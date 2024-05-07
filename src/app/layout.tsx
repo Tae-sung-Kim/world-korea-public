@@ -1,6 +1,6 @@
-import type { Metadata } from 'next';
 import Layout from '@/layouts/layout/Layout';
 import { pretendard } from '@/utils/fonts';
+import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
