@@ -1,13 +1,17 @@
-import { NextResponse } from 'next/server';
 import executeQuery from '@/db/database';
+import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
-    const sql = `select * from worldkoreadev.users a join worldkoreadev.member_types b on a.member_type_id = b.id`;
+    const sql = `select id, email from worldkoreadev.users`;
     const data = await executeQuery(sql, '');
-    const getdata = JSON.parse(JSON.stringify(data));
+    const userListData = JSON.parse(JSON.stringify(data));
 
-    return NextResponse.json(getdata);
+    return NextResponse.json({
+      success: true,
+      data: userListData,
+      message: '회원목록 조회에 성공했습니다.',
+    });
   } catch (error) {
     return NextResponse.json(
       {

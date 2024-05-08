@@ -1,3 +1,4 @@
+import Providers from '@/app/utils/Providers';
 import Layout from '@/layouts/layout/Layout';
 import { pretendard } from '@/utils/fonts';
 import type { Metadata } from 'next';
@@ -16,7 +17,9 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={`${pretendard.variable} ${pretendard.className}`}>
-        <Layout>{children}</Layout>
+        <Providers>
+          <Layout>{children}</Layout>
+        </Providers>
       </body>
     </html>
   );
