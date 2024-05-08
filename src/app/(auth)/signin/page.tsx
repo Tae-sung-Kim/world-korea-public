@@ -11,36 +11,37 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { useToast } from '@/components/ui/use-toast';
+import http from '@/services';
 import { zodResolver } from '@hookform/resolvers/zod';
-import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 const FormSchema = z.object({
   id: z.string(),
-  email: z.string(),
   password: z.string(),
-  confirmPassword: z.string(),
-  name: z.string().min(2, {
-    message: 'Username must be at least 2 characters.',
-  }),
 });
 
-export default function SignUp() {
+export default function SignIn() {
+  const { toast } = useToast();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       id: '',
-      email: '',
       password: '',
-      confirmPassword: '',
-      name: '',
     },
   });
 
   const handleSubmit = async () => {
     try {
-      await axios.post('/api/auth/signup', form.getValues());
+      const response = await http.post<boolean>(
+        '/api/auth/signin',
+        form.getValues()
+      );
+      toast({
+        title: response.message,
+        variant: response.data ? 'destructive' : null,
+      });
     } catch (error) {
       console.error(error);
     }
@@ -68,19 +69,6 @@ export default function SignUp() {
           />
           <FormField
             control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>이메일</FormLabel>
-                <FormControl>
-                  <Input placeholder="" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
             name="password"
             render={({ field }) => (
               <FormItem>
@@ -92,33 +80,7 @@ export default function SignUp() {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="confirmPassword"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>비밀번호 확인</FormLabel>
-                <FormControl>
-                  <Input placeholder="" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>이름</FormLabel>
-                <FormControl>
-                  <Input placeholder="" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button type="submit">회원가입</Button>
+          <Button type="submit">로그인</Button>
         </form>
       </Form>
     </>

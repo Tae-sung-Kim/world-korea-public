@@ -19,6 +19,7 @@ const executeQuery = <T>(query: string, arrParams: T) => {
       pool.query(query, arrParams, (err, data) => {
         if (err) {
           console.log('Error in executing the query');
+          console.log(err);
           reject(err);
         }
 

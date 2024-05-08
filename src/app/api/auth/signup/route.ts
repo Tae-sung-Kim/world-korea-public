@@ -16,9 +16,13 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({
-      id,
-      email,
-      name,
+      success: true,
+      data: {
+        id,
+        email,
+        name,
+      },
+      message: '회원가입이 성공적으로 완료되었습니다.',
     });
   } catch (error) {
     return NextResponse.json(
@@ -27,7 +31,7 @@ export async function POST(req: NextRequest) {
       },
       {
         status: 500,
-      },
+      }
     );
   }
 }

@@ -7,16 +7,28 @@ export async function POST(req: NextRequest) {
     const { id, password } = await req.json();
 
     // 유저 조회
-    // 비밀번호 체크
-    // 결과값 반환
-    const sql = `INSERT INTO users SET ?`;
-    await executeQuery(sql, {
-      id,
-      password,
-      name,
-    });
+    let sql = `SELECT * FROM worldkoreadev.users users WHERE id = '${id}'`;
+    const userResult = await executeQuery(sql, '');
+    let userData = JSON.parse(JSON.stringify(userResult));
+    if (userData.length === 0) {
+      return NextResponse.json({
+        success: true,
+        data: false,
+        message: '해당 아이디로 등록된 사용자를 찾을 수 없습니다.',
+      });
+    }
+    userData = userData[0];
 
-    return NextResponse.json(true);
+    // 비밀번호 체크
+    const isEqual = await comparePassword(password, userData.password);
+
+    return NextResponse.json({
+      success: true,
+      data: isEqual,
+      message: isEqual
+        ? '로그인이 성공적으로 완료되었습니다.'
+        : '로그인에 실패했습니다. 입력한 정보를 다시 확인해주세요.',
+    });
   } catch (error) {
     return NextResponse.json(
       {
@@ -24,7 +36,7 @@ export async function POST(req: NextRequest) {
       },
       {
         status: 500,
-      },
+      }
     );
   }
 }
