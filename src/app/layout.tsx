@@ -1,4 +1,4 @@
-import Providers from '@/app/utils/Providers';
+import ReactQueryProviders from '@/app/utils/ReactQueryProviders';
 import Layout from '@/layouts/layout/Layout';
 import { pretendard } from '@/utils/fonts';
 import type { Metadata } from 'next';
@@ -17,9 +17,9 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={`${pretendard.variable} ${pretendard.className}`}>
-        <Providers>
+        <ReactQueryProviders>
           <Layout>{children}</Layout>
-        </Providers>
+        </ReactQueryProviders>
       </body>
     </html>
   );

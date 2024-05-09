@@ -38,9 +38,13 @@ export default function SignIn() {
         '/api/auth/signin',
         form.getValues()
       );
+
+      let isSuccess = !!response;
       toast({
-        title: response.message,
-        variant: response.data ? 'destructive' : null,
+        title: isSuccess
+          ? '로그인이 성공적으로 완료되었습니다.'
+          : '로그인에 실패했습니다. 입력한 정보를 다시 확인해주세요.',
+        variant: !isSuccess ? 'destructive' : null,
       });
     } catch (error) {
       console.error(error);

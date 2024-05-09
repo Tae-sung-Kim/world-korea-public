@@ -41,6 +41,7 @@ export default function SignUp() {
   const handleSubmit = async () => {
     try {
       await axios.post('/api/auth/signup', form.getValues());
+      // 회원가입이 성공적으로 완료되었습니다.
     } catch (error) {
       console.error(error);
     }

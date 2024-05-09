@@ -1,22 +1,14 @@
 import axios, { AxiosInstance, AxiosResponse, AxiosRequestConfig } from 'axios';
 
-type APIResponse<T> = {
-  success: boolean;
-  data: T;
-  message: string;
-};
-
 const instance: AxiosInstance = axios.create({
   timeout: 10000, // 요청 타임아웃 설정 (단위: 밀리초)
+  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
 });
 
 const methods = {
-  get: async <T>(
-    url: string,
-    config?: AxiosRequestConfig
-  ): Promise<APIResponse<T>> => {
+  get: async <T>(url: string, config?: AxiosRequestConfig): Promise<T> => {
     try {
-      const response = await instance.get<APIResponse<T>>(url, config);
+      const response = await instance.get<T>(url, config);
       return response.data;
     } catch (error) {
       return Promise.reject(error);
@@ -27,9 +19,9 @@ const methods = {
     url: string,
     data?: any,
     config?: AxiosRequestConfig
-  ): Promise<APIResponse<T>> => {
+  ): Promise<T> => {
     try {
-      const response = await instance.post<APIResponse<T>>(url, data, config);
+      const response = await instance.post<T>(url, data, config);
       return response.data;
     } catch (error) {
       return Promise.reject(error);
@@ -40,21 +32,18 @@ const methods = {
     url: string,
     data?: any,
     config?: AxiosRequestConfig
-  ): Promise<APIResponse<T>> => {
+  ): Promise<T> => {
     try {
-      const response = await instance.put<APIResponse<T>>(url, data, config);
+      const response = await instance.put<T>(url, data, config);
       return response.data;
     } catch (error) {
       return Promise.reject(error);
     }
   },
 
-  delete: async <T>(
-    url: string,
-    config?: AxiosRequestConfig
-  ): Promise<APIResponse<T>> => {
+  delete: async <T>(url: string, config?: AxiosRequestConfig): Promise<T> => {
     try {
-      const response = await instance.delete<APIResponse<T>>(url, config);
+      const response = await instance.delete<T>(url, config);
       return response.data;
     } catch (error) {
       return Promise.reject(error);
