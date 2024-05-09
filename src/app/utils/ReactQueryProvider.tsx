@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useState } from 'react';
 
-const ReactQueryProviders = ({ children }: { children: React.ReactNode }) => {
+const ReactQueryProvider = ({ children }: { children: React.ReactNode }) => {
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -16,7 +16,7 @@ const ReactQueryProviders = ({ children }: { children: React.ReactNode }) => {
             staleTime: 60 * 1000,
           },
         },
-      })
+      }),
   );
 
   return (
@@ -27,4 +27,4 @@ const ReactQueryProviders = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default ReactQueryProviders;
+export default ReactQueryProvider;

@@ -15,6 +15,8 @@ import { useToast } from '@/components/ui/use-toast';
 import authService from '@/services/authService';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
+import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -25,6 +27,7 @@ const FormSchema = z.object({
 
 export default function SignInClient() {
   const { toast } = useToast();
+  const router = useRouter();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -35,16 +38,27 @@ export default function SignInClient() {
   const signInMutatino = useMutation({ mutationFn: authService.signIn });
 
   const handleSubmit = async () => {
+    console.log('?');
     try {
-      const response = await signInMutatino.mutateAsync(form.getValues());
+      // const response = await signInMutatino.mutateAsync(form.getValues());
+      // const response = await signInMutatino.mutateAsync(form.getValues());
 
-      let isSuccess = !!response;
-      toast({
-        title: isSuccess
-          ? '로그인이 성공적으로 완료되었습니다.'
-          : '로그인에 실패했습니다. 입력한 정보를 다시 확인해주세요.',
-        variant: !isSuccess ? 'destructive' : null,
+      const response = await signIn('credentials', {
+        ...form.getValues(),
+        redirect: false,
       });
+
+      if (response.ok) {
+        toast({
+          title: '로그인이 성공적으로 완료되었습니다.',
+        });
+        router.replace('/');
+      } else {
+        toast({
+          title: '로그인에 실패했습니다. 입력한 정보를 다시 확인해주세요.',
+          variant: 'destructive',
+        });
+      }
     } catch (error) {
       console.error(error);
     }

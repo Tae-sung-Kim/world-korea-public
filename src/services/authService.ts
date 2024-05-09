@@ -1,5 +1,10 @@
 import http from '@/services';
-import { SingInUserType, SignUpUserType, UserType } from '@/types/user';
+import {
+  SingInUserType,
+  SignUpUserType,
+  UserType,
+  LoggedUserType,
+} from '@/types/user';
 
 class AuthService {
   // 회원가입
@@ -9,7 +14,7 @@ class AuthService {
 
   // 로그인
   signIn(user: SingInUserType) {
-    return http.post<boolean>(`/api/auth/signin`, user);
+    return http.post<UserType>(`/api/auth/signin`, user);
   }
 }
 

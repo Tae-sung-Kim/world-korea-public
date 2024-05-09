@@ -1,8 +1,9 @@
-import ReactQueryProviders from '@/app/utils/ReactQueryProviders';
+import ReactQueryProviders from '@/app/utils/ReactQueryProvider';
 import Layout from '@/layouts/layout/Layout';
 import { pretendard } from '@/utils/fonts';
 import type { Metadata } from 'next';
 import './globals.css';
+import SessionProvider from './utils/SessionProvider';
 
 export const metadata: Metadata = {
   title: '월드코리아',
@@ -15,12 +16,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko">
-      <body className={`${pretendard.variable} ${pretendard.className}`}>
-        <ReactQueryProviders>
-          <Layout>{children}</Layout>
-        </ReactQueryProviders>
-      </body>
-    </html>
+    <SessionProvider>
+      <html lang="ko">
+        <body className={`${pretendard.variable} ${pretendard.className}`}>
+          <ReactQueryProviders>
+            <Layout>{children}</Layout>
+          </ReactQueryProviders>
+        </body>
+      </html>
+    </SessionProvider>
   );
 }

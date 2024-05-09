@@ -1,4 +1,5 @@
 import executeQuery from '@/db/database';
+import { generateToken } from '@/utils/jwt';
 import { comparePassword } from '@/utils/password';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -18,7 +19,25 @@ export async function POST(req: NextRequest) {
     // 비밀번호 체크
     const isEqual = await comparePassword(password, userData.password);
 
-    return NextResponse.json(isEqual);
+    if (isEqual) {
+      // 유저 id, 관리자 여부 객체로 토큰 페이로드 정보 생성
+      const payload = {
+        id: userData.id,
+      };
+
+      // jwt.js에서 작성된 토큰 생성 코드 실행
+      const token = generateToken(payload);
+
+      return NextResponse.json(userData);
+      // return NextResponse.json({
+      //   user: {
+      //     id: userData.id,
+      //   },
+      //   token,
+      // });
+    }
+
+    return NextResponse.json(false);
   } catch (error) {
     return NextResponse.json(
       {
@@ -26,7 +45,7 @@ export async function POST(req: NextRequest) {
       },
       {
         status: 500,
-      }
+      },
     );
   }
 }
