@@ -1,5 +1,5 @@
 import UsersClient from './UsersClient';
-import { getUserList } from '@/services/userService';
+import userService from '@/services/userService';
 import {
   HydrationBoundary,
   QueryClient,
@@ -11,7 +11,7 @@ export default async function Users() {
 
   await queryClient.prefetchQuery({
     queryKey: ['users'],
-    queryFn: getUserList,
+    queryFn: userService.getUserList,
   });
 
   return (
