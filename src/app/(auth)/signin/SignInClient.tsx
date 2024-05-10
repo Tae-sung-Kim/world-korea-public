@@ -12,9 +12,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
-import authService from '@/services/authService';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -35,20 +33,15 @@ export default function SignInClient() {
       password: '',
     },
   });
-  const signInMutatino = useMutation({ mutationFn: authService.signIn });
 
   const handleSubmit = async () => {
-    console.log('?');
     try {
-      // const response = await signInMutatino.mutateAsync(form.getValues());
-      // const response = await signInMutatino.mutateAsync(form.getValues());
-
       const response = await signIn('credentials', {
         ...form.getValues(),
         redirect: false,
       });
 
-      if (response.ok) {
+      if (response?.ok) {
         toast({
           title: '로그인이 성공적으로 완료되었습니다.',
         });

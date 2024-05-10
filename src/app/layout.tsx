@@ -4,6 +4,7 @@ import { pretendard } from '@/utils/fonts';
 import type { Metadata } from 'next';
 import './globals.css';
 import SessionProvider from './utils/SessionProvider';
+import AuthProvider from '@/contexts/AuthContext';
 
 export const metadata: Metadata = {
   title: '월드코리아',
@@ -20,7 +21,9 @@ export default function RootLayout({
       <html lang="ko">
         <body className={`${pretendard.variable} ${pretendard.className}`}>
           <ReactQueryProviders>
-            <Layout>{children}</Layout>
+            <AuthProvider>
+              <Layout>{children}</Layout>
+            </AuthProvider>
           </ReactQueryProviders>
         </body>
       </html>

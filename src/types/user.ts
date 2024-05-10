@@ -19,7 +19,4 @@ export type UserJwtPayloadType = {
   id: string;
 };
 
-export type LoggedUserType = {
-  user: UserType;
-  token: string;
-};
+export type SignInReturnType = string;

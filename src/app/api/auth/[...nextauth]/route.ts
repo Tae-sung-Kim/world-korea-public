@@ -1,21 +1,28 @@
 import authService from '@/services/authService';
-import { SingInUserType } from '@/types/user';
+import { SingInUserType, UserJwtPayloadType } from '@/types/user';
 import NextAuth from 'next-auth';
+import type { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
-const handler = NextAuth({
+export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: 'Credentials',
-      credentials: {},
+      credentials: {
+        id: { label: 'Id', type: 'text' },
+        password: { label: 'Password', type: 'password' },
+      },
       async authorize(credentials) {
         try {
           const response = await authService.signIn(
-            credentials as SingInUserType,
+            credentials as SingInUserType
           );
 
-          if (response) {
-            return response;
+          if (response && credentials) {
+            return {
+              id: credentials.id,
+              accessToken: response,
+            };
           }
         } catch (error) {
           throw new Error('Filed to login.');
@@ -27,30 +34,37 @@ const handler = NextAuth({
   ],
 
   callbacks: {
-    async signIn() {
-      return true;
-    },
-
     async redirect({ url, baseUrl }) {
+      console.log(url, baseUrl);
       return baseUrl;
     },
 
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
-        token.name = user.name;
+        return {
+          accessToken: user.accessToken,
+          user: {
+            id: user.id,
+          },
+        };
       }
 
       return token;
     },
 
-    async session({ session, user, token }) {
+    async session({ session, token }) {
       if (token) {
-        session.user.id = token.id as string;
-        session.user.name = token.name as string;
+        session.accessToken = token.accessToken;
+        session.user = token.user;
       }
 
       return session;
+    },
+  },
+
+  events: {
+    signOut: () => {
+      console.log('Hi');
     },
   },
 
@@ -61,6 +75,8 @@ const handler = NextAuth({
   jwt: {
     secret: process.env.NEXTAUTH_SECRET,
   },
-});
+};
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };

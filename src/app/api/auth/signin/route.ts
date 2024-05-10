@@ -24,11 +24,10 @@ export async function POST(req: NextRequest) {
       const payload = {
         id: userData.id,
       };
-
       // jwt.js에서 작성된 토큰 생성 코드 실행
       const token = generateToken(payload);
 
-      return NextResponse.json(userData);
+      return NextResponse.json(token);
       // return NextResponse.json({
       //   user: {
       //     id: userData.id,
@@ -45,7 +44,7 @@ export async function POST(req: NextRequest) {
       },
       {
         status: 500,
-      },
+      }
     );
   }
 }
