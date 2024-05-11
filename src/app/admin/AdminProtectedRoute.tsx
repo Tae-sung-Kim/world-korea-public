@@ -2,6 +2,7 @@
 
 import { useAuthContext } from '@/contexts/AuthContext';
 import { redirect } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function AdminProtectedRoute({
   children,
@@ -10,9 +11,11 @@ export default function AdminProtectedRoute({
 }) {
   const { isLoggedIn } = useAuthContext();
 
-  if (isLoggedIn === false) {
-    redirect('/');
-  }
+  useEffect(() => {
+    if (isLoggedIn === false) {
+      redirect('/');
+    }
+  }, [isLoggedIn]);
 
   return children;
 }
