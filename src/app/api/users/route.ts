@@ -1,16 +1,15 @@
 import executeQuery from '@/db/database';
-import authService from '@/services/authService';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
-    const session = await authService.getSession();
-    if (!session) {
-      return NextResponse.json(
-        { message: '권한이 없습니다.' },
-        { status: 400 },
-      );
-    }
+    // const session = await authService.getSession();
+    // if (!session) {
+    //   return NextResponse.json(
+    //     { message: '권한이 없습니다.' },
+    //     { status: 400 },
+    //   );
+    // }
 
     const sql = `select id, email from worldkoreadev.users`;
     const data = await executeQuery(sql, '');

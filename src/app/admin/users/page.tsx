@@ -1,5 +1,4 @@
 import UsersClient from './UsersClient';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import userService from '@/services/userService';
 import {
   HydrationBoundary,
