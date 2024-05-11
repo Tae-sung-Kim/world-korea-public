@@ -11,13 +11,13 @@ import { getSession } from 'next-auth/react';
 
 class AuthService {
   // 회원가입
-  signUp(user: SignUpUserType) {
-    return http.post<UserType>(`/api/auth/signup`, user);
+  register(user: SignUpUserType) {
+    return http.post<UserType>(`/api/auth/register`, user);
   }
 
   // 로그인
-  signIn(user: SingInUserType) {
-    return http.post<SignInReturnType>(`/api/auth/signin`, user);
+  login(user: SingInUserType) {
+    return http.post<SignInReturnType>(`/api/auth/login`, user);
   }
 
   // 세션 반환

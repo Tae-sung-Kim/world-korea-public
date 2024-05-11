@@ -1,5 +1,6 @@
 import authService from '@/services/authService';
 import { SingInUserType, UserJwtPayloadType } from '@/types/user';
+import jwtUtils from '@/utils/jwt';
 import NextAuth from 'next-auth';
 import type { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
@@ -9,20 +10,25 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
-        id: { label: 'Id', type: 'text' },
-        password: { label: 'Password', type: 'password' },
+        id: {},
+        password: {},
       },
       async authorize(credentials) {
         try {
-          const response = await authService.signIn(
-            credentials as SingInUserType
+          const response = await authService.login(
+            credentials as SingInUserType,
           );
 
           if (response && credentials) {
-            return {
-              id: credentials.id,
-              accessToken: response,
-            };
+            const userData = jwtUtils.verify(response);
+
+            if (userData) {
+              return {
+                id: userData.id,
+                name: userData.name,
+                accessToken: response,
+              };
+            }
           }
         } catch (error) {
           throw new Error('Filed to login.');
@@ -35,16 +41,23 @@ export const authOptions: NextAuthOptions = {
 
   callbacks: {
     async redirect({ url, baseUrl }) {
-      console.log(url, baseUrl);
       return baseUrl;
     },
 
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
+      if (trigger === 'update') {
+        return {
+          ...token,
+          ...session.user,
+        };
+      }
+
       if (user) {
         return {
           accessToken: user.accessToken,
           user: {
             id: user.id,
+            name: user.name,
           },
         };
       }
@@ -72,6 +85,7 @@ export const authOptions: NextAuthOptions = {
     strategy: 'jwt',
     maxAge: 30 * 24 * 60 * 60, // 30일
   },
+
   jwt: {
     secret: process.env.NEXTAUTH_SECRET,
   },

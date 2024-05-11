@@ -24,7 +24,7 @@ export default function UsersClient() {
   });
 
   return (
-    <>
+    <div className="container">
       <Table>
         <TableCaption>회원 목록</TableCaption>
         <TableHeader>
@@ -34,7 +34,7 @@ export default function UsersClient() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {userList.map(user => {
+          {userList.map((user) => {
             const { id, email } = user;
 
             return (
@@ -55,7 +55,7 @@ export default function UsersClient() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {userList2.map(user => {
+          {userList2.map((user) => {
             const { id, email } = user;
 
             return (
@@ -67,6 +67,6 @@ export default function UsersClient() {
           })}
         </TableBody>
       </Table>
-    </>
+    </div>
   );
 }

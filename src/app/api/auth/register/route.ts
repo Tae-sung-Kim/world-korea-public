@@ -15,19 +15,22 @@ export async function POST(req: NextRequest) {
       name,
     });
 
-    return NextResponse.json({
-      id,
-      email,
-      name,
-    });
-  } catch (error) {
     return NextResponse.json(
       {
-        error,
+        id,
+        email,
+        name,
+      },
+      { status: 200 },
+    );
+  } catch (error: any) {
+    return NextResponse.json(
+      {
+        error: error.message,
       },
       {
         status: 500,
-      }
+      },
     );
   }
 }

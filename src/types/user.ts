@@ -13,7 +13,7 @@ export type UserType = {
   name: string;
 };
 
-export type UserListType = Array<UserType>;
+export type UserListType = UserType[];
 
 export type UserJwtPayloadType = {
   id: string;

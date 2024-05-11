@@ -1,10 +1,10 @@
-import ReactQueryProviders from '@/app/utils/ReactQueryProvider';
+import ReactQueryProviders from '@/app/providers/ReactQueryProvider';
 import Layout from '@/layouts/layout/Layout';
 import { pretendard } from '@/utils/fonts';
 import type { Metadata } from 'next';
 import './globals.css';
-import SessionProvider from './utils/SessionProvider';
-import AuthProvider from '@/contexts/AuthContext';
+import { OuterProvider, InnterProvider } from './providers/Providers';
+import SessionProvider from '@/app/providers/SessionProvider';
 
 export const metadata: Metadata = {
   title: '월드코리아',
@@ -17,16 +17,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <SessionProvider>
+    <OuterProvider>
       <html lang="ko">
         <body className={`${pretendard.variable} ${pretendard.className}`}>
-          <ReactQueryProviders>
-            <AuthProvider>
-              <Layout>{children}</Layout>
-            </AuthProvider>
-          </ReactQueryProviders>
+          <InnterProvider>
+            <Layout>{children}</Layout>
+          </InnterProvider>
         </body>
       </html>
-    </SessionProvider>
+    </OuterProvider>
   );
 }

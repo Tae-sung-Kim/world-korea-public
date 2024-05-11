@@ -1,5 +1,5 @@
 import executeQuery from '@/db/database';
-import { generateToken } from '@/utils/jwt';
+import jwtUtils from '@/utils/jwt';
 import { comparePassword } from '@/utils/password';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -23,9 +23,10 @@ export async function POST(req: NextRequest) {
       // 유저 id, 관리자 여부 객체로 토큰 페이로드 정보 생성
       const payload = {
         id: userData.id,
+        name: userData.name,
       };
       // jwt.js에서 작성된 토큰 생성 코드 실행
-      const token = generateToken(payload);
+      const token = jwtUtils.sign(payload);
 
       return NextResponse.json(token);
       // return NextResponse.json({
@@ -44,7 +45,7 @@ export async function POST(req: NextRequest) {
       },
       {
         status: 500,
-      }
+      },
     );
   }
 }
