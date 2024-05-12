@@ -17,7 +17,7 @@ export default function AccessPanel() {
 
   return (
     <div className="flex items-center justify-center h-9 bg-slate-50">
-      <div className="flex justify-end items-center space-x-4 w-[1000px] text-gray-400">
+      <div className="flex justify-end items-center space-x-4 w-[1200px] text-gray-400">
         {isLoggedIn ? (
           <>
             <Link
