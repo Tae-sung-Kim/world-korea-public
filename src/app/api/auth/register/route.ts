@@ -1,19 +1,21 @@
-import executeQuery from '@/db/database';
+import connectMongo from '@/db/database';
+import User from '@/models/user';
 import { hashPassword } from '@/utils/password';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
   try {
+    await connectMongo();
     const { id, email, password, name } = await req.json();
     const hashedPassword = await hashPassword(password);
-
-    const sql = `INSERT INTO users SET ?`;
-    await executeQuery(sql, {
-      id,
+    const newUser = new User({
+      loginId: id,
+      name,
       email,
       password: hashedPassword,
-      name,
     });
+
+    await newUser.save();
 
     return NextResponse.json(
       {
@@ -21,16 +23,17 @@ export async function POST(req: NextRequest) {
         email,
         name,
       },
-      { status: 200 },
+      { status: 200 }
     );
   } catch (error: any) {
+    console.log(error.message);
     return NextResponse.json(
       {
         error: error.message,
       },
       {
         status: 500,
-      },
+      }
     );
   }
 }

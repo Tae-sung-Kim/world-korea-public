@@ -8,7 +8,7 @@ export type SignUpUserType = {
 export type SingInUserType = Pick<SignUpUserType, 'id' | 'password'>;
 
 export type UserType = {
-  id: string;
+  loginId: string;
   email: string;
   name: string;
 };

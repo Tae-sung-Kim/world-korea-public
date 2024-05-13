@@ -1,21 +1,20 @@
-import executeQuery from '@/db/database';
+import User from '@/models/user';
+import authService from '@/services/authService';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
-    // const session = await authService.getSession();
-    // if (!session) {
-    //   return NextResponse.json(
-    //     { message: '권한이 없습니다.' },
-    //     { status: 400 },
-    //   );
-    // }
+    const session = await authService.getSession();
+    if (!session) {
+      return NextResponse.json(
+        { message: '권한이 없습니다.' },
+        { status: 400 }
+      );
+    }
 
-    const sql = `select id, email from worldkoreadev.users`;
-    const data = await executeQuery(sql, '');
-    const userListData = JSON.parse(JSON.stringify(data));
+    const users = await User.find();
 
-    return NextResponse.json(userListData);
+    return NextResponse.json(users);
   } catch (error) {
     return NextResponse.json(
       {
@@ -23,7 +22,7 @@ export async function GET() {
       },
       {
         status: 500,
-      },
+      }
     );
   }
 }

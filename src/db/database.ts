@@ -1,34 +1,37 @@
-import mysql from 'mysql2';
+import mongoose from 'mongoose';
 
-const pool = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_DATABASE,
-});
+const MONGO_URI = process.env.MONGO_URI;
+const cached: {
+  connection?: typeof mongoose;
+  promise?: Promise<typeof mongoose>;
+} = {};
 
-pool.getConnection((err, conn) => {
-  if (err) console.log('Error connecting to db...');
-  else console.log('Connected to db...!');
-  conn.release();
-});
+async function connectMongo() {
+  if (!MONGO_URI) {
+    throw new Error(
+      'Please define the MONGO_URI environment variable inside .env.local'
+    );
+  }
 
-const executeQuery = <T>(query: string, arrParams: T) => {
-  return new Promise((resolve, reject) => {
-    try {
-      pool.query(query, arrParams, (err, data) => {
-        if (err) {
-          console.log('Error in executing the query');
-          console.log(err);
-          reject(err);
-        }
+  if (cached.connection) {
+    return cached.connection;
+  }
 
-        resolve(data);
-      });
-    } catch (err) {
-      reject(err);
-    }
-  });
-};
+  if (!cached.promise) {
+    const opts = {
+      bufferCommands: false,
+    };
+    cached.promise = mongoose.connect(MONGO_URI, opts);
+  }
 
-export default executeQuery;
+  try {
+    cached.connection = await cached.promise;
+  } catch (e) {
+    cached.promise = undefined;
+    throw e;
+  }
+
+  return cached.connection;
+}
+
+export default connectMongo;
