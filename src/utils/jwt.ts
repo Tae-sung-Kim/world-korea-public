@@ -15,7 +15,7 @@ class JwtUtils {
     let decoded = null;
 
     try {
-      decoded = jwt.verify(token, secretKey) as UserType;
+      decoded = jwt.verify(token, secretKey) as UserJwtPayloadType;
 
       return {
         id: decoded.id,
