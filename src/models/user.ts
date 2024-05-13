@@ -1,13 +1,23 @@
-import { model, models, Schema } from 'mongoose';
+import { UserType } from '@/types/user';
+import { model, models, Schema, Model, HydratedDocument } from 'mongoose';
 
-export type UserSchemaType = {
+export interface IUser {
   loginId: string;
   name: string;
   password: string;
   email: string;
-};
+}
 
-const UserSchema = new Schema<UserSchemaType>({
+interface IUserMethods {
+  fullName(): string;
+}
+
+interface UserModel extends Model<IUser, {}, IUserMethods> {
+  // getUserList(): Promise<HydratedDocument<IUser, IUserMethods>>;
+  getUserList(): UserType[];
+}
+
+const schema = new Schema<IUser, UserModel, IUserMethods>({
   loginId: {
     type: String,
     required: true,
@@ -25,6 +35,12 @@ const UserSchema = new Schema<UserSchemaType>({
     required: true,
   },
 });
-const User = models.User || model('User', UserSchema);
+
+schema.static('getUserList', function getUserList() {
+  return this.find({}, '-password');
+});
+
+const User =
+  (models.User as UserModel) || model<IUser, UserModel>('User', schema);
 
 export default User;

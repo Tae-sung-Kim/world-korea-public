@@ -10,7 +10,7 @@ export default async function AdminLayout({
 }>) {
   return (
     <AdminProtectedRoute>
-      <div className="container flex pt-12 gap-6">
+      <div className="container flex py-12 gap-6">
         <div className="w-[260px] border border-gray-200 bg-white">
           <div className="flex items-center justify-center py-4 text-white bg-black">
             <h2 className="text-2xl">관리자 페이지</h2>

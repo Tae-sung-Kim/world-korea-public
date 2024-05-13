@@ -1,15 +1,16 @@
 import connectMongo from '@/db/database';
-import User, { UserSchemaType } from '@/models/user';
+import User, { IUser } from '@/models/user';
 import jwtUtils from '@/utils/jwt';
 import { comparePassword } from '@/utils/password';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
   try {
+    await connectMongo();
+
     const { id, password } = await req.json();
 
-    const userData = await User.findOne<UserSchemaType>({ loginId: id });
-
+    const userData = await User.findOne<IUser>({ loginId: id });
     if (!userData) {
       return NextResponse.json(false);
     }

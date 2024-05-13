@@ -1,9 +1,12 @@
+import connectMongo from '@/db/database';
 import User from '@/models/user';
 import authService from '@/services/authService';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
+    await connectMongo();
+
     const session = await authService.getSession();
     if (!session) {
       return NextResponse.json(
@@ -12,7 +15,7 @@ export async function GET() {
       );
     }
 
-    const users = await User.find();
+    const users = await User.getUserList();
 
     return NextResponse.json(users);
   } catch (error) {

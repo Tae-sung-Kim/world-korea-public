@@ -5,7 +5,7 @@ export default function AuthLayout({
 }>) {
   return (
     <div className="container flex items-center justify-center">
-      <div className="w-[800px]">{children}</div>
+      <div className="w-[800px] py-24 px-6">{children}</div>
     </div>
   );
 }

@@ -6,6 +6,7 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function POST(req: NextRequest) {
   try {
     await connectMongo();
+
     const { id, email, password, name } = await req.json();
     const hashedPassword = await hashPassword(password);
     const newUser = new User({
