@@ -1,11 +1,23 @@
-import { UserType } from '@/types/user';
-import { model, models, Schema, Model, HydratedDocument } from 'mongoose';
+// 회원
 
+import { UserType } from '@/types/user';
+import {
+  model,
+  models,
+  Schema,
+  Model,
+  HydratedDocument,
+  Types,
+} from 'mongoose';
+
+Types.ObjectId;
 export interface IUser {
   loginId: string;
   name: string;
   password: string;
   email: string;
+  phoneNumber: string;
+  type: {};
 }
 
 interface IUserMethods {
@@ -13,7 +25,6 @@ interface IUserMethods {
 }
 
 interface UserModel extends Model<IUser, {}, IUserMethods> {
-  // getUserList(): Promise<HydratedDocument<IUser, IUserMethods>>;
   getUserList(): UserType[];
 }
 
@@ -33,6 +44,14 @@ const schema = new Schema<IUser, UserModel, IUserMethods>({
   password: {
     type: String,
     required: true,
+  },
+  phoneNumber: {
+    type: String,
+    required: true,
+  },
+  type: {
+    type: Types.ObjectId,
+    ref: 'UserCategory',
   },
 });
 
