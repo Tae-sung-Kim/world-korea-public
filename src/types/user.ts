@@ -17,6 +17,7 @@ export type UserListType = UserType[];
 
 export type UserJwtPayloadType = {
   id: string;
+  name: string;
 };
 
 export type SignInReturnType = string;
