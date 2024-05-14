@@ -7,27 +7,27 @@ export async function POST(req: NextRequest) {
   try {
     await connectMongo();
 
-    const { id, email, password, name } = await req.json();
+    const body = await req.json();
+    const { id, password } = body;
     const hashedPassword = await hashPassword(password);
     const newUser = new User({
+      ...body,
       loginId: id,
-      name,
-      email,
       password: hashedPassword,
+      isAdmin: false,
     });
 
     await newUser.save();
 
     return NextResponse.json(
       {
-        id,
-        email,
-        name,
+        id: newUser.id,
+        email: newUser.email,
+        name: newUser.name,
       },
       { status: 200 }
     );
   } catch (error: any) {
-    console.log(error.message);
     return NextResponse.json(
       {
         error: error.message,

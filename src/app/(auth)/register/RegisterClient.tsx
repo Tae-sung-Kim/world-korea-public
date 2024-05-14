@@ -39,6 +39,8 @@ const formSchema = z
     email: z.string().email('유효하지 않은 이메일 입니다.'),
     password: z.string().min(4, { message: '4자 이상 입력해주세요.' }),
     confirmPassword: z.string().min(4, { message: '4자 이상 입력해주세요.' }),
+    companyName: z.string(),
+    phoneNumber: z.string(),
   })
   .superRefine(({ password, confirmPassword }, ctx) => {
     if (password !== confirmPassword) {
@@ -136,6 +138,32 @@ export default function Register() {
                 <FormLabel>비밀번호 확인</FormLabel>
                 <FormControl>
                   <Input placeholder="" type="password" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="phoneNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>폰번호</FormLabel>
+                <FormControl>
+                  <Input placeholder="" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="companyName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>회사명</FormLabel>
+                <FormControl>
+                  <Input placeholder="" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
