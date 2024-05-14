@@ -82,151 +82,142 @@ export default function GroupReservationClient() {
   }
 
   return (
-    <>
-      <h1>단체 예약</h1>
-      {/* 1.36개월 이상, 미만 */}
-      {/* 2. 인원 */}
-      {/* 3. 날짜(완료) */}
-      {/* 4. 상품(패키지) */}
-      {/* 5. 예약자 이름 */}
-      {/* 6. 전화번호 */}
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <FormField
-            control={form.control}
-            name="personType"
-            render={({ field }) => (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <FormField
+          control={form.control}
+          name="personType"
+          render={({ field }) => (
+            <FormItem className="space-y-3">
+              <FormLabel>예약 인원 구분</FormLabel>
+              <FormControl>
+                <RadioGroup
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                  className="flex flex-col space-y-1"
+                >
+                  <FormItem className="flex items-center space-x-3 space-y-0">
+                    <FormControl>
+                      <RadioGroupItem value="36under" />
+                    </FormControl>
+                    <FormLabel className="font-normal">36개월 미만</FormLabel>
+                  </FormItem>
+                  <FormItem className="flex items-center space-x-3 space-y-0">
+                    <FormControl>
+                      <RadioGroupItem value="37above" />
+                    </FormControl>
+                    <FormLabel className="font-normal">37개월 이상</FormLabel>
+                  </FormItem>
+                </RadioGroup>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="peopleCount"
+          render={({ field }) => {
+            return (
               <FormItem className="space-y-3">
-                <FormLabel>예약 인원 구분</FormLabel>
+                <FormLabel>인원 수</FormLabel>
                 <FormControl>
-                  <RadioGroup
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    className="flex flex-col space-y-1"
-                  >
-                    <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem value="36under" />
-                      </FormControl>
-                      <FormLabel className="font-normal">36개월 미만</FormLabel>
-                    </FormItem>
-                    <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem value="37above" />
-                      </FormControl>
-                      <FormLabel className="font-normal">37개월 이상</FormLabel>
-                    </FormItem>
-                  </RadioGroup>
+                  <Input placeholder="" {...field} type="number" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="peopleCount"
-            render={({ field }) => {
-              return (
-                <FormItem className="space-y-3">
-                  <FormLabel>인원 수</FormLabel>
-                  <FormControl>
-                    <Input placeholder="" {...field} type="number" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              );
-            }}
-          />
+            );
+          }}
+        />
 
-          <FormField
-            control={form.control}
-            name="peopleCount"
-            render={({ field }) => {
-              return (
-                <FormItem className="space-y-3">
-                  <FormLabel>상품</FormLabel>
-                  <FormControl></FormControl>
-                  <FormMessage />
-                </FormItem>
-              );
-            }}
-          />
-
-          <FormField
-            control={form.control}
-            name="reserveDate"
-            render={({ field }) => (
-              <FormItem className="flex flex-col">
-                <FormLabel>예약일 선택</FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant={'outline'}
-                        className={cn(
-                          'w-[240px] pl-3 text-left font-normal',
-                          !field.value && 'text-muted-foreground'
-                        )}
-                      >
-                        {field.value ? (
-                          format(field.value, 'PPP', { locale: ko })
-                        ) : (
-                          <span>날짜를 선택하세요.</span>
-                        )}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      disabled={(date) =>
-                        format(date, 'yyyMMdd') < format(new Date(), 'yyyyMMdd')
-                      }
-                      initialFocus
-                      locale={ko}
-                    />
-                  </PopoverContent>
-                </Popover>
+        <FormField
+          control={form.control}
+          name="peopleCount"
+          render={({ field }) => {
+            return (
+              <FormItem className="space-y-3">
+                <FormLabel>상품</FormLabel>
+                <FormControl></FormControl>
                 <FormMessage />
               </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="reserverName"
-            render={({ field }) => {
-              return (
-                <FormItem className="space-y-3">
-                  <FormLabel>예약자</FormLabel>
+            );
+          }}
+        />
+
+        <FormField
+          control={form.control}
+          name="reserveDate"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>예약일 선택</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
                   <FormControl>
-                    <Input placeholder="" {...field} />
+                    <Button
+                      variant={'outline'}
+                      className={cn(
+                        'w-[240px] pl-3 text-left font-normal',
+                        !field.value && 'text-muted-foreground'
+                      )}
+                    >
+                      {field.value ? (
+                        format(field.value, 'PPP', { locale: ko })
+                      ) : (
+                        <span>날짜를 선택하세요.</span>
+                      )}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
                   </FormControl>
-                  <FormMessage />
-                </FormItem>
-              );
-            }}
-          />
-          <FormField
-            control={form.control}
-            name="reserverTel"
-            render={({ field }) => {
-              return (
-                <FormItem className="space-y-3">
-                  <FormLabel>전화번호</FormLabel>
-                  <FormControl>
-                    <Input placeholder="- 제외(01011112222)" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              );
-            }}
-          />
-          <Button type="submit">예약</Button>
-        </form>
-      </Form>
-    </>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={field.value}
+                    onSelect={field.onChange}
+                    disabled={(date) =>
+                      format(date, 'yyyMMdd') < format(new Date(), 'yyyyMMdd')
+                    }
+                    initialFocus
+                    locale={ko}
+                  />
+                </PopoverContent>
+              </Popover>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="reserverName"
+          render={({ field }) => {
+            return (
+              <FormItem className="space-y-3">
+                <FormLabel>예약자</FormLabel>
+                <FormControl>
+                  <Input placeholder="" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            );
+          }}
+        />
+        <FormField
+          control={form.control}
+          name="reserverTel"
+          render={({ field }) => {
+            return (
+              <FormItem className="space-y-3">
+                <FormLabel>전화번호</FormLabel>
+                <FormControl>
+                  <Input placeholder="- 제외(01011112222)" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            );
+          }}
+        />
+        <Button type="submit">예약</Button>
+      </form>
+    </Form>
   );
 }

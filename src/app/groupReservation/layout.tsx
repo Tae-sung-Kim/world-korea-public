@@ -3,5 +3,11 @@ export default function GroupReservationLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <>{children}</>;
+  return (
+    <>
+      <h1>단체 예약</h1>
+      <hr />
+      {children}
+    </>
+  );
 }
