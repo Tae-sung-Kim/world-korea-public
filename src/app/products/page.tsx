@@ -1,4 +1,4 @@
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import Image from 'next/image';
 
 type Product = {
@@ -68,31 +68,35 @@ const productItem: Product[] = [
 export default function Products() {
   return (
     <>
-      <h1>상품리스트</h1>
-      <div className="">
-        <ScrollArea className="whitespace-nowrap rounded-md border">
-          {productItem.map((d) => (
-            <div key={d.id} className="grid grid-rows-3 grid-flow-col gap-4">
-              <div className="row-span-3">
-                <figure className="shrink-0">
-                  <div className="overflow-hidden rounded-md">
-                    <Image
-                      src={d.url}
-                      alt={`Photo by ${d.title}`}
-                      className="aspect-[3/4] h-fit w-fit object-cover"
-                      width={300}
-                      height={400}
-                    />
-                  </div>
-                </figure>
-              </div>
-              <div className="col-span-2">상품명: {d.title}</div>
-              <div className="row-span-2 col-span-2">가격: {d.price}원</div>
+      <h1 className="pt-7 pb-10 text-center text-4xl font-medium">
+        상품리스트
+      </h1>
+      <ScrollArea className="container h-full">
+        {productItem.map((d) => (
+          <div
+            key={d.id}
+            className="grid grid-rows-3 grid-flow-col-dense gap-2 m-5 p-5 rounded-md border"
+          >
+            <div className="row-span-3">
+              <figure className="shrink-0 p-5 grid justify-items-center">
+                <div className="overflow-hidden rounded-md size-48">
+                  <Image
+                    src={d.url}
+                    alt={`Photo by ${d.title}`}
+                    // className="aspet-[3/4] w-fit object-cover"
+                    className="size-full"
+                    width={300}
+                    height={400}
+                  />
+                </div>
+              </figure>
             </div>
-          ))}
-          <ScrollBar />
-        </ScrollArea>
-      </div>
+            <div className="col-span-7 p-5">상품명: {d.title}</div>
+            <div className="col-span-7 p-5 border-t">설명: {d.title}</div>
+            <div className="col-span-7 p-5 border-t">가격: {d.price}원</div>
+          </div>
+        ))}
+      </ScrollArea>
     </>
   );
 }
