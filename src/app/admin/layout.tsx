@@ -34,12 +34,14 @@ export default async function AdminLayout({
               </span>
               <ul className="mt-2">
                 <li className="text-sm mt-[2px] text-gray-600">
+                  <Link href="/admin/user-categories">회원 구분</Link>
+                </li>
+                <li className="text-sm mt-[2px] text-gray-600">
                   <Link href="/admin/users">회원 목록</Link>
                 </li>
                 <li className="text-sm mt-[2px] text-gray-600">
                   파트너사 목록
                 </li>
-                <li className="text-sm mt-[2px] text-gray-600">권한 관리</li>
               </ul>
             </li>
             <Separator />

@@ -14,6 +14,7 @@ import { Input } from '@/components/ui/input';
 import authService from '@/services/authService';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -28,6 +29,11 @@ const formSchema = z
       .max(20, {
         message: '20자를 초과할 수 없습니다.',
       }),
+    password: z.string().min(4, { message: '4자 이상 입력해주세요.' }),
+    confirmPassword: z.string().min(4, { message: '4자 이상 입력해주세요.' }),
+    companyName: z.string(),
+    address: z.string(),
+    contactNumber: z.string(),
     name: z
       .string()
       .min(2, {
@@ -36,11 +42,8 @@ const formSchema = z
       .max(20, {
         message: '20자를 초과할 수 없습니다.',
       }),
-    email: z.string().email('유효하지 않은 이메일 입니다.'),
-    password: z.string().min(4, { message: '4자 이상 입력해주세요.' }),
-    confirmPassword: z.string().min(4, { message: '4자 이상 입력해주세요.' }),
-    companyName: z.string(),
     phoneNumber: z.string(),
+    email: z.string().email('유효하지 않은 이메일 입니다.'),
   })
   .superRefine(({ password, confirmPassword }, ctx) => {
     if (password !== confirmPassword) {
@@ -53,14 +56,19 @@ const formSchema = z
   });
 
 export default function Register() {
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       id: '',
-      email: '',
       password: '',
       confirmPassword: '',
+      companyName: '',
+      address: '',
+      contactNumber: '',
       name: '',
+      phoneNumber: '',
+      email: '',
     },
   });
 
@@ -68,6 +76,7 @@ export default function Register() {
     try {
       await authService.register(values);
       toast.success('회원가입이 성공적으로 완료되었습니다.');
+      router.push('/login');
     } catch (error: any) {
       toast.error('에러가 발생하였습니다.');
     }
@@ -84,32 +93,6 @@ export default function Register() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>아이디</FormLabel>
-                <FormControl>
-                  <Input placeholder="" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>이름</FormLabel>
-                <FormControl>
-                  <Input placeholder="" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>이메일</FormLabel>
                 <FormControl>
                   <Input placeholder="" {...field} />
                 </FormControl>
@@ -143,12 +126,13 @@ export default function Register() {
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
-            name="phoneNumber"
+            name="companyName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>폰번호</FormLabel>
+                <FormLabel>업체명</FormLabel>
                 <FormControl>
                   <Input placeholder="" {...field} />
                 </FormControl>
@@ -156,12 +140,69 @@ export default function Register() {
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
-            name="companyName"
+            name="address"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>회사명</FormLabel>
+                <FormLabel>주소</FormLabel>
+                <FormControl>
+                  <Input placeholder="" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="contactNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>연락처</FormLabel>
+                <FormControl>
+                  <Input placeholder="" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>이름</FormLabel>
+                <FormControl>
+                  <Input placeholder="" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="phoneNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>휴대폰</FormLabel>
+                <FormControl>
+                  <Input placeholder="" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>이메일</FormLabel>
                 <FormControl>
                   <Input placeholder="" {...field} />
                 </FormControl>

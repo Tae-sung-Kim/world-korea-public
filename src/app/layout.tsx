@@ -1,10 +1,8 @@
-import ReactQueryProviders from '@/app/providers/ReactQueryProvider';
 import Layout from '@/layouts/layout/Layout';
 import { pretendard } from '@/utils/fonts';
 import type { Metadata } from 'next';
 import './globals.css';
-import { OuterProvider, InnterProvider } from './providers/Providers';
-import SessionProvider from '@/app/providers/SessionProvider';
+import { OuterProvider, InnerProvider } from './providers/Providers';
 
 export const metadata: Metadata = {
   title: '월드코리아',
@@ -20,9 +18,9 @@ export default function RootLayout({
     <OuterProvider>
       <html lang="ko">
         <body className={`${pretendard.variable} ${pretendard.className}`}>
-          <InnterProvider>
+          <InnerProvider>
             <Layout>{children}</Layout>
-          </InnterProvider>
+          </InnerProvider>
         </body>
       </html>
     </OuterProvider>

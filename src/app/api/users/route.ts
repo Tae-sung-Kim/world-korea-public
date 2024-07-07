@@ -1,17 +1,24 @@
+import { requiredIsAdmin } from '../auth';
 import connectMongo from '@/db/database';
 import User from '@/models/user';
 import authService from '@/services/authService';
 import { NextResponse } from 'next/server';
 
+/**
+ * 회원 목록 반환
+ */
 export async function GET() {
   try {
     await connectMongo();
 
-    const session = await authService.getSession();
-    if (!session) {
+    if (!(await requiredIsAdmin())) {
       return NextResponse.json(
-        { message: '권한이 없습니다.' },
-        { status: 400 }
+        {
+          message: 'Forbidden: Admin access required',
+        },
+        {
+          status: 403,
+        },
       );
     }
 
@@ -25,7 +32,7 @@ export async function GET() {
       },
       {
         status: 500,
-      }
+      },
     );
   }
 }

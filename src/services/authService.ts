@@ -5,6 +5,7 @@ import {
   SignUpUserType,
   UserType,
   SignInReturnType,
+  UserAuth,
 } from '@/types/user';
 import { getServerSession } from 'next-auth/next';
 import { getSession } from 'next-auth/react';
@@ -21,11 +22,23 @@ class AuthService {
   }
 
   // 세션 반환
-  getSession() {
+  async getSession() {
     return typeof window === 'undefined'
       ? getServerSession(authOptions)
       : getSession();
   }
+
+  async getUserAuth(
+    loginId?: string,
+  ): Promise<{
+    user: { id: string; name: string };
+    accessToken: string;
+  } | null> {
+    return http.get(`/api/auth/user?loginId=${loginId || ''}`);
+  }
+  // getUserAuth(loginId?: string) {
+  //   return http.get<UserAuth>(`/api/auth/user?loginId=${loginId || ''}`);
+  // }
 }
 
 export default new AuthService();

@@ -14,7 +14,8 @@ export async function POST(req: NextRequest) {
       ...body,
       loginId: id,
       password: hashedPassword,
-      isAdmin: false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     });
 
     await newUser.save();
@@ -25,7 +26,7 @@ export async function POST(req: NextRequest) {
         email: newUser.email,
         name: newUser.name,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error: any) {
     return NextResponse.json(
@@ -34,7 +35,7 @@ export async function POST(req: NextRequest) {
       },
       {
         status: 500,
-      }
+      },
     );
   }
 }

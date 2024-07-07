@@ -1,24 +1,20 @@
-// 회원
+// 회원분류
 
-// import { UserCategoryType } from '@/types/UserCategory';
-import {
-  model,
-  models,
-  Schema,
-  Model,
-  HydratedDocument,
-  Types,
-} from 'mongoose';
+import connectMongo from '@/db/database';
+import { UserCategoryType } from '@/types/userCategory';
+import { model, models, Schema, Model, Types } from 'mongoose';
 
 export interface IUserCategory {
   name: string;
-  isAdmin: boolean;
+  level: number;
 }
 
 interface IUserCategoryMethods {}
 
 interface UserCategoryModel
-  extends Model<IUserCategory, {}, IUserCategoryMethods> {}
+  extends Model<IUserCategory, {}, IUserCategoryMethods> {
+  getUserCategoryList(): UserCategoryType[];
+}
 
 const schema = new Schema<
   IUserCategory,
@@ -29,18 +25,31 @@ const schema = new Schema<
     type: String,
     required: true,
   },
-  isAdmin: {
-    type: Boolean,
-    default: false,
+  level: {
+    type: Number,
+    required: true,
   },
 });
 
-schema.static('getUserCategoryList', function getUserCategoryList() {
-  return this.find({}, '-password');
+schema.static('getUserCategoryList', function getUserList() {
+  return this.find({});
 });
 
 const UserCategory =
   (models.UserCategory as UserCategoryModel) ||
   model<IUserCategory, UserCategoryModel>('UserCategory', schema);
+
+export async function initUserCategory() {
+  await connectMongo();
+
+  const len = await UserCategory.countDocuments();
+
+  if (len === 0) {
+    await UserCategory.create({
+      name: '일반회원',
+      level: 1,
+    });
+  }
+}
 
 export default UserCategory;

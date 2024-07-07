@@ -1,10 +1,10 @@
 import http from '@/services';
-import { UserListType } from '@/types/user';
+import { UserListType, UserType } from '@/types/user';
 
 class UserService {
   // 회원 반환
   getUserById(id: string) {
-    return http.get<UserListType>(`/api/users/${id}`);
+    return http.get<UserType>(`/api/users/${id}`);
   }
 
   // 회원 목록 반환
@@ -13,8 +13,21 @@ class UserService {
   }
 
   // 회원 수정
-  updateUser() {
-    return http.put<UserListType>(`/api/users`);
+  updateUser(
+    userData: Pick<
+      UserType,
+      | '_id'
+      | 'companyName'
+      | 'companyNo'
+      | 'address'
+      | 'contactNumber'
+      | 'name'
+      | 'phoneNumber'
+      | 'email'
+      | 'isApproved'
+    > & { userCategoryId: string },
+  ) {
+    return http.put<UserType>(`/api/users/${userData._id}`, userData);
   }
 
   // 회원 삭제
