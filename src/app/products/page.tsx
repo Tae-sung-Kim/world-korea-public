@@ -71,7 +71,7 @@ export default function Products() {
       <h1 className="pt-7 pb-10 text-center text-4xl font-medium">
         상품리스트
       </h1>
-      <ScrollArea className="container h-full">
+      <ScrollArea className={`h-dvh`}>
         {productItem.map((d) => (
           <div
             key={d.id}
