@@ -3,6 +3,7 @@ import { SingInUserType } from '@/types/user';
 import jwtUtils from '@/utils/jwt';
 import type { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import { cookies } from 'next/headers';
 
 const authOptions: NextAuthOptions = {
   providers: [
@@ -15,13 +16,16 @@ const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         try {
           const response = await authService.login(
-            credentials as SingInUserType,
+            credentials as SingInUserType
           );
 
           if (response && credentials) {
             const userData = jwtUtils.verify(response);
 
             if (userData) {
+              //로그인 후 토큰 저장
+              cookies().set('accessToken', response);
+
               return {
                 id: userData.id,
                 name: userData.name,
@@ -76,6 +80,8 @@ const authOptions: NextAuthOptions = {
 
   events: {
     signOut: () => {
+      //로그아웃 할때 삭제
+      cookies().delete('accessToken');
       console.log('Hi');
     },
   },
