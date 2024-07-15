@@ -1,5 +1,3 @@
-'use server';
-
 import RegisterClient from './RegisterClient';
 import authService from '@/services/authService';
 import { redirect } from 'next/navigation';

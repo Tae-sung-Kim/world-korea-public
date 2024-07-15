@@ -1,6 +1,6 @@
 'use client';
 
-import { SingInUserType, UserJwtPayloadType } from '@/types/user';
+import { UserJwtPayloadType } from '@/types/user';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { createContext, useContext, useMemo, useEffect, useState } from 'react';
 

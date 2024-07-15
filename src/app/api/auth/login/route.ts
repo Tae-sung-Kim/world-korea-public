@@ -20,6 +20,7 @@ export async function POST(req: NextRequest) {
       const payload = {
         id: userData.loginId,
         name: userData.name,
+        isAdmin: userData.isAdmin,
       };
 
       const token = jwtUtils.sign(payload);
@@ -35,7 +36,7 @@ export async function POST(req: NextRequest) {
       },
       {
         status: 500,
-      },
+      }
     );
   }
 }

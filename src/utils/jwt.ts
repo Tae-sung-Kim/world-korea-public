@@ -20,6 +20,7 @@ class JwtUtils {
       return {
         id: decoded.id,
         name: decoded.name,
+        isAdmin: decoded.isAdmin,
       };
     } catch (err) {
       return false;

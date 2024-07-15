@@ -3,9 +3,17 @@ import { SingInUserType } from '@/types/user';
 import jwtUtils from '@/utils/jwt';
 import type { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { cookies } from 'next/headers';
+
+const ROLE = {
+  ADMIN: 'admin',
+  USER: 'user',
+  PARTNER: 'partner',
+};
 
 const authOptions: NextAuthOptions = {
+  pages: {
+    signIn: '/login',
+  },
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -23,12 +31,10 @@ const authOptions: NextAuthOptions = {
             const userData = jwtUtils.verify(response);
 
             if (userData) {
-              //로그인 후 토큰 저장
-              cookies().set('accessToken', response);
-
               return {
                 id: userData.id,
                 name: userData.name,
+                role: userData.isAdmin ? ROLE.ADMIN : ROLE.USER,
                 accessToken: response,
               };
             }
@@ -59,8 +65,7 @@ const authOptions: NextAuthOptions = {
         return {
           accessToken: user.accessToken,
           user: {
-            id: user.id,
-            name: user.name,
+            ...user,
           },
         };
       }
@@ -79,11 +84,7 @@ const authOptions: NextAuthOptions = {
   },
 
   events: {
-    signOut: () => {
-      //로그아웃 할때 삭제
-      cookies().delete('accessToken');
-      console.log('Hi');
-    },
+    signOut: () => {},
   },
 
   session: {

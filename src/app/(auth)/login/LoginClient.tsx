@@ -50,6 +50,7 @@ export default function LoginClient() {
       if (response?.ok) {
         toast.success('로그인이 성공적으로 완료되었습니다.');
         router.push('/');
+        router.refresh();
       } else {
         toast.error('로그인에 실패했습니다. 입력한 정보를 다시 확인해주세요.');
       }

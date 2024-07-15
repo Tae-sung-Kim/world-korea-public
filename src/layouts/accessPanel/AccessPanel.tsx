@@ -12,7 +12,7 @@ export default function AccessPanel() {
   const isAdmin = user?.id === 'admin';
 
   const handleLogoutBtnClick = () => {
-    signOut({ redirect: false });
+    signOut();
   };
 
   return (
