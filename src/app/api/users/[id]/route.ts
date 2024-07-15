@@ -20,11 +20,11 @@ export async function GET(req: NextRequest, ctx: { params: { id: string } }) {
         },
         {
           status: 400,
-        },
+        }
       );
     }
 
-    const userData = await User.getUserById(userId);
+    const userData = await User.getUserByLoginId(userId);
 
     return NextResponse.json(userData);
   } catch (error) {
@@ -34,7 +34,7 @@ export async function GET(req: NextRequest, ctx: { params: { id: string } }) {
       },
       {
         status: 500,
-      },
+      }
     );
   }
 }
@@ -56,7 +56,7 @@ export async function PUT(req: NextRequest, ctx: { params: { id: string } }) {
         },
         {
           status: 400,
-        },
+        }
       );
     }
 
@@ -75,7 +75,7 @@ export async function PUT(req: NextRequest, ctx: { params: { id: string } }) {
       },
       {
         status: 500,
-      },
+      }
     );
   }
 }

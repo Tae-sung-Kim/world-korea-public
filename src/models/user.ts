@@ -30,6 +30,7 @@ interface IUserMethods {
 interface UserModel extends Model<IUser, {}, IUserMethods> {
   getUserList(): UserType[];
   getUserById(userId: string): UserType;
+  getUserByLoginId(userId: string): UserType;
   getUserAuthByLoginId(userId: string): UserType;
 }
 
@@ -133,6 +134,12 @@ schema.static('getUserList', function getUserList() {
 
 schema.static('getUserById', function getUserById(userId) {
   return this.findOne({ _id: userId }, '-password').populate('userCategory');
+});
+
+schema.static('getUserByLoginId', function getUserById(userId) {
+  return this.findOne({ loginId: userId }, '-password').populate(
+    'userCategory'
+  );
 });
 
 schema.static('getUserAuthByLoginId', function getUserAuthByLoginId(userId) {

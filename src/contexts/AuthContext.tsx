@@ -1,12 +1,12 @@
 'use client';
 
-import { UserJwtPayloadType } from '@/types/user';
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { UserSessionType } from '@/types/user';
+import { useSession } from 'next-auth/react';
 import { createContext, useContext, useMemo, useEffect, useState } from 'react';
 
 type AuthContextType = {
   accessToken: string | null;
-  user: UserJwtPayloadType | null;
+  user: UserSessionType | null;
   isLoggedIn: boolean | null;
 };
 
@@ -24,7 +24,11 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     if (session.status === 'authenticated') {
       return {
         accessToken: session.data.accessToken,
-        user: session.data.user,
+        user: {
+          id: session.data.user.id,
+          name: session.data.user.name,
+          role: session.data.user.role,
+        },
         isLoggedIn,
       };
     }

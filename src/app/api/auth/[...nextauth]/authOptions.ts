@@ -1,14 +1,9 @@
+import * as CONSTS from '@/constants';
 import authService from '@/services/authService';
 import { SingInUserType } from '@/types/user';
 import jwtUtils from '@/utils/jwt';
 import type { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-
-const ROLE = {
-  ADMIN: 'admin',
-  USER: 'user',
-  PARTNER: 'partner',
-};
 
 const authOptions: NextAuthOptions = {
   pages: {
@@ -34,7 +29,9 @@ const authOptions: NextAuthOptions = {
               return {
                 id: userData.id,
                 name: userData.name,
-                role: userData.isAdmin ? ROLE.ADMIN : ROLE.USER,
+                role: userData.isAdmin
+                  ? CONSTS.USER_ROLE.ADMIN
+                  : CONSTS.USER_ROLE.USER,
                 accessToken: response,
               };
             }
@@ -49,7 +46,7 @@ const authOptions: NextAuthOptions = {
   ],
 
   callbacks: {
-    async redirect({ url, baseUrl }) {
+    async redirect({ baseUrl }) {
       return baseUrl;
     },
 

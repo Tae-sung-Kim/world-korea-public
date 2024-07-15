@@ -23,7 +23,7 @@ export default function UsersClient() {
   const router = useRouter();
 
   const handleTrClick = (userData: UserType) => () => {
-    router.push(`/admin/users/${userData._id}`);
+    router.push(`/admin/users/${userData.loginId}`);
   };
 
   return (

@@ -136,7 +136,7 @@ export default function UsersDetailClient({ userId }: IProps) {
       // );
       form.setValue(
         'userCategoryId',
-        userData.userCategory?._id || ('' as string),
+        userData.userCategory?._id || ('' as string)
       );
       form.setValue('isApproved', userData.isApproved);
       form.setValue('id', userData.loginId as string);

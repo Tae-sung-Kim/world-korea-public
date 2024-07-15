@@ -35,6 +35,12 @@ export type UserJwtPayloadType = {
   isAdmin: boolean;
 };
 
+export type UserSessionType = {
+  id: string;
+  name: string;
+  role: string;
+};
+
 export type SignInReturnType = string;
 
 export type UserAuth = {
