@@ -22,14 +22,6 @@ export async function GET() {
 
     return NextResponse.json(userData);
   } catch (error: any) {
-    // return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
-    return NextResponse.json(
-      {
-        message: error.stack,
-      },
-      {
-        status: 500,
-      }
-    );
+    return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
   }
 }
