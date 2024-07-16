@@ -1,5 +1,5 @@
-import { requiredIsAdmin } from '../../auth';
-import connectMongo from '@/app/api/db/database';
+import { requiredIsAdmin } from '../../utils/authHelper';
+import connectMongo from '@/app/api/libs/database';
 import UserCategory from '@/app/api/models/userCategory';
 import { NextRequest, NextResponse } from 'next/server';
 

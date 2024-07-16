@@ -1,4 +1,4 @@
-import connectMongo from '@/app/api/db/database';
+import connectMongo from '@/app/api/libs/database';
 import User from '@/app/api/models/user';
 import UserCategory from '@/app/api/models/userCategory';
 import { hashPassword } from '@/utils/password';

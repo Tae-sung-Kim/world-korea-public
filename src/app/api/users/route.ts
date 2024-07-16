@@ -1,7 +1,8 @@
-import { requiredIsAdmin } from '../auth';
-import connectMongo from '@/app/api/db/database';
+import { requiredIsAdmin } from '../utils/authHelper';
+import connectMongo from '@/app/api/libs/database';
 import User from '@/app/api/models/user';
-import authService from '@/services/authService';
+import { HTTP_STATUS } from '@/constants/http';
+import { createResponse } from '@/utils/http';
 import { NextResponse } from 'next/server';
 
 /**
@@ -12,27 +13,13 @@ export async function GET() {
     await connectMongo();
 
     if (!(await requiredIsAdmin())) {
-      return NextResponse.json(
-        {
-          message: 'Forbidden: Admin access required',
-        },
-        {
-          status: 403,
-        }
-      );
+      return createResponse(HTTP_STATUS.FORBIDDEN);
     }
 
     const users = await User.getUserList();
 
     return NextResponse.json(users);
   } catch (error) {
-    return NextResponse.json(
-      {
-        error,
-      },
-      {
-        status: 500,
-      }
-    );
+    return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
   }
 }

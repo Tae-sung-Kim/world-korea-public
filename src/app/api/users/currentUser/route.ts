@@ -1,5 +1,5 @@
-import { requiredIsAdmin, requiredIsMe } from '../../auth';
-import connectMongo from '@/app/api/db/database';
+import { requiredIsAdmin, requiredIsMe } from '../../utils/authHelper';
+import connectMongo from '@/app/api/libs/database';
 import User from '@/app/api/models/user';
 import { HTTP_STATUS } from '@/constants/http';
 import authService from '@/services/authService';

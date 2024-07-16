@@ -1,7 +1,8 @@
-import { requiredIsAdmin, requiredIsMe } from '../../auth';
-import connectMongo from '@/app/api/db/database';
+import { requiredIsMe } from '../../utils/authHelper';
+import connectMongo from '@/app/api/libs/database';
 import User from '@/app/api/models/user';
-import authService from '@/services/authService';
+import { HTTP_STATUS } from '@/constants/http';
+import { createResponse } from '@/utils/http';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
@@ -14,28 +15,14 @@ export async function GET(req: NextRequest, ctx: { params: { id: string } }) {
     await connectMongo();
 
     if (!(await requiredIsMe())) {
-      return NextResponse.json(
-        {
-          message: 'Bad Request: Invalid request method or parameters',
-        },
-        {
-          status: 400,
-        }
-      );
+      return createResponse(HTTP_STATUS.UNAUTHORIZED);
     }
 
     const userData = await User.getUserById(userId);
 
     return NextResponse.json(userData);
   } catch (error) {
-    return NextResponse.json(
-      {
-        error,
-      },
-      {
-        status: 500,
-      }
-    );
+    return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
   }
 }
 
@@ -50,14 +37,7 @@ export async function PUT(req: NextRequest, ctx: { params: { id: string } }) {
     await connectMongo();
 
     if (!(await requiredIsMe())) {
-      return NextResponse.json(
-        {
-          message: 'Bad Request: Invalid request method or parameters',
-        },
-        {
-          status: 400,
-        }
-      );
+      return createResponse(HTTP_STATUS.UNAUTHORIZED);
     }
 
     const existingUser = await User.findById(userId);
@@ -69,13 +49,6 @@ export async function PUT(req: NextRequest, ctx: { params: { id: string } }) {
 
     return NextResponse.json(true);
   } catch (error) {
-    return NextResponse.json(
-      {
-        error,
-      },
-      {
-        status: 500,
-      }
-    );
+    return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
   }
 }

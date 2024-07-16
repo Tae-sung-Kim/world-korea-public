@@ -1,5 +1,7 @@
-import connectMongo from '@/app/api/db/database';
+import connectMongo from '@/app/api/libs/database';
 import User, { IUser } from '@/app/api/models/user';
+import { HTTP_STATUS } from '@/constants/http';
+import { createResponse } from '@/utils/http';
 import jwtUtils from '@/utils/jwt';
 import { comparePassword } from '@/utils/password';
 import { NextRequest, NextResponse } from 'next/server';
@@ -30,13 +32,6 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(false);
   } catch (error) {
-    return NextResponse.json(
-      {
-        error,
-      },
-      {
-        status: 500,
-      }
-    );
+    return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
   }
 }
