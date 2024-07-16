@@ -22,7 +22,7 @@ const AuthContext = createContext<IAuthProps>({
 });
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [isLoggedIn, setLoggedIn] = useState<boolean | null>(null);
+  const [initialLoading, setInitialLoading] = useState<boolean>(true);
   const session = useSession();
   const [currentUser, setCurrentUser] = useState<UserType | null>(null);
 
@@ -45,25 +45,24 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
       user: null,
       isLoggedIn: false,
     };
-  }, [session, isLoggedIn, currentUser]);
+  }, [session, currentUser]);
 
   useEffect(() => {
     if (session.status === 'unauthenticated') {
-      setLoggedIn(false);
       setCurrentUser(null);
+      setInitialLoading(false);
     }
 
     if (session.status === 'authenticated') {
       (async () => {
         const userData = await userService.getCurrentUser();
         setCurrentUser(userData);
+        setInitialLoading(false);
       })();
-
-      setLoggedIn(true);
     }
   }, [session]);
 
-  if (typeof isLoggedIn !== 'boolean') {
+  if (initialLoading) {
     return null;
   }
 
