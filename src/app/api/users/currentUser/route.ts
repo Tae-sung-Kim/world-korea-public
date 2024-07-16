@@ -22,7 +22,15 @@ export async function GET() {
     const userData = await User.getUserByLoginId(session.user.id);
 
     return NextResponse.json(userData);
-  } catch (error) {
-    return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
+  } catch (error: any) {
+    // return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
+    return NextResponse.json(
+      {
+        message: error.stack,
+      },
+      {
+        status: 500,
+      }
+    );
   }
 }
