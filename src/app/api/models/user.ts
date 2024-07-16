@@ -3,6 +3,8 @@
 import { UserType } from '@/types/user';
 import { model, models, Schema, Model, Types } from 'mongoose';
 
+require('@/app/api/models/userCategory');
+
 export interface IUser {
   loginId: string; // 아이디
   password: string; // 비밀번호

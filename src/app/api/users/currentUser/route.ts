@@ -1,4 +1,3 @@
-import { requiredIsAdmin, requiredIsMe } from '../../utils/authHelper';
 import connectMongo from '@/app/api/libs/database';
 import User from '@/app/api/models/user';
 import { HTTP_STATUS } from '@/constants/http';
