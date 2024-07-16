@@ -2,7 +2,7 @@
 
 import connectMongo from '@/app/api/libs/database';
 import { UserCategoryType } from '@/types/userCategory';
-import { model, models, Schema, Model, Types } from 'mongoose';
+import { model, models, Schema, Model } from 'mongoose';
 
 export interface IUserCategory {
   name: string;
