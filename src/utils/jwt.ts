@@ -7,7 +7,7 @@ class JwtUtils {
   sign(payload: UserJwtPayloadType) {
     return jwt.sign(payload, secretKey, {
       algorithm: 'HS256', // 암호화 알고리즘
-      expiresIn: '1h', // 유효기간
+      expiresIn: '7d', // 유효기간
     });
   }
 
