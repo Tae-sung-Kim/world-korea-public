@@ -1,5 +1,5 @@
-import connectMongo from '@/db/database';
-import User, { IUser } from '@/models/user';
+import connectMongo from '@/app/api/db/database';
+import User, { IUser } from '@/app/api/models/user';
 import jwtUtils from '@/utils/jwt';
 import { comparePassword } from '@/utils/password';
 import { NextRequest, NextResponse } from 'next/server';

@@ -25,7 +25,7 @@ class UserService {
       | 'phoneNumber'
       | 'email'
       | 'isApproved'
-    > & { userCategoryId: string },
+    > & { userCategoryId: string }
   ) {
     return http.put<UserType>(`/api/users/${userData._id}`, userData);
   }
@@ -33,6 +33,10 @@ class UserService {
   // 회원 삭제
   deleteUser() {
     return http.delete<UserListType>(`/api/users`);
+  }
+
+  getCurrentUser() {
+    return http.get<UserType>(`/api/users/currentUser`);
   }
 }
 

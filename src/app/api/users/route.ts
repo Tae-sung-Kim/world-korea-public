@@ -1,6 +1,6 @@
 import { requiredIsAdmin } from '../auth';
-import connectMongo from '@/db/database';
-import User from '@/models/user';
+import connectMongo from '@/app/api/db/database';
+import User from '@/app/api/models/user';
 import authService from '@/services/authService';
 import { NextResponse } from 'next/server';
 
@@ -18,7 +18,7 @@ export async function GET() {
         },
         {
           status: 403,
-        },
+        }
       );
     }
 
@@ -32,7 +32,7 @@ export async function GET() {
       },
       {
         status: 500,
-      },
+      }
     );
   }
 }

@@ -136,7 +136,7 @@ schema.static('getUserById', function getUserById(userId) {
   return this.findOne({ _id: userId }, '-password').populate('userCategory');
 });
 
-schema.static('getUserByLoginId', function getUserById(userId) {
+schema.static('getUserByLoginId', function getUserByLoginId(userId) {
   return this.findOne({ loginId: userId }, '-password').populate(
     'userCategory'
   );

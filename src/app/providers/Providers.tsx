@@ -1,7 +1,7 @@
+import { initUserCategory } from '@/app/api/models/userCategory';
 import ReactQueryProviders from '@/app/providers/ReactQueryProvider';
 import SessionProvider from '@/app/providers/SessionProvider';
 import AuthProvider from '@/contexts/AuthContext';
-import { initUserCategory } from '@/models/userCategory';
 
 initUserCategory();
 

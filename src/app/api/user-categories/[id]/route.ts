@@ -1,6 +1,6 @@
 import { requiredIsAdmin } from '../../auth';
-import connectMongo from '@/db/database';
-import UserCategory from '@/models/userCategory';
+import connectMongo from '@/app/api/db/database';
+import UserCategory from '@/app/api/models/userCategory';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
@@ -20,7 +20,7 @@ export async function PUT(req: NextRequest, ctx: { params: { id: string } }) {
         },
         {
           status: 403,
-        },
+        }
       );
     }
 
@@ -37,7 +37,7 @@ export async function PUT(req: NextRequest, ctx: { params: { id: string } }) {
       },
       {
         status: 500,
-      },
+      }
     );
   }
 }
@@ -47,7 +47,7 @@ export async function PUT(req: NextRequest, ctx: { params: { id: string } }) {
  */
 export async function DELETE(
   req: NextRequest,
-  ctx: { params: { id: string } },
+  ctx: { params: { id: string } }
 ) {
   try {
     const id = ctx.params.id;
@@ -60,7 +60,7 @@ export async function DELETE(
         },
         {
           status: 403,
-        },
+        }
       );
     }
 
@@ -74,7 +74,7 @@ export async function DELETE(
       },
       {
         status: 500,
-      },
+      }
     );
   }
 }

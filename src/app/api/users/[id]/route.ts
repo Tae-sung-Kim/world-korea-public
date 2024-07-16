@@ -1,6 +1,6 @@
 import { requiredIsAdmin, requiredIsMe } from '../../auth';
-import connectMongo from '@/db/database';
-import User from '@/models/user';
+import connectMongo from '@/app/api/db/database';
+import User from '@/app/api/models/user';
 import authService from '@/services/authService';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -24,7 +24,7 @@ export async function GET(req: NextRequest, ctx: { params: { id: string } }) {
       );
     }
 
-    const userData = await User.getUserByLoginId(userId);
+    const userData = await User.getUserById(userId);
 
     return NextResponse.json(userData);
   } catch (error) {

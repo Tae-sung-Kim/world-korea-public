@@ -1,6 +1,6 @@
 // 회원분류
 
-import connectMongo from '@/db/database';
+import connectMongo from '@/app/api/db/database';
 import { UserCategoryType } from '@/types/userCategory';
 import { model, models, Schema, Model, Types } from 'mongoose';
 

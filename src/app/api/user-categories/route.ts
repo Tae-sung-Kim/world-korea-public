@@ -1,6 +1,6 @@
 import { requiredIsAdmin } from '../auth';
-import connectMongo from '@/db/database';
-import UserCategory from '@/models/userCategory';
+import connectMongo from '@/app/api/db/database';
+import UserCategory from '@/app/api/models/userCategory';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
@@ -20,7 +20,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
       },
       {
         status: 500,
-      },
+      }
     );
   }
 }
@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
         },
         {
           status: 403,
-        },
+        }
       );
     }
 
@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
     if (!name || name.trim() === '' || typeof level !== 'number') {
       return NextResponse.json(
         { message: '값을 정확하게 입력하세요.' },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
       },
       {
         status: 500,
-      },
+      }
     );
   }
 }
