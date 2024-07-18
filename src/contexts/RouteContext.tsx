@@ -1,7 +1,7 @@
 'use client';
 
 import { useAuthContext } from './AuthContext';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { createContext, useEffect } from 'react';
 
 const RouteContext = createContext(null);
@@ -13,13 +13,14 @@ function RouteProvider({ children }: { children: React.ReactNode }) {
   const isApproved = user?.isApproved;
 
   const router = useRouter();
+  const pathName = usePathname();
 
   useEffect(() => {
     //승인여부
     if (isApproved === false) {
       router.replace('/unapproved');
     }
-  }, [isApproved, router]);
+  }, [isApproved, router, pathName]);
 
   return <RouteContext.Provider value={null}>{children}</RouteContext.Provider>;
 }
