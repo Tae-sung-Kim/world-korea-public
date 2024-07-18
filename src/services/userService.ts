@@ -27,7 +27,7 @@ class UserService {
       | 'isApproved'
     > & { userCategoryId: string }
   ) {
-    return http.put<UserType>(`/api/users/${userData._id}`, userData);
+    return http.patch<UserType>(`/api/users/${userData._id}`, userData);
   }
 
   // 회원 삭제

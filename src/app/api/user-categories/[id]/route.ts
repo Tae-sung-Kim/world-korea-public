@@ -1,12 +1,14 @@
 import { requiredIsAdmin } from '../../utils/authHelper';
 import connectMongo from '@/app/api/libs/database';
 import UserCategory from '@/app/api/models/userCategory';
+import { HTTP_STATUS } from '@/constants';
+import { createResponse } from '@/utils/http';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
  * 회원 구분 수정
  */
-export async function PUT(req: NextRequest, ctx: { params: { id: string } }) {
+export async function PATCH(req: NextRequest, ctx: { params: { id: string } }) {
   try {
     const id = ctx.params.id;
     const { name, level } = await req.json();
@@ -14,14 +16,7 @@ export async function PUT(req: NextRequest, ctx: { params: { id: string } }) {
     await connectMongo();
 
     if (!(await requiredIsAdmin())) {
-      return NextResponse.json(
-        {
-          message: 'Forbidden: Admin access required',
-        },
-        {
-          status: 403,
-        }
-      );
+      return createResponse(HTTP_STATUS.FORBIDDEN);
     }
 
     await UserCategory.findByIdAndUpdate(id, {
@@ -31,14 +26,7 @@ export async function PUT(req: NextRequest, ctx: { params: { id: string } }) {
 
     return NextResponse.json(true);
   } catch (error) {
-    return NextResponse.json(
-      {
-        error,
-      },
-      {
-        status: 500,
-      }
-    );
+    return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
   }
 }
 
@@ -54,27 +42,13 @@ export async function DELETE(
     await connectMongo();
 
     if (!(await requiredIsAdmin())) {
-      return NextResponse.json(
-        {
-          message: 'Forbidden: Admin access required',
-        },
-        {
-          status: 403,
-        }
-      );
+      return createResponse(HTTP_STATUS.FORBIDDEN);
     }
 
     await UserCategory.findByIdAndDelete(id);
 
     return NextResponse.json(true);
   } catch (error) {
-    return NextResponse.json(
-      {
-        error,
-      },
-      {
-        status: 500,
-      }
-    );
+    return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
   }
 }

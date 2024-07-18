@@ -5,7 +5,7 @@ import { model, models, Schema, Model, Types } from 'mongoose';
 
 require('@/app/api/models/userCategory');
 
-export interface IUser {
+interface User {
   loginId: string; // 아이디
   password: string; // 비밀번호
   companyNo: string; // 업체번호
@@ -24,19 +24,19 @@ export interface IUser {
   deletedAt: Date;
 }
 
-interface IUserMethods {
+interface UserMethods {
   fullName(): string;
-  updateUser(userData: IUser): boolean;
+  updateUser(userData: User): boolean;
 }
 
-interface UserModel extends Model<IUser, {}, IUserMethods> {
+interface UserModel extends Model<User, {}, UserMethods> {
   getUserList(): UserType[];
   getUserById(userId: string): UserType;
   getUserByLoginId(userId: string): UserType;
   getUserAuthByLoginId(userId: string): UserType;
 }
 
-const schema = new Schema<IUser, UserModel, IUserMethods>({
+const schema = new Schema<User, UserModel, UserMethods>({
   // 로그인 ID
   loginId: {
     type: String,
@@ -187,6 +187,6 @@ schema.method('updateUser', function updateUser(userData) {
 });
 
 const User =
-  (models.User as UserModel) || model<IUser, UserModel>('User', schema);
+  (models.User as UserModel) || model<User, UserModel>('User', schema);
 
 export default User;

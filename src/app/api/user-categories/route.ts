@@ -1,6 +1,8 @@
 import { requiredIsAdmin } from '../utils/authHelper';
 import connectMongo from '@/app/api/libs/database';
 import UserCategory from '@/app/api/models/userCategory';
+import { HTTP_STATUS } from '@/constants';
+import { createResponse } from '@/utils/http';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
@@ -14,30 +16,19 @@ export async function GET(req: NextRequest, res: NextResponse) {
 
     return NextResponse.json(list);
   } catch (error) {
-    return NextResponse.json(
-      {
-        error,
-      },
-      {
-        status: 500,
-      }
-    );
+    return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
   }
 }
 
+/**
+ * 회원 구분 등록
+ */
 export async function POST(req: NextRequest) {
   try {
     await connectMongo();
 
     if (!(await requiredIsAdmin())) {
-      return NextResponse.json(
-        {
-          message: 'Forbidden: Admin access required',
-        },
-        {
-          status: 403,
-        }
-      );
+      return createResponse(HTTP_STATUS.FORBIDDEN);
     }
 
     const body = await req.json();
@@ -59,13 +50,6 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(newUserCategory, { status: 200 });
   } catch (error: any) {
-    return NextResponse.json(
-      {
-        error,
-      },
-      {
-        status: 500,
-      }
-    );
+    return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
   }
 }

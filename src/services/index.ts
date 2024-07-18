@@ -7,12 +7,12 @@ const instance: AxiosInstance = axios.create({
 });
 
 instance.interceptors.request.use(
-  async config => {
+  async (config) => {
     // const session = await authService.getSession();
     // console.log('hi', session);
     return config;
   },
-  error => {
+  (error) => {
     // 요청이 실패한 경우 에러 처리를 할 수 있습니다.
     console.error('Request interceptor error:', error);
     return Promise.reject(error);
@@ -49,6 +49,19 @@ const methods = {
   ): Promise<T> => {
     try {
       const response = await instance.put<T>(url, data, config);
+      return response.data;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  },
+
+  patch: async <T>(
+    url: string,
+    data?: any,
+    config?: AxiosRequestConfig
+  ): Promise<T> => {
+    try {
+      const response = await instance.patch<T>(url, data, config);
       return response.data;
     } catch (error) {
       return Promise.reject(error);

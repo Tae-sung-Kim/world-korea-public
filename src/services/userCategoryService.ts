@@ -12,7 +12,7 @@ class UserCategoryService {
   }
 
   updateUserCategory(data: UserCategoryType) {
-    return http.put<boolean>(`/api/user-categories/${data._id}`, data);
+    return http.patch<boolean>(`/api/user-categories/${data._id}`, data);
   }
 
   deleteUserCategory(id: string) {
