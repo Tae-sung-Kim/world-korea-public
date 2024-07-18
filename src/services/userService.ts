@@ -38,6 +38,10 @@ class UserService {
   getCurrentUser() {
     return http.get<UserType>(`/api/users/currentUser`);
   }
+
+  patchUser(userData: Partial<UserType>) {
+    return http.patch<UserType>(`/api/users/${userData._id}`, userData);
+  }
 }
 
 export default new UserService();

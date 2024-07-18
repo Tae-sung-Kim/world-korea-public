@@ -21,7 +21,7 @@ export default function AccessPanel() {
         {isLoggedIn ? (
           <>
             <Link
-              href="/my/info-change"
+              href="/my/profile"
               className="text-sm hover:text-gray-700 hover:underline"
             >
               {user?.id}님 환영합니다.
