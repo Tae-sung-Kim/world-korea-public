@@ -1,6 +1,6 @@
 import connectMongo from '@/app/api/libs/database';
-import User from '@/app/api/models/user';
-import authService from '@/services/authService';
+import User from '@/app/api/models/user.model';
+import authService from '@/services/auth.service';
 import { NextApiRequest } from 'next';
 import { NextRequest, NextResponse } from 'next/server';
 

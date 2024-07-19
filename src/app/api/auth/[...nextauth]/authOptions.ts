@@ -1,7 +1,7 @@
+import jwtUtils from '@/app/api/utils/jwt.util';
 import * as CONSTS from '@/constants';
-import authService from '@/services/authService';
-import { SingInUserType } from '@/types/user';
-import jwtUtils from '@/utils/jwt';
+import authService from '@/services/auth.service';
+import { SingInUserType } from '@/types';
 import type { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 

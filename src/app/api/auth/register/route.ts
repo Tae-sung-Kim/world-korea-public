@@ -1,7 +1,7 @@
 import connectMongo from '@/app/api/libs/database';
-import User from '@/app/api/models/user';
-import UserCategory from '@/app/api/models/userCategory';
-import { hashPassword } from '@/utils/password';
+import UserCategory from '@/app/api/models/user-category.model';
+import User from '@/app/api/models/user.model';
+import { hashPassword } from '@/app/api/utils/password.util';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {

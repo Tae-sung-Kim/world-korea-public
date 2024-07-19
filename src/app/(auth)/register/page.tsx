@@ -1,5 +1,5 @@
-import RegisterClient from './RegisterClient';
-import authService from '@/services/authService';
+import RegisterClient from './register.client';
+import authService from '@/services/auth.service';
 import { redirect } from 'next/navigation';
 
 export default async function Register() {

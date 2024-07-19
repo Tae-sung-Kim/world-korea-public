@@ -1,4 +1,4 @@
-import AdminProtectedRoute from '@/app/admin/AdminProtectedRoute';
+import AdminProtectedRoute from '@/app/admin/admin-protected-route.component';
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
 import { TbTicket, TbUser } from 'react-icons/tb';

@@ -1,4 +1,4 @@
-import { UserCategoryType } from './userCategory';
+import { UserCategoryType } from './user-category.type';
 
 export type SignUpUserType = {
   id: string;
@@ -26,6 +26,10 @@ export type UserType = {
   isApproved: boolean;
   isAdmin: boolean;
 };
+
+export interface IUserHasPassword extends UserType {
+  password: string;
+}
 
 export type UserListType = UserType[];
 

@@ -19,13 +19,11 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
-import userCategoryService from '@/services/userCategoryService';
-import userService from '@/services/userService';
-import { UserType } from '@/types/user';
+import userCategoryService from '@/services/user-category.service';
+import userService from '@/services/user.service';
+import { UserType } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import React, { useEffect, useReducer, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';

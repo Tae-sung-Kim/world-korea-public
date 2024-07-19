@@ -9,8 +9,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import userService from '@/services/userService';
-import { UserType } from '@/types/user';
+import userService from '@/services/user.service';
+import { UserType } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 

@@ -1,5 +1,5 @@
 import http from '@/services';
-import { UserCategoryType } from '@/types/userCategory';
+import { UserCategoryType } from '@/types';
 
 class UserCategoryService {
   // 회원 반환

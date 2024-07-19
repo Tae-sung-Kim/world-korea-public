@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { useAuthContext } from '@/contexts/AuthContext';
+import { useAuthContext } from '@/contexts/auth.context';
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
 import 'next/navigation';

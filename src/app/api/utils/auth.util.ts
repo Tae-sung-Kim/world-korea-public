@@ -1,6 +1,7 @@
 import connectMongo from '@/app/api/libs/database';
-import User from '@/app/api/models/user';
-import authService from '@/services/authService';
+import User from '@/app/api/models/user.model';
+import authService from '@/services/auth.service';
+import { IUserHasPassword } from '@/types';
 
 export async function getAuthData(loginId?: string) {
   await connectMongo();
@@ -35,6 +36,20 @@ export async function getAuthData(loginId?: string) {
   returnValue.isAdmin = userData.isAdmin;
 
   return returnValue;
+}
+
+export async function getCurrentUser(): Promise<IUserHasPassword | null> {
+  await connectMongo();
+
+  const session = await authService.getSession();
+
+  if (!session) {
+    return null;
+  }
+
+  const userData = await User.getUserByLoginId(session.user.id);
+
+  return userData;
 }
 
 export async function requiredIsAdmin() {

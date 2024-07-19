@@ -6,7 +6,7 @@ import {
   UserType,
   SignInReturnType,
   UserAuth,
-} from '@/types/user';
+} from '@/types';
 import { getServerSession } from 'next-auth/next';
 import { getSession } from 'next-auth/react';
 
@@ -28,9 +28,7 @@ class AuthService {
       : getSession();
   }
 
-  async getUserAuth(
-    loginId?: string,
-  ): Promise<{
+  async getUserAuth(loginId?: string): Promise<{
     user: { id: string; name: string };
     accessToken: string;
   } | null> {

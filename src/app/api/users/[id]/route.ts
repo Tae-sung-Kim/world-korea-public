@@ -1,8 +1,8 @@
-import { requiredIsMe } from '../../utils/authHelper';
+import { requiredIsMe } from '../../utils/auth.util';
 import connectMongo from '@/app/api/libs/database';
-import User from '@/app/api/models/user';
-import { HTTP_STATUS } from '@/constants/http';
-import { createResponse } from '@/utils/http';
+import User from '@/app/api/models/user.model';
+import { createResponse } from '@/app/api/utils/http.util';
+import { HTTP_STATUS } from '@/constants/http.constant';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**

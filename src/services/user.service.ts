@@ -1,13 +1,13 @@
 import http from '@/services';
-import { UserListType, UserType } from '@/types/user';
+import { UserListType, UserType } from '@/types';
 
 class UserService {
-  // 유저 반환
+  // 유저 반환 (관리자)
   getUserById(id: string) {
     return http.get<UserType>(`/api/users/${id}`);
   }
 
-  // 유저 목록 반환
+  // 유저 목록 반환 (관리자)
   getUserList() {
     return http.get<UserListType>(`/api/users`);
   }
@@ -30,7 +30,7 @@ class UserService {
     return http.patch<UserType>(`/api/users/${userData._id}`, userData);
   }
 
-  // 유저 삭제
+  // 유저 삭제 (관리자)
   deleteUser() {
     return http.delete<UserListType>(`/api/users`);
   }

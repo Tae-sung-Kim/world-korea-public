@@ -1,4 +1,4 @@
-import { FILE_PATH, FILE_TYPE, uploadFile } from '../../utils/uploadHelper';
+import { FILE_PATH, FILE_TYPE, uploadFile } from '../../utils/upload.util';
 import { NextRequest, NextResponse } from 'next/server';
 
 // export const config = {

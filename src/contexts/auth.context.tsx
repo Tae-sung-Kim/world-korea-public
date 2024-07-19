@@ -1,7 +1,7 @@
 'use client';
 
-import userService from '@/services/userService';
-import { UserSessionType, UserType } from '@/types/user';
+import userService from '@/services/user.service';
+import { UserSessionType, UserType } from '@/types';
 import { useSession } from 'next-auth/react';
 import { createContext, useContext, useMemo, useEffect, useState } from 'react';
 

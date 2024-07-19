@@ -1,4 +1,4 @@
-import UsersClient from './UsersClient';
+import UsersClient from './users.client';
 
 // import userService from '@/services/userService';
 // import {

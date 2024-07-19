@@ -1,7 +1,7 @@
 'use client';
 
-import userCategoryService from '@/services/userCategoryService';
-import { UserCategoryType } from '@/types/userCategory';
+import userCategoryService from '@/services/user-category.service';
+import { UserCategoryType } from '@/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
@@ -67,7 +67,7 @@ export default function UserCategoriesClient() {
             ...row,
             [e.target.name]: value,
           };
-        }),
+        })
       );
     };
 

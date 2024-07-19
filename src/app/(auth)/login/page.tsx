@@ -1,5 +1,5 @@
-import LoginClient from './LoginClient';
-import authService from '@/services/authService';
+import LoginClient from './login.client';
+import authService from '@/services/auth.service';
 import { redirect } from 'next/navigation';
 
 export default async function Login() {

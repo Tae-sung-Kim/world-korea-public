@@ -1,8 +1,8 @@
 import connectMongo from '@/app/api/libs/database';
-import User from '@/app/api/models/user';
-import { HTTP_STATUS } from '@/constants/http';
-import authService from '@/services/authService';
-import { createResponse } from '@/utils/http';
+import User from '@/app/api/models/user.model';
+import { createResponse } from '@/app/api/utils/http.util';
+import { HTTP_STATUS } from '@/constants/http.constant';
+import authService from '@/services/auth.service';
 import { NextResponse } from 'next/server';
 
 /**

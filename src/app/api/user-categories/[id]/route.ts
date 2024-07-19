@@ -1,8 +1,8 @@
-import { requiredIsAdmin } from '../../utils/authHelper';
+import { requiredIsAdmin } from '../../utils/auth.util';
 import connectMongo from '@/app/api/libs/database';
-import UserCategory from '@/app/api/models/userCategory';
+import UserCategory from '@/app/api/models/user-category.model';
+import { createResponse } from '@/app/api/utils/http.util';
 import { HTTP_STATUS } from '@/constants';
-import { createResponse } from '@/utils/http';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**

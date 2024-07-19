@@ -1,4 +1,4 @@
-import { UserJwtPayloadType, UserType } from '@/types/user';
+import { UserJwtPayloadType } from '@/types';
 import jwt from 'jsonwebtoken';
 
 const secretKey = process.env.NEXTAUTH_SECRET as string;

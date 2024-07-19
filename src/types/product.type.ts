@@ -1,4 +1,4 @@
-import { Product } from '@/app/api/models/product';
+import { Product } from '@/app/api/models/product.model';
 import { PRODUCT_STATUS } from '@/constants';
 
 export type ProductStatus =

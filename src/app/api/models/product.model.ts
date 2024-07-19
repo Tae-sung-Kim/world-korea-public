@@ -1,6 +1,6 @@
 import { PRODUCT_STATUS } from '@/constants';
-import { ProductStatus } from '@/types/product';
-import { model, models, Schema, Model, Types } from 'mongoose';
+import { ProductStatus } from '@/types';
+import { model, models, Schema, Model } from 'mongoose';
 
 export interface Product {
   name: string; // 상품명

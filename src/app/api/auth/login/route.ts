@@ -1,9 +1,9 @@
 import connectMongo from '@/app/api/libs/database';
-import User, { IUser } from '@/app/api/models/user';
-import { HTTP_STATUS } from '@/constants/http';
-import { createResponse } from '@/utils/http';
-import jwtUtils from '@/utils/jwt';
-import { comparePassword } from '@/utils/password';
+import User, { IUser } from '@/app/api/models/user.model';
+import { createResponse } from '@/app/api/utils/http.util';
+import jwtUtils from '@/app/api/utils/jwt.util';
+import { comparePassword } from '@/app/api/utils/password.util';
+import { HTTP_STATUS } from '@/constants/http.constant';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
