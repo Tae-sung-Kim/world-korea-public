@@ -1,4 +1,4 @@
-import UsersDetailClient from './UsersDetailClient';
+import UsersDetailClient from './users.detail.client';
 
 export default async function UsersDetailPage({
   params,
