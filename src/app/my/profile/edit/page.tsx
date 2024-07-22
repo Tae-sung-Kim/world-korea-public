@@ -1,5 +1,5 @@
-import EditProfileClient from './EditProfileClient';
+import ProfileEditClient from './profile-edit.client';
 
 export default async function ProfilePage() {
-  return <EditProfileClient />;
+  return <ProfileEditClient />;
 }

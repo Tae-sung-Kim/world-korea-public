@@ -7,12 +7,12 @@ export default function MainNav() {
       <div className="flex justify-between items-center w-[1200px]">
         <h1>
           <Link href="/">
-            <Image
+            {/* <Image
               src="/images/main_logo_invert.png"
               width={270}
               height={50}
               alt="Logo"
-            />
+            /> */}
           </Link>
         </h1>
         <ul className="flex items-center justify-center h-full text-xl gap-16">

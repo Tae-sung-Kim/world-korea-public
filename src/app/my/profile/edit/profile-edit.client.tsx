@@ -14,6 +14,7 @@ import { Input } from '@/components/ui/input';
 import userService from '@/services/user.service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -37,7 +38,9 @@ const formSchema = z.object({
   email: z.string().email('유효하지 않은 이메일 입니다.'),
 });
 
-export default function EditProfileClient() {
+export default function ProfileEditClient() {
+  const router = useRouter();
+
   const { isFetching, data: currentUserData } = useQuery({
     queryKey: ['userService.getCurrentUser'],
     queryFn: userService.getCurrentUser,
@@ -47,6 +50,7 @@ export default function EditProfileClient() {
     mutationFn: userService.patchUser,
     onSuccess: () => {
       toast.success('정보 수정이 완료 되었습니다.');
+      router.back();
     },
     onError: () => {
       toast.error('정보 수정이 실패 하였습니다. 잠시 후 다시 시도하여 주세요.');
@@ -224,7 +228,7 @@ export default function EditProfileClient() {
               )}
             />
             <Button type="submit" className="ml-2" disabled={isFetching}>
-              수정하기
+              수정 완료
             </Button>
           </form>
         </Form>
