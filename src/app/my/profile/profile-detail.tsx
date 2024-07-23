@@ -1,14 +1,9 @@
 'use client';
 
+import ProfileChangePassword from './profile-change-password';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-  Modal,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-} from '@/components/ui/modal';
 import userService from '@/services/user.service';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
@@ -94,19 +89,7 @@ export default function ProfileDetail() {
         </Button>
       </div>
 
-      {isModalOpen && (
-        <Modal>
-          <ModalHeader onClose={handleClose}>
-            <div>모달 헤더</div>
-          </ModalHeader>
-          <ModalContent>
-            모달 내용모달 내용모달 내용모달 내용모달 내용모달 내용모달 내용모달
-            <br />
-            내용모달 내용모달 내용모달 내용모달 내용모달 내용모달 내용 aaaaaaaaa
-          </ModalContent>
-          <ModalFooter>버튼영역</ModalFooter>
-        </Modal>
-      )}
+      {isModalOpen && <ProfileChangePassword onClose={handleClose} />}
     </>
   );
 }
