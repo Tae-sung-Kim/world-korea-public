@@ -138,9 +138,7 @@ schema.static('getUserById', function getUserById(userId) {
 });
 
 schema.static('getUserByLoginId', function getUserByLoginId(userId) {
-  return this.findOne({ loginId: userId }, '-password').populate(
-    'userCategory'
-  );
+  return this.findOne({ loginId: userId }).populate('userCategory');
 });
 
 schema.static('getUserAuthByLoginId', function getUserAuthByLoginId(userId) {

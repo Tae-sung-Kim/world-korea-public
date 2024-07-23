@@ -50,7 +50,7 @@ export default function ProfileEditClient() {
     mutationFn: userService.patchUser,
     onSuccess: () => {
       toast.success('정보 수정이 완료 되었습니다.');
-      router.back();
+      router.replace('/');
     },
     onError: () => {
       toast.error('정보 수정이 실패 하였습니다. 잠시 후 다시 시도하여 주세요.');
@@ -114,7 +114,7 @@ export default function ProfileEditClient() {
 
   return (
     <>
-      <h1 className="text-2xl font-semibold text-center p-4">정보 수정</h1>
+      <h1 className="text-2xl font-semibold text-center p-4">회원 정보 수정</h1>
 
       <div className="container">
         <Form {...form}>
