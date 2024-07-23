@@ -29,7 +29,7 @@ export default function MainNav() {
             <Link href="/">선구매용</Link>
           </li>
           <li>
-            <Link href="/groupReservation">단체예약</Link>
+            <Link href="/group-reservation">단체예약</Link>
           </li>
         </ul>
       </div>
