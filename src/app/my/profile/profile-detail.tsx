@@ -3,12 +3,21 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+  Modal,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+} from '@/components/ui/modal';
 import userService from '@/services/user.service';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 export default function ProfileDetail() {
   const router = useRouter();
+
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const { isFetching, data: currentUserData } = useQuery({
     queryKey: ['userService.getCurrentUser'],
@@ -19,10 +28,24 @@ export default function ProfileDetail() {
     router.push('/my/profile/edit');
   };
 
+  //모달창 오픈
+  const handleModalOpen = () => {
+    setIsModalOpen((prev) => !prev);
+  };
+
+  const handleClose = () => {
+    setIsModalOpen((prev) => !prev);
+  };
+
   return (
     <>
       <h1 className="text-2xl font-semibold text-center p-4">회원 정보</h1>
 
+      <div className="container relative">
+        <div className="absolute right-0 -top-[40px]">
+          <Button onClick={handleModalOpen}>비밀번호 변경</Button>
+        </div>
+      </div>
       <div className="container space-y-8">
         <div className="space-y-2">
           <Label>아이디</Label>
@@ -70,6 +93,20 @@ export default function ProfileDetail() {
           수정하기
         </Button>
       </div>
+
+      {isModalOpen && (
+        <Modal>
+          <ModalHeader onClose={handleClose}>
+            <div>모달 헤더</div>
+          </ModalHeader>
+          <ModalContent>
+            모달 내용모달 내용모달 내용모달 내용모달 내용모달 내용모달 내용모달
+            <br />
+            내용모달 내용모달 내용모달 내용모달 내용모달 내용모달 내용 aaaaaaaaa
+          </ModalContent>
+          <ModalFooter>버튼영역</ModalFooter>
+        </Modal>
+      )}
     </>
   );
 }
