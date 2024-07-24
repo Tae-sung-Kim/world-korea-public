@@ -2,6 +2,6 @@ export interface IOnVerifyPassword {
   onVerifyPassword: (password: string) => void;
 }
 
-export interface IModalFunction {
+export interface ModalFunction {
   onClose?: () => void | undefined;
 }

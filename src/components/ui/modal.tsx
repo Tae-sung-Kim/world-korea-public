@@ -1,14 +1,11 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { IModalFunction } from '@/types';
+import { ModalFunction } from '@/types';
 import React from 'react';
 
-//모달을 이런식으로 만들어야 하는지??
-//아니면 div로 구성해야 하는지 -> useStaet, useEffect를 이용해야 하는지?
-
-interface IModalProps
-  extends IModalFunction,
+interface ModalProps
+  extends ModalFunction,
     React.HTMLAttributes<HTMLDivElement> {
   // 추가적인 props 정의
 }
@@ -46,7 +43,7 @@ const Modal = React.forwardRef<
 
 Modal.displayName = 'Modal';
 
-const ModalHeader = React.forwardRef<HTMLDivElement, IModalProps>(
+const ModalHeader = React.forwardRef<HTMLDivElement, ModalProps>(
   ({ className, children, onClose }, ref) => {
     return (
       <div

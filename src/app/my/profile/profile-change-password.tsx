@@ -6,9 +6,9 @@ import {
   ModalFooter,
   ModalHeader,
 } from '@/components/ui/modal';
-import { IModalFunction } from '@/types';
+import { ModalFunction } from '@/types';
 
-export default function ProfileChangePassword({ onClose }: IModalFunction) {
+export default function ProfileChangePassword({ onClose }: ModalFunction) {
   return (
     <Modal>
       <ModalHeader onClose={onClose}>
