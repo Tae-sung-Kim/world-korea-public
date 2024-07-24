@@ -10,7 +10,7 @@ interface ModalProps
   // 추가적인 props 정의
 }
 
-const Modal = React.forwardRef<
+const ModalContainer = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, children, ...props }, ref) => {
@@ -26,7 +26,6 @@ const Modal = React.forwardRef<
           'top-0 w-full h-full fixed z-10 p-10 flex justify-center grid content-center'
         )}
       >
-        {/* 드래그 할려면 여기서 해야함. */}
         <div
           ref={ref}
           className={cn(
@@ -41,7 +40,7 @@ const Modal = React.forwardRef<
   );
 });
 
-Modal.displayName = 'Modal';
+ModalContainer.displayName = 'ModalContainer';
 
 const ModalHeader = React.forwardRef<HTMLDivElement, ModalProps>(
   ({ className, children, onClose }, ref) => {
@@ -103,4 +102,4 @@ const ModalFooter = React.forwardRef<
 
 ModalFooter.displayName = 'ModalFooter';
 
-export { Modal, ModalHeader, ModalContent, ModalFooter };
+export { ModalContainer, ModalHeader, ModalContent, ModalFooter };

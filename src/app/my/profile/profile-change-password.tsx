@@ -1,7 +1,7 @@
 'use client';
 
 import {
-  Modal,
+  ModalContainer,
   ModalContent,
   ModalFooter,
   ModalHeader,
@@ -10,7 +10,7 @@ import { ModalFunction } from '@/types';
 
 export default function ProfileChangePassword({ onClose }: ModalFunction) {
   return (
-    <Modal>
+    <ModalContainer>
       <ModalHeader onClose={onClose}>
         <div>모달 헤더</div>
       </ModalHeader>
@@ -20,6 +20,6 @@ export default function ProfileChangePassword({ onClose }: ModalFunction) {
         내용모달 내용모달 내용모달 내용모달 내용모달 내용모달 내용 aaaaaaaaa
       </ModalContent>
       <ModalFooter>버튼영역</ModalFooter>
-    </Modal>
+    </ModalContainer>
   );
 }
