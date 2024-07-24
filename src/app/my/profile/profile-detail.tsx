@@ -1,18 +1,16 @@
 'use client';
 
-import ProfileChangePassword from './profile-change-password';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useModalContext, MODAL_TYPE } from '@/contexts/modal.context';
 import userService from '@/services/user.service';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 
 export default function ProfileDetail() {
   const router = useRouter();
-
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const { openModal } = useModalContext();
 
   const { isFetching, data: currentUserData } = useQuery({
     queryKey: ['userService.getCurrentUser'],
@@ -25,11 +23,22 @@ export default function ProfileDetail() {
 
   //모달창 오픈
   const handleModalOpen = () => {
-    setIsModalOpen((prev) => !prev);
-  };
-
-  const handleClose = () => {
-    setIsModalOpen((prev) => !prev);
+    openModal({
+      type: MODAL_TYPE.ALERT,
+      title: '타이틀 테스트 입니다',
+      content: '내용 테스트 입니다.',
+      cancelName: 'aaaaaaaaa',
+      useOkClose: false,
+      // useOverlayClose: true,
+      onOk: () => {
+        openModal({
+          type: MODAL_TYPE.ALERT,
+          title: 'asdasdasdasdasd',
+          content: 'kljsdfjasdlfkl;ajsdf;klajsd;fkl',
+          cancelName: 'bbbbbbbbbbb',
+        });
+      },
+    });
   };
 
   return (
@@ -88,8 +97,6 @@ export default function ProfileDetail() {
           수정하기
         </Button>
       </div>
-
-      {isModalOpen && <ProfileChangePassword onClose={handleClose} />}
     </>
   );
 }

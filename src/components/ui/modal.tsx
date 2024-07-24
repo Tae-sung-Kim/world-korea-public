@@ -1,14 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { ModalFunction } from '@/types';
 import React from 'react';
-
-interface ModalProps
-  extends ModalFunction,
-    React.HTMLAttributes<HTMLDivElement> {
-  // 추가적인 props 정의
-}
 
 const ModalContainer = React.forwardRef<
   HTMLDivElement,
@@ -25,11 +18,12 @@ const ModalContainer = React.forwardRef<
         className={cn(
           'top-0 w-full h-full fixed z-10 p-10 flex justify-center grid content-center'
         )}
+        onClick={props.onClick}
       >
         <div
           ref={ref}
           className={cn(
-            'min-w-96 min-h-96 bg-gray-50 space-y-4 border-2 border-double border-indigo-600',
+            'min-w-96 min-h-60 bg-gray-50 space-y-4 border-2 border-double border-indigo-600',
             className
           )}
         >
@@ -42,31 +36,22 @@ const ModalContainer = React.forwardRef<
 
 ModalContainer.displayName = 'ModalContainer';
 
-const ModalHeader = React.forwardRef<HTMLDivElement, ModalProps>(
-  ({ className, children, onClose }, ref) => {
-    return (
-      <div
-        ref={ref}
-        className={cn(
-          'border-b-2 border-dotted border-indigo-600 p-4 min-w-40',
-          className
-        )}
-      >
-        <div className="relative">
-          {children}
-          {onClose && (
-            <button
-              className="bg-slate-200 rounded-full hover:bg-slate-400 absolute top-0 right-0 h-7 w-7"
-              onClick={onClose}
-            >
-              X
-            </button>
-          )}
-        </div>
-      </div>
-    );
-  }
-);
+const ModalHeader = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, children }, ref) => {
+  return (
+    <div
+      ref={ref}
+      className={cn(
+        'border-b-2 border-dotted border-indigo-600 p-4 min-h-14',
+        className
+      )}
+    >
+      <div className="relative">{children}</div>
+    </div>
+  );
+});
 
 ModalHeader.displayName = 'ModalHeader';
 
@@ -75,7 +60,7 @@ const ModalContent = React.forwardRef<
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, children, ...props }, ref) => {
   return (
-    <div ref={ref} className={cn('p-5 min-w-96 min-h-96', className)}>
+    <div ref={ref} className={cn('p-5 min-h-64', className)}>
       {children}
     </div>
   );
@@ -91,7 +76,7 @@ const ModalFooter = React.forwardRef<
     <div
       ref={ref}
       className={cn(
-        'border-t-2 border-dotted border-indigo-600 p-4 min-w-40',
+        'border-t-2 border-dotted border-indigo-600 p-2 min-h-14',
         className
       )}
     >

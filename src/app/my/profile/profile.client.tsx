@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 
 export default function ProfileClient() {
-  const [isVerifiedPassword, setIsVerifiedPassword] = useState(false);
+  const [isVerifiedPassword, setIsVerifiedPassword] = useState(true);
 
   const verifiedPassword = useMutation({
     mutationFn: userService.verifyPassword,
