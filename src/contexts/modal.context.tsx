@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
 import {
   ModalContainer,
   ModalContent,
@@ -12,6 +13,7 @@ import {
   useContext,
   useState,
   MouseEvent,
+  cloneElement,
 } from 'react';
 import ReactDOM from 'react-dom';
 import { v4 as uuidv4 } from 'uuid';
@@ -43,31 +45,29 @@ type ModalComponentType = {
 
 type ModalPropsType = {
   type?: ModalType;
-  component?: ReactNode | null | undefined;
+  Component?: ({
+    id,
+    onOk,
+    onCancel,
+  }: Pick<ModalComponentType, 'id' | 'onOk' | 'onCancel'>) => ReactNode;
 } & ModalComponentType;
 
+type AsyncPropsType = {
+  id: string;
+  isOk?: boolean;
+  isCancel?: boolean;
+};
+
 interface ModalContextProps {
-  openModal: ({ type }: ModalPropsType) => void;
-  closeModal?: (id: string) => void;
+  openModal: ({ type }: ModalPropsType) => ReactNode | Promise<AsyncPropsType>;
 }
 
 const ModalContext = createContext<ModalContextProps>({
   openModal: () => <></>,
-  closeModal: undefined,
 });
 
 function ModalProvider({ children }: { children: ReactNode }) {
   const [modals, setModals] = useState<ModalPropsType[]>([]);
-
-  //경고창
-  const openAlert = () => {
-    console.log('openAlert');
-  };
-
-  //확인창
-  const openConfirm = () => {
-    console.log('openConfirm');
-  };
 
   //창 닫기
   const closeModal = (id: string = '') => {
@@ -75,9 +75,9 @@ function ModalProvider({ children }: { children: ReactNode }) {
   };
 
   //일반 창
-  const openModal = ({
+  const openModal = async ({
     type = MODAL_TYPE.MODAL,
-    component,
+    Component,
     title,
     content,
     okName,
@@ -91,76 +91,81 @@ function ModalProvider({ children }: { children: ReactNode }) {
     onOk,
     onCancel,
     onOverlayClick,
-  }: ModalPropsType) => {
-    const id = uuidv4();
+  }: ModalPropsType): Promise<AsyncPropsType> => {
+    return new Promise<AsyncPropsType>((resolve) => {
+      const id = uuidv4();
 
-    //확인
-    const handleOk = () => {
-      onOk && onOk();
+      //확인
+      const handleOk = () => {
+        onOk && onOk();
 
-      if (useOkClose) {
-        closeModal(id);
-      }
-    };
-    //취소
-    const handleCancel = () => {
-      onCancel && onCancel();
-
-      closeModal(id);
-    };
-
-    //바깥영역 클릭시 닫기 처리
-    const handlOverlayClick = (e: MouseEvent) => {
-      if (e.target === e.currentTarget) {
-        onOverlayClick && onOverlayClick(e);
-        closeModal(id);
-      }
-    };
-
-    setModals((prevModal) => {
-      return [
-        ...prevModal,
-        {
+        resolve({
           id,
-          type,
-          component,
-          title,
-          content,
-          okName,
-          cancelName,
-          useCloseButton,
-          showFooter,
-          showHeader,
-          useOverlayClose,
-          useOkClose,
-          onOk: handleOk,
-          onCancel: handleCancel,
-          onOverlayClick: handlOverlayClick,
-        },
-      ];
-    });
+          isOk: true,
+        });
 
-    if (type === MODAL_TYPE.ALERT) {
-      console.log('alert');
-    } else if (type === MODAL_TYPE.CONFIRM) {
-      console.log('confirm');
-    } else {
-      console.log('modal');
-    }
+        if (useOkClose) {
+          closeModal(id);
+        }
+      };
+      //취소
+      const handleCancel = () => {
+        onCancel && onCancel();
+
+        resolve({
+          id,
+          isCancel: true,
+        });
+
+        if (useCancelClose) {
+          closeModal(id);
+        }
+      };
+
+      //바깥영역 클릭시 닫기 처리
+      const handlOverlayClick = (e: MouseEvent) => {
+        if (e.target === e.currentTarget) {
+          onOverlayClick && onOverlayClick(e);
+          closeModal(id);
+        }
+      };
+
+      setModals((prevModal) => {
+        return [
+          ...prevModal,
+          {
+            id,
+            type,
+            Component,
+            title,
+            content,
+            okName,
+            cancelName,
+            useCloseButton,
+            showFooter,
+            showHeader,
+            useOverlayClose,
+            useOkClose,
+            onOk: handleOk,
+            onCancel: handleCancel,
+            onOverlayClick: handlOverlayClick,
+          },
+        ];
+      });
+    });
   };
 
   return (
     <ModalContext.Provider
       value={{
         openModal,
-        closeModal,
       }}
     >
       {modals.map(
         ({
           id,
           type,
-          component,
+          Component,
           title,
           content,
           okName,
@@ -175,51 +180,54 @@ function ModalProvider({ children }: { children: ReactNode }) {
         }) => {
           return (
             <ModalPortal key={id}>
-              {type === MODAL_TYPE.MODAL && component ? (
-                <>{component && 'componet 있음'}</>
-              ) : (
-                <ModalContainer
-                  {...(useOverlayClose
-                    ? { onClick: (e) => onOverlayClick && onOverlayClick(e) }
-                    : {})}
-                >
-                  {showHeader && (
-                    <ModalHeader>
-                      <>
+              <ModalContainer
+                {...(useOverlayClose
+                  ? { onClick: (e) => onOverlayClick && onOverlayClick(e) }
+                  : {})}
+              >
+                {type === MODAL_TYPE.MODAL && Component ? (
+                  cloneElement(
+                    <Component id={id} onOk={onOk} onCancel={onCancel} />
+                  )
+                ) : (
+                  <>
+                    {showHeader && (
+                      <ModalHeader>
                         {title}
                         {useCloseButton && (
-                          <button
-                            className="bg-slate-200 rounded-full hover:bg-slate-400 absolute top-0 right-0 h-7 w-7"
+                          <Button
+                            className="bg-red-400 rounded-full hover:bg-red-300 absolute top-0 right-0 h-7 w-7"
                             onClick={() => closeModal(id)}
                           >
                             X
-                          </button>
+                          </Button>
                         )}
-                      </>
-                    </ModalHeader>
-                  )}
-                  <ModalContent>{content}</ModalContent>
-                  {showFooter && (
-                    <ModalFooter>
-                      <div className="grid grid-cols-2 gap-4">
-                        {type === MODAL_TYPE.CONFIRM && <button>취소</button>}
-                        <button
-                          className="p-2 bg-slate-200 hover:bg-slate-400"
-                          onClick={onCancel}
-                        >
-                          {cancelName ?? '취소'}
-                        </button>
-                        <button
-                          className="p-2 bg-teal-200 hover:bg-teal-400"
-                          onClick={onOk}
-                        >
-                          {okName ?? '확인'}
-                        </button>
-                      </div>
-                    </ModalFooter>
-                  )}
-                </ModalContainer>
-              )}
+                      </ModalHeader>
+                    )}
+                    <ModalContent>{content}</ModalContent>
+                    {showFooter && (
+                      <ModalFooter>
+                        <div className="flex justify-center">
+                          {type === MODAL_TYPE.CONFIRM && (
+                            <Button
+                              className="p-2 mx-5 bg-slate-400 hover:bg-slate-300 min-w-36"
+                              onClick={onCancel}
+                            >
+                              {cancelName ?? '취소'}
+                            </Button>
+                          )}
+                          <Button
+                            className="p-2 mx-5 bg-blue-400 hover:bg-blue-300 min-w-36"
+                            onClick={onOk}
+                          >
+                            {okName ?? '확인'}
+                          </Button>
+                        </div>
+                      </ModalFooter>
+                    )}
+                  </>
+                )}
+              </ModalContainer>
             </ModalPortal>
           );
         }

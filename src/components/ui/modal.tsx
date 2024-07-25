@@ -11,7 +11,7 @@ const ModalContainer = React.forwardRef<
     <>
       {/* modal backgroundStyle */}
       <div
-        className={cn('top-0 w-full h-full fixed bg-stone-100 opacity-70')}
+        className={cn('top-0 w-full h-full fixed bg-black opacity-50')}
       ></div>
 
       <div
@@ -23,7 +23,7 @@ const ModalContainer = React.forwardRef<
         <div
           ref={ref}
           className={cn(
-            'min-w-96 min-h-60 bg-gray-50 space-y-4 border-2 border-double border-indigo-600',
+            'min-w-96 min-h-60 bg-gray-50 rounded-lg space-y-4 border-2',
             className
           )}
         >
@@ -44,7 +44,7 @@ const ModalHeader = React.forwardRef<
     <div
       ref={ref}
       className={cn(
-        'border-b-2 border-dotted border-indigo-600 p-4 min-h-14',
+        'border-b-2 border-soild border-indigo-600/50 p-4 min-h-14',
         className
       )}
     >
@@ -76,7 +76,7 @@ const ModalFooter = React.forwardRef<
     <div
       ref={ref}
       className={cn(
-        'border-t-2 border-dotted border-indigo-600 p-2 min-h-14',
+        'border-t-2 border-soild border-indigo-600/50 p-2 min-h-14',
         className
       )}
     >
