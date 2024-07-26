@@ -33,7 +33,6 @@ export default function ProfileDetail({
           <ProfileChangePasswordModal id={id} onOk={onOk} onCancel={onCancel} />
         );
       },
-      useOverlayClose: true,
       title: '타이틀 테스트 입니다',
       content: '내용 테스트 입니다.',
       cancelName: 'aaaaaaaaa',
