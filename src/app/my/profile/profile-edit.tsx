@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import userService from '@/services/user.service';
+import { StepType } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
@@ -38,9 +39,12 @@ const formSchema = z.object({
   email: z.string().email('유효하지 않은 이메일 입니다.'),
 });
 
-export default function ProfileEdit() {
+export default function ProfileEdit({
+  onStep,
+}: {
+  onStep: (type: StepType) => void;
+}) {
   const queryClient = useQueryClient();
-  const router = useRouter();
 
   const { isFetching, data: currentUserData } = useQuery({
     queryKey: ['userService.getCurrentUser'],
@@ -49,10 +53,12 @@ export default function ProfileEdit() {
 
   const patchMutation = useMutation({
     mutationFn: userService.patchUser,
-    onSuccess: () => {
-      // queryClient.invalidateQueries({ queryKey: ['profile-change'] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ['userService.getCurrentUser'],
+      });
       toast.success('정보 수정이 완료 되었습니다.');
-      router.replace('/');
+      onStep(0);
     },
     onError: () => {
       toast.error('정보 수정이 실패 하였습니다. 잠시 후 다시 시도하여 주세요.');

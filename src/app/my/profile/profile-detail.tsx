@@ -6,12 +6,13 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useModalContext, MODAL_TYPE } from '@/contexts/modal.context';
 import userService from '@/services/user.service';
+import { StepType } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 
 export default function ProfileDetail({
-  onNextStep,
+  onStep,
 }: {
-  onNextStep: () => void;
+  onStep: (type: StepType) => void;
 }) {
   const { openModal } = useModalContext();
 
@@ -21,7 +22,7 @@ export default function ProfileDetail({
   });
 
   const handleUpdate = () => {
-    onNextStep();
+    onStep(1);
   };
 
   //모달창 오픈

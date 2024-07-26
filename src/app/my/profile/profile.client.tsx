@@ -4,8 +4,9 @@ import ProfileConfirmPassword from './profile-confirm-password';
 import ProfileDetail from './profile-detail';
 import ProfileEdit from './profile-edit';
 import userService from '@/services/user.service';
+import { StepType } from '@/types';
 import { useMutation } from '@tanstack/react-query';
-import { Fragment, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'sonner';
 
 enum Step {
@@ -22,10 +23,8 @@ export default function ProfileClient() {
     mutationFn: userService.verifyPassword,
     onSuccess: (data: boolean) => {
       setIsVerifiedPassword(data);
-      setStep(Step.Edit);
       if (!data) {
         toast.error('비밀번호가 일치 하지 않습니다. 다시 확인하여 주세요.');
-        setStep(Step.ConfirmPassword);
       } else {
         setStep(Step.Edit);
       }
@@ -37,20 +36,25 @@ export default function ProfileClient() {
     },
   });
 
-  const handleNextStep = () => {
-    setStep(Step.ConfirmPassword);
+  //number값에 따라 정의
+  const handleStep = (type: StepType) => {
+    setStep(
+      type === 0 ? Step.Detail : type === 1 ? Step.ConfirmPassword : Step.Edit
+    );
   };
 
   return (
     <>
       {/* 회원정보 보기*/}
-      {step === Step.Detail && <ProfileDetail onNextStep={handleNextStep} />}
+      {step === Step.Detail && <ProfileDetail onStep={handleStep} />}
       {/* 비번 확인 창 */}
       {step === Step.ConfirmPassword && (
         <ProfileConfirmPassword onVerifyPassword={verifiedPassword.mutate} />
       )}
       {/* 회원정보 변경 */}
-      {step === Step.Edit && isVerifiedPassword && <ProfileEdit />}
+      {step === Step.Edit && isVerifiedPassword && (
+        <ProfileEdit onStep={handleStep} />
+      )}
     </>
   );
 }
