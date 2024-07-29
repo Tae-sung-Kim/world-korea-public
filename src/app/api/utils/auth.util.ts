@@ -1,7 +1,7 @@
 import connectMongo from '@/app/api/libs/database';
 import User from '@/app/api/models/user.model';
 import authService from '@/services/auth.service';
-import { IUserHasPassword } from '@/types';
+import { UserHasPassword } from '@/types';
 
 export async function getAuthData(loginId?: string) {
   await connectMongo();
@@ -38,7 +38,7 @@ export async function getAuthData(loginId?: string) {
   return returnValue;
 }
 
-export async function getCurrentUser(): Promise<IUserHasPassword | null> {
+export async function getCurrentUser(): Promise<UserHasPassword | null> {
   await connectMongo();
 
   const session = await authService.getSession();

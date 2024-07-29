@@ -27,7 +27,7 @@ export type UserType = {
   isAdmin: boolean;
 };
 
-export interface IUserHasPassword extends UserType {
+export interface UserHasPassword extends UserType {
   password: string;
 }
 

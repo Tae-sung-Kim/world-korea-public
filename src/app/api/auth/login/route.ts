@@ -4,7 +4,7 @@ import { createResponse } from '@/app/api/utils/http.util';
 import jwtUtils from '@/app/api/utils/jwt.util';
 import { comparePassword } from '@/app/api/utils/password.util';
 import { HTTP_STATUS } from '@/constants/http.constant';
-import { IUserHasPassword } from '@/types';
+import { UserHasPassword } from '@/types';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
 
     const { id, password } = await req.json();
 
-    const userData = await User.findOne<IUserHasPassword>({ loginId: id });
+    const userData = await User.findOne<UserHasPassword>({ loginId: id });
     if (!userData) {
       return NextResponse.json(false);
     }
