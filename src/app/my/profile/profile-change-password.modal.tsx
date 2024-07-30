@@ -32,10 +32,10 @@ const passwordSchema = () => {
     })
     .max(15, {
       message: '비밀번호는 영문/숫자/특수문자 조합으로 8~15자리 입니다.',
-    })
-    .regex(passwordRegex, {
-      message: '특수문자 중 ; & % = - + < > ＼ 는 사용할 수 없습니다.',
     });
+  // .regex(passwordRegex, {
+  //   message: '특수문자 중 ; & % = - + < > ＼ 는 사용할 수 없습니다.',
+  // });
 };
 
 const FormSchema = z

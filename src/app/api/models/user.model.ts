@@ -31,8 +31,9 @@ interface UserMethods {
 interface UserModel extends Model<User, {}, UserMethods> {
   getUserList(): UserType[];
   getUserById(userId: string): UserType;
-  getUserByLoginId(userId: string): UserHasPassword;
-  getUserAuthByLoginId(userId: string): UserType;
+  getUserByLoginId(loginId: string): UserHasPassword;
+  getUserAuthByLoginId(loginId: string): UserType;
+  updateUserPasswordById(userId: string, password: string): UserType;
 }
 
 const schema = new Schema<User, UserModel, UserMethods>({
@@ -137,15 +138,23 @@ schema.static('getUserById', function getUserById(userId) {
   return this.findOne({ _id: userId }, '-password').populate('userCategory');
 });
 
-schema.static('getUserByLoginId', function getUserByLoginId(userId) {
-  return this.findOne({ loginId: userId }).populate('userCategory');
+schema.static('getUserByLoginId', function getUserByLoginId(loginId) {
+  return this.findOne({ loginId }).populate('userCategory');
 });
 
-schema.static('getUserAuthByLoginId', function getUserAuthByLoginId(userId) {
-  return this.findOne({ loginId: userId }, '-password').populate(
-    'userCategory'
-  );
+schema.static('getUserAuthByLoginId', function getUserAuthByLoginId(loginId) {
+  return this.findOne({ loginId }, '-password').populate('userCategory');
 });
+
+schema.static(
+  'updateUserPasswordById',
+  function updateUserPasswordById(userId, password) {
+    return this.findByIdAndUpdate(userId, {
+      password,
+      updatedAt: new Date(),
+    });
+  }
+);
 
 schema.method('updateUser', function updateUser(userData) {
   if (typeof userData.userCategoryId === 'string') {
