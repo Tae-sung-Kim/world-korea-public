@@ -11,8 +11,8 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Step } from '@/constants/profile.constant';
 import userService from '@/services/user.service';
-import { StepType } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
@@ -42,7 +42,7 @@ const formSchema = z.object({
 export default function ProfileEdit({
   onStep,
 }: {
-  onStep: (type: StepType) => void;
+  onStep: (type: Step) => void;
 }) {
   const queryClient = useQueryClient();
 
@@ -58,7 +58,7 @@ export default function ProfileEdit({
         queryKey: ['userService.getCurrentUser'],
       });
       toast.success('정보 수정이 완료 되었습니다.');
-      onStep(0);
+      onStep(Step.Detail);
     },
     onError: () => {
       toast.error('정보 수정이 실패 하였습니다. 잠시 후 다시 시도하여 주세요.');
