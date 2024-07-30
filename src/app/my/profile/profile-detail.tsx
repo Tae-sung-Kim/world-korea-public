@@ -4,15 +4,15 @@ import ProfileChangePasswordModal from './profile-change-password.modal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Step } from '@/constants/profile.constant';
 import { useModalContext, MODAL_TYPE } from '@/contexts/modal.context';
 import userService from '@/services/user.service';
-import { StepType } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 
 export default function ProfileDetail({
   onStep,
 }: {
-  onStep: (type: StepType) => void;
+  onStep: (type: Step) => void;
 }) {
   const { openModal } = useModalContext();
 
@@ -22,7 +22,7 @@ export default function ProfileDetail({
   });
 
   const handleUpdate = () => {
-    onStep(1);
+    onStep(Step.ConfirmPassword);
   };
 
   //모달창 오픈

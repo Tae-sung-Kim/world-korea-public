@@ -3,17 +3,11 @@
 import ProfileConfirmPassword from './profile-confirm-password';
 import ProfileDetail from './profile-detail';
 import ProfileEdit from './profile-edit';
+import { Step } from '@/constants/profile.constant';
 import userService from '@/services/user.service';
-import { StepType } from '@/types';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { toast } from 'sonner';
-
-enum Step {
-  Detail = 'DETAIL',
-  ConfirmPassword = 'CONFIRM_PASSWORD',
-  Edit = 'EDIT',
-}
 
 export default function ProfileClient() {
   const [isVerifiedPassword, setIsVerifiedPassword] = useState(false);
@@ -37,10 +31,8 @@ export default function ProfileClient() {
   });
 
   //number값에 따라 정의
-  const handleStep = (type: StepType) => {
-    setStep(
-      type === 0 ? Step.Detail : type === 1 ? Step.ConfirmPassword : Step.Edit
-    );
+  const handleStep = (type: Step) => {
+    setStep(type);
   };
 
   return (
