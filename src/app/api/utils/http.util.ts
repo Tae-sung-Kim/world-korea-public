@@ -1,7 +1,7 @@
 import {
   HTTP_STATUS_MESSAGES,
   HttpStatusValues,
-} from '@/constants/http.constant';
+} from '@/definitions/http.constant';
 import { NextResponse } from 'next/server';
 
 export function createResponse(status: HttpStatusValues) {

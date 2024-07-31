@@ -3,8 +3,8 @@ import User from '@/app/api/models/user.model';
 import { createResponse } from '@/app/api/utils/http.util';
 import jwtUtils from '@/app/api/utils/jwt.util';
 import { comparePassword } from '@/app/api/utils/password.util';
-import { HTTP_STATUS } from '@/constants/http.constant';
-import { UserHasPassword } from '@/types';
+import * as CONSTS from '@/definitions';
+import { UserHasPassword } from '@/definitions';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
@@ -33,6 +33,6 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(false);
   } catch (error) {
-    return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
+    return createResponse(CONSTS.HTTP_STATUS.INTERNAL_SERVER_ERROR);
   }
 }

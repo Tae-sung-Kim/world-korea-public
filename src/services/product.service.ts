@@ -2,4 +2,6 @@ import http from '@/services';
 
 class ProductService {}
 
-export default new ProductService();
+const productService = new ProductService();
+
+export default productService;

@@ -1,25 +1,25 @@
 // 회원분류
 
 import connectMongo from '@/app/api/libs/database';
-import { UserCategoryType } from '@/types';
+import { UserCategoryType } from '@/definitions';
 import { model, models, Schema, Model } from 'mongoose';
 
-export interface IUserCategory {
+export interface UserCategoryDB {
   name: string;
   level: number;
 }
 
-interface IUserCategoryMethods {}
+interface UserCategoryMethods {}
 
 interface UserCategoryModel
-  extends Model<IUserCategory, {}, IUserCategoryMethods> {
+  extends Model<UserCategoryDB, {}, UserCategoryMethods> {
   getUserCategoryList(): UserCategoryType[];
 }
 
 const schema = new Schema<
-  IUserCategory,
+  UserCategoryDB,
   UserCategoryModel,
-  IUserCategoryMethods
+  UserCategoryMethods
 >({
   name: {
     type: String,
@@ -37,7 +37,7 @@ schema.static('getUserCategoryList', function getUserList() {
 
 const UserCategory =
   (models.UserCategory as UserCategoryModel) ||
-  model<IUserCategory, UserCategoryModel>('UserCategory', schema);
+  model<UserCategoryDB, UserCategoryModel>('UserCategory', schema);
 
 export async function initUserCategory() {
   await connectMongo();

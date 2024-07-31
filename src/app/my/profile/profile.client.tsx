@@ -3,7 +3,7 @@
 import ProfileConfirmPassword from './profile-confirm-password';
 import ProfileDetail from './profile-detail';
 import ProfileEdit from './profile-edit';
-import { Step } from '@/constants/profile.constant';
+import { Step } from './profile.constant';
 import userService from '@/services/user.service';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';

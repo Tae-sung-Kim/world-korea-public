@@ -1,4 +1,4 @@
-import { UserJwtPayloadType } from '@/types';
+import { UserJwtPayloadType } from '@/definitions';
 import jwt from 'jsonwebtoken';
 
 const secretKey = process.env.NEXTAUTH_SECRET as string;
@@ -55,4 +55,6 @@ class JwtUtils {
   // },
 }
 
-export default new JwtUtils();
+const jwtUtils = new JwtUtils();
+
+export default jwtUtils;

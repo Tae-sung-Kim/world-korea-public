@@ -1,5 +1,5 @@
+import { UserCategoryType } from '@/definitions';
 import http from '@/services';
-import { UserCategoryType } from '@/types';
 
 class UserCategoryService {
   // 회원 반환
@@ -47,4 +47,6 @@ class UserCategoryService {
   // }
 }
 
-export default new UserCategoryService();
+const userCategoryService = new UserCategoryService();
+
+export default userCategoryService;

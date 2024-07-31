@@ -1,10 +1,10 @@
 'use client';
 
 import ProfileChangePasswordModal from './profile-change-password.modal';
+import { Step } from './profile.constant';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Step } from '@/constants/profile.constant';
 import { useModalContext, MODAL_TYPE } from '@/contexts/modal.context';
 import userService from '@/services/user.service';
 import { useQuery } from '@tanstack/react-query';

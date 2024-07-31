@@ -1,8 +1,7 @@
-import { PRODUCT_STATUS } from '@/constants';
-import { ProductStatus } from '@/types';
+import { PRODUCT_STATUS, ProductStatus } from '@/definitions';
 import { model, models, Schema, Model } from 'mongoose';
 
-export interface Product {
+export interface ProductDB {
   name: string; // 상품명
   accessLevel: number; // 접근 레벨
   status: ProductStatus; // 상품 상태
@@ -21,9 +20,9 @@ export interface Product {
 
 interface ProductMethods {}
 
-interface ProductModel extends Model<Product, {}, ProductMethods> {}
+interface ProductModel extends Model<ProductDB, {}, ProductMethods> {}
 
-const schema = new Schema<Product>({
+const schema = new Schema<ProductDB>({
   name: { type: String, required: true },
   accessLevel: { type: Number, default: 1 },
   status: {
@@ -49,6 +48,6 @@ const schema = new Schema<Product>({
 
 const Product =
   (models.Product as ProductModel) ||
-  model<Product, ProductModel>('Product', schema);
+  model<ProductDB, ProductModel>('Product', schema);
 
 export default Product;

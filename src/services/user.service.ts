@@ -1,5 +1,5 @@
+import { UserListType, UserType } from '@/definitions';
 import http from '@/services';
-import { UserListType, UserType } from '@/types';
 
 class UserService {
   // 유저 반환 (관리자)
@@ -64,4 +64,6 @@ class UserService {
   }
 }
 
-export default new UserService();
+const userService = new UserService();
+
+export default userService;

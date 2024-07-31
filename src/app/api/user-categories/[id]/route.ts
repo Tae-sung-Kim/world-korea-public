@@ -2,7 +2,7 @@ import { requiredIsAdmin } from '../../utils/auth.util';
 import connectMongo from '@/app/api/libs/database';
 import UserCategory from '@/app/api/models/user-category.model';
 import { createResponse } from '@/app/api/utils/http.util';
-import { HTTP_STATUS } from '@/constants';
+import { HTTP_STATUS } from '@/definitions';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**

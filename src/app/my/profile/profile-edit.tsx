@@ -1,5 +1,6 @@
 'use client';
 
+import { Step } from './profile.constant';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -11,7 +12,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Step } from '@/constants/profile.constant';
 import userService from '@/services/user.service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';

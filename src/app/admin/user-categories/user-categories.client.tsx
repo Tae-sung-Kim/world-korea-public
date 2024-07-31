@@ -1,7 +1,7 @@
 'use client';
 
+import { UserCategoryType } from '@/definitions';
 import userCategoryService from '@/services/user-category.service';
-import { UserCategoryType } from '@/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';

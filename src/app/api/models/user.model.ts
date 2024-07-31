@@ -1,10 +1,10 @@
 // 회원
 
-import { UserHasPassword, UserType } from '@/types';
+import { UserHasPassword, UserType } from '@/definitions';
 import { model, models, Schema, Model, Types } from 'mongoose';
 import '@/app/api/models/user-category.model';
 
-interface User {
+interface UserDB {
   loginId: string; // 아이디
   password: string; // 비밀번호
   companyNo: string; // 업체번호
@@ -28,7 +28,7 @@ interface UserMethods {
   updateUser(userData: UserType): boolean;
 }
 
-interface UserModel extends Model<User, {}, UserMethods> {
+interface UserModel extends Model<UserDB, {}, UserMethods> {
   getUserList(): UserType[];
   getUserById(userId: string): UserType;
   getUserByLoginId(loginId: string): UserHasPassword;
@@ -36,7 +36,7 @@ interface UserModel extends Model<User, {}, UserMethods> {
   updateUserPasswordById(userId: string, password: string): UserType;
 }
 
-const schema = new Schema<User, UserModel, UserMethods>({
+const schema = new Schema<UserDB, UserModel, UserMethods>({
   // 로그인 ID
   loginId: {
     type: String,
@@ -193,6 +193,6 @@ schema.method('updateUser', function updateUser(userData) {
 });
 
 const User =
-  (models.User as UserModel) || model<User, UserModel>('User', schema);
+  (models.User as UserModel) || model<UserDB, UserModel>('User', schema);
 
 export default User;

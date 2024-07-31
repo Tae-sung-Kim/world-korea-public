@@ -1,12 +1,12 @@
 import authOptions from '@/app/api/auth/[...nextauth]/authOptions';
-import http from '@/services';
 import {
   SingInUserType,
   SignUpUserType,
   UserType,
   SignInReturnType,
   UserAuth,
-} from '@/types';
+} from '@/definitions';
+import http from '@/services';
 import { getServerSession } from 'next-auth/next';
 import { getSession } from 'next-auth/react';
 
@@ -39,4 +39,6 @@ class AuthService {
   // }
 }
 
-export default new AuthService();
+const authService = new AuthService();
+
+export default authService;

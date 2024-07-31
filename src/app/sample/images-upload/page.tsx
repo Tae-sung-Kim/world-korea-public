@@ -1,6 +1,5 @@
 'use client';
 
-import { HTTP_METHODS } from '@/constants/http.constant';
 import http from '@/services';
 import { useState, useRef } from 'react';
 

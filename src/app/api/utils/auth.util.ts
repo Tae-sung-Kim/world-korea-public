@@ -1,7 +1,7 @@
 import connectMongo from '@/app/api/libs/database';
 import User from '@/app/api/models/user.model';
+import { UserHasPassword } from '@/definitions';
 import authService from '@/services/auth.service';
-import { UserHasPassword } from '@/types';
 
 export async function getAuthData(loginId?: string) {
   await connectMongo();

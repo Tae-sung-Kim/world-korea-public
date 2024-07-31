@@ -1,5 +1,5 @@
 import { createResponse } from '@/app/api/utils/http.util';
-import { HTTP_STATUS } from '@/constants';
+import { HTTP_STATUS } from '@/definitions';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
