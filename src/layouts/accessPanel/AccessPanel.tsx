@@ -9,7 +9,8 @@ import 'next/navigation';
 
 export default function AccessPanel() {
   const { isLoggedIn, user } = useAuthContext();
-  const isAdmin = user?.id === 'admin';
+
+  const isAdmin = user?.role === 'admin';
 
   const handleLogoutBtnClick = () => {
     signOut();
