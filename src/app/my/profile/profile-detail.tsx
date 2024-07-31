@@ -1,7 +1,7 @@
 'use client';
 
 import ProfileChangePasswordModal from './profile-change-password.modal';
-import { Step } from './profile.constant';
+import { ProfileStep } from './profile.constant';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -12,7 +12,7 @@ import { useQuery } from '@tanstack/react-query';
 export default function ProfileDetail({
   onStep,
 }: {
-  onStep: (type: Step) => void;
+  onStep: (type: ProfileStep) => void;
 }) {
   const { openModal } = useModalContext();
 
@@ -22,7 +22,7 @@ export default function ProfileDetail({
   });
 
   const handleUpdate = () => {
-    onStep(Step.ConfirmPassword);
+    onStep(ProfileStep.ConfirmPassword);
   };
 
   //모달창 오픈
@@ -34,9 +34,7 @@ export default function ProfileDetail({
           <ProfileChangePasswordModal id={id} onOk={onOk} onCancel={onCancel} />
         );
       },
-      title: '타이틀 테스트 입니다',
-      content: '내용 테스트 입니다.',
-      cancelName: 'aaaaaaaaa',
+      useOverlayClose: true,
     });
   };
 

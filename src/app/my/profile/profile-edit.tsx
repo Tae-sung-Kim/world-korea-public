@@ -1,6 +1,6 @@
 'use client';
 
-import { Step } from './profile.constant';
+import { ProfileStep } from './profile.constant';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -42,7 +42,7 @@ const formSchema = z.object({
 export default function ProfileEdit({
   onStep,
 }: {
-  onStep: (type: Step) => void;
+  onStep: (type: ProfileStep) => void;
 }) {
   const queryClient = useQueryClient();
 
@@ -58,7 +58,7 @@ export default function ProfileEdit({
         queryKey: ['userService.getCurrentUser'],
       });
       toast.success('정보 수정이 완료 되었습니다.');
-      onStep(Step.Detail);
+      onStep(ProfileStep.Detail);
     },
     onError: () => {
       toast.error('정보 수정이 실패 하였습니다. 잠시 후 다시 시도하여 주세요.');

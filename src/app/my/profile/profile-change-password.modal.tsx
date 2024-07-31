@@ -98,9 +98,6 @@ export default function ProfileChangePasswordModal({
       <ModalHeader>
         <div className="flex justify-center">
           <h1 className="text-xl ">비밀번호 변경</h1>
-          <div className="absolute right-0">
-            <Button onClick={onCancel}>X</Button>
-          </div>
         </div>
       </ModalHeader>
       <ModalContent>
@@ -150,7 +147,10 @@ export default function ProfileChangePasswordModal({
               )}
             />
 
-            <div className="flex justify-center border-t-2 border-soild pt-4">
+            <div className="flex justify-center space-x-8 border-t-2 border-soild pt-4">
+              <Button type="button" onClick={onCancel}>
+                취소하기
+              </Button>
               <Button type="submit">변경하기</Button>
             </div>
           </form>
