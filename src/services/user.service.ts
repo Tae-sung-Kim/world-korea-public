@@ -1,10 +1,10 @@
-import { UserListType, UserType } from '@/definitions';
+import { UserListType, User } from '@/definitions';
 import http from '@/services';
 
 class UserService {
   // 유저 반환 (관리자)
   getUserById(id: string) {
-    return http.get<UserType>(`/api/users/${id}`);
+    return http.get<User>(`/api/users/${id}`);
   }
 
   // 유저 목록 반환 (관리자)
@@ -15,7 +15,7 @@ class UserService {
   // 유저 수정 (관리자)
   updateUser(
     userData: Pick<
-      UserType,
+      User,
       | '_id'
       | 'companyName'
       | 'companyNo'
@@ -27,7 +27,7 @@ class UserService {
       | 'isApproved'
     > & { userCategoryId: string }
   ) {
-    return http.patch<UserType>(`/api/users/${userData._id}`, userData);
+    return http.patch<User>(`/api/users/${userData._id}`, userData);
   }
 
   // 유저 삭제 (관리자)
@@ -37,12 +37,12 @@ class UserService {
 
   // 로그인 된 유저의 정보 반환
   getCurrentUser() {
-    return http.get<UserType>(`/api/users/current-user`);
+    return http.get<User>(`/api/users/current-user`);
   }
 
   // 유저 수정 (사용자)
-  patchUser(userData: Partial<UserType>) {
-    return http.patch<UserType>(`/api/users/${userData._id}`, userData);
+  patchUser(userData: Partial<User>) {
+    return http.patch<User>(`/api/users/${userData._id}`, userData);
   }
 
   // 비밀번호 확인 (사용자)

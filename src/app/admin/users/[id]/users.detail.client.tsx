@@ -19,7 +19,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
-import { UserType } from '@/definitions';
+import { User } from '@/definitions';
 import userCategoryService from '@/services/user-category.service';
 import userService from '@/services/user.service';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -96,7 +96,7 @@ export default function UsersDetailClient({ userId }: IProps) {
     },
   });
 
-  const userDataRef = useRef<UserType>();
+  const userDataRef = useRef<User>();
   userDataRef.current = userData;
 
   const handleSubmit = async () => {

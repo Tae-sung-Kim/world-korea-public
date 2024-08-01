@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { UserType } from '@/definitions';
+import { User } from '@/definitions';
 import userService from '@/services/user.service';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
@@ -22,7 +22,7 @@ export default function UsersClient() {
   });
   const router = useRouter();
 
-  const handleTrClick = (userData: UserType) => () => {
+  const handleTrClick = (userData: User) => () => {
     router.push(`/admin/users/${userData._id}`);
   };
 

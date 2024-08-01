@@ -1,5 +1,5 @@
 import connectMongo from '@/app/api/libs/database';
-import User from '@/app/api/models/user.model';
+import UserModel from '@/app/api/models/user.model';
 import authService from '@/services/auth.service';
 import { NextApiRequest } from 'next';
 import { NextRequest, NextResponse } from 'next/server';
@@ -30,7 +30,7 @@ export async function GET(req: any) {
       loginId = session.user?.id;
     }
 
-    const userData = await User.getUserAuthByLoginId(loginId);
+    const userData = await UserModel.getUserAuthByLoginId(loginId);
     if (!userData) {
       return NextResponse.json({
         isLoggedIn: false,

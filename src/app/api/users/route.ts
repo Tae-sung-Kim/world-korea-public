@@ -1,6 +1,6 @@
 import { requiredIsAdmin } from '../utils/auth.util';
 import connectMongo from '@/app/api/libs/database';
-import User from '@/app/api/models/user.model';
+import UserModel from '@/app/api/models/user.model';
 import { createResponse } from '@/app/api/utils/http.util';
 import { HTTP_STATUS } from '@/definitions/http.constant';
 import { NextResponse } from 'next/server';
@@ -16,7 +16,7 @@ export async function GET() {
       return createResponse(HTTP_STATUS.FORBIDDEN);
     }
 
-    const users = await User.getUserList();
+    const users = await UserModel.getUserList();
 
     return NextResponse.json(users);
   } catch (error) {

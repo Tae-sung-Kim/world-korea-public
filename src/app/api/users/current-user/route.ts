@@ -1,5 +1,5 @@
 import connectMongo from '@/app/api/libs/database';
-import User from '@/app/api/models/user.model';
+import UserModel from '@/app/api/models/user.model';
 import { createResponse } from '@/app/api/utils/http.util';
 import { HTTP_STATUS } from '@/definitions';
 import authService from '@/services/auth.service';
@@ -18,7 +18,7 @@ export async function GET() {
       return createResponse(HTTP_STATUS.UNAUTHORIZED);
     }
 
-    const userData = await User.getUserByLoginId(session.user.id);
+    const userData = await UserModel.getUserByLoginId(session.user.id);
 
     return NextResponse.json(userData);
   } catch (error: any) {

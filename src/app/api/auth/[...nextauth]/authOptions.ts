@@ -1,7 +1,6 @@
 import jwtUtils from '@/app/api/utils/jwt.util';
 import * as CONSTS from '@/definitions';
-import { SingInUserType } from '@/definitions';
-import authService from '@/services/auth.service';
+import authService, { UserSignIn } from '@/services/auth.service';
 import type { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
@@ -18,9 +17,9 @@ const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         try {
-          const response = await authService.login(
-            credentials as SingInUserType
-          );
+          console.log(credentials);
+          const response = await authService.login(credentials as UserSignIn);
+          console.log(response);
 
           if (response && credentials) {
             const userData = jwtUtils.verify(response);

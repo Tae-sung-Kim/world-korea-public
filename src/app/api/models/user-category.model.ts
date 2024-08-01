@@ -6,7 +6,7 @@ import { model, models, Schema, Model } from 'mongoose';
 
 export interface UserCategoryDB {
   name: string;
-  level: number;
+  level: string;
 }
 
 interface UserCategoryMethods {}
@@ -26,7 +26,7 @@ const schema = new Schema<
     required: true,
   },
   level: {
-    type: Number,
+    type: String,
     required: true,
   },
 });
@@ -47,7 +47,7 @@ export async function initUserCategory() {
   if (len === 0) {
     await UserCategory.create({
       name: '일반회원',
-      level: 1,
+      level: '1',
     });
   }
 }

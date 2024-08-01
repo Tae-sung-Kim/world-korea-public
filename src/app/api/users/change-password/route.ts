@@ -1,4 +1,4 @@
-import User from '../../models/user.model';
+import UserModel from '../../models/user.model';
 import { getCurrentUser, requiredIsLoggedIn } from '../../utils/auth.util';
 import { comparePassword, hashPassword } from '../../utils/password.util';
 import connectMongo from '@/app/api/libs/database';
@@ -23,7 +23,7 @@ export async function PATCH(req: NextRequest) {
     }
 
     const hashedPassword = await hashPassword(newPassword);
-    await User.updateUserPasswordById(userData._id, hashedPassword);
+    await UserModel.updateUserPasswordById(userData._id, hashedPassword);
 
     return NextResponse.json(true);
   } catch (error) {

@@ -1,6 +1,6 @@
 import connectMongo from '@/app/api/libs/database';
 import UserCategory from '@/app/api/models/user-category.model';
-import User from '@/app/api/models/user.model';
+import UserModel from '@/app/api/models/user.model';
 import { hashPassword } from '@/app/api/utils/password.util';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
     const { id, password } = body;
     const hashedPassword = await hashPassword(password);
     const userCategoryList = await UserCategory.getUserCategoryList();
-    const newUser = new User({
+    const newUser = new UserModel({
       ...body,
       loginId: id,
       password: hashedPassword,

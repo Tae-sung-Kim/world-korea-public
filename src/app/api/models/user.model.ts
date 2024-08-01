@@ -1,6 +1,6 @@
 // 회원
 
-import { UserHasPassword, UserType } from '@/definitions';
+import { UserHasPassword, User } from '@/definitions';
 import { model, models, Schema, Model, Types } from 'mongoose';
 import '@/app/api/models/user-category.model';
 
@@ -25,18 +25,18 @@ interface UserDB {
 
 interface UserMethods {
   fullName(): string;
-  updateUser(userData: UserType): boolean;
+  updateUser(userData: UserDB): boolean;
 }
 
-interface UserModel extends Model<UserDB, {}, UserMethods> {
-  getUserList(): UserType[];
-  getUserById(userId: string): UserType;
-  getUserByLoginId(loginId: string): UserHasPassword;
-  getUserAuthByLoginId(loginId: string): UserType;
-  updateUserPasswordById(userId: string, password: string): UserType;
+interface UserSchemaModel extends Model<UserDB, {}, UserMethods> {
+  getUserList(): Promise<User[]>;
+  getUserById(userId: string): Promise<User>;
+  getUserByLoginId(loginId: string): Promise<UserHasPassword>;
+  getUserAuthByLoginId(loginId: string): Promise<User>;
+  updateUserPasswordById(userId: string, password: string): Promise<User>;
 }
 
-const schema = new Schema<UserDB, UserModel, UserMethods>({
+const schema = new Schema<UserDB, UserSchemaModel, UserMethods>({
   // 로그인 ID
   loginId: {
     type: String,
@@ -192,7 +192,8 @@ schema.method('updateUser', function updateUser(userData) {
   return this.save();
 });
 
-const User =
-  (models.User as UserModel) || model<UserDB, UserModel>('User', schema);
+const UserModel =
+  (models.User as UserSchemaModel) ||
+  model<UserDB, UserSchemaModel>('User', schema);
 
-export default User;
+export default UserModel;

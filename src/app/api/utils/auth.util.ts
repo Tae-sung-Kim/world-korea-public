@@ -1,5 +1,5 @@
 import connectMongo from '@/app/api/libs/database';
-import User from '@/app/api/models/user.model';
+import UserModel from '@/app/api/models/user.model';
 import { UserHasPassword } from '@/definitions';
 import authService from '@/services/auth.service';
 
@@ -24,7 +24,7 @@ export async function getAuthData(loginId?: string) {
     loginId = session.user?.id;
   }
 
-  const userData = await User.getUserAuthByLoginId(loginId);
+  const userData = await UserModel.getUserAuthByLoginId(loginId);
   if (!userData) {
     return {
       isLoggedIn: false,
@@ -47,7 +47,7 @@ export async function getCurrentUser(): Promise<UserHasPassword | null> {
     return null;
   }
 
-  const userData = await User.getUserByLoginId(session.user.id);
+  const userData = await UserModel.getUserByLoginId(session.user.id);
 
   return userData;
 }

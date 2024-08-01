@@ -1,6 +1,6 @@
 import { requiredIsMe } from '../../utils/auth.util';
 import connectMongo from '@/app/api/libs/database';
-import User from '@/app/api/models/user.model';
+import UserModel from '@/app/api/models/user.model';
 import { createResponse } from '@/app/api/utils/http.util';
 import { HTTP_STATUS } from '@/definitions/http.constant';
 import { NextRequest, NextResponse } from 'next/server';
@@ -18,7 +18,7 @@ export async function GET(req: NextRequest, ctx: { params: { id: string } }) {
       return createResponse(HTTP_STATUS.UNAUTHORIZED);
     }
 
-    const userData = await User.getUserById(userId);
+    const userData = await UserModel.getUserById(userId);
 
     return NextResponse.json(userData);
   } catch (error) {
@@ -40,7 +40,7 @@ export async function PATCH(req: NextRequest, ctx: { params: { id: string } }) {
       return createResponse(HTTP_STATUS.UNAUTHORIZED);
     }
 
-    const existingUser = await User.findById(userId);
+    const existingUser = await UserModel.findById(userId);
     if (!existingUser) {
       return NextResponse.json(false);
     }

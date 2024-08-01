@@ -43,7 +43,7 @@ export default function UserCategoriesClient() {
         {
           _id: '',
           name: '',
-          level: 1,
+          level: '1',
         },
       ]);
     }
@@ -57,10 +57,10 @@ export default function UserCategoriesClient() {
             return row;
           }
 
-          let value: string | number = e.target.value;
+          let value: string = e.target.value;
 
           if (e.target.name === 'level') {
-            value = value.trim() === '' ? 0 : Number(value);
+            value = value.trim() === '' ? '1' : value;
           }
 
           return {

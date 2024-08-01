@@ -27,7 +27,7 @@ class UserCategoryService {
   // // 회원 수정
   // updateUser(
   //   userData: Pick<
-  //     UserType,
+  //     User,
   //     | '_id'
   //     | 'companyName'
   //     | 'companyNo'
@@ -38,7 +38,7 @@ class UserCategoryService {
   //     | 'email'
   //   >,
   // ) {
-  //   return http.put<UserType>(`/api/users/${userData._id}`, userData);
+  //   return http.put<User>(`/api/users/${userData._id}`, userData);
   // }
 
   // // 회원 삭제

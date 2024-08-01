@@ -1,15 +1,6 @@
 import { UserCategoryType } from './user-category.type';
 
-export type SignUpUserType = {
-  id: string;
-  email: string;
-  name: string;
-  password: string;
-};
-
-export type SingInUserType = Pick<SignUpUserType, 'id' | 'password'>;
-
-export type UserType = {
+export type User = {
   userCategory: UserCategoryType;
   _id: string;
   loginId: string;
@@ -27,11 +18,11 @@ export type UserType = {
   isAdmin: boolean;
 };
 
-export interface UserHasPassword extends UserType {
+export interface UserHasPassword extends User {
   password: string;
 }
 
-export type UserListType = UserType[];
+export type UserListType = User[];
 
 export type UserJwtPayloadType = {
   id: string;

@@ -1,6 +1,6 @@
 'use client';
 
-import { UserSessionType, UserType } from '@/definitions';
+import { UserSessionType, User } from '@/definitions';
 import userService from '@/services/user.service';
 import { useSession } from 'next-auth/react';
 import { createContext, useContext, useMemo, useEffect, useState } from 'react';
@@ -24,7 +24,7 @@ const AuthContext = createContext<IAuthProps>({
 function AuthProvider({ children }: { children: React.ReactNode }) {
   const [initialLoading, setInitialLoading] = useState<boolean>(true);
   const session = useSession();
-  const [currentUser, setCurrentUser] = useState<UserType | null>(null);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   const authValue = useMemo(() => {
     if (session.status === 'authenticated' && currentUser) {
