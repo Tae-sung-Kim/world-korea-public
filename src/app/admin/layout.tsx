@@ -23,7 +23,9 @@ export default async function AdminLayout({
               </span>
               <ul className="mt-2">
                 <li className="text-sm mt-[2px] text-gray-600">상품 목록</li>
-                <li className="text-sm mt-[2px] text-gray-600">상품 등록</li>
+                <li className="text-sm mt-[2px] text-gray-600">
+                  <Link href="/admin/products/create">상품 등록</Link>
+                </li>
               </ul>
             </li>
             <Separator />
