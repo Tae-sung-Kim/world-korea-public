@@ -1,5 +1,5 @@
 import authOptions from '@/app/api/auth/[...nextauth]/authOptions';
-import { User, SignInReturnType } from '@/definitions';
+import { User } from '@/definitions';
 import http from '@/services';
 import { getServerSession } from 'next-auth/next';
 import { getSession } from 'next-auth/react';
@@ -14,6 +14,8 @@ export type UserSignUp = UserSignIn & {
   name: string;
 };
 
+export type UserSignInReturn = string;
+
 class AuthService {
   // 회원가입
   register(user: UserSignUp) {
@@ -22,7 +24,7 @@ class AuthService {
 
   // 로그인
   login(user: UserSignIn) {
-    return http.post<SignInReturnType>(`/api/auth/login`, user);
+    return http.post<UserSignInReturn>(`/api/auth/login`, user);
   }
 
   // 세션 반환

@@ -1,14 +1,20 @@
 'use client';
 
-import { UserSessionType, User } from '@/definitions';
+import { User } from '@/definitions';
 import userService from '@/services/user.service';
 import { useSession } from 'next-auth/react';
 import { createContext, useContext, useMemo, useEffect, useState } from 'react';
 
+type UserSession = {
+  id: string;
+  name: string;
+  role: string;
+};
+
 export interface IAuthProps {
   accessToken: string | null;
   user:
-    | (UserSessionType & {
+    | (UserSession & {
         isApproved: boolean;
       })
     | null;

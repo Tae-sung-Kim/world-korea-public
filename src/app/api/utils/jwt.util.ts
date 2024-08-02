@@ -1,7 +1,12 @@
-import { UserJwtPayloadType } from '@/definitions';
 import jwt from 'jsonwebtoken';
 
 const secretKey = process.env.NEXTAUTH_SECRET as string;
+
+type UserJwtPayloadType = {
+  id: string;
+  name: string;
+  isAdmin: boolean;
+};
 
 class JwtUtils {
   sign(payload: UserJwtPayloadType) {

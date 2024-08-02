@@ -1,4 +1,4 @@
-import { UserListType, User } from '@/definitions';
+import { User } from '@/definitions';
 import http from '@/services';
 
 class UserService {
@@ -9,7 +9,7 @@ class UserService {
 
   // 유저 목록 반환 (관리자)
   getUserList() {
-    return http.get<UserListType>(`/api/users`);
+    return http.get<User[]>(`/api/users`);
   }
 
   // 유저 수정 (관리자)
@@ -32,7 +32,7 @@ class UserService {
 
   // 유저 삭제 (관리자)
   deleteUser() {
-    return http.delete<UserListType>(`/api/users`);
+    return http.delete<User[]>(`/api/users`);
   }
 
   // 로그인 된 유저의 정보 반환

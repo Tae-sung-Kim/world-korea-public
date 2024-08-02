@@ -18,28 +18,6 @@ export type User = {
   isAdmin: boolean;
 };
 
-export interface UserHasPassword extends User {
+export type UserHasPassword = User & {
   password: string;
-}
-
-export type UserListType = User[];
-
-export type UserJwtPayloadType = {
-  id: string;
-  name: string;
-  isAdmin: boolean;
-};
-
-export type UserSessionType = {
-  id: string;
-  name: string;
-  role: string;
-};
-
-export type SignInReturnType = string;
-
-export type UserAuth = {
-  isLoggedIn: boolean;
-  isMe: boolean;
-  isAdmin: boolean;
 };
