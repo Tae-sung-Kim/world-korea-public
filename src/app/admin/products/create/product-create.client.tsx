@@ -1,5 +1,6 @@
 'use client';
 
+import { descriptionShcema, priceShcema } from '../product.schema';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -23,26 +24,15 @@ import { PRODUCT_STATUS_MESSAGE } from '@/definitions';
 import userCategoryService from '@/services/user-category.service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQuery } from '@tanstack/react-query';
+import Image from 'next/image';
 import { ChangeEvent, MouseEvent, useCallback, useState } from 'react';
 import { ControllerRenderProps, useForm } from 'react-hook-form';
-import { v4 as uuidv4 } from 'uuid';
 import { z } from 'zod';
 
-const priceShcema = () => {
-  return z.number().refine((d) => Number(d) > 0, {
-    message: '0보다 큰 금액을 입력해주세요.',
-  });
+type ProductImage = {
+  file: File | undefined;
+  blob: string | undefined;
 };
-
-const descriptionShcema = () => {
-  return z.string().optional();
-};
-
-interface Images {
-  id: string;
-  file: File | undefined | null;
-  blob: Blob | undefined | null;
-}
 
 const FormSchema = z.object({
   name: z.string().refine((d) => d.length > 0, {
@@ -66,11 +56,12 @@ const FormSchema = z.object({
 });
 
 export default function ProductCreateClient() {
-  const [fileInputElement, setFileInputElement] = useState<string[]>([
-    uuidv4(),
+  const [productImages, setProductImages] = useState<ProductImage[]>([
+    {
+      file: undefined,
+      blob: undefined,
+    },
   ]);
-
-  const [images, setImages] = useState<Images[]>([]);
 
   const { data: userCategoryList } = useQuery({
     queryKey: ['user-categories', 'products'],
@@ -84,9 +75,9 @@ export default function ProductCreateClient() {
       accessLevel: '', // 접근 레벨
       status: '', // 상품 상태
       images: [], // 상품 이미지
-      regularPrice: 0, // 정가
-      salePrice: 0, // 할인가
-      price: 0, // 판매가
+      regularPrice: '0', // 정가
+      salePrice: '0', // 할인가
+      price: '0', // 판매가
       description1: '',
       description2: '',
       description3: '',
@@ -97,11 +88,20 @@ export default function ProductCreateClient() {
 
   //상품 등록
   const handleSubmit = () => {
-    // const formData = form.getValues();
-    // // form.setValue('images', [form])
-    // console.log(formData);
-
+    const formValues = form.getValues() as { [key: string]: any };
     const formData = new FormData();
+
+    for (let key in formValues) {
+      if (key === 'images') {
+        productImages.forEach((data) => {
+          if (data.file instanceof File && data.file.size > 0) {
+            formData.append(key, data.file);
+          }
+        });
+      } else {
+        formData.append(key, formValues[key]);
+      }
+    }
   };
 
   const removeComma = (value: string) => {
@@ -119,38 +119,48 @@ export default function ProductCreateClient() {
   };
 
   //이미지 추가 버튼
-  const handleAddImage = (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setFileInputElement((prevInput) => [...prevInput, uuidv4()]);
+  const handleAddImage = () => {
+    setProductImages((prevImage) => [
+      ...prevImage,
+      {
+        file: undefined,
+        blob: undefined,
+      },
+    ]);
   };
 
   //이미지 삭제 버튼
-  const handleDeleteImage = (e: MouseEvent<HTMLButtonElement>, id: string) => {
-    e.preventDefault();
-
-    //인풋 삭제
-    setFileInputElement((prevInput) => prevInput.filter((fId) => fId !== id));
-
+  const handleDeleteImage = (idx: number) => {
     //파일 삭제
-    setImages((prevImage) => prevImage.filter((f) => f.id !== id));
+    setProductImages((prevImage) =>
+      prevImage.filter((_, fIdx) => fIdx !== idx)
+    );
   };
 
   const handleInputFileChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>, id: string) => {
+    (e: ChangeEvent<HTMLInputElement>, idx: number) => {
       e.preventDefault();
+      const file = e.target.files?.item(0);
 
-      const copyImages = [...images];
+      if (file) {
+        //blob으로 변경
+        const blobFile = new Blob([file], { type: file.type });
+        const blob = URL.createObjectURL(blobFile);
 
-      if (copyImages.find((f) => f.id === id)) {
-        //있을 경우 -> 교체
-      } else {
-        //없을 경우 추가
+        setProductImages((prevImages) =>
+          prevImages.map((d, dIdx) => {
+            if (dIdx === idx) {
+              return {
+                file,
+                blob,
+              };
+            } else return d;
+          })
+        );
       }
     },
-    [images]
+    []
   );
-
-  console.log(images, fileInputElement);
 
   return (
     <Form {...form}>
@@ -242,30 +252,37 @@ export default function ProductCreateClient() {
                 <FormLabel>이미지</FormLabel>
                 <Button
                   className="size-5"
-                  onClick={(e: MouseEvent<HTMLButtonElement>) =>
-                    handleAddImage(e)
-                  }
+                  type="button"
+                  onClick={() => handleAddImage()}
                 >
                   +
                 </Button>
               </div>
 
-              {fileInputElement.map((id) => {
+              {productImages.map(({ blob }, idx) => {
                 return (
-                  <div key={id} className="flex space-x-4">
+                  <div key={'proudct-image-' + idx} className="flex space-x-4">
                     <FormControl>
                       <Input
                         className="flex-initial"
                         type="file"
+                        accept="image/*"
                         onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                          handleInputFileChange(e, id)
+                          handleInputFileChange(e, idx)
                         }
                       />
                     </FormControl>
+                    {blob && (
+                      <Image
+                        src={blob}
+                        width={250}
+                        height={250}
+                        alt="등록 이미지"
+                      />
+                    )}
                     <Button
-                      onClick={(e: MouseEvent<HTMLButtonElement>) =>
-                        handleDeleteImage(e, id)
-                      }
+                      type="button"
+                      onClick={() => handleDeleteImage(idx)}
                     >
                       -
                     </Button>
@@ -287,7 +304,7 @@ export default function ProductCreateClient() {
                   <Input
                     {...field}
                     placeholder="정가를 입력해 주세요."
-                    value={field.value.toLocaleString('ko-KR')}
+                    value={Number(field.value).toLocaleString('ko-KR')}
                     onChange={(e) => handlePriceChange(e, { ...field })}
                   />
                 </FormControl>
@@ -306,7 +323,7 @@ export default function ProductCreateClient() {
                 <Input
                   {...field}
                   placeholder="할인 가격을 입력해 주세요."
-                  value={field.value.toLocaleString('ko-KR')}
+                  value={Number(field.value).toLocaleString('ko-KR')}
                   onChange={(e) => handlePriceChange(e, { ...field })}
                 />
                 {/* 할인율 */}
@@ -325,7 +342,7 @@ export default function ProductCreateClient() {
                 <Input
                   {...field}
                   placeholder="판매가를 입력해 주세요."
-                  value={field.value.toLocaleString('ko-KR')}
+                  value={Number(field.value).toLocaleString('ko-KR')}
                   onChange={(e) => handlePriceChange(e, { ...field })}
                 />
               </FormControl>
