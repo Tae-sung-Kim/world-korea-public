@@ -29,6 +29,8 @@ export async function POST(req: NextRequest) {
 
     const formData = await req.formData();
 
+    console.log('reqreqreqreqreq', req);
+
     const name = formData.get('name');
     const accessLevel = formData.get('accessLevel');
     const status = formData.get('status');
