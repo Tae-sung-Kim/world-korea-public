@@ -18,12 +18,12 @@ export const ALLOWED_IMAGE_MIME_TYPES = [
 type UploaFilePath = (typeof FILE_PATH)[keyof typeof FILE_PATH];
 type UploadFileType = (typeof FILE_TYPE)[keyof typeof FILE_TYPE];
 
-interface IUploadOptions {
+type UploadOptions = {
   path?: UploaFilePath;
   type: UploadFileType;
-}
+};
 
-export async function uploadFile(files: File[], options: IUploadOptions) {
+export async function uploadFile(files: File[], options: UploadOptions) {
   const fileType = options.type;
 
   const filteredFileList = files.filter((file) => {
