@@ -1,5 +1,6 @@
 import { requiredIsAdmin } from '../utils/auth.util';
 import { FILE_PATH, FILE_TYPE, uploadFile } from '../utils/upload.util';
+import connectMongo from '@/app/api/libs/database';
 import ProductModel from '@/app/api/models/product.model';
 import { createResponse } from '@/app/api/utils/http.util';
 import { HTTP_STATUS } from '@/definitions';
@@ -28,8 +29,6 @@ export async function POST(req: NextRequest) {
     }
 
     const formData = await req.formData();
-
-    console.log('reqreqreqreqreq', req);
 
     const name = formData.get('name');
     const accessLevel = formData.get('accessLevel');
@@ -71,7 +70,4 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
   }
-}
-function connectMongo() {
-  throw new Error('Function not implemented.');
 }
