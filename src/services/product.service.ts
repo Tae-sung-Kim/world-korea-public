@@ -2,6 +2,7 @@ import { ProductStatus } from '@/definitions';
 import http from '@/services';
 
 export interface ProductToCreate {
+  _id: string;
   name: string; // 상품명
   accessLevel: string; // 접근 레벨
   status: ProductStatus; // 상품 상태
@@ -17,12 +18,23 @@ export interface ProductToCreate {
 }
 
 class ProductService {
+  //상품 생성
   createProduct(data: FormData) {
-    return http.post<ProductToCreate>(`/api/products`, data, {
+    return http.post<Partial<ProductToCreate>>(`/api/products`, data, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
     });
+  }
+
+  //상품 전체
+  getProudctList() {
+    return http.get<ProductToCreate[]>('/api/products');
+  }
+
+  //개별 상품
+  detailProudct(id: string) {
+    return http.get<ProductToCreate>(`/api/products/${id}`);
   }
 }
 
