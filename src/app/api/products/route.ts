@@ -1,4 +1,4 @@
-import { requiredIsAdmin } from '../utils/auth.util';
+import { requiredIsAdmin, requiredIsLoggedIn } from '../utils/auth.util';
 import { FILE_PATH, FILE_TYPE, uploadFile } from '../utils/upload.util';
 import connectMongo from '@/app/api/libs/database';
 import ProductModel from '@/app/api/models/product.model';
@@ -11,7 +11,13 @@ import { NextRequest, NextResponse } from 'next/server';
  */
 export async function GET() {
   try {
-    return NextResponse.json(true);
+    if (!(await requiredIsLoggedIn())) {
+      return createResponse(HTTP_STATUS.UNAUTHORIZED);
+    }
+
+    const list = await ProductModel.find({});
+
+    return NextResponse.json(list);
   } catch (error) {
     return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
   }
