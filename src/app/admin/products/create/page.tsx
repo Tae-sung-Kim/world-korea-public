@@ -1,5 +1,5 @@
-import ProductCreateClient from './product-create.client';
+import ProductFormClient from '../product-form.client';
 
 export default function ProductCreatePage() {
-  return <ProductCreateClient />;
+  return <ProductFormClient />;
 }

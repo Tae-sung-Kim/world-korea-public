@@ -1,6 +1,6 @@
 'use client';
 
-import { descriptionShcema, priceShcema } from '../product.schema';
+import { descriptionShcema, priceShcema } from './product.schema';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -83,7 +83,7 @@ type ProductImage = {
   blob: string;
 };
 
-export default function ProductCreateClient() {
+export default function ProductFormClient() {
   const [productImageBlobList, setProductImageBlobList] = useState<
     ProductImage[]
   >([]);
