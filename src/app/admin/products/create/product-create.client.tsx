@@ -96,7 +96,6 @@ export default function ProductCreateClient() {
   const ProductMutation = useMutation({
     mutationFn: productService.createProduct,
     onSuccess: () => {
-      // queryClient.invalidateQueries({ queryKey: ['user-categories'] });
       toast.success('상품이 등록 되었습니다.');
     },
   });

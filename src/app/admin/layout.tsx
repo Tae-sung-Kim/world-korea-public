@@ -22,7 +22,9 @@ export default async function AdminLayout({
                 <TbTicket />
               </span>
               <ul className="mt-2">
-                <li className="text-sm mt-[2px] text-gray-600">상품 목록</li>
+                <li className="text-sm mt-[2px] text-gray-600">
+                  <Link href="/admin/products"> 상품 목록</Link>
+                </li>
                 <li className="text-sm mt-[2px] text-gray-600">
                   <Link href="/admin/products/create">상품 등록</Link>
                 </li>

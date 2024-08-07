@@ -1,3 +1,11 @@
-export default function ProductDetailPage() {
-  return 'ProductDetailPage';
+import ProductDetailClient from './product-detail.client';
+
+export default function ProductDetailPage({
+  params,
+}: {
+  params: {
+    id: string;
+  };
+}) {
+  return <ProductDetailClient productId={params.id} />;
 }

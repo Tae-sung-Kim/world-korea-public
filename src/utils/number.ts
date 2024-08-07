@@ -11,6 +11,10 @@ export const removeComma = (value: string) => {
 /**
  * 숫자를 comma를 추가한 문자열변 변환
  */
-export const addComma = (value: number) => {
-  return new Intl.NumberFormat('ko-KR').format(value);
+export const addComma = (value: number | string) => {
+  if (isNaN(Number(value))) {
+    return value;
+  }
+
+  return new Intl.NumberFormat('ko-KR').format(Number(value));
 };
