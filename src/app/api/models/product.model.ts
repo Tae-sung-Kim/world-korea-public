@@ -1,5 +1,5 @@
 import { PRODUCT_STATUS, ProductStatus } from '@/definitions';
-import { model, models, Schema, Model } from 'mongoose';
+import { model, models, Schema, Model, Types } from 'mongoose';
 
 export interface ProductDB {
   name: string; // 상품명
@@ -16,13 +16,15 @@ export interface ProductDB {
   unavailableDates?: Date[]; // 이용 불가능 날짜
   createdAt: Date;
   updatedAt: Date;
+  deletedAt: Date;
+  pins: object; // 빈 번호 목록
 }
 
 interface ProductMethods {}
 
-interface ProductModel extends Model<ProductDB, {}, ProductMethods> {}
+interface ProductSchemaModel extends Model<ProductDB, {}, ProductMethods> {}
 
-const schema = new Schema<ProductDB>({
+const schema = new Schema<ProductDB, ProductSchemaModel, ProductMethods>({
   name: { type: String, required: true },
   accessLevel: { type: Number, default: 1 },
   status: {
@@ -44,10 +46,12 @@ const schema = new Schema<ProductDB>({
   unavailableDates: { type: [Date] }, // 예약 불가 날짜 배열
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
+  deletedAt: { type: Date },
+  pins: [{ type: Types.ObjectId, ref: 'Pin' }],
 });
 
 const Product =
-  (models.Product as ProductModel) ||
-  model<ProductDB, ProductModel>('Product', schema);
+  (models.Product as ProductSchemaModel) ||
+  model<ProductDB, ProductSchemaModel>('Product', schema);
 
 export default Product;
