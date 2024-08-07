@@ -96,6 +96,7 @@ export default function ProductCreateClient() {
   const ProductMutation = useMutation({
     mutationFn: productService.createProduct,
     onSuccess: () => {
+      handleResetForm();
       toast.success('상품이 등록 되었습니다.');
     },
   });
@@ -106,7 +107,7 @@ export default function ProductCreateClient() {
       name: '', // 상품명
       accessLevel: '1', // 접근 레벨
       status: PRODUCT_STATUS.AVAILABLE, // 상품 상태
-      images: [], // 상품 이미지
+      images: [{ file: undefined }], // 상품 이미지
       regularPrice: '0', // 정가
       salePrice: '0', // 할인가
       price: '0', // 판매가
@@ -149,6 +150,12 @@ export default function ProductCreateClient() {
 
   const handleAddImage = () => {
     productImages.append({ file: undefined });
+  };
+
+  //상품 등록 후 reset
+  const handleResetForm = () => {
+    setProductImageBlobList([]);
+    productForm.reset();
   };
 
   const handleInputFileChange = (
@@ -196,6 +203,10 @@ export default function ProductCreateClient() {
 
   return (
     <Form {...productForm}>
+      <Button type="button" onClick={handleResetForm}>
+        reset
+      </Button>
+
       <form
         onSubmit={productForm.handleSubmit(handleSubmit)}
         className="space-y-8"
@@ -226,7 +237,7 @@ export default function ProductCreateClient() {
               <FormItem>
                 <FormLabel>Level</FormLabel>
                 <FormControl>
-                  <Select onValueChange={field.onChange} defaultValue="1">
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <SelectTrigger className="w-[180px]">
                       <SelectValue placeholder="선택" />
                     </SelectTrigger>
@@ -256,10 +267,7 @@ export default function ProductCreateClient() {
             <FormItem>
               <FormLabel>상태</FormLabel>
               <FormControl>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={PRODUCT_STATUS.AVAILABLE}
-                >
+                <Select onValueChange={field.onChange} value={field.value}>
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="선택" />
                   </SelectTrigger>
