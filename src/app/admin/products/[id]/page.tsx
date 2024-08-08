@@ -1,4 +1,4 @@
-import ProductDetailClient from './product-detail.client';
+import ProductFormClient from '../product-form.client';
 
 export default function ProductDetailPage({
   params,
@@ -7,5 +7,5 @@ export default function ProductDetailPage({
     id: string;
   };
 }) {
-  return <ProductDetailClient productId={params.id} />;
+  return <ProductFormClient productId={params.id} />;
 }
