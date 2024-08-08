@@ -43,6 +43,11 @@ import {
 import { toast } from 'sonner';
 import { z } from 'zod';
 
+//1. 상품을 수정할때 ID를 보내야 함.
+//2. 상품 수정 API
+//3. 수정할떄 버튼을 따로 만드는게 나을지 아니면 컴포넌트 자체를 분리하는게 나을지
+// - 상위 컴포넌트에서부터 분리(product-form.client)
+
 const ProductFormSchema = z.object({
   name: z.string().refine((d) => d.length > 0, {
     message: '상품명을 입력해 주세요.',
@@ -212,7 +217,30 @@ export default function ProductForm({
       // 1. 일반 필드 세팅
       for (let [key, value] of Object.entries(productDetail)) {
         if (Array.isArray(value)) {
-          // productForm.setValue(key as keyof ProductFormValues, value);
+          //이미지 데이터 세팅
+          if (key === 'images') {
+            setProductImageBlobList(
+              value.map((d) => ({
+                name: '',
+                size: '',
+                blob: d,
+              }))
+            );
+            productForm.setValue(
+              'images',
+              value.map((image) => {
+                if (typeof image === 'string') {
+                  return { file: image };
+                } else {
+                  return {
+                    file: image.file,
+                  };
+                }
+              })
+            );
+          } else {
+            console.log('그 외', key, value);
+          }
         } else {
           productForm.setValue(key as keyof ProductFormValues, value);
         }
