@@ -33,7 +33,7 @@ import { addComma, removeComma } from '@/utils/number';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import Image from 'next/image';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import {
   useForm,
   useFieldArray,
@@ -64,6 +64,7 @@ const ProductFormSchema = z.object({
     z.object({
       file: z
         .instanceof(File)
+        .or(z.string())
         .optional()
         .refine((d) => d, {
           message: '파일을 등록해 주세요.',
@@ -89,6 +90,7 @@ type ProductImage = {
 
 type Props = {
   userCategoryList: UserCategoryType[] | undefined;
+  // productDetail: Omit<ProductFormData, '_id'> | undefined;
   productDetail: ProductFormData | undefined;
 };
 
@@ -96,8 +98,6 @@ export default function ProductForm({
   userCategoryList,
   productDetail,
 }: Props) {
-  console.log('productDetail', productDetail);
-
   const [productImageBlobList, setProductImageBlobList] = useState<
     ProductImage[]
   >([]);
@@ -132,9 +132,6 @@ export default function ProductForm({
   const productImages = useFieldArray({
     control: productForm.control,
     name: 'images',
-    rules: {
-      required: true,
-    },
   });
 
   const handleSubmit = () => {
@@ -209,6 +206,43 @@ export default function ProductForm({
       field.onChange(String(removeComma(e.target.value)));
     }
   };
+
+  useEffect(() => {
+    if (productDetail) {
+      // 1. 일반 필드 세팅
+      for (let [key, value] of Object.entries(productDetail)) {
+        if (Array.isArray(value)) {
+          // productForm.setValue(key as keyof ProductFormValues, value);
+        } else {
+          productForm.setValue(key as keyof ProductFormValues, value);
+        }
+      }
+
+      // 2. useFieldArray로 관리되는 배열 필드 세팅
+      // if (productDetail.images && productDetail.images.length > 0) {
+      //   productForm.setValue(
+      //     'images',
+      //     productDetail.images.map((image) => {
+      //       if (typeof image === 'string') {
+      //         return { file: image };
+      //       } else {
+      //         return {
+      //           file: image.file,
+      //         };
+      //       }
+      //     })
+      //   );
+
+      // // 이미지 미리보기 블랍 업데이트 (필요한 경우)
+      // const imageBlobs = productDetail.images.map((image) => ({
+      //   name: image.file.name,
+      //   size: String(bytesToMB(image.file.size)),
+      //   blob: URL.createObjectURL(image.file), // 예시로 createObjectURL 사용
+      // }));
+      // setProductImageBlobList(imageBlobs);
+      // }
+    }
+  }, [productDetail, productForm]);
 
   return (
     <Form {...productForm}>
