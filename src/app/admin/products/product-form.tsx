@@ -95,7 +95,6 @@ type ProductImage = {
 
 type Props = {
   userCategoryList: UserCategoryType[] | undefined;
-  // productDetail: Omit<ProductFormData, '_id'> | undefined;
   productDetail: ProductFormData | undefined;
 };
 
@@ -274,10 +273,6 @@ export default function ProductForm({
 
   return (
     <Form {...productForm}>
-      <Button type="button" onClick={handleResetForm}>
-        reset
-      </Button>
-
       <form
         onSubmit={productForm.handleSubmit(handleSubmit)}
         className="space-y-8"
