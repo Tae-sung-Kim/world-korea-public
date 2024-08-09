@@ -18,6 +18,7 @@ import {
 import { addComma } from '@/utils/number';
 import {
   ColumnDef,
+  flexRender,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
@@ -61,7 +62,7 @@ type Props = {
 export default function ProductList({ productList, userCategoryList }: Props) {
   const router = useRouter();
 
-  const table = useReactTable({
+  const dataTable = useReactTable({
     data: productList,
     columns,
     getCoreRowModel: getCoreRowModel(),
@@ -76,15 +77,18 @@ export default function ProductList({ productList, userCategoryList }: Props) {
     <Table>
       {/* {isFetching && <TableCaption>조회 중입니다.</TableCaption>} */}
       <TableHeader>
-        <TableRow>
-          <TableHead className="w-[50px]">번호</TableHead>
-          <TableHead className="">상품명</TableHead>
-          <TableHead className="">level</TableHead>
-          <TableHead className="">상태</TableHead>
-          <TableHead className="text-right">정가</TableHead>
-          <TableHead className="text-right">할인가</TableHead>
-          <TableHead className="text-right">판매가</TableHead>
-        </TableRow>
+        {dataTable.getHeaderGroups().map((headerGroup) => (
+          <TableRow key={headerGroup.id}>
+            {headerGroup.headers.map((header) => (
+              <TableHead key={header.id}>
+                {flexRender(
+                  header.column.columnDef.header,
+                  header.getContext()
+                )}
+              </TableHead>
+            ))}
+          </TableRow>
+        ))}
       </TableHeader>
       <TableBody>
         {productList.map((product, idx) => (
