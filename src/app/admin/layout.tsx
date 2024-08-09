@@ -1,7 +1,7 @@
 import AdminProtectedRoute from '@/app/admin/admin-protected-route.component';
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
-import { TbTicket, TbUser } from 'react-icons/tb';
+import { TbNumber123, TbTicket, TbUser } from 'react-icons/tb';
 
 export default async function AdminLayout({
   children,
@@ -50,11 +50,14 @@ export default async function AdminLayout({
             </li>
             <Separator />
             <li className="p-5 my-4">
-              <span className="text-lg font-bold">메뉴3</span>
+              <span className="flex text-lg font-bold">
+                핀번호 관리
+                <TbNumber123 />
+              </span>
               <ul className="mt-2">
-                <li className="text-sm mt-[2px] text-gray-600">메뉴3-1</li>
-                <li className="text-sm mt-[2px] text-gray-600">메뉴3-2</li>
-                <li className="text-sm mt-[2px] text-gray-600">메뉴3-3</li>
+                <li className="text-sm mt-[2px] text-gray-600">핀번호 등록</li>
+                <li className="text-sm mt-[2px] text-gray-600">핀번호 사용</li>
+                <li className="text-sm mt-[2px] text-gray-600">핀번호 생성</li>
               </ul>
             </li>
           </ul>
