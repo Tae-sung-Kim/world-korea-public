@@ -13,7 +13,7 @@ export const removeComma = (value: string) => {
  */
 export const addComma = (value: number | string) => {
   if (isNaN(Number(value))) {
-    return value;
+    return '0';
   }
 
   return new Intl.NumberFormat('ko-KR').format(Number(value));
