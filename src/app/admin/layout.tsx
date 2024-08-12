@@ -55,9 +55,14 @@ export default async function AdminLayout({
                 <TbNumber123 />
               </span>
               <ul className="mt-2">
+                <li className="text-sm mt-[2px] text-gray-600">
+                  <Link href="/admin/pins">핀번호 목록</Link>
+                </li>
+                <li className="text-sm mt-[2px] text-gray-600">
+                  <Link href="/admin/pins/create">핀번호 생성</Link>
+                </li>
                 <li className="text-sm mt-[2px] text-gray-600">핀번호 등록</li>
                 {/* <li className="text-sm mt-[2px] text-gray-600">핀번호 사용</li> */}
-                <li className="text-sm mt-[2px] text-gray-600">핀번호 생성</li>
               </ul>
             </li>
           </ul>
