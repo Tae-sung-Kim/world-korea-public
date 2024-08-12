@@ -16,57 +16,19 @@ import {
   UserCategoryType,
 } from '@/definitions';
 import { addComma } from '@/utils/number';
-import {
-  ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from '@tanstack/react-table';
+import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 
-const columns: ColumnDef<ProductFormData>[] = [
-  {
-    accessorKey: 'no',
-    header: '번호',
-  },
-  {
-    accessorKey: 'name',
-    header: '상품명',
-  },
-  {
-    accessorKey: 'accessLevel',
-    header: 'Level',
-  },
-  {
-    accessorKey: 'status',
-    header: '상태',
-  },
-  {
-    accessorKey: 'regularPrice',
-    header: '정가',
-  },
-  {
-    accessorKey: 'salePrice',
-    header: '할인가',
-  },
-  {
-    accessorKey: 'price',
-    header: '판매가',
-  },
-];
 type Props = {
   productList: ProductFormData[];
   userCategoryList: UserCategoryType[] | undefined;
 };
 
-export default function ProductList({ productList, userCategoryList }: Props) {
+export default function ProductListClient({
+  productList,
+  userCategoryList,
+}: Props) {
   const router = useRouter();
-
-  const dataTable = useReactTable({
-    data: productList,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
 
   //테이블 리스트 클릭 -> 상세
   const handleProductItemClick = (id: string) => {
@@ -77,18 +39,15 @@ export default function ProductList({ productList, userCategoryList }: Props) {
     <Table>
       {/* {isFetching && <TableCaption>조회 중입니다.</TableCaption>} */}
       <TableHeader>
-        {dataTable.getHeaderGroups().map((headerGroup) => (
-          <TableRow key={headerGroup.id}>
-            {headerGroup.headers.map((header) => (
-              <TableHead key={header.id}>
-                {flexRender(
-                  header.column.columnDef.header,
-                  header.getContext()
-                )}
-              </TableHead>
-            ))}
-          </TableRow>
-        ))}
+        <TableRow>
+          <TableHead className="w-[50px]">번호</TableHead>
+          <TableHead className="">상품명</TableHead>
+          <TableHead className="">level</TableHead>
+          <TableHead className="">상태</TableHead>
+          <TableHead className="text-right">정가</TableHead>
+          <TableHead className="text-right">할인가</TableHead>
+          <TableHead className="text-right">판매가</TableHead>
+        </TableRow>
       </TableHeader>
       <TableBody>
         {productList.map((product, idx) => (
