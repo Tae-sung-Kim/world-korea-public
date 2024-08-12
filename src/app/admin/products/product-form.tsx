@@ -149,6 +149,8 @@ export default function ProductForm({
           const file = value.file;
           if (file instanceof File) {
             data.append('images', file);
+          } else {
+            console.log('기타 필드 추가', key, value);
           }
         });
       } else {
@@ -374,8 +376,8 @@ export default function ProductForm({
             <div className="flex space-x-4" key={d.id}>
               {blobImages ? (
                 <div>
-                  <div>파일명 : {blobImages.name}</div>
-                  <div>용량 : {blobImages.size} MB</div>
+                  {!!blobImages.name && <div>파일명 : {blobImages.name}</div>}
+                  {!!blobImages.size && <div>용량 : {blobImages.size} MB</div>}
                   <Image
                     src={blobImages.blob}
                     width={250}

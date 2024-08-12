@@ -56,7 +56,7 @@ export default async function AdminLayout({
               </span>
               <ul className="mt-2">
                 <li className="text-sm mt-[2px] text-gray-600">핀번호 등록</li>
-                <li className="text-sm mt-[2px] text-gray-600">핀번호 사용</li>
+                {/* <li className="text-sm mt-[2px] text-gray-600">핀번호 사용</li> */}
                 <li className="text-sm mt-[2px] text-gray-600">핀번호 생성</li>
               </ul>
             </li>
