@@ -24,7 +24,6 @@ import { Textarea } from '@/components/ui/textarea';
 import {
   PRODUCT_STATUS,
   PRODUCT_STATUS_MESSAGE,
-  ProductFormData,
   UserCategoryType,
 } from '@/definitions';
 import productService from '@/services/product.service';
@@ -33,7 +32,7 @@ import { addComma, removeComma } from '@/utils/number';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import Image from 'next/image';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import {
   useForm,
   useFieldArray,
@@ -42,11 +41,6 @@ import {
 } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-
-//1. 상품을 수정할때 ID를 보내야 함.
-//2. 상품 수정 API
-//3. 수정할떄 버튼을 따로 만드는게 나을지 아니면 컴포넌트 자체를 분리하는게 나을지
-// - 상위 컴포넌트에서부터 분리(product-form.client)
 
 const ProductFormSchema = z.object({
   name: z.string().refine((d) => d.length > 0, {
@@ -95,16 +89,11 @@ type ProductImage = {
 
 type Props = {
   userCategoryList: UserCategoryType[] | undefined;
-  productDetail: ProductFormData | undefined;
+  productId?: string;
 };
 
-export default function ProductForm({
-  userCategoryList,
-  productDetail,
-}: Props) {
-  const [productImageBlobList, setProductImageBlobList] = useState<
-    ProductImage[]
-  >([]);
+export default function ProductForm({ userCategoryList, productId }: Props) {
+  const [productImageList, setProductImageList] = useState<ProductImage[]>([]);
 
   const ProductMutation = useMutation({
     mutationFn: productService.createProduct,
@@ -116,20 +105,38 @@ export default function ProductForm({
 
   const productForm = useForm<ProductFormValues>({
     resolver: zodResolver(ProductFormSchema),
-    defaultValues: {
-      name: '', // 상품명
-      accessLevel: '1', // 접근 레벨
-      status: PRODUCT_STATUS.AVAILABLE, // 상품 상태
-      images: [{ file: undefined }], // 상품 이미지
-      regularPrice: '0', // 정가
-      salePrice: '0', // 할인가
-      price: '0', // 판매가
-      description1: '',
-      description2: '',
-      description3: '',
-      description4: '',
-      // unavailableDates: [], // 이용 불가능 날짜
-    },
+    defaultValues: !!productId
+      ? async () =>
+          productService.detailProudct(productId).then((res) => {
+            let images = res.images.map((d) => ({
+              name: '',
+              size: '',
+              blob: d as string,
+            }));
+
+            setProductImageList(images);
+
+            return {
+              ...res,
+              price: addComma(res.price),
+              regularPrice: addComma(res.regularPrice),
+              salePrice: addComma(res.salePrice),
+            };
+          })
+      : {
+          name: '', // 상품명
+          accessLevel: '1', // 접근 레벨
+          status: PRODUCT_STATUS.AVAILABLE, // 상품 상태
+          images: [{ file: undefined }], // 상품 이미지
+          regularPrice: '0', // 정가
+          salePrice: '0', // 할인가
+          price: '0', // 판매가
+          description1: '',
+          description2: '',
+          description3: '',
+          description4: '',
+          // unavailableDates: [], // 이용 불가능 날짜
+        },
   });
 
   //fields, append, remove, update??
@@ -137,6 +144,8 @@ export default function ProductForm({
     control: productForm.control,
     name: 'images',
   });
+
+  console.log(productForm.getValues());
 
   const handleSubmit = () => {
     const data = new FormData();
@@ -157,7 +166,11 @@ export default function ProductForm({
         data.append(key, values);
       }
     }
-    ProductMutation.mutate(data);
+
+    if (productId) {
+    } else {
+      ProductMutation.mutate(data);
+    }
   };
 
   const handleAddImage = () => {
@@ -166,7 +179,7 @@ export default function ProductForm({
 
   //상품 등록 후 reset
   const handleResetForm = () => {
-    setProductImageBlobList([]);
+    setProductImageList([]);
     productForm.reset();
   };
 
@@ -181,7 +194,7 @@ export default function ProductForm({
       fileToBlob({
         file,
         handler: ({ blob }: { blob: string }) => {
-          setProductImageBlobList((prevBlob) => [
+          setProductImageList((prevBlob) => [
             ...prevBlob,
             {
               name: file.name,
@@ -198,7 +211,7 @@ export default function ProductForm({
   //이미지 삭제 버튼
   const handleDeleteImage = (idx: number) => {
     productImages.remove(idx);
-    setProductImageBlobList((prevBlob) =>
+    setProductImageList((prevBlob) =>
       prevBlob.filter((_, dIdx) => dIdx !== idx)
     );
   };
@@ -213,65 +226,65 @@ export default function ProductForm({
     }
   };
 
-  useEffect(() => {
-    if (productDetail) {
-      // 1. 일반 필드 세팅
-      for (let [key, value] of Object.entries(productDetail)) {
-        if (Array.isArray(value)) {
-          //이미지 데이터 세팅
-          if (key === 'images') {
-            setProductImageBlobList(
-              value.map((d) => ({
-                name: '',
-                size: '',
-                blob: d,
-              }))
-            );
-            productForm.setValue(
-              'images',
-              value.map((image) => {
-                if (typeof image === 'string') {
-                  return { file: image };
-                } else {
-                  return {
-                    file: image.file,
-                  };
-                }
-              })
-            );
-          } else {
-            console.log('그 외', key, value);
-          }
-        } else {
-          productForm.setValue(key as keyof ProductFormValues, value);
-        }
-      }
+  // useEffect(() => {
+  //   if (productDetail) {
+  //     // 1. 일반 필드 세팅
+  //     for (let [key, value] of Object.entries(productDetail)) {
+  //       if (Array.isArray(value)) {
+  //         //이미지 데이터 세팅
+  //         if (key === 'images') {
+  //           setProductImageList(
+  //             value.map((d) => ({
+  //               name: '',
+  //               size: '',
+  //               blob: d,
+  //             }))
+  //           );
+  //           productForm.setValue(
+  //             'images',
+  //             value.map((image) => {
+  //               if (typeof image === 'string') {
+  //                 return { file: image };
+  //               } else {
+  //                 return {
+  //                   file: image.file,
+  //                 };
+  //               }
+  //             })
+  //           );
+  //         } else {
+  //           console.log('그 외', key, value);
+  //         }
+  //       } else {
+  //         productForm.setValue(key as keyof ProductFormValues, value);
+  //       }
+  //     }
 
-      // 2. useFieldArray로 관리되는 배열 필드 세팅
-      // if (productDetail.images && productDetail.images.length > 0) {
-      //   productForm.setValue(
-      //     'images',
-      //     productDetail.images.map((image) => {
-      //       if (typeof image === 'string') {
-      //         return { file: image };
-      //       } else {
-      //         return {
-      //           file: image.file,
-      //         };
-      //       }
-      //     })
-      //   );
+  // 2. useFieldArray로 관리되는 배열 필드 세팅
+  // if (productDetail.images && productDetail.images.length > 0) {
+  //   productForm.setValue(
+  //     'images',
+  //     productDetail.images.map((image) => {
+  //       if (typeof image === 'string') {
+  //         return { file: image };
+  //       } else {
+  //         return {
+  //           file: image.file,
+  //         };
+  //       }
+  //     })
+  //   );
 
-      // // 이미지 미리보기 블랍 업데이트 (필요한 경우)
-      // const imageBlobs = productDetail.images.map((image) => ({
-      //   name: image.file.name,
-      //   size: String(bytesToMB(image.file.size)),
-      //   blob: URL.createObjectURL(image.file), // 예시로 createObjectURL 사용
-      // }));
-      // setProductImageBlobList(imageBlobs);
-      // }
-    }
-  }, [productDetail, productForm]);
+  // // 이미지 미리보기 블랍 업데이트 (필요한 경우)
+  // const imageBlobs = productDetail.images.map((image) => ({
+  //   name: image.file.name,
+  //   size: String(bytesToMB(image.file.size)),
+  //   blob: URL.createObjectURL(image.file), // 예시로 createObjectURL 사용
+  // }));
+  // setProductImageList(imageBlobs);
+  // }
+  // }
+  // }, [productDetail, productForm]);
 
   return (
     <Form {...productForm}>
@@ -279,6 +292,7 @@ export default function ProductForm({
         onSubmit={productForm.handleSubmit(handleSubmit)}
         className="space-y-8"
       >
+        {/* 상품명 undefined 확인 */}
         <FormField
           control={productForm.control}
           name="name"
@@ -290,6 +304,7 @@ export default function ProductForm({
                   {...field}
                   type="text"
                   placeholder="상품명을 입력해 주세요."
+                  value={field.value ?? ''}
                 />
               </FormControl>
               <FormMessage />
@@ -371,7 +386,7 @@ export default function ProductForm({
         </div>
 
         {productImages.fields.map((d, idx) => {
-          const blobImages = productImageBlobList[idx];
+          const blobImages = productImageList[idx];
           return (
             <div className="flex space-x-4" key={d.id}>
               {blobImages ? (
@@ -540,7 +555,7 @@ export default function ProductForm({
         />
 
         <div className="flex justify-center pt-4">
-          <Button type="submit">상품 등록</Button>
+          <Button type="submit">상품 {productId ? '수정' : '등록'}</Button>
         </div>
       </form>
     </Form>
