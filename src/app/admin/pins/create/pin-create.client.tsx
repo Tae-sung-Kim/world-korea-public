@@ -68,7 +68,6 @@ export default function PinCreateClient() {
   const pinForm = useForm<PinFormValues>({
     resolver: zodResolver(PinFormSchema),
     defaultValues: {
-      productId: '', //첫번째?
       number: '',
       endDate: new Date(),
       count: '1',
@@ -83,12 +82,9 @@ export default function PinCreateClient() {
     if (!isFetching) {
       pinForm.reset({
         productId: productList[0]?._id,
-        number: '',
-        endDate: new Date(),
-        count: '1',
       });
     }
-  }, [productList]);
+  }, [productList, pinForm, isFetching]);
 
   return (
     <Form {...pinForm}>

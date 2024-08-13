@@ -32,7 +32,7 @@ import { addComma, removeComma } from '@/utils/number';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import Image from 'next/image';
-import { ChangeEvent, useEffect, useMemo, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import {
   useForm,
   useFieldArray,
@@ -144,8 +144,6 @@ export default function ProductForm({ userCategoryList, productId }: Props) {
     control: productForm.control,
     name: 'images',
   });
-
-  console.log(productForm.getValues());
 
   const handleSubmit = () => {
     const data = new FormData();
