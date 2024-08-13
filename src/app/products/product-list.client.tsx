@@ -17,7 +17,7 @@ export default function ProductListClient() {
 
       {productList?.map((d) => {
         return (
-          <div className="grid grid-cols-4 gap-4 p-5">
+          <div key={d._id} className="grid grid-cols-4 gap-4 p-5">
             <div>
               <Image
                 src={String(d.images[0] ?? '')}
