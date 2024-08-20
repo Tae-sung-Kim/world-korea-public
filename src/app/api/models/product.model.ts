@@ -1,4 +1,5 @@
 import { resolveData } from '../utils/condition.util';
+import { FILE_PATH, FILE_TYPE, uploadFile } from '../utils/upload.util';
 import { PRODUCT_STATUS, ProductStatus } from '@/definitions';
 import { model, models, Schema, Model, Types } from 'mongoose';
 
@@ -53,7 +54,7 @@ const schema = new Schema<ProductDB, ProductSchemaModel, ProductMethods>({
   pins: [{ type: Types.ObjectId, ref: 'Pin' }],
 });
 
-schema.method('updateProduct', function updateProduct(productData) {
+schema.method('updateProduct', async function updateProduct(productData) {
   this.name = resolveData<ProductDB['name']>(productData.name, this.name);
   this.accessLevel = resolveData<ProductDB['accessLevel']>(
     productData.accessLevel,
@@ -89,6 +90,27 @@ schema.method('updateProduct', function updateProduct(productData) {
     this.description4
   );
   this.updatedAt = new Date();
+
+  if (Array.isArray(productData.images)) {
+    let imageDataList = [];
+
+    for (let imageData of productData.images) {
+      if (typeof imageData === 'string') {
+        imageDataList.push(imageData);
+      } else {
+        let imageList = await uploadFile([imageData], {
+          path: FILE_PATH.PRODUCT,
+          type: FILE_TYPE.IMAGE,
+        });
+
+        if (Array.isArray(imageList) && imageList.length === 0) {
+          imageDataList.push(imageList[0].url);
+        }
+      }
+    }
+
+    this.images = imageDataList;
+  }
 
   return this.save();
 });
