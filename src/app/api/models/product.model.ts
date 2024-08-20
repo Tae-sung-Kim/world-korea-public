@@ -1,3 +1,4 @@
+import { resolveData } from '../utils/condition.util';
 import { PRODUCT_STATUS, ProductStatus } from '@/definitions';
 import { model, models, Schema, Model, Types } from 'mongoose';
 
@@ -17,10 +18,12 @@ export interface ProductDB {
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;
-  pins: object; // 빈 번호 목록
+  pins: string[]; // 빈 번호 목록
 }
 
-interface ProductMethods {}
+interface ProductMethods {
+  updateProduct(productData: ProductDB): boolean;
+}
 
 interface ProductSchemaModel extends Model<ProductDB, {}, ProductMethods> {}
 
@@ -48,6 +51,46 @@ const schema = new Schema<ProductDB, ProductSchemaModel, ProductMethods>({
   updatedAt: { type: Date, default: Date.now },
   deletedAt: { type: Date },
   pins: [{ type: Types.ObjectId, ref: 'Pin' }],
+});
+
+schema.method('updateProduct', function updateProduct(productData) {
+  this.name = resolveData<ProductDB['name']>(productData.name, this.name);
+  this.accessLevel = resolveData<ProductDB['accessLevel']>(
+    productData.accessLevel,
+    this.accessLevel
+  );
+  this.status = resolveData<ProductDB['status']>(
+    productData.status,
+    this.status
+  );
+  this.regularPrice = resolveData<ProductDB['regularPrice']>(
+    productData.regularPrice,
+    this.regularPrice
+  );
+  this.salePrice = resolveData<ProductDB['salePrice']>(
+    productData.salePrice,
+    this.salePrice
+  );
+  this.price = resolveData<ProductDB['price']>(productData.price, this.price);
+  this.description1 = resolveData<ProductDB['description1']>(
+    productData.description1,
+    this.description1
+  );
+  this.description2 = resolveData<ProductDB['description2']>(
+    productData.description2,
+    this.description2
+  );
+  this.description3 = resolveData<ProductDB['description3']>(
+    productData.description3,
+    this.description3
+  );
+  this.description4 = resolveData<ProductDB['description4']>(
+    productData.description4,
+    this.description4
+  );
+  this.updatedAt = new Date();
+
+  return this.save();
 });
 
 const Product =
