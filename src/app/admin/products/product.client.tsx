@@ -1,6 +1,6 @@
 'use client';
 
-import ProductList from './product-list';
+import Product from './product';
 import productService from '@/services/product.service';
 import userCategoryService from '@/services/user-category.service';
 import { useQuery } from '@tanstack/react-query';
@@ -18,9 +18,6 @@ export default function ProductListClient() {
   });
 
   return (
-    <ProductList
-      productList={productList}
-      userCategoryList={userCategoryList}
-    />
+    <Product productList={productList} userCategoryList={userCategoryList} />
   );
 }
