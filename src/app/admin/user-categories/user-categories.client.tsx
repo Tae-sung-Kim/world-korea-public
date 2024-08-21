@@ -1,10 +1,10 @@
 'use client';
 
 import {
-  useUserCategoryAddMutation,
-  useUserCategoryDeleteMutation,
+  useAddUserCategoryMutation,
+  useDeleteUserCategoryMutation,
   useUserCategoryListQuery,
-  useUserCategoryUpdateMutation,
+  useUpdateUserCategoryMutation,
 } from '../queries';
 import { UserCategoryType } from '@/definitions';
 import { useEffect, useState } from 'react';
@@ -12,9 +12,9 @@ import { useEffect, useState } from 'react';
 export default function UserCategoriesClient() {
   const userCategoryList = useUserCategoryListQuery();
 
-  const addMutation = useUserCategoryAddMutation();
-  const updateMutation = useUserCategoryUpdateMutation();
-  const deleteMutation = useUserCategoryDeleteMutation();
+  const addMutation = useAddUserCategoryMutation();
+  const updateMutation = useUpdateUserCategoryMutation();
+  const deleteMutation = useDeleteUserCategoryMutation();
 
   const [list, setList] = useState<UserCategoryType[]>([]);
 

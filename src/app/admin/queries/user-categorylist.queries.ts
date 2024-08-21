@@ -16,7 +16,7 @@ export function useUserCategoryListQuery() {
   return data;
 }
 
-export function useUserCategoryAddMutation() {
+export function useAddUserCategoryMutation() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: userCategoryService.addUserCategory,
@@ -27,7 +27,7 @@ export function useUserCategoryAddMutation() {
   });
 }
 
-export function useUserCategoryUpdateMutation() {
+export function useUpdateUserCategoryMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -39,7 +39,7 @@ export function useUserCategoryUpdateMutation() {
   });
 }
 
-export function useUserCategoryDeleteMutation() {
+export function useDeleteUserCategoryMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
