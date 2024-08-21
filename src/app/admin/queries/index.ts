@@ -1,1 +1,2 @@
-export * from './user-categorylist';
+export * from './user-categorylist.queries';
+export * from './product.queries';

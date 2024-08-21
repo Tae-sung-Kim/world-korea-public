@@ -3,14 +3,14 @@
 import {
   useUserCategoryAddMutation,
   useUserCategoryDeleteMutation,
-  useUserCategoryQuery,
+  useUserCategoryListQuery,
   useUserCategoryUpdateMutation,
 } from '../queries';
 import { UserCategoryType } from '@/definitions';
 import { useEffect, useState } from 'react';
 
 export default function UserCategoriesClient() {
-  const userCategoryList = useUserCategoryQuery();
+  const userCategoryList = useUserCategoryListQuery();
 
   const addMutation = useUserCategoryAddMutation();
   const updateMutation = useUserCategoryUpdateMutation();

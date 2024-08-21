@@ -20,6 +20,15 @@ class ProductService {
   detailProudct(id: string) {
     return http.get<ProductFormData>(`/api/products/${id}`);
   }
+
+  //상품 수정
+  updateProduct(data: FormData) {
+    return http.patch<Partial<ProductFormData>>(`/api/products/$`, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+  }
 }
 
 const productService = new ProductService();

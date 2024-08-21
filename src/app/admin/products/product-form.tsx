@@ -1,5 +1,6 @@
 'use client';
 
+import { useCreateProductMutation } from '../queries';
 import { descriptionShcema, priceShcema } from './product.schema';
 import { Button } from '@/components/ui/button';
 import {
@@ -30,7 +31,6 @@ import productService from '@/services/product.service';
 import { bytesToMB, fileToBlob } from '@/utils/file';
 import { addComma, removeComma } from '@/utils/number';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
 import Image from 'next/image';
 import { ChangeEvent, useState } from 'react';
 import {
@@ -39,7 +39,6 @@ import {
   Controller,
   ControllerRenderProps,
 } from 'react-hook-form';
-import { toast } from 'sonner';
 import { z } from 'zod';
 
 const ProductFormSchema = z.object({
@@ -95,12 +94,13 @@ type Props = {
 export default function ProductForm({ userCategoryList, productId }: Props) {
   const [productImageList, setProductImageList] = useState<ProductImage[]>([]);
 
-  const ProductMutation = useMutation({
-    mutationFn: productService.createProduct,
-    onSuccess: () => {
-      handleResetForm();
-      toast.success('상품이 등록 되었습니다.');
-    },
+  //상품 등록 후 reset
+  const handleResetForm = () => {
+    setProductImageList([]);
+    productForm.reset();
+  };
+  const createProductMutation = useCreateProductMutation({
+    onSuccess: handleResetForm,
   });
 
   const productForm = useForm<ProductFormValues>({
@@ -167,18 +167,12 @@ export default function ProductForm({ userCategoryList, productId }: Props) {
 
     if (productId) {
     } else {
-      ProductMutation.mutate(data);
+      createProductMutation.mutate(data);
     }
   };
 
   const handleAddImage = () => {
     productImages.append({ file: undefined });
-  };
-
-  //상품 등록 후 reset
-  const handleResetForm = () => {
-    setProductImageList([]);
-    productForm.reset();
   };
 
   const handleInputFileChange = (

@@ -5,11 +5,11 @@ import { toast } from 'sonner';
 
 const QUERY_KEY = 'user-categories';
 
-export function useUserCategoryQuery() {
+export function useUserCategoryListQuery() {
   const fallback: UserCategoryType[] = [];
 
   const { data = fallback } = useQuery({
-    queryKey: ['user-categories'],
+    queryKey: [QUERY_KEY],
     queryFn: userCategoryService.getUserCategoryList,
   });
 
