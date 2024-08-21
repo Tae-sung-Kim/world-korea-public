@@ -1,5 +1,6 @@
 'use client';
 
+import { useUserListQuery } from '../queries';
 import {
   Table,
   TableBody,
@@ -10,16 +11,11 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { User } from '@/definitions';
-import userService from '@/services/user.service';
-import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 
 export default function UsersClient() {
-  const { data: userList = [] } = useQuery({
-    queryKey: ['users'],
-    queryFn: userService.getUserList,
-    gcTime: 0,
-  });
+  const userList = useUserListQuery();
+
   const router = useRouter();
 
   const handleTrClick = (userData: User) => () => {

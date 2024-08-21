@@ -1,5 +1,10 @@
 'use client';
 
+import {
+  useUserDetailQuery,
+  useUpdateUserMutation,
+  useUserCategoryListQuery,
+} from '../../queries';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -20,13 +25,9 @@ import {
 } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { User } from '@/definitions';
-import userCategoryService from '@/services/user-category.service';
-import userService from '@/services/user.service';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import React, { useEffect, useReducer, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
 import { z } from 'zod';
 
 interface IProps {
@@ -56,29 +57,10 @@ const formSchema = z.object({
 export default function UsersDetailClient({ userId }: IProps) {
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [isEdit, setIsEdit] = useState(true);
-  const queryClient = useQueryClient();
 
-  const {
-    isLoading,
-    isFetching,
-    isFetched,
-    data: userData,
-  } = useQuery({
-    queryKey: ['users', userId],
-    queryFn: () => userService.getUserById(userId),
-  });
-  const updateMutation = useMutation({
-    mutationFn: userService.updateUser,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['users', userId] });
-      toast.success('회원 정보를 수정하였습니다.');
-    },
-  });
-  const { data: userCategoryList, isLoading: isUserCategoriesLoading } =
-    useQuery({
-      queryKey: ['user-categories'],
-      queryFn: userCategoryService.getUserCategoryList,
-    });
+  const userData = useUserDetailQuery(userId);
+  const updateMutation = useUpdateUserMutation(userId);
+  const userCategoryList = useUserCategoryListQuery();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -122,8 +104,8 @@ export default function UsersDetailClient({ userId }: IProps) {
   };
 
   useEffect(() => {
-    if (isFetched && !isFetching && userDataRef.current) {
-      const userData = userDataRef.current;
+    if (Object.keys(userData).length > 0) {
+      // const userData = userDataRef.current;
 
       // form.setValue(
       //   'userCategory',
@@ -148,9 +130,9 @@ export default function UsersDetailClient({ userId }: IProps) {
 
       setIsInitialLoading(false);
     }
-  }, [isFetched, isFetching, form]);
+  }, [form, userData]);
 
-  if (isLoading || isUserCategoriesLoading || isInitialLoading) {
+  if (isInitialLoading) {
     return null;
   }
 
@@ -329,7 +311,7 @@ export default function UsersDetailClient({ userId }: IProps) {
           <Button
             type="submit"
             className="ml-2"
-            disabled={isFetching || updateMutation.isPending}
+            disabled={updateMutation.isPending}
           >
             수정하기
           </Button>

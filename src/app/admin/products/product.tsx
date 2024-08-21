@@ -16,7 +16,6 @@ import {
   UserCategoryType,
 } from '@/definitions';
 import { addComma } from '@/utils/number';
-import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 
 type Props = {
