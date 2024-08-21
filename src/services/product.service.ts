@@ -22,8 +22,8 @@ class ProductService {
   }
 
   //상품 수정
-  updateProduct(data: FormData) {
-    return http.patch<Partial<ProductFormData>>(`/api/products/$`, data, {
+  updateProduct({ id, data }: { id: string; data: FormData }) {
+    return http.patch<Partial<ProductFormData>>(`/api/products/${id}`, data, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCreateProductMutation } from '../queries';
+import { useCreateProductMutation, useUpdateProductMutation } from '../queries';
 import { descriptionShcema, priceShcema } from './product.schema';
 import { Button } from '@/components/ui/button';
 import {
@@ -99,9 +99,14 @@ export default function ProductForm({ userCategoryList, productId }: Props) {
     setProductImageList([]);
     productForm.reset();
   };
+
+  //상품 추가
   const createProductMutation = useCreateProductMutation({
     onSuccess: handleResetForm,
   });
+
+  //상품 수정
+  const updateProductMutation = useUpdateProductMutation({});
 
   const productForm = useForm<ProductFormValues>({
     resolver: zodResolver(ProductFormSchema),
@@ -166,6 +171,7 @@ export default function ProductForm({ userCategoryList, productId }: Props) {
     }
 
     if (productId) {
+      updateProductMutation.mutate({ id: productId, data });
     } else {
       createProductMutation.mutate(data);
     }
