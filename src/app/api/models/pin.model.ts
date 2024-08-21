@@ -1,13 +1,13 @@
 import { model, models, Schema, Model, Types } from 'mongoose';
 
-interface PinDB {
+export interface PinDB {
   number: string;
-  product: object;
-  endDate: Date;
-  useDate: Date;
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt: Date;
+  product: Types.ObjectId;
+  endDate?: Date;
+  useDate?: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
+  deletedAt?: Date;
 }
 
 interface PinMethods {}
@@ -20,11 +20,11 @@ const schema = new Schema<PinDB, PinSchemaModel, PinMethods>({
     required: true,
   },
   product: {
-    type: Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'Product',
   },
-  endDate: { type: Date, default: Date.now },
-  useDate: { type: Date, default: Date.now },
+  endDate: { type: Date },
+  useDate: { type: Date },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
   deletedAt: { type: Date },

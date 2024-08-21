@@ -19,7 +19,7 @@ export interface ProductDB {
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;
-  pins: string[]; // 빈 번호 목록
+  pins: Types.ObjectId[]; // 빈 번호 목록
 }
 
 interface ProductMethods {
@@ -51,7 +51,7 @@ const schema = new Schema<ProductDB, ProductSchemaModel, ProductMethods>({
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
   deletedAt: { type: Date },
-  pins: [{ type: Types.ObjectId, ref: 'Pin' }],
+  pins: [{ type: Schema.Types.ObjectId, ref: 'Pin' }],
 });
 
 schema.method('updateProduct', async function updateProduct(productData) {

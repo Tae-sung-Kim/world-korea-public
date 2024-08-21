@@ -15,8 +15,8 @@ interface UserDB {
   phoneNumber: string; // 폰번호
   email: string; // 이메일
   isApproved: boolean; // 승인 여부
-  userCategory: object; // 회원 분류 Ref
-  partner: object; // 파트너 Ref
+  userCategory: Types.ObjectId; // 회원 분류 Ref
+  partner: Types.ObjectId; // 파트너 Ref
   isAdmin: boolean; // 관리자 여부
   createdAt: Date;
   updatedAt: Date;
@@ -99,14 +99,14 @@ const schema = new Schema<UserDB, UserSchemaModel, UserMethods>({
 
   // 회원구분 Ref
   userCategory: {
-    type: Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'UserCategory',
     default: null,
   },
 
   // 파트너 Ref
   partner: {
-    type: Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'Partner',
     default: null,
   },
