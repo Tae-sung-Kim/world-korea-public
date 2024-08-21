@@ -1,5 +1,5 @@
-import ProductListClient from './product-list.client';
+import ProductClient from './product.client';
 
 export default function ProductPage() {
-  return <ProductListClient />;
+  return <ProductClient />;
 }
