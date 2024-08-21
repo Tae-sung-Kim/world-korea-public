@@ -1,45 +1,27 @@
 'use client';
 
+import {
+  useUserCategoryAddMutation,
+  useUserCategoryDeleteMutation,
+  useUserCategoryQuery,
+  useUserCategoryUpdateMutation,
+} from '../queries';
 import { UserCategoryType } from '@/definitions';
-import userCategoryService from '@/services/user-category.service';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
 
 export default function UserCategoriesClient() {
-  const queryClient = useQueryClient();
-  const { data, isPending, isFetching } = useQuery({
-    queryKey: ['user-categories'],
-    queryFn: userCategoryService.getUserCategoryList,
-  });
-  const addMutation = useMutation({
-    mutationFn: userCategoryService.addUserCategory,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['user-categories'] });
-      toast.success('회원 구분을 추가하였습니다.');
-    },
-  });
-  const updateMutation = useMutation({
-    mutationFn: userCategoryService.updateUserCategory,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['user-categories'] });
-      toast.success('회원 구분을 수정하였습니다.');
-    },
-  });
-  const deleteMutation = useMutation({
-    mutationFn: userCategoryService.deleteUserCategory,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['user-categories'] });
-      toast.success('회원 구분을 삭제하였습니다.');
-    },
-  });
+  const userCategoryList = useUserCategoryQuery();
+
+  const addMutation = useUserCategoryAddMutation();
+  const updateMutation = useUserCategoryUpdateMutation();
+  const deleteMutation = useUserCategoryDeleteMutation();
 
   const [list, setList] = useState<UserCategoryType[]>([]);
 
   useEffect(() => {
-    if (data) {
+    if (userCategoryList) {
       setList([
-        ...data,
+        ...userCategoryList,
         {
           _id: '',
           name: '',
@@ -47,7 +29,7 @@ export default function UserCategoriesClient() {
         },
       ]);
     }
-  }, [data]);
+  }, [userCategoryList]);
 
   const handleChange =
     (id: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,10 +77,6 @@ export default function UserCategoriesClient() {
     deleteMutation.mutate(data._id);
   };
 
-  if (isPending) {
-    return <h1>Loading...</h1>;
-  }
-
   return (
     <div className="container">
       {list.map((item, index) => {
@@ -120,19 +98,11 @@ export default function UserCategoriesClient() {
               value={level}
               onChange={handleChange(_id)}
             />
-            <button
-              type="button"
-              disabled={isFetching}
-              onClick={() => updateRow(_id)}
-            >
+            <button type="button" onClick={() => updateRow(_id)}>
               {isAddField ? '추가하기' : '수정하기'}
             </button>
             {!isAddField && !isFirstRow && (
-              <button
-                type="button"
-                disabled={isFetching}
-                onClick={() => deleteRow(_id)}
-              >
+              <button type="button" onClick={() => deleteRow(_id)}>
                 삭제하기
               </button>
             )}
