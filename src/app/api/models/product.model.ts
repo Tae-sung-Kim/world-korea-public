@@ -1,6 +1,6 @@
 import { resolveData } from '../utils/condition.util';
 import { FILE_PATH, FILE_TYPE, uploadFile } from '../utils/upload.util';
-import { PRODUCT_STATUS, ProductStatus } from '@/definitions';
+import { PRODUCT_STATUS, ProductFormData, ProductStatus } from '@/definitions';
 import { model, models, Schema, Model, Types } from 'mongoose';
 
 export interface ProductDB {
@@ -23,7 +23,7 @@ export interface ProductDB {
 }
 
 interface ProductMethods {
-  updateProduct(productData: ProductDB): boolean;
+  updateProduct(productData: ProductFormData): boolean;
 }
 
 interface ProductSchemaModel extends Model<ProductDB, {}, ProductMethods> {}
