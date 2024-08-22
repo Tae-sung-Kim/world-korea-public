@@ -1,3 +1,4 @@
+import { PinsData } from './pins.type';
 import { ProductDB } from '@/app/api/models/product.model';
 import { PRODUCT_STATUS } from '@/definitions';
 
@@ -27,4 +28,8 @@ export interface ProductFormData {
   description4: string;
   // unavailableDates?: Date[]; // 이용 불가능 날짜
   _id?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  pins?: PinsData[];
+  unavailableDates?: string[];
 }

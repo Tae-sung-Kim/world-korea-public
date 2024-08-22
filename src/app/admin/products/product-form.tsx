@@ -284,6 +284,8 @@ export default function ProductForm({ userCategoryList, productId }: Props) {
   // }
   // }, [productDetail, productForm]);
 
+  console.log(productForm.getValues());
+
   return (
     <Form {...productForm}>
       <form
