@@ -13,7 +13,6 @@ export type ProductImage = {
 };
 
 export interface ProductFormData {
-  _id?: string;
   name: string; // 상품명
   accessLevel: string; // 접근 레벨
   status: ProductStatus; // 상품 상태
@@ -27,4 +26,5 @@ export interface ProductFormData {
   description3: string;
   description4: string;
   // unavailableDates?: Date[]; // 이용 불가능 날짜
+  _id?: string;
 }

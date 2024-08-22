@@ -1,5 +1,6 @@
 'use client';
 
+import { useCreatePinMutation } from '../../queries';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import {
@@ -11,6 +12,12 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from '@/components/ui/input-otp';
 import {
   Popover,
   PopoverContent,
@@ -31,15 +38,15 @@ import { CalendarIcon } from '@radix-ui/react-icons';
 import { useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { ChangeEvent, useEffect } from 'react';
+import { Field, FieldElement, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 const PinFormSchema = z.object({
   productId: z.string().refine((d) => !!d, {
     message: '상품을 선택해 주세요.',
   }),
-  number: z
+  pinPrefixFour: z
     .string()
     .refine((d) => !!d, {
       message: '핀번호를 입력해 주세요.',
@@ -51,7 +58,7 @@ const PinFormSchema = z.object({
       message: '4자리를 입력해 주세요.',
     }),
   endDate: z.date(),
-  count: z.string().refine((d) => Number(d) > 0, {
+  pinCount: z.number().refine((d) => Number(d) > 0, {
     message: '0보다 큰 수를 입력해 주세요.',
   }),
 });
@@ -59,7 +66,7 @@ const PinFormSchema = z.object({
 type PinFormValues = z.infer<typeof PinFormSchema>;
 
 export default function PinCreateClient() {
-  //상품 목록 조회
+  //상품 목록 조회 - 수정해야함 로딩 만들고
   const { data: productList = [], isFetching } = useQuery({
     queryKey: ['getProudctList', 'pin-create'],
     queryFn: productService.getProudctList,
@@ -68,16 +75,25 @@ export default function PinCreateClient() {
   const pinForm = useForm<PinFormValues>({
     resolver: zodResolver(PinFormSchema),
     defaultValues: {
-      number: '',
+      pinPrefixFour: '',
       endDate: new Date(),
-      count: '1',
+      pinCount: 1,
     },
   });
 
-  const handleSubmit = () => {
-    console.log('전송', pinForm.getValues());
+  const handleResetFormData = () => {
+    pinForm.reset();
   };
 
+  const createPinMutation = useCreatePinMutation({
+    onSuccess: handleResetFormData,
+  });
+
+  const handleSubmit = () => {
+    createPinMutation.mutate(pinForm.getValues());
+  };
+
+  console.log(pinForm.getValues());
   useEffect(() => {
     if (!isFetching) {
       pinForm.reset({
@@ -104,7 +120,7 @@ export default function PinCreateClient() {
                     <SelectGroup>
                       {productList.map((d) => {
                         return (
-                          <SelectItem key={d._id} value={d._id}>
+                          <SelectItem key={d._id} value={String(d._id)}>
                             {d.name}
                           </SelectItem>
                         );
@@ -120,12 +136,25 @@ export default function PinCreateClient() {
 
         <FormField
           control={pinForm.control}
-          name="number"
+          name="pinPrefixFour"
           render={({ field }) => (
             <FormItem>
               <FormLabel>핀 번호</FormLabel>
               <FormControl>
-                <Input {...field} maxLength={4} />
+                <InputOTP
+                  maxLength={4}
+                  {...field}
+                  onChange={(value: string) => {
+                    field.onChange(value);
+                  }}
+                >
+                  <InputOTPGroup>
+                    <InputOTPSlot index={0} />
+                    <InputOTPSlot index={1} />
+                    <InputOTPSlot index={2} />
+                    <InputOTPSlot index={3} />
+                  </InputOTPGroup>
+                </InputOTP>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -181,12 +210,17 @@ export default function PinCreateClient() {
 
         <FormField
           control={pinForm.control}
-          name="count"
+          name="pinCount"
           render={({ field }) => (
             <FormItem>
               <FormLabel>생성 갯수</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input
+                  {...field}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    field.onChange(Number(e.target.value))
+                  }
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -1,3 +1,5 @@
+import PinClient from './pin.client';
+
 export default function PinListPage() {
-  return 'PinListPage';
+  return <PinClient />;
 }

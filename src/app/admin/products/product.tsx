@@ -53,7 +53,7 @@ export default function ProductListClient({
           <TableRow
             key={product._id}
             className="cursor-pointer"
-            onClick={() => handleProductItemClick(product._id)}
+            onClick={() => handleProductItemClick(String(product._id))}
           >
             <TableCell>{idx + 1}</TableCell>
             <TableCell className="font-medium">{product.name}</TableCell>
