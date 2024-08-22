@@ -103,7 +103,7 @@ schema.method('updateProduct', async function updateProduct(productData) {
           type: FILE_TYPE.IMAGE,
         });
 
-        if (Array.isArray(imageList) && imageList.length === 0) {
+        if (Array.isArray(imageList) && imageList.length === 1) {
           imageDataList.push(imageList[0].url);
         }
       }
