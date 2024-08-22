@@ -32,7 +32,6 @@ export async function GET(req: NextRequest, ctx: { params: { id: string } }) {
 export async function PATCH(req: NextRequest, ctx: { params: { id: string } }) {
   try {
     const productId = ctx.params.id;
-    const body = await req.json();
 
     await connectMongo();
 
