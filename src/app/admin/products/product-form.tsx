@@ -59,15 +59,17 @@ const ProductFormSchema = z.object({
     }
   ), // 상품 상태
   images: z.array(
-    z.object({
-      file: z
-        .instanceof(File)
-        .or(z.string())
-        .optional()
-        .refine((d) => d, {
-          message: '파일을 등록해 주세요.',
-        }),
-    })
+    z
+      .object({
+        file: z
+          .instanceof(File)
+          .or(z.string())
+          .optional()
+          .refine((d) => d, {
+            message: '파일을 등록해 주세요.',
+          }),
+      })
+      .or(z.string())
   ), // 상품 이미지
   regularPrice: priceShcema(), // 정가
   salePrice: priceShcema(), // 할인가
@@ -155,6 +157,7 @@ export default function ProductForm({ userCategoryList, productId }: Props) {
 
     const formValues = productForm.getValues();
 
+    //파일일때 다시 해야함~!~!~!~!
     for (const [key, values] of Object.entries(formValues)) {
       if (Array.isArray(values)) {
         values.forEach((value) => {
