@@ -63,7 +63,6 @@ const ProductFormSchema = z.object({
       .object({
         file: z
           .instanceof(File)
-          .or(z.string())
           .optional()
           .refine((d) => d, {
             message: '파일을 등록해 주세요.',
@@ -157,15 +156,16 @@ export default function ProductForm({ userCategoryList, productId }: Props) {
 
     const formValues = productForm.getValues();
 
-    //파일일때 다시 해야함~!~!~!~!
     for (const [key, values] of Object.entries(formValues)) {
       if (Array.isArray(values)) {
         values.forEach((value) => {
-          const file = value.file;
-          if (file instanceof File) {
-            data.append('images', file);
+          if (typeof value === 'string') {
+            data.append(key, value);
           } else {
-            console.log('기타 필드 추가', key, value);
+            const file = value.file;
+            if (file instanceof File) {
+              data.append('images', file);
+            }
           }
         });
       } else {
@@ -226,68 +226,6 @@ export default function ProductForm({ userCategoryList, productId }: Props) {
       field.onChange(String(removeComma(e.target.value)));
     }
   };
-
-  // useEffect(() => {
-  //   if (productDetail) {
-  //     // 1. 일반 필드 세팅
-  //     for (let [key, value] of Object.entries(productDetail)) {
-  //       if (Array.isArray(value)) {
-  //         //이미지 데이터 세팅
-  //         if (key === 'images') {
-  //           setProductImageList(
-  //             value.map((d) => ({
-  //               name: '',
-  //               size: '',
-  //               blob: d,
-  //             }))
-  //           );
-  //           productForm.setValue(
-  //             'images',
-  //             value.map((image) => {
-  //               if (typeof image === 'string') {
-  //                 return { file: image };
-  //               } else {
-  //                 return {
-  //                   file: image.file,
-  //                 };
-  //               }
-  //             })
-  //           );
-  //         } else {
-  //           console.log('그 외', key, value);
-  //         }
-  //       } else {
-  //         productForm.setValue(key as keyof ProductFormValues, value);
-  //       }
-  //     }
-
-  // 2. useFieldArray로 관리되는 배열 필드 세팅
-  // if (productDetail.images && productDetail.images.length > 0) {
-  //   productForm.setValue(
-  //     'images',
-  //     productDetail.images.map((image) => {
-  //       if (typeof image === 'string') {
-  //         return { file: image };
-  //       } else {
-  //         return {
-  //           file: image.file,
-  //         };
-  //       }
-  //     })
-  //   );
-
-  // // 이미지 미리보기 블랍 업데이트 (필요한 경우)
-  // const imageBlobs = productDetail.images.map((image) => ({
-  //   name: image.file.name,
-  //   size: String(bytesToMB(image.file.size)),
-  //   blob: URL.createObjectURL(image.file), // 예시로 createObjectURL 사용
-  // }));
-  // setProductImageList(imageBlobs);
-  // }
-  // }
-  // }, [productDetail, productForm]);
-
-  console.log(productForm.getValues());
 
   return (
     <Form {...productForm}>
@@ -390,6 +328,10 @@ export default function ProductForm({ userCategoryList, productId }: Props) {
 
         {productImages.fields.map((d, idx) => {
           const blobImages = productImageList[idx];
+          const newFileImage = productForm.formState.errors.images?.[idx];
+
+          console.log(newFileImage);
+
           return (
             <div className="flex space-x-4" key={d.id}>
               {blobImages ? (
@@ -421,9 +363,9 @@ export default function ProductForm({ userCategoryList, productId }: Props) {
                       );
                     }}
                   />
-                  {productForm.formState.errors.images?.[idx]?.file && (
+                  {newFileImage && (
                     <span className="text-red-500 text-sm">
-                      {productForm.formState.errors.images[idx].file.message}
+                      {newFileImage?.file.message}
                     </span>
                   )}
                 </>
