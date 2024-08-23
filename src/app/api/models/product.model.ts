@@ -1,3 +1,4 @@
+import { Pin } from '@/definitions/pins.type';
 import { resolveData } from '../utils/condition.util';
 import { FILE_PATH, FILE_TYPE, uploadFile } from '../utils/upload.util';
 import { PRODUCT_STATUS, Product, ProductFormData, ProductStatus } from '@/definitions';
@@ -57,11 +58,12 @@ const schema = new Schema<ProductDB, ProductSchemaModel, ProductMethods>({
 });
 
 schema.static('getProductList', async function getProductList() {
-  let list = await this.find({}).populate('pins');
-  list = list.map(d => ({
-    ...d,
-    pinCount: d.pins.length
-  }))
+  const list = await this.find({}).populate('pins');
+  list.forEach(d => {
+    d.pinCount = d.pins.length;
+  })
+
+  return list;
 });
 
 schema.method('updateProduct', async function updateProduct(productData) {
