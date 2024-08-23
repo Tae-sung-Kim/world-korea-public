@@ -10,7 +10,7 @@ export interface Product extends ProductDB {
 }
 
 export type ProductImage = {
-  file?: string | File;
+  file?: File;
 };
 
 export interface ProductFormData {
