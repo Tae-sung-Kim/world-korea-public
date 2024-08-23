@@ -1,6 +1,6 @@
 import { resolveData } from '../utils/condition.util';
 import { FILE_PATH, FILE_TYPE, uploadFile } from '../utils/upload.util';
-import { PRODUCT_STATUS, ProductFormData, ProductStatus } from '@/definitions';
+import { PRODUCT_STATUS, Product, ProductFormData, ProductStatus } from '@/definitions';
 import { model, models, Schema, Model, Types } from 'mongoose';
 
 export interface ProductDB {
@@ -26,7 +26,9 @@ interface ProductMethods {
   updateProduct(productData: ProductFormData): boolean;
 }
 
-interface ProductSchemaModel extends Model<ProductDB, {}, ProductMethods> {}
+interface ProductSchemaModel extends Model<ProductDB, {}, ProductMethods> {
+  getProductList(): Promise<Product[]>
+}
 
 const schema = new Schema<ProductDB, ProductSchemaModel, ProductMethods>({
   name: { type: String, required: true },
@@ -52,6 +54,14 @@ const schema = new Schema<ProductDB, ProductSchemaModel, ProductMethods>({
   updatedAt: { type: Date, default: Date.now },
   deletedAt: { type: Date },
   pins: [{ type: Schema.Types.ObjectId, ref: 'Pin' }],
+});
+
+schema.static('getProductList', async function getProductList() {
+  let list = await this.find({}).populate('pins');
+  list = list.map(d => ({
+    ...d,
+    pinCount: d.pins.length
+  }))
 });
 
 schema.method('updateProduct', async function updateProduct(productData) {

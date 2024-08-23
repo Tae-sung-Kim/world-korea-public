@@ -11,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { PinsData } from '@/definitions/pins.type';
+import { Pin } from '@/definitions/pins.type';
 import { addComma } from '@/utils/number';
 
 export default function PinClient() {
@@ -42,7 +42,7 @@ export default function PinClient() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {pinList.map((pin: PinsData, idx: number) => (
+        {pinList.map((pin: Pin, idx: number) => (
           <TableRow
             key={pin._id}
             className="cursor-pointer"

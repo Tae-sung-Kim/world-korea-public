@@ -1,4 +1,4 @@
-import { PinsData } from '@/definitions/pins.type';
+import { Pin } from '@/definitions/pins.type';
 import pinsService from '@/services/pins.service';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
@@ -12,7 +12,7 @@ type FunctionProps = {
 const QUERY_KEY = 'pins';
 
 export function usePinsListQuery() {
-  const fallback: PinsData[] = [];
+  const fallback: Pin[] = [];
 
   const { data = fallback } = useQuery({
     queryKey: [QUERY_KEY],

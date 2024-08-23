@@ -1,13 +1,15 @@
-import { PinsData } from './pins.type';
+import { Pin } from './pins.type';
 import { ProductDB } from '@/app/api/models/product.model';
 import { PRODUCT_STATUS } from '@/definitions';
 
 export type ProductStatus =
   (typeof PRODUCT_STATUS)[keyof typeof PRODUCT_STATUS];
 
-export interface Product extends ProductDB {
+export type Product = ProductDB & {
   _id: string;
-}
+  pinCount: number;
+  pins: Pin[];
+};
 
 export type ProductImage = {
   file?: string | File;
@@ -30,6 +32,6 @@ export interface ProductFormData {
   _id?: string;
   createdAt?: string;
   updatedAt?: string;
-  pins?: PinsData[];
+  pins?: Pin[];
   unavailableDates?: string[];
 }

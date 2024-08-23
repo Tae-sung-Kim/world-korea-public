@@ -16,7 +16,7 @@ export async function GET() {
       return createResponse(HTTP_STATUS.FORBIDDEN);
     }
 
-    const list = await PinModel.find({});
+    const list = await PinModel.getPinList();
 
     return NextResponse.json(list);
   } catch (error) {
@@ -47,6 +47,8 @@ export async function POST(req: NextRequest) {
     // pinPrefixFour 가 있을 경우 (유효성 체크 후 뒤 12자리 생성)
     const isPinPrefixFourValid =
       typeof pinPrefixFour === 'string' && pinPrefixFour.length === 4;
+    // 사용자가 pin 번호를 직접 다 작성한 경우
+    const isPinManualValid = Array.isArray(pinList) && pinList.length > 0;
 
     if (isPinPrefixFourValid) {
       if (typeof pinCount !== 'number' || pinCount <= 0) {
@@ -65,9 +67,27 @@ export async function POST(req: NextRequest) {
       await PinModel.insertMany(listToInsert, { ordered: false });
 
       return NextResponse.json(true);
+    } else if (isPinManualValid) {
+      const listToInsert: PinDB[] = [];
+
+      pinList.forEach((pin: string) => {
+        if (typeof pin === 'string' && pin.length === 16) {
+          listToInsert.push({
+            product: productId,
+            number: pin,
+            endDate,
+          });
+        }
+      });
+
+      if (listToInsert.length > 0) {
+        await PinModel.insertMany(listToInsert, { ordered: false });
+
+        return NextResponse.json(true);
+      }
     }
 
-    return NextResponse.json(false);
+    return createResponse(HTTP_STATUS.BAD_REQUEST);
   } catch (error) {
     return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
   }

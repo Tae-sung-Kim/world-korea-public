@@ -15,7 +15,7 @@ export async function GET() {
       return createResponse(HTTP_STATUS.UNAUTHORIZED);
     }
 
-    const list = await ProductModel.find({});
+    const list = await ProductModel.getProductList();
 
     return NextResponse.json(list);
   } catch (error) {

@@ -1,4 +1,4 @@
-import ProductModel from '../../models/product.model';
+import PinModel from '../../models/pin.model';
 import { requiredIsAdmin, requiredIsMe } from '../../utils/auth.util';
 import connectMongo from '@/app/api/libs/database';
 import { createResponse } from '@/app/api/utils/http.util';
@@ -6,11 +6,11 @@ import { HTTP_STATUS } from '@/definitions';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
- * 상품 상세 반환
+ * 핀 상세 반환
  */
 export async function GET(req: NextRequest, ctx: { params: { id: string } }) {
   try {
-    const productId = ctx.params.id;
+    const pinId = ctx.params.id;
 
     await connectMongo();
 
@@ -18,7 +18,7 @@ export async function GET(req: NextRequest, ctx: { params: { id: string } }) {
       return createResponse(HTTP_STATUS.UNAUTHORIZED);
     }
 
-    const productData = await ProductModel.findOne({ _id: productId });
+    const productData = await PinModel.getPinById(pinId);
 
     return NextResponse.json(productData);
   } catch (error) {
@@ -27,11 +27,11 @@ export async function GET(req: NextRequest, ctx: { params: { id: string } }) {
 }
 
 /**
- * 상품 내용 변경
+ * 핀 내용 변경
  */
 export async function PATCH(req: NextRequest, ctx: { params: { id: string } }) {
   try {
-    const userId = ctx.params.id;
+    const pinId = ctx.params.id;
     const body = await req.json();
 
     await connectMongo();
@@ -40,12 +40,12 @@ export async function PATCH(req: NextRequest, ctx: { params: { id: string } }) {
       return createResponse(HTTP_STATUS.FORBIDDEN);
     }
 
-    const existingProduct = await ProductModel.findById(userId);
+    const existingProduct = await PinModel.findById(pinId);
     if (!existingProduct) {
       return NextResponse.json(false);
     }
 
-    await existingProduct.updateProduct(body);
+    // await existingProduct.updateProduct(body);
 
     return NextResponse.json(true);
   } catch (error) {

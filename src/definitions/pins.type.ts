@@ -1,4 +1,4 @@
-export interface PinsData {
+export interface Pin {
   productId: string;
   pinPrefixFour: string;
   endDate: Date | string;
