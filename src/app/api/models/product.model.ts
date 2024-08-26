@@ -87,12 +87,14 @@ schema.static('getProductById', function getProductById(productId) {
 });
 
 schema.static('getProductList', async function getProductList() {
-  const list = (await this.find({})) as (ProductDB & {
+  let list = (await this.find({})).map((d) => d.toObject()) as (ProductDB & {
     pinCount?: number;
   })[];
-  list.forEach((d) => {
-    d.pinCount = d.pins.length;
-  });
+
+  list = list.map((d) => ({
+    ...d,
+    pinCount: d.pins.length,
+  }));
 
   return list;
 });
