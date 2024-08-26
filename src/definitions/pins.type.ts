@@ -1,10 +1,11 @@
+import { ProductFormData } from './product.type';
+
 export interface Pin {
-  productId: string;
   pinPrefixFour: string;
   endDate: Date | string;
   pinCount: number;
   _id?: string;
-  createdAt?: string;
-  product?: string;
+  createdAt?: Date | string;
+  product?: ProductFormData;
   number?: string;
 }
