@@ -48,12 +48,14 @@ type ProductDocument =
 
 interface ProductMethods {
   updateProduct(productData: ProductFormData): boolean;
-  addProductPin(pin: Types.ObjectId | Types.ObjectId[]): boolean;
+  addProductPin(pin: Types.ObjectId | Types.ObjectId[]): ProductDocument;
+  deleteProductPin(pin: Types.ObjectId | Types.ObjectId[]): ProductDocument;
 }
 
 interface ProductSchemaModel extends Model<ProductDB, {}, ProductMethods> {
-  getProductById(productId: string): Promise<ProductDocument>;
+  getProductById(productId: Types.ObjectId): Promise<ProductDocument>;
   getProductList(): Promise<Product[]>;
+  deleteProductById(productId: string): Promise<boolean>;
 }
 
 const schema = new Schema<ProductDB, ProductSchemaModel, ProductMethods>({
@@ -97,6 +99,18 @@ schema.static('getProductList', async function getProductList() {
   }));
 
   return list;
+});
+
+schema.static('deleteProductById', async function deleteProduct(productId) {
+  const product = await this.getProductById(productId);
+  if (!product) {
+    return false;
+  }
+
+  product.deletedAt = new Date();
+  await product.save();
+
+  return true;
 });
 
 schema.method('updateProduct', async function updateProduct(productData) {
@@ -163,6 +177,15 @@ schema.method('updateProduct', async function updateProduct(productData) {
 schema.method('addProductPin', function addProductPin(pin) {
   const pinList = Array.isArray(pin) ? pin : [pin];
   this.pins = this.pins.concat(pinList);
+  this.updatedAt = new Date();
+
+  return this.save();
+});
+
+schema.method('deleteProductPin', function deleteProductPin(pin) {
+  const pinList = Array.isArray(pin) ? pin : [pin];
+  this.pins = this.pins.filter((d) => !pinList.includes(d));
+  this.updatedAt = new Date();
 
   return this.save();
 });

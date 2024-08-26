@@ -1,4 +1,5 @@
 import PinModel from '../../models/pin.model';
+import ProductModel from '../../models/product.model';
 import { requiredIsAdmin, requiredIsMe } from '../../utils/auth.util';
 import connectMongo from '@/app/api/libs/database';
 import { createResponse } from '@/app/api/utils/http.util';
@@ -46,6 +47,32 @@ export async function PATCH(req: NextRequest, ctx: { params: { id: string } }) {
     }
 
     // await existingProduct.updateProduct(body);
+
+    return NextResponse.json(true);
+  } catch (error) {
+    return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
+  }
+}
+
+export async function DELETE(
+  req: NextRequest,
+  ctx: { params: { id: string } }
+) {
+  try {
+    const id = ctx.params.id;
+    await connectMongo();
+
+    if (!(await requiredIsAdmin())) {
+      return createResponse(HTTP_STATUS.FORBIDDEN);
+    }
+
+    const deletedPin = await PinModel.findByIdAndDelete(id);
+    if (deletedPin) {
+      const product = await ProductModel.getProductById(deletedPin.product);
+      if (product) {
+        await product.deleteProductPin(deletedPin.product);
+      }
+    }
 
     return NextResponse.json(true);
   } catch (error) {
