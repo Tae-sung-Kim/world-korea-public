@@ -77,15 +77,17 @@ export async function POST(req: NextRequest) {
     } else if (isPinManualValid) {
       const listToInsert: PinDB[] = [];
 
-      pinList.forEach((pin: string) => {
-        if (typeof pin === 'string' && pin.length === 16) {
-          listToInsert.push({
-            product: productId,
-            number: pin,
-            endDate,
-          });
+      pinList.forEach(
+        ({ pinNumber, endDate }: { pinNumber: string; endDate?: Date }) => {
+          if (typeof pinNumber === 'string' && pinNumber.length === 16) {
+            listToInsert.push({
+              product: productId,
+              number: pinNumber,
+              endDate,
+            });
+          }
         }
-      });
+      );
 
       if (listToInsert.length > 0) {
         const pinList = await PinModel.insertMany(listToInsert, {
