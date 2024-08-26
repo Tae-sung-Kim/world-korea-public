@@ -30,7 +30,7 @@ export async function GET(req: any) {
       loginId = session.user?.id;
     }
 
-    const userData = await UserModel.getUserAuthByLoginId(loginId);
+    const userData = await UserModel.getUserByLoginId(loginId);
     if (!userData) {
       return NextResponse.json({
         isLoggedIn: false,

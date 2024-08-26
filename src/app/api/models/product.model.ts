@@ -1,8 +1,20 @@
-import { Pin } from '@/definitions/pins.type';
 import { resolveData } from '../utils/condition.util';
 import { FILE_PATH, FILE_TYPE, uploadFile } from '../utils/upload.util';
-import { PRODUCT_STATUS, Product, ProductFormData, ProductStatus } from '@/definitions';
-import { model, models, Schema, Model, Types } from 'mongoose';
+import {
+  PRODUCT_STATUS,
+  Product,
+  ProductFormData,
+  ProductStatus,
+} from '@/definitions';
+import {
+  model,
+  models,
+  Schema,
+  Model,
+  Types,
+  Document,
+  ObjectId,
+} from 'mongoose';
 
 export interface ProductDB {
   name: string; // 상품명
@@ -23,12 +35,25 @@ export interface ProductDB {
   pins: Types.ObjectId[]; // 빈 번호 목록
 }
 
+type ProductDocument =
+  | (Document<unknown, {}, ProductDB> &
+      Omit<
+        ProductDB & {
+          _id: Types.ObjectId;
+        },
+        keyof ProductMethods
+      > &
+      ProductMethods)
+  | null;
+
 interface ProductMethods {
   updateProduct(productData: ProductFormData): boolean;
+  addProductPin(pin: Types.ObjectId | Types.ObjectId[]): boolean;
 }
 
 interface ProductSchemaModel extends Model<ProductDB, {}, ProductMethods> {
-  getProductList(): Promise<Product[]>
+  getProductById(productId: string): Promise<ProductDocument>;
+  getProductList(): Promise<Product[]>;
 }
 
 const schema = new Schema<ProductDB, ProductSchemaModel, ProductMethods>({
@@ -57,11 +82,17 @@ const schema = new Schema<ProductDB, ProductSchemaModel, ProductMethods>({
   pins: [{ type: Schema.Types.ObjectId, ref: 'Pin' }],
 });
 
+schema.static('getProductById', function getProductById(productId) {
+  return this.findById(productId);
+});
+
 schema.static('getProductList', async function getProductList() {
-  const list = await this.find({}).populate('pins');
-  list.forEach(d => {
+  const list = (await this.find({})) as (ProductDB & {
+    pinCount?: number;
+  })[];
+  list.forEach((d) => {
     d.pinCount = d.pins.length;
-  })
+  });
 
   return list;
 });
@@ -127,8 +158,15 @@ schema.method('updateProduct', async function updateProduct(productData) {
   return this.save();
 });
 
-const Product =
+schema.method('addProductPin', function addProductPin(pin) {
+  const pinList = Array.isArray(pin) ? pin : [pin];
+  this.pins = this.pins.concat(pinList);
+
+  return this.save();
+});
+
+const ProductModel =
   (models.Product as ProductSchemaModel) ||
   model<ProductDB, ProductSchemaModel>('Product', schema);
 
-export default Product;
+export default ProductModel;

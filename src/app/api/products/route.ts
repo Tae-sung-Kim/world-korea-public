@@ -67,6 +67,7 @@ export async function POST(req: NextRequest) {
       description3,
       description4,
       images: imageUrlListToUpload,
+      pins: [],
       // unavailableDates
     });
 

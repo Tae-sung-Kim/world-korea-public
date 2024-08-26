@@ -31,8 +31,8 @@ interface UserMethods {
 interface UserSchemaModel extends Model<UserDB, {}, UserMethods> {
   getUserList(): Promise<User[]>;
   getUserById(userId: string): Promise<User>;
-  getUserByLoginId(loginId: string): Promise<UserHasPassword>;
-  getUserAuthByLoginId(loginId: string): Promise<User>;
+  getUserHasPasswordByLoginId(loginId: string): Promise<UserHasPassword>;
+  getUserByLoginId(loginId: string): Promise<User>;
   updateUserPasswordById(userId: string, password: string): Promise<User>;
 }
 
@@ -138,11 +138,14 @@ schema.static('getUserById', function getUserById(userId) {
   return this.findOne({ _id: userId }, '-password').populate('userCategory');
 });
 
-schema.static('getUserByLoginId', function getUserByLoginId(loginId) {
-  return this.findOne({ loginId }).populate('userCategory');
-});
+schema.static(
+  'getUserHasPasswordByLoginId',
+  function getUserHasPasswordByLoginId(loginId) {
+    return this.findOne({ loginId }).populate('userCategory');
+  }
+);
 
-schema.static('getUserAuthByLoginId', function getUserAuthByLoginId(loginId) {
+schema.static('getUserByLoginId', function getUserByLoginId(loginId) {
   return this.findOne({ loginId }, '-password').populate('userCategory');
 });
 

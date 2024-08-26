@@ -52,7 +52,7 @@ export default function PinClient() {
             <TableCell className="font-medium">
               {splitFourChar(String(pin.number))}
             </TableCell>
-            <TableCell>{pin.product}</TableCell>
+            <TableCell>{pin.product.name}</TableCell>
             <TableCell className="text-right">
               {new Date(String(pin.endDate)).toLocaleDateString()}
             </TableCell>

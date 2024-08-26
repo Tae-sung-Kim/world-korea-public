@@ -1,3 +1,4 @@
+import ProductModel from '../models/product.model';
 import { requiredIsAdmin, requiredIsLoggedIn } from '../utils/auth.util';
 import { generate12CharUUID } from '../utils/pin.utils';
 import { FILE_PATH, FILE_TYPE, uploadFile } from '../utils/upload.util';
@@ -64,7 +65,14 @@ export async function POST(req: NextRequest) {
         });
       });
 
-      await PinModel.insertMany(listToInsert, { ordered: false });
+      const pinList = await PinModel.insertMany(listToInsert, {
+        ordered: false,
+      });
+      const product = await ProductModel.getProductById(productId);
+      console.log(product);
+      if (product) {
+        await product.addProductPin(pinList.map((d) => d._id));
+      }
 
       return NextResponse.json(true);
     } else if (isPinManualValid) {

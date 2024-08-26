@@ -24,7 +24,7 @@ export async function getAuthData(loginId?: string) {
     loginId = session.user?.id;
   }
 
-  const userData = await UserModel.getUserAuthByLoginId(loginId);
+  const userData = await UserModel.getUserByLoginId(loginId);
   if (!userData) {
     return {
       isLoggedIn: false,
@@ -47,7 +47,7 @@ export async function getCurrentUser(): Promise<UserHasPassword | null> {
     return null;
   }
 
-  const userData = await UserModel.getUserByLoginId(session.user.id);
+  const userData = await UserModel.getUserHasPasswordByLoginId(session.user.id);
 
   return userData;
 }

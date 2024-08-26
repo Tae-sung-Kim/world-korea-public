@@ -7,7 +7,7 @@ export type ProductStatus =
 
 export type Product = ProductDB & {
   _id: string;
-  pinCount: number;
+  pinCount?: number;
   pins: Pin[];
 };
 
