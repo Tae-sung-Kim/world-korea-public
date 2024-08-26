@@ -15,7 +15,6 @@ import { Input } from '@/components/ui/input';
 import {
   InputOTP,
   InputOTPGroup,
-  InputOTPSeparator,
   InputOTPSlot,
 } from '@/components/ui/input-otp';
 import {
@@ -103,7 +102,7 @@ export default function PinCreateClient() {
 
   return (
     <Form {...pinForm}>
-      <form onSubmit={pinForm.handleSubmit(handleSubmit)}>
+      <form onSubmit={pinForm.handleSubmit(handleSubmit)} className="space-y-4">
         <FormField
           control={pinForm.control}
           name="productId"
