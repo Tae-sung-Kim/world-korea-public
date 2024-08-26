@@ -69,7 +69,6 @@ export async function POST(req: NextRequest) {
         ordered: false,
       });
       const product = await ProductModel.getProductById(productId);
-      console.log(product);
       if (product) {
         await product.addProductPin(pinList.map((d) => d._id));
       }
@@ -89,7 +88,13 @@ export async function POST(req: NextRequest) {
       });
 
       if (listToInsert.length > 0) {
-        await PinModel.insertMany(listToInsert, { ordered: false });
+        const pinList = await PinModel.insertMany(listToInsert, {
+          ordered: false,
+        });
+        const product = await ProductModel.getProductById(productId);
+        if (product) {
+          await product.addProductPin(pinList.map((d) => d._id));
+        }
 
         return NextResponse.json(true);
       }
