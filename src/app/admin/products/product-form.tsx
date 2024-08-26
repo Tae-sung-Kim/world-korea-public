@@ -38,6 +38,7 @@ import {
   useFieldArray,
   Controller,
   ControllerRenderProps,
+  FieldError,
 } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -328,9 +329,9 @@ export default function ProductForm({ userCategoryList, productId }: Props) {
 
         {productImages.fields.map((d, idx) => {
           const blobImages = productImageList[idx];
-          const newFileImage = productForm.formState.errors.images?.[idx];
-
-          console.log(newFileImage);
+          const newFileImage = productForm.formState.errors.images?.[
+            idx
+          ] as FieldError & { file: { message: string } };
 
           return (
             <div className="flex space-x-4" key={d.id}>
@@ -350,6 +351,7 @@ export default function ProductForm({ userCategoryList, productId }: Props) {
                   <Controller
                     name={`images.${idx}.file`}
                     control={productForm.control}
+                    rules={{ required: true }}
                     render={({ field }) => {
                       return (
                         <Input
