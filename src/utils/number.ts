@@ -12,6 +12,10 @@ export const removeComma = (value: string) => {
  * 숫자를 comma를 추가한 문자열변 변환
  */
 export const addComma = (value: number | string) => {
+  if (typeof value === 'string' && value.includes(',')) {
+    return value;
+  }
+
   if (isNaN(Number(value))) {
     return '0';
   }

@@ -51,7 +51,7 @@ export default function PinClient() {
       <TableHeader>
         <TableRow>
           <TableHead className="w-[50px]">번호</TableHead>
-          <TableHead className="w-[250px]">핀 번호</TableHead>
+          <TableHead className="w-[200px]">핀 번호</TableHead>
           <TableHead className="">연결 상품</TableHead>
           <TableHead className="w-[110px] text-center">종료일</TableHead>
           <TableHead className="w-[110px] text-center">생성일</TableHead>

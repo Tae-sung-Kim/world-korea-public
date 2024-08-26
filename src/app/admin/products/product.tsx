@@ -1,5 +1,7 @@
 'use client';
 
+import { useDeleteProductMutation } from '../queries';
+import { Button } from '@/components/ui/button';
 import {
   Table,
   TableBody,
@@ -10,6 +12,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { MODAL_TYPE, useModalContext } from '@/contexts/modal.context';
 import {
   PRODUCT_STATUS_MESSAGE,
   ProductFormData,
@@ -17,6 +20,7 @@ import {
 } from '@/definitions';
 import { addComma } from '@/utils/number';
 import { useRouter } from 'next/navigation';
+import { FormEvent } from 'react';
 
 type Props = {
   productList: ProductFormData[];
@@ -28,10 +32,33 @@ export default function ProductListClient({
   userCategoryList,
 }: Props) {
   const router = useRouter();
+  const { openModal } = useModalContext();
 
   //테이블 리스트 클릭 -> 상세
   const handleProductItemClick = (id: string = '') => {
     router.push(`/admin/products/${id}`);
+  };
+
+  const deleteProductMutation = useDeleteProductMutation();
+
+  const handleDeleteProduct = ({
+    e,
+    id,
+    title,
+  }: {
+    e: FormEvent<HTMLButtonElement>;
+    id: string;
+    title: string;
+  }) => {
+    e.stopPropagation();
+    if (!!id) {
+      openModal({
+        type: MODAL_TYPE.CONFIRM,
+        title: '상품 삭제',
+        content: `'${title}'을(를) 삭제 하시겠습니까?`,
+        onOk: () => deleteProductMutation.mutate(id),
+      });
+    }
   };
 
   return (
@@ -47,6 +74,7 @@ export default function ProductListClient({
           <TableHead className="w-[100px] text-right">할인가</TableHead>
           <TableHead className="w-[100px] text-right">판매가</TableHead>
           <TableHead className="w-[70px] text-right">재고</TableHead>
+          <TableHead className="w-[70px] text-right">삭제</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -78,12 +106,26 @@ export default function ProductListClient({
             <TableCell className="text-right">
               {addComma(product.pinCount ?? 0)} 개
             </TableCell>
+            <TableCell className="text-center">
+              <Button
+                type="button"
+                onClick={(e: FormEvent<HTMLButtonElement>) =>
+                  handleDeleteProduct({
+                    e,
+                    id: product._id ?? '',
+                    title: product.name,
+                  })
+                }
+              >
+                삭제
+              </Button>
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>
       <TableFooter>
         <TableRow>
-          <TableCell colSpan={7}>총 상품</TableCell>
+          <TableCell colSpan={8}>총 상품</TableCell>
           <TableCell className="text-right">
             {addComma(productList.length)} 개
           </TableCell>

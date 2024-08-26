@@ -29,6 +29,10 @@ class ProductService {
       },
     });
   }
+
+  deleteProduct(id: string) {
+    return http.delete(`/api/products/${id}`);
+  }
 }
 
 const productService = new ProductService();

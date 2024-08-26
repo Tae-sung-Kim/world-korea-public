@@ -123,7 +123,12 @@ export default function ProductForm({ userCategoryList, productId }: Props) {
 
             setProductImageList(images);
 
-            return res;
+            return {
+              ...res,
+              price: addComma(res.price),
+              regularPrice: addComma(res.regularPrice),
+              salePrice: addComma(res.salePrice),
+            };
           })
       : {
           name: '', // 상품명
@@ -165,7 +170,11 @@ export default function ProductForm({ userCategoryList, productId }: Props) {
           }
         });
       } else {
-        data.append(key, values);
+        if (['price', 'regularPrice', 'salePrice'].includes(key)) {
+          data.append(key, String(removeComma(values)));
+        } else {
+          data.append(key, values);
+        }
       }
     }
 
@@ -385,7 +394,7 @@ export default function ProductForm({ userCategoryList, productId }: Props) {
                   <Input
                     {...field}
                     placeholder="정가를 입력해 주세요."
-                    value={addComma(Number(field.value))}
+                    value={addComma(field.value)}
                     onChange={(e) => handlePriceChange(e, { ...field })}
                   />
                 </FormControl>
@@ -404,7 +413,7 @@ export default function ProductForm({ userCategoryList, productId }: Props) {
                 <Input
                   {...field}
                   placeholder="할인 가격을 입력해 주세요."
-                  value={addComma(Number(field.value))}
+                  value={addComma(field.value)}
                   onChange={(e) => handlePriceChange(e, { ...field })}
                 />
                 {/* 할인율 */}
@@ -423,7 +432,7 @@ export default function ProductForm({ userCategoryList, productId }: Props) {
                 <Input
                   {...field}
                   placeholder="판매가를 입력해 주세요."
-                  value={addComma(Number(field.value))}
+                  value={addComma(field.value)}
                   onChange={(e) => handlePriceChange(e, { ...field })}
                 />
               </FormControl>
