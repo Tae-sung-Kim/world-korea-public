@@ -39,7 +39,7 @@ import { useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { ChangeEvent, useEffect } from 'react';
-import { Field, FieldElement, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 const PinFormSchema = z.object({
@@ -93,7 +93,6 @@ export default function PinCreateClient() {
     createPinMutation.mutate(pinForm.getValues());
   };
 
-  console.log(pinForm.getValues());
   useEffect(() => {
     if (!isFetching) {
       pinForm.reset({

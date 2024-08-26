@@ -20,7 +20,6 @@ export interface ProductFormData {
   accessLevel: string; // 접근 레벨
   status: ProductStatus; // 상품 상태
   images: ProductImage[] | string[]; // 상품 이미지
-  // images: File[] | string[]; // 상품 이미지
   regularPrice: string; // 정가
   salePrice: string; // 할인가
   price: string; // 판매가
@@ -28,10 +27,10 @@ export interface ProductFormData {
   description2: string;
   description3: string;
   description4: string;
-  // unavailableDates?: Date[]; // 이용 불가능 날짜
   _id?: string;
   createdAt?: string;
   updatedAt?: string;
   pins?: Pin[];
+  pinCount?: number;
   unavailableDates?: string[];
 }

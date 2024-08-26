@@ -123,12 +123,7 @@ export default function ProductForm({ userCategoryList, productId }: Props) {
 
             setProductImageList(images);
 
-            return {
-              ...res,
-              price: addComma(res.price),
-              regularPrice: addComma(res.regularPrice),
-              salePrice: addComma(res.salePrice),
-            };
+            return res;
           })
       : {
           name: '', // 상품명
