@@ -6,15 +6,7 @@ import {
   ProductFormData,
   ProductStatus,
 } from '@/definitions';
-import {
-  model,
-  models,
-  Schema,
-  Model,
-  Types,
-  Document,
-  ObjectId,
-} from 'mongoose';
+import { model, models, Schema, Model, Types, Document } from 'mongoose';
 
 export interface ProductDB {
   name: string; // 상품명

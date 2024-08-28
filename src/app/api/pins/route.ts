@@ -1,4 +1,5 @@
 import ProductModel from '../models/product.model';
+import { getQueryParams } from '../utils/api.utils';
 import { requiredIsAdmin, requiredIsLoggedIn } from '../utils/auth.util';
 import { generate12CharUUID } from '../utils/pin.utils';
 import { FILE_PATH, FILE_TYPE, uploadFile } from '../utils/upload.util';
@@ -11,13 +12,18 @@ import { NextRequest, NextResponse } from 'next/server';
 /**
  * 핀 목록 반환
  */
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
     if (!(await requiredIsAdmin())) {
       return createResponse(HTTP_STATUS.FORBIDDEN);
     }
 
-    const list = await PinModel.getPinList();
+    const { pageNumber, pageSize } = getQueryParams(req);
+
+    const list = await PinModel.getPinList({
+      pageNumber,
+      pageSize,
+    });
 
     return NextResponse.json(list);
   } catch (error) {
