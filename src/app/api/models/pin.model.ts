@@ -1,7 +1,7 @@
+import { PaginationResponse } from '@/definitions';
 import { PAGE_NUMBER_DEFAULT, PAGE_SIZE_DEFAULT } from '@/definitions/pagination.constant';
 import { PaginationParams } from '@/definitions/pagination.type';
 import { Pin } from '@/definitions/pins.type';
-import { PaginationResponse } from '@/definitions/response.type';
 import { model, models, Schema, Model, Types } from 'mongoose';
 
 export interface PinDB {
