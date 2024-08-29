@@ -1,4 +1,4 @@
-import { PaginationParams } from '@/definitions/pagination.types';
+import { PaginationParams } from '@/definitions/pagination.type';
 import { NextRequest } from 'next/server';
 
 type QueryParams = {

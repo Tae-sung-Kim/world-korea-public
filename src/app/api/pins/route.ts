@@ -20,12 +20,12 @@ export async function GET(req: NextRequest) {
 
     const { pageNumber, pageSize } = getQueryParams(req);
 
-    const list = await PinModel.getPinList({
+    const paginationResponse = await PinModel.getPinList({
       pageNumber,
       pageSize,
     });
 
-    return NextResponse.json(list);
+    return NextResponse.json(paginationResponse);
   } catch (error) {
     return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
   }
