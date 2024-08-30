@@ -1,12 +1,24 @@
 import { resolveData } from '../utils/condition.util';
 import { FILE_PATH, FILE_TYPE, uploadFile } from '../utils/upload.util';
 import {
+  PAGE_NUMBER_DEFAULT,
+  PAGE_SIZE_DEFAULT,
   PRODUCT_STATUS,
+  PaginationParams,
+  PaginationResponse,
   Product,
   ProductFormData,
   ProductStatus,
 } from '@/definitions';
-import { model, models, Schema, Model, Types, Document } from 'mongoose';
+import {
+  model,
+  models,
+  Schema,
+  Model,
+  Types,
+  Document,
+  SortOrder,
+} from 'mongoose';
 
 export interface ProductDB {
   name: string; // 상품명
@@ -46,7 +58,9 @@ interface ProductMethods {
 
 interface ProductSchemaModel extends Model<ProductDB, {}, ProductMethods> {
   getProductById(productId: Types.ObjectId): Promise<ProductDocument>;
-  getProductList(): Promise<Product[]>;
+  getProductList(
+    paginationParams: PaginationParams
+  ): PaginationResponse<Promise<Product[]>>;
   deleteProductById(productId: string): Promise<boolean>;
 }
 
@@ -80,18 +94,63 @@ schema.static('getProductById', function getProductById(productId) {
   return this.findById(productId);
 });
 
-schema.static('getProductList', async function getProductList() {
-  let list = (await this.find({})).map((d) => d.toObject()) as (ProductDB & {
-    pinCount?: number;
-  })[];
+schema.static(
+  'getProductList',
+  async function getProductList({
+    pageNumber = PAGE_NUMBER_DEFAULT,
+    pageSize = PAGE_SIZE_DEFAULT,
+    filter: filterQuery = null,
+  } = {}) {
+    const skip = (pageNumber - 1) * pageSize;
+    const filter: Record<string, any> = {};
+    const sort = { createdAt: -1 as SortOrder }; // 최신순 정렬
 
-  list = list.map((d) => ({
-    ...d,
-    pinCount: d.pins.length,
-  }));
+    if (filterQuery) {
+      Object.keys(filterQuery).forEach((key) => {
+        const value = filterQuery[key];
+        filter[key] = { $regex: value, $options: 'i' }; // 정규식 검색 적용
+      });
+    }
 
-  return list;
-});
+    // 총 개수 가져오기
+    const totalItems = await this.countDocuments(filter);
+
+    // 데이터 가져오기
+    let list = (
+      await this.find(filter).sort(sort).skip(skip).limit(pageSize)
+    ).map((d) => d.toObject()) as (ProductDB & {
+      pinCount?: number;
+    })[];
+
+    // 전체 페이지 수 계산
+    const totalPages = Math.ceil(totalItems / pageSize);
+
+    // 페이지네이션 관련 정보 계산
+    const hasPreviousPage = pageNumber > 1;
+    const hasNextPage = pageNumber < totalPages;
+    const previousPage = hasPreviousPage ? pageNumber - 1 : null;
+    const nextPage = hasNextPage ? pageNumber + 1 : null;
+
+    list = list.map((d) => ({
+      ...d,
+      pinCount: d.pins.length,
+    }));
+
+    return {
+      list,
+      pageNumber,
+      pageSize,
+      totalItems,
+      totalPages,
+      hasPreviousPage,
+      hasNextPage,
+      previousPage,
+      nextPage,
+      startIndex: skip,
+      endIndex: totalItems - 1,
+    };
+  }
+);
 
 schema.static('deleteProductById', async function deleteProduct(productId) {
   const product = await this.getProductById(productId);
@@ -169,7 +228,6 @@ schema.method('updateProduct', async function updateProduct(productData) {
 schema.method('addProductPin', function addProductPin(pin) {
   const pinList = Array.isArray(pin) ? pin : [pin];
   this.pins = this.pins.concat(pinList);
-  this.updatedAt = new Date();
 
   return this.save();
 });
@@ -177,7 +235,6 @@ schema.method('addProductPin', function addProductPin(pin) {
 schema.method('deleteProductPin', function deleteProductPin(pin) {
   const pinList = Array.isArray(pin) ? pin : [pin];
   this.pins = this.pins.filter((d) => !pinList.includes(d));
-  this.updatedAt = new Date();
 
   return this.save();
 });

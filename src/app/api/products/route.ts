@@ -1,3 +1,4 @@
+import { getQueryParams } from '../utils/api.utils';
 import { requiredIsAdmin, requiredIsLoggedIn } from '../utils/auth.util';
 import { FILE_PATH, FILE_TYPE, uploadFile } from '../utils/upload.util';
 import connectMongo from '@/app/api/libs/database';
@@ -9,15 +10,21 @@ import { NextRequest, NextResponse } from 'next/server';
 /**
  * 상품 목록 반환
  */
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
     if (!(await requiredIsLoggedIn())) {
       return createResponse(HTTP_STATUS.UNAUTHORIZED);
     }
 
-    const list = await ProductModel.getProductList();
+    const { pageNumber, pageSize, filter } = getQueryParams(req);
 
-    return NextResponse.json(list);
+    const paginationResponse = await ProductModel.getProductList({
+      pageNumber,
+      pageSize,
+      filter,
+    });
+
+    return NextResponse.json(paginationResponse);
   } catch (error) {
     return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
   }

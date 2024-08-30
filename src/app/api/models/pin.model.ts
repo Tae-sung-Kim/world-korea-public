@@ -2,7 +2,7 @@ import { PaginationResponse } from '@/definitions';
 import { PAGE_NUMBER_DEFAULT, PAGE_SIZE_DEFAULT } from '@/definitions/pagination.constant';
 import { PaginationParams } from '@/definitions/pagination.type';
 import { Pin } from '@/definitions/pins.type';
-import { model, models, Schema, Model, Types } from 'mongoose';
+import { model, models, Schema, Model, Types, SortOrder } from 'mongoose';
 
 export interface PinDB {
   number: string;
@@ -17,7 +17,7 @@ export interface PinDB {
 interface PinMethods {}
 
 interface PinSchemaModel extends Model<PinDB, {}, PinMethods> {
-  getPinList(paginationParams: PaginationParams): Promise<PaginationResponse<Pin>>; // 핀 목록 반환
+  getPinList(paginationParams: PaginationParams): Promise<PaginationResponse<Pin[]>>; // 핀 목록 반환
   getPinById(pinId: string): Promise<Pin>;  // 핀 상세 반환
 }
 
@@ -40,12 +40,13 @@ const schema = new Schema<PinDB, PinSchemaModel, PinMethods>({
 schema.static('getPinList', async function getPinList({ pageNumber = PAGE_NUMBER_DEFAULT, pageSize = PAGE_SIZE_DEFAULT } = {}){
   const skip = (pageNumber - 1) * pageSize;
   const filter = {}
+  const sort = { createdAt: -1 as SortOrder }; // 최신순 정렬
   
   // 총 개수 가져오기
   const totalItems = await this.countDocuments(filter);
 
   // 데이터 가져오기
-  const list = await this.find(filter).skip(skip).limit(pageSize).populate('product');
+  const list = await this.find(filter).sort(sort).skip(skip).limit(pageSize).populate('product');
   
   // 전체 페이지 수 계산
   const totalPages = Math.ceil(totalItems / pageSize);
@@ -67,7 +68,7 @@ schema.static('getPinList', async function getPinList({ pageNumber = PAGE_NUMBER
     previousPage,
     nextPage,
     startIndex: skip,
-    endIndex: totalItems,
+    endIndex: totalItems - 1,
   }
 });
 
