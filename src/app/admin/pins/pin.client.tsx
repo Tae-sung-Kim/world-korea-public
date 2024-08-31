@@ -19,7 +19,7 @@ import { addComma } from '@/utils/number';
 import { useRouter } from 'next/navigation';
 
 export default function PinClient() {
-  const pinList = usePinsListQuery();
+  const pinData = usePinsListQuery();
   const router = useRouter();
 
   const { openModal } = useModalContext();
@@ -60,7 +60,7 @@ export default function PinClient() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {pinList.map((pin: Pin, idx: number) => (
+        {pinData.list.map((pin: Pin, idx: number) => (
           <TableRow key={pin._id}>
             <TableCell>{idx + 1}</TableCell>
             <TableCell className="font-medium">
@@ -98,7 +98,7 @@ export default function PinClient() {
         <TableRow>
           <TableCell colSpan={6}>총 상품</TableCell>
           <TableCell className="text-right">
-            {addComma(pinList.length)} 개
+            {addComma(pinData.list.length)} 개
           </TableCell>
         </TableRow>
       </TableFooter>
