@@ -25,10 +25,23 @@ import {
 import { MODAL_TYPE, useModalContext } from '@/contexts/modal.context';
 import { Pin } from '@/definitions/pins.type';
 import { addComma } from '@/utils/number';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function PinClient() {
-  const pinData = usePinsListQuery();
+  const searchParam = useSearchParams();
+
+  const pageNumber: number = searchParam.get('pageNumber')
+    ? Number(searchParam.get('pageNumber'))
+    : 1;
+  const pageSize: number = searchParam.get('pageSize')
+    ? Number(searchParam.get('pageSize'))
+    : 10;
+
+  const { data: pinData, refetch } = usePinsListQuery({
+    pageNumber,
+    pageSize,
+  });
+
   const router = useRouter();
 
   const { openModal } = useModalContext();
@@ -38,6 +51,12 @@ export default function PinClient() {
   //리스트 클릭
   const handlePinListClick = (productId: string = '') => {
     router.push('products/' + productId);
+  };
+
+  //페이지 번호 클릭
+  const handlePageNumberClick = (pageNumber: number) => {
+    router.push(`pins?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+    refetch();
   };
 
   //핀번호 삭제
@@ -108,28 +127,37 @@ export default function PinClient() {
           <TableRow>
             <TableCell colSpan={6}>총 상품</TableCell>
             <TableCell className="text-right">
-              {addComma(pinData.list.length)} 개
+              {addComma(pinData.totalItems)} 개
             </TableCell>
           </TableRow>
         </TableFooter>
       </Table>
-      {/* 
+
       <Pagination>
         <PaginationContent>
           <PaginationItem>
             <PaginationPrevious href="#" />
           </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">1</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
+          {Array.from({ length: pinData.totalPages }, (_, i) => i + 1).map(
+            (d) => {
+              return (
+                <PaginationItem key={`pagination-${d}`}>
+                  <PaginationLink onClick={() => handlePageNumberClick(d)}>
+                    {d}
+                  </PaginationLink>
+                </PaginationItem>
+              );
+            }
+          )}
+
+          {/* <PaginationItem>
             <PaginationEllipsis />
-          </PaginationItem>
+          </PaginationItem> */}
           <PaginationItem>
             <PaginationNext href="#" />
           </PaginationItem>
         </PaginationContent>
-      </Pagination> */}
+      </Pagination>
     </div>
   );
 }

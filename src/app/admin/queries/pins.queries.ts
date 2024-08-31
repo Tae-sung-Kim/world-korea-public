@@ -12,7 +12,13 @@ type FunctionProps = {
 
 const QUERY_KEY = 'pins';
 
-export function usePinsListQuery() {
+export function usePinsListQuery({
+  pageNumber = 1,
+  pageSize = 10,
+}: {
+  pageNumber: number;
+  pageSize: number;
+}) {
   const fallback: PaginationResponse<Pin> = {
     pageNumber: 0,
     pageSize: 0,
@@ -27,12 +33,12 @@ export function usePinsListQuery() {
     endIndex: 0,
   };
 
-  const { data = fallback } = useQuery({
+  const { data = fallback, refetch } = useQuery({
     queryKey: [QUERY_KEY],
-    queryFn: pinsService.getListPin,
+    queryFn: () => pinsService.getListPin({ pageNumber, pageSize }),
   });
 
-  return data;
+  return { data, refetch };
 }
 
 export function useDetailPinsQuery(id: string) {
