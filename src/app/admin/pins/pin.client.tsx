@@ -1,6 +1,10 @@
 'use client';
 
-import { useDeletePinMutation, usePinsListQuery } from '../queries';
+import {
+  useDeletePinMutation,
+  usePinsListQuery,
+  useProductListQuery,
+} from '../queries';
 import { splitFourChar } from './pin.utils';
 import { Button } from '@/components/ui/button';
 import {
@@ -12,6 +16,14 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import {
   Table,
   TableBody,
@@ -26,18 +38,23 @@ import { MODAL_TYPE, useModalContext } from '@/contexts/modal.context';
 import { Pin } from '@/definitions/pins.type';
 import { addComma } from '@/utils/number';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
+
+type SearchParams = Record<string, number | string | undefined>;
 
 export default function PinClient() {
-  const searchParam = useSearchParams();
+  const searchParams = useSearchParams();
+  const productList = useProductListQuery();
+  const [selectedProductId, setSelectedProductId] = useState<string>('');
 
-  const pageNumber: number = searchParam.get('pageNumber')
-    ? Number(searchParam.get('pageNumber'))
+  const pageNumber: number = searchParams.get('pageNumber')
+    ? Number(searchParams.get('pageNumber'))
     : 1;
-  const pageSize: number = searchParam.get('pageSize')
-    ? Number(searchParam.get('pageSize'))
+  const pageSize: number = searchParams.get('pageSize')
+    ? Number(searchParams.get('pageSize'))
     : 10;
 
-  const { data: pinData, refetch } = usePinsListQuery({
+  const pinData = usePinsListQuery({
     pageNumber,
     pageSize,
   });
@@ -55,8 +72,34 @@ export default function PinClient() {
 
   //페이지 번호 클릭
   const handlePageNumberClick = (pageNumber: number) => {
-    router.push(`pins?pageNumber=${pageNumber}&pageSize=${pageSize}`);
-    refetch();
+    const params = new URLSearchParams(searchParams);
+
+    params.set('pageNumber', String(pageNumber));
+    params.set('pageSize', String(pageSize));
+
+    handleUpdateQuery({ pageNumber, pageSize });
+  };
+
+  const handleProductChange = (id: string) => {
+    const findProduct = productList.find((f) => f._id === id);
+    setSelectedProductId(id);
+
+    handleUpdateQuery({ name: findProduct?.name });
+  };
+
+  const handleUpdateQuery = (updatedQuery: SearchParams) => {
+    const params = new URLSearchParams(searchParams);
+
+    Object.keys(updatedQuery).forEach((key) => {
+      if (updatedQuery[key]) {
+        params.set(key, String(updatedQuery[key]));
+        // } else {
+        //   params.delete(key);
+      }
+    });
+
+    const queryString = params.toString();
+    router.push(`pins?${queryString}`);
   };
 
   //핀번호 삭제
@@ -74,7 +117,25 @@ export default function PinClient() {
   };
 
   return (
-    <div>
+    <>
+      <div className="">
+        <Select onValueChange={handleProductChange} value={selectedProductId}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="선택" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              {productList.map((d) => {
+                return (
+                  <SelectItem key={d._id} value={String(d._id)}>
+                    {d.name}
+                  </SelectItem>
+                );
+              })}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </div>
       <Table>
         {/* {isFetching && <TableCaption>조회 중입니다.</TableCaption>} */}
         <TableHeader>
@@ -158,6 +219,6 @@ export default function PinClient() {
           </PaginationItem>
         </PaginationContent>
       </Pagination>
-    </div>
+    </>
   );
 }

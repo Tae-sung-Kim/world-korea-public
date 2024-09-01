@@ -20,25 +20,25 @@ export function usePinsListQuery({
   pageSize: number;
 }) {
   const fallback: PaginationResponse<Pin> = {
-    pageNumber: 0,
-    pageSize: 0,
+    pageNumber: -1,
+    pageSize: -1,
     list: [],
-    totalItems: 0,
-    totalPages: 0,
+    totalItems: -1,
+    totalPages: -1,
     hasPreviousPage: false,
     hasNextPage: false,
-    previousPage: 0,
-    nextPage: 0,
-    startIndex: 0,
-    endIndex: 0,
+    previousPage: -1,
+    nextPage: -1,
+    startIndex: -1,
+    endIndex: -1,
   };
 
-  const { data = fallback, refetch } = useQuery({
-    queryKey: [QUERY_KEY],
+  const { data = fallback } = useQuery({
+    queryKey: [QUERY_KEY, pageNumber, pageSize],
     queryFn: () => pinsService.getListPin({ pageNumber, pageSize }),
   });
 
-  return { data, refetch };
+  return data;
 }
 
 export function useDetailPinsQuery(id: string) {
