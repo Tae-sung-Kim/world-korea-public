@@ -15,3 +15,5 @@ export interface Pin {
   productId?: string;
   number?: string;
 }
+
+export type SearchParams = Record<string, number | string | undefined>;

@@ -32,19 +32,17 @@ import { addComma } from '@/utils/number';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
-type SearchParams = Record<string, number | string | undefined>;
-
 export default function PinClient() {
   const searchParams = useSearchParams();
   const productList = useProductListQuery();
   const [selectedProductId, setSelectedProductId] = useState<string>('');
 
-  const pageNumber: number = searchParams.get('pageNumber')
-    ? Number(searchParams.get('pageNumber'))
-    : 1;
-  const pageSize: number = searchParams.get('pageSize')
-    ? Number(searchParams.get('pageSize'))
-    : 10;
+  const [pageNumber, setPageNumber] = useState(
+    searchParams.get('pageNumber') ? Number(searchParams.get('pageNumber')) : 1
+  );
+  const [pageSize, setPageSize] = useState(
+    searchParams.get('pageSize') ? Number(searchParams.get('pageSize')) : 10
+  );
 
   const pinData = usePinsListQuery({
     pageNumber,
@@ -63,35 +61,26 @@ export default function PinClient() {
   };
 
   //페이지 번호 클릭
-  const handlePageNumberClick = (pageNumber: number) => {
-    const params = new URLSearchParams(searchParams);
+  const handleMovePage = (pageNumber: number) => {
+    setPageNumber(pageNumber);
+  };
 
-    params.set('pageNumber', String(pageNumber));
-    params.set('pageSize', String(pageSize));
+  const handlePrevPage = () => {
+    if (pinData.hasPreviousPage) {
+      setPageNumber((prevData) => prevData - 1);
+    }
+  };
 
-    handleUpdateQuery({ pageNumber, pageSize });
+  const handleNextPage = () => {
+    if (pinData.hasNextPage) {
+      setPageNumber((prevData) => prevData + 1);
+    }
   };
 
   const handleProductChange = (id: string) => {
     const findProduct = productList.find((f) => f._id === id);
     setSelectedProductId(id);
-
-    handleUpdateQuery({ name: findProduct?.name });
-  };
-
-  const handleUpdateQuery = (updatedQuery: SearchParams) => {
-    const params = new URLSearchParams(searchParams);
-
-    Object.keys(updatedQuery).forEach((key) => {
-      if (updatedQuery[key]) {
-        params.set(key, String(updatedQuery[key]));
-        // } else {
-        //   params.delete(key);
-      }
-    });
-
-    const queryString = params.toString();
-    router.push(`pins?${queryString}`);
+    console.log('선택된 상품', findProduct);
   };
 
   //핀번호 삭제
@@ -187,8 +176,12 @@ export default function PinClient() {
       </Table>
 
       <Paginations
-        pagination={pinData}
-        onPageNumberClick={handlePageNumberClick}
+        pageNumber={pageNumber}
+        pageSize={pageSize}
+        totalPages={pinData.totalPages}
+        onPrevPage={handlePrevPage}
+        onNextPage={handleNextPage}
+        onMovePage={handleMovePage}
       />
     </>
   );
