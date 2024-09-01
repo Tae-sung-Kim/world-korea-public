@@ -46,14 +46,15 @@ export async function PATCH(req: NextRequest, ctx: { params: { id: string } }) {
       return NextResponse.json(false);
     }
 
-    // await existingProduct.updateProduct(body);
-
     return NextResponse.json(true);
   } catch (error) {
     return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
   }
 }
 
+/**
+ * 핀 삭제
+ */
 export async function DELETE(
   req: NextRequest,
   ctx: { params: { id: string } }

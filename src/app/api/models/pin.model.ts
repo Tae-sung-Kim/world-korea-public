@@ -5,7 +5,7 @@ import {
 } from '@/definitions/pagination.constant';
 import { PaginationParams } from '@/definitions/pagination.type';
 import type { Pin } from '@/definitions/pins.type';
-import { model, models, Schema, Model, Types } from 'mongoose';
+import { model, models, Schema, Model, Types, Document } from 'mongoose';
 
 export interface PinDB {
   number: string;
@@ -17,6 +17,17 @@ export interface PinDB {
   deletedAt?: Date;
 }
 
+type PinDocument =
+  | (Document<unknown, {}, PinDB> &
+      Omit<
+        PinDB & {
+          _id: Types.ObjectId;
+        },
+        keyof PinMethods
+      > &
+      PinMethods)
+  | null;
+
 interface PinMethods {}
 
 interface PinSchemaModel extends Model<PinDB, {}, PinMethods> {
@@ -24,6 +35,7 @@ interface PinSchemaModel extends Model<PinDB, {}, PinMethods> {
     paginationParams: PaginationParams
   ): Promise<PaginationResponse<Pin>>; // 핀 목록 반환
   getPinById(pinId: string): Promise<Pin>; // 핀 상세 반환
+  updateUsedDatePin(pinId: string, used: boolean): Promise<boolean>; // 빈 사용날짜 수정
 }
 
 const schema = new Schema<PinDB, PinSchemaModel, PinMethods>({
@@ -87,6 +99,23 @@ schema.static(
 
 schema.static('getPinById', function getPinById(pinId) {
   return this.findOne({ _id: pinId }).populate('product');
+});
+
+schema.static('updateUsedDatePin', async function updateUsedDatePin(id, used) {
+  const newPin = await this.findByIdAndUpdate(
+    id,
+    {
+      $set: {
+        usedDate: used ? new Date() : null,
+      },
+    },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+
+  return !!newPin;
 });
 
 const Pin =
