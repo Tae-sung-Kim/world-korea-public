@@ -6,16 +6,8 @@ import {
   useProductListQuery,
 } from '../queries';
 import { splitFourChar } from './pin.utils';
+import Paginations from '@/app/common/components/pagination';
 import { Button } from '@/components/ui/button';
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination';
 import {
   Select,
   SelectContent,
@@ -194,31 +186,10 @@ export default function PinClient() {
         </TableFooter>
       </Table>
 
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious href="#" />
-          </PaginationItem>
-          {Array.from({ length: pinData.totalPages }, (_, i) => i + 1).map(
-            (d) => {
-              return (
-                <PaginationItem key={`pagination-${d}`}>
-                  <PaginationLink onClick={() => handlePageNumberClick(d)}>
-                    {d}
-                  </PaginationLink>
-                </PaginationItem>
-              );
-            }
-          )}
-
-          {/* <PaginationItem>
-            <PaginationEllipsis />
-          </PaginationItem> */}
-          <PaginationItem>
-            <PaginationNext href="#" />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
+      <Paginations
+        pagination={pinData}
+        onPageNumberClick={handlePageNumberClick}
+      />
     </>
   );
 }
