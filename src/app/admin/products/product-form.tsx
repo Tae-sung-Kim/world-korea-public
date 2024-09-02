@@ -320,7 +320,7 @@ export default function ProductForm({ userCategoryList, productId }: Props) {
           )}
         />
 
-        <div>
+        <div className="flex items-center gap-4">
           <Label>이미지</Label>
           <Button
             className="size-5"
@@ -383,63 +383,66 @@ export default function ProductForm({ userCategoryList, productId }: Props) {
           );
         })}
 
-        <FormField
-          control={productForm.control}
-          name="regularPrice"
-          render={({ field }) => {
-            return (
+        <div className="grid grid-cols-3 gap-6">
+          <FormField
+            control={productForm.control}
+            name="regularPrice"
+            render={({ field }) => {
+              return (
+                <FormItem>
+                  <FormLabel>정가</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      placeholder="정가를 입력해 주세요."
+                      value={addComma(field.value)}
+                      onChange={(e) => handlePriceChange(e, { ...field })}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
+          <FormField
+            control={productForm.control}
+            name="salePrice"
+            render={({ field }) => (
               <FormItem>
-                <FormLabel>정가</FormLabel>
+                <FormLabel>할인 가격</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
-                    placeholder="정가를 입력해 주세요."
+                    placeholder="할인 가격을 입력해 주세요."
+                    value={addComma(field.value)}
+                    onChange={(e) => handlePriceChange(e, { ...field })}
+                  />
+                  {/* 할인율 */}
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={productForm.control}
+            name="price"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>판매가</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    placeholder="판매가를 입력해 주세요."
                     value={addComma(field.value)}
                     onChange={(e) => handlePriceChange(e, { ...field })}
                   />
                 </FormControl>
                 <FormMessage />
               </FormItem>
-            );
-          }}
-        />
-        <FormField
-          control={productForm.control}
-          name="salePrice"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>할인 가격</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  placeholder="할인 가격을 입력해 주세요."
-                  value={addComma(field.value)}
-                  onChange={(e) => handlePriceChange(e, { ...field })}
-                />
-                {/* 할인율 */}
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={productForm.control}
-          name="price"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>판매가</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  placeholder="판매가를 입력해 주세요."
-                  value={addComma(field.value)}
-                  onChange={(e) => handlePriceChange(e, { ...field })}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+            )}
+          />
+        </div>
+
         <FormField
           control={productForm.control}
           name="description1"

@@ -1,8 +1,11 @@
 import { PaginationResponse } from '@/definitions';
-import { PAGE_NUMBER_DEFAULT, PAGE_SIZE_DEFAULT } from '@/definitions/pagination.constant';
+import {
+  PAGE_NUMBER_DEFAULT,
+  PAGE_SIZE_DEFAULT,
+} from '@/definitions/pagination.constant';
 import { PaginationParams } from '@/definitions/pagination.type';
 import { Pin } from '@/definitions/pins.type';
-import { model, models, Schema, Model, Types, SortOrder } from 'mongoose';
+import { model, models, Schema, Model, Types, SortOrder, Document } from 'mongoose';
 
 export interface PinDB {
   number: string;
@@ -14,11 +17,23 @@ export interface PinDB {
   deletedAt?: Date;
 }
 
+type PinDocument =
+  | (Document<unknown, {}, PinDB> &
+      Omit<
+        PinDB & {
+          _id: Types.ObjectId;
+        },
+        keyof PinMethods
+      > &
+      PinMethods)
+  | null;
+
 interface PinMethods {}
 
 interface PinSchemaModel extends Model<PinDB, {}, PinMethods> {
   getPinList(paginationParams: PaginationParams): Promise<PaginationResponse<Pin[]>>; // 핀 목록 반환
   getPinById(pinId: string): Promise<Pin>;  // 핀 상세 반환
+  updateUsedDatePin(pinId: string, used: boolean): Promise<boolean>; // 빈 사용날짜 수정
 }
 
 const schema = new Schema<PinDB, PinSchemaModel, PinMethods>({
@@ -47,7 +62,7 @@ schema.static('getPinList', async function getPinList({ pageNumber = PAGE_NUMBER
 
   // 데이터 가져오기
   const list = await this.find(filter).sort(sort).skip(skip).limit(pageSize).populate('product');
-  
+
   // 전체 페이지 수 계산
   const totalPages = Math.ceil(totalItems / pageSize);
 
@@ -69,11 +84,29 @@ schema.static('getPinList', async function getPinList({ pageNumber = PAGE_NUMBER
     nextPage,
     startIndex: skip,
     endIndex: totalItems - 1,
-  }
+  };
+  
 });
 
 schema.static('getPinById', function getPinById(pinId) {
   return this.findOne({ _id: pinId }).populate('product');
+});
+
+schema.static('updateUsedDatePin', async function updateUsedDatePin(id, used) {
+  const newPin = await this.findByIdAndUpdate(
+    id,
+    {
+      $set: {
+        usedDate: used ? new Date() : null,
+      },
+    },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+
+  return !!newPin;
 });
 
 const Pin =
