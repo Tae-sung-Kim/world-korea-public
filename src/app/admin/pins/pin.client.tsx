@@ -34,15 +34,11 @@ import { useState } from 'react';
 
 export default function PinClient() {
   const searchParams = useSearchParams();
-  const productList = useProductListQuery();
+  const productData = useProductListQuery();
   const [selectedProductId, setSelectedProductId] = useState<string>('');
 
-  const [pageNumber, setPageNumber] = useState(
-    searchParams.get('pageNumber') ? Number(searchParams.get('pageNumber')) : 1
-  );
-  const [pageSize, setPageSize] = useState(
-    searchParams.get('pageSize') ? Number(searchParams.get('pageSize')) : 10
-  );
+  const pageNumber = Number(searchParams.get('pageNumber') ?? 1);
+  const pageSize = Number(searchParams.get('pageSize') ?? 10);
 
   const pinData = usePinsListQuery({
     pageNumber,
@@ -60,25 +56,8 @@ export default function PinClient() {
     router.push('products/' + productId);
   };
 
-  //페이지 번호 클릭
-  const handleMovePage = (pageNumber: number) => {
-    setPageNumber(pageNumber);
-  };
-
-  const handlePrevPage = () => {
-    if (pinData.hasPreviousPage) {
-      setPageNumber((prevData) => prevData - 1);
-    }
-  };
-
-  const handleNextPage = () => {
-    if (pinData.hasNextPage) {
-      setPageNumber((prevData) => prevData + 1);
-    }
-  };
-
   const handleProductChange = (id: string) => {
-    const findProduct = productList.find((f) => f._id === id);
+    const findProduct = productData.list.find((f) => f._id === id);
     setSelectedProductId(id);
     console.log('선택된 상품', findProduct);
   };
@@ -106,7 +85,7 @@ export default function PinClient() {
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              {productList.map((d) => {
+              {productData.list.map((d) => {
                 return (
                   <SelectItem key={d._id} value={String(d._id)}>
                     {d.name}
@@ -179,9 +158,8 @@ export default function PinClient() {
         pageNumber={pageNumber}
         pageSize={pageSize}
         totalPages={pinData.totalPages}
-        onPrevPage={handlePrevPage}
-        onNextPage={handleNextPage}
-        onMovePage={handleMovePage}
+        pageRange={3}
+        minPages={5}
       />
     </>
   );

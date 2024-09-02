@@ -1,4 +1,4 @@
-import { ProductFormData } from '@/definitions';
+import { PaginationResponse, ProductFormData } from '@/definitions';
 import productService from '@/services/product.service';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
@@ -12,7 +12,19 @@ type FunctionProps = {
 const QUERY_KEY = 'admin-product';
 
 export function useProductListQuery() {
-  const fallback: ProductFormData[] = [];
+  const fallback: PaginationResponse<ProductFormData> = {
+    pageNumber: -1,
+    pageSize: -1,
+    list: [],
+    totalItems: -1,
+    totalPages: -1,
+    hasPreviousPage: false,
+    hasNextPage: false,
+    previousPage: -1,
+    nextPage: -1,
+    startIndex: -1,
+    endIndex: -1,
+  };
 
   const { data = fallback } = useQuery({
     queryKey: [QUERY_KEY],

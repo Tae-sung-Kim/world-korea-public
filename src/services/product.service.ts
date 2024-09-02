@@ -1,4 +1,4 @@
-import { ProductFormData } from '@/definitions';
+import { PaginationResponse, ProductFormData } from '@/definitions';
 import http from '@/services';
 
 class ProductService {
@@ -13,7 +13,7 @@ class ProductService {
 
   //상품 전체
   getProudctList() {
-    return http.get<ProductFormData[]>('/api/products');
+    return http.get<PaginationResponse<ProductFormData>>('/api/products');
   }
 
   //개별 상품

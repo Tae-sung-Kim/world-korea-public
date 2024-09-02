@@ -1,7 +1,12 @@
 import { PaginationResponse } from '@/definitions';
 import { Pin } from '@/definitions/pins.type';
 import pinsService from '@/services/pins.service';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 type FunctionProps = {
@@ -36,6 +41,7 @@ export function usePinsListQuery({
   const { data = fallback } = useQuery({
     queryKey: [QUERY_KEY, pageNumber, pageSize],
     queryFn: () => pinsService.getListPin({ pageNumber, pageSize }),
+    placeholderData: keepPreviousData,
   });
 
   return data;
