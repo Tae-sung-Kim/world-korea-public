@@ -24,16 +24,30 @@ export const addComma = (value: number | string) => {
 };
 
 /**
- * object의 value를 string에서 number로 변경
+ * object의 String의 숫자값을 number로 변경 또는 nubmer를 string으로 변경
+ *
  * @param obj
+ * @param toString boolean default false
+ * @returns
  */
+export const ObjectStrToNum = (
+  obj: { [key: string]: any },
+  toString = false
+) => {
+  let convertObj: { [key: string]: any } = {};
 
-export const ObjectStrToNum = (obj: { [key: string]: any }) => {
-  let convertObj: { [key: string]: string | number } = {};
-
-  for (let key in obj) {
-    convertObj[key] =
-      typeof obj[key] === 'string' ? Number(obj[key]) : obj[key];
+  if (toString) {
+    for (let key in obj) {
+      convertObj[key] =
+        typeof obj[key] === 'number' ? String(obj[key]) : obj[key];
+    }
+  } else {
+    for (let key in obj) {
+      convertObj[key] =
+        typeof obj[key] === 'string' && !isNaN(Number(obj[key]))
+          ? Number(obj[key])
+          : obj[key];
+    }
   }
 
   return convertObj;
