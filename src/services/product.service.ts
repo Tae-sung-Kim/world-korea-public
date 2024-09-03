@@ -1,6 +1,7 @@
 import { PaginationProp } from '@/app/admin/queries/queries.type';
 import { PaginationResponse, ProductFormData } from '@/definitions';
 import http from '@/services';
+import qs from 'qs';
 
 class ProductService {
   //상품 생성
@@ -13,11 +14,11 @@ class ProductService {
   }
 
   //상품 전체
-  getProudctList({ pageNumber, pageSize }: PaginationProp) {
+  getProudctList(pageParams?: PaginationProp) {
+    const params = qs.stringify(pageParams ?? {});
+
     return http.get<PaginationResponse<ProductFormData>>(
-      `/api/products?${pageNumber ? 'pageNumber=' + pageNumber : ''}&${
-        pageSize ? 'pageSize=' + pageSize : ''
-      }`
+      `/api/products?${params}`
     );
   }
 

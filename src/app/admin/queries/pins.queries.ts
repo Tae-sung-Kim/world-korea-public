@@ -12,7 +12,7 @@ import { toast } from 'sonner';
 
 const QUERY_KEY = 'pins';
 
-export function usePinsListQuery({ pageNumber, pageSize }: PaginationProp) {
+export function usePinsListQuery(paginationParam?: PaginationProp) {
   const fallback: PaginationResponse<Pin> = {
     pageNumber: -1,
     pageSize: -1,
@@ -28,8 +28,8 @@ export function usePinsListQuery({ pageNumber, pageSize }: PaginationProp) {
   };
 
   const { data = fallback } = useQuery({
-    queryKey: [QUERY_KEY, pageNumber, pageSize],
-    queryFn: () => pinsService.getListPin({ pageNumber, pageSize }),
+    queryKey: [QUERY_KEY, Object.values(paginationParam ?? {})],
+    queryFn: () => pinsService.getListPin(paginationParam ?? {}),
     placeholderData: keepPreviousData,
   });
 

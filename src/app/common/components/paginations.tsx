@@ -37,10 +37,6 @@ export default function Paginations({
   const router = useRouter();
   const pathName = usePathname();
 
-  const handlePageSizeChange = (pageSize: string) => {
-    router.push(pathName + '?pageNumber=' + 1 + '&pageSize=' + pageSize);
-  };
-
   // 페이지 번호 배열 생성
   let startPage = Math.max(pageNumber - pageRange, 1);
   let endPage = Math.min(pageNumber + pageRange, totalPages);
@@ -67,6 +63,9 @@ export default function Paginations({
     );
   };
 
+  const handlePageSizeChange = (pageSize: string) => {
+    router.push(pathName + '?pageNumber=' + 1 + '&pageSize=' + pageSize);
+  };
   return (
     <Pagination>
       <PaginationContent>

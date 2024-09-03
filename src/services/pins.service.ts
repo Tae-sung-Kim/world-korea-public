@@ -2,6 +2,7 @@ import { PaginationProp } from '@/app/admin/queries/queries.type';
 import { PaginationResponse } from '@/definitions';
 import { Pin } from '@/definitions/pins.type';
 import http from '@/services';
+import qs from 'qs';
 
 class PinsService {
   //핀 생성
@@ -10,10 +11,10 @@ class PinsService {
   }
 
   //핀 리스트
-  getListPin({ pageNumber, pageSize }: PaginationProp) {
-    return http.get<PaginationResponse<Pin>>(
-      `api/pins?pageNumber=${pageNumber}&pageSize=${pageSize}`
-    );
+  getListPin(pageParams?: PaginationProp) {
+    const params = qs.stringify(pageParams ?? {});
+
+    return http.get<PaginationResponse<Pin>>(`api/pins?${params}`);
   }
 
   detailPin(id: string) {

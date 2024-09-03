@@ -34,7 +34,7 @@ import { useState } from 'react';
 
 export default function PinClient() {
   const searchParams = useSearchParams();
-  const productData = useProductListQuery({});
+  const productData = useProductListQuery();
   const [selectedProductId, setSelectedProductId] = useState<string>('');
 
   //이렇게 하는게 맞는건지 잘 모르겠음..
