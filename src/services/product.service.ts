@@ -14,22 +14,11 @@ class ProductService {
   }
 
   //상품 전체
-  getProudctList(pageParams?: PaginationProp) {
-    const { filter, ...otherParams } = pageParams ?? {};
-
-    const params = qs.stringify(otherParams ?? {});
-    let filterParams = '';
-    //filter가 있다면
-    if (Array.isArray(filter) && filter.length > 0) {
-      console.log(filter);
-      filter.forEach((d) => {
-        filterParams += '&filter';
-        filterParams += `[${d.key}]=${d.value}`;
-      });
-    }
+  getProudctList<T extends string>(pageParams?: PaginationProp<T>) {
+    const params = qs.stringify(pageParams ?? {});
 
     return http.get<PaginationResponse<ProductFormData>>(
-      `/api/products?${params}${filterParams}`
+      `/api/products?${params}`
     );
   }
 

@@ -11,7 +11,7 @@ class PinsService {
   }
 
   //핀 리스트
-  getListPin(pageParams?: PaginationProp) {
+  getListPin<T extends string>(pageParams?: PaginationProp<T>) {
     const params = qs.stringify(pageParams ?? {});
 
     return http.get<PaginationResponse<Pin>>(`api/pins?${params}`);

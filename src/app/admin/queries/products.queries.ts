@@ -11,7 +11,9 @@ import { toast } from 'sonner';
 
 const QUERY_KEY = 'admin-product';
 
-export function useProductListQuery(paginationParam?: PaginationProp) {
+export function useProductListQuery<T extends string>(
+  paginationParam?: PaginationProp<T>
+) {
   const fallback: PaginationResponse<ProductFormData> = {
     pageNumber: -1,
     pageSize: -1,
@@ -25,6 +27,8 @@ export function useProductListQuery(paginationParam?: PaginationProp) {
     startIndex: -1,
     endIndex: -1,
   };
+
+  console.log('paginationParam', paginationParam);
 
   const { data = fallback } = useQuery({
     queryKey: [QUERY_KEY, Object.values(paginationParam ?? {})],

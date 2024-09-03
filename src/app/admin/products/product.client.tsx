@@ -5,10 +5,10 @@ import {
   useProductListQuery,
   useUserCategoryListQuery,
 } from '../queries';
-import { filterProp } from '../queries/queries.type';
+import { PaginationProp } from '../queries/queries.type';
+import ProductSearchComponent from './product-search.component';
 import Paginations from '@/app/common/components/paginations';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import {
   Table,
   TableBody,
@@ -24,21 +24,24 @@ import { PRODUCT_STATUS_MESSAGE } from '@/definitions';
 import { addComma } from '@/utils/number';
 import { useRouter, useSearchParams } from 'next/navigation';
 import qs from 'qs';
-import { FormEvent, useState } from 'react';
+import { FormEvent } from 'react';
 
 export default function ProductListClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { openModal } = useModalContext();
 
-  const pageNumber = Number(searchParams.get('pageNumber') ?? 1);
-  const pageSize = Number(searchParams.get('pageSize') ?? 5);
+  const {
+    pageNumber = 1,
+    pageSize = 10,
+    filter = { name: '' },
+  }: PaginationProp<'name'> = qs.parse(searchParams.toString());
 
-  const [filter, setFilter] = useState<filterProp>([
-    { key: 'name', value: '2' },
-  ]);
-
-  const productData = useProductListQuery({ pageNumber, pageSize, filter });
+  const productData = useProductListQuery({
+    pageNumber: Number(pageNumber),
+    pageSize: Number(pageSize),
+    filter,
+  });
 
   //유저 레벨
   const userCategoryList = useUserCategoryListQuery();
@@ -72,6 +75,7 @@ export default function ProductListClient() {
 
   return (
     <>
+      <ProductSearchComponent />
       <Table>
         {/* {isFetching && <TableCaption>조회 중입니다.</TableCaption>} */}
         <TableHeader>
