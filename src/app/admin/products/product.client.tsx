@@ -5,8 +5,10 @@ import {
   useProductListQuery,
   useUserCategoryListQuery,
 } from '../queries';
+import { filterProp } from '../queries/queries.type';
 import Paginations from '@/app/common/components/paginations';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Table,
   TableBody,
@@ -21,7 +23,8 @@ import { MODAL_TYPE, useModalContext } from '@/contexts/modal.context';
 import { PRODUCT_STATUS_MESSAGE } from '@/definitions';
 import { addComma } from '@/utils/number';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { FormEvent } from 'react';
+import qs from 'qs';
+import { FormEvent, useState } from 'react';
 
 export default function ProductListClient() {
   const router = useRouter();
@@ -31,7 +34,11 @@ export default function ProductListClient() {
   const pageNumber = Number(searchParams.get('pageNumber') ?? 1);
   const pageSize = Number(searchParams.get('pageSize') ?? 5);
 
-  const productData = useProductListQuery({ pageNumber, pageSize });
+  const [filter, setFilter] = useState<filterProp>([
+    { key: 'name', value: '2' },
+  ]);
+
+  const productData = useProductListQuery({ pageNumber, pageSize, filter });
 
   //유저 레벨
   const userCategoryList = useUserCategoryListQuery();

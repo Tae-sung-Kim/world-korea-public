@@ -4,8 +4,13 @@ export type FunctionProps = {
   onSettled?: () => void;
 };
 
+export type filterProp = Array<{
+  key: string;
+  value: string;
+}>;
+
 export type PaginationProp = {
   pageNumber?: number;
   pageSize?: number;
-  filter?: string;
+  filter?: filterProp;
 };
