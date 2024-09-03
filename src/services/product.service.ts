@@ -1,3 +1,4 @@
+import { PaginationProp } from '@/app/admin/queries/queries.type';
 import { PaginationResponse, ProductFormData } from '@/definitions';
 import http from '@/services';
 
@@ -12,8 +13,12 @@ class ProductService {
   }
 
   //상품 전체
-  getProudctList() {
-    return http.get<PaginationResponse<ProductFormData>>('/api/products');
+  getProudctList({ pageNumber, pageSize }: PaginationProp) {
+    return http.get<PaginationResponse<ProductFormData>>(
+      `/api/products?${pageNumber ? 'pageNumber=' + pageNumber : ''}&${
+        pageSize ? 'pageSize=' + pageSize : ''
+      }`
+    );
   }
 
   //개별 상품

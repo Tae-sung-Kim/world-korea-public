@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/table';
 import { MODAL_TYPE, useModalContext } from '@/contexts/modal.context';
 import {
+  PaginationResponse,
   PRODUCT_STATUS_MESSAGE,
   ProductFormData,
   UserCategoryType,
@@ -23,12 +24,12 @@ import { useRouter } from 'next/navigation';
 import { FormEvent } from 'react';
 
 type Props = {
-  productList: ProductFormData[];
+  productData: PaginationResponse<ProductFormData>;
   userCategoryList: UserCategoryType[] | undefined;
 };
 
 export default function ProductListClient({
-  productList,
+  productData,
   userCategoryList,
 }: Props) {
   const router = useRouter();
@@ -78,7 +79,7 @@ export default function ProductListClient({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {productList.map((product, idx) => (
+        {productData.list.map((product, idx) => (
           <TableRow
             key={product._id}
             className="cursor-pointer"
@@ -127,7 +128,7 @@ export default function ProductListClient({
         <TableRow>
           <TableCell colSpan={8}>총 상품</TableCell>
           <TableCell className="text-right">
-            {addComma(productList.length)} 개
+            {addComma(productData.totalItems)} 개
           </TableCell>
         </TableRow>
       </TableFooter>

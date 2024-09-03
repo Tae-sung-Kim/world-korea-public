@@ -6,7 +6,7 @@ import {
   useProductListQuery,
 } from '../queries';
 import { splitFourChar } from './pin.utils';
-import Paginations from '@/app/common/components/pagination';
+import Paginations from '@/app/common/components/paginations';
 import { Button } from '@/components/ui/button';
 import {
   Select,
@@ -34,9 +34,10 @@ import { useState } from 'react';
 
 export default function PinClient() {
   const searchParams = useSearchParams();
-  const productData = useProductListQuery();
+  const productData = useProductListQuery({});
   const [selectedProductId, setSelectedProductId] = useState<string>('');
 
+  //이렇게 하는게 맞는건지 잘 모르겠음..
   const pageNumber = Number(searchParams.get('pageNumber') ?? 1);
   const pageSize = Number(searchParams.get('pageSize') ?? 10);
 
@@ -78,7 +79,7 @@ export default function PinClient() {
 
   return (
     <>
-      <div className="">
+      <div className="flex">
         <Select onValueChange={handleProductChange} value={selectedProductId}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="선택" />
@@ -158,7 +159,7 @@ export default function PinClient() {
         pageNumber={pageNumber}
         pageSize={pageSize}
         totalPages={pinData.totalPages}
-        pageRange={3}
+        pageRange={2}
         minPages={5}
       />
     </>

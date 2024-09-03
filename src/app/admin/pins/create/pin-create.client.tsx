@@ -1,6 +1,6 @@
 'use client';
 
-import { useCreatePinMutation } from '../../queries';
+import { useCreatePinMutation, useProductListQuery } from '../../queries';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import {
@@ -31,10 +31,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
-import productService from '@/services/product.service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CalendarIcon } from '@radix-ui/react-icons';
-import { useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { ChangeEvent, useEffect } from 'react';
@@ -65,11 +63,7 @@ const PinFormSchema = z.object({
 type PinFormValues = z.infer<typeof PinFormSchema>;
 
 export default function PinCreateClient() {
-  //상품 목록 조회 - 수정해야함 로딩 만들고
-  const { data: productList = [], isFetching } = useQuery({
-    queryKey: ['getProudctList', 'pin-create'],
-    queryFn: productService.getProudctList,
-  });
+  const productData = useProductListQuery({});
 
   const pinForm = useForm<PinFormValues>({
     resolver: zodResolver(PinFormSchema),
@@ -93,12 +87,12 @@ export default function PinCreateClient() {
   };
 
   useEffect(() => {
-    if (!isFetching) {
+    if (Array.isArray(productData.list) && productData.list.length > 0) {
       pinForm.reset({
-        productId: productList[0]?._id,
+        productId: productData.list[0]?._id,
       });
     }
-  }, [productList, pinForm, isFetching]);
+  }, [productData, pinForm]);
 
   return (
     <Form {...pinForm}>
@@ -116,7 +110,7 @@ export default function PinCreateClient() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      {productList.map((d) => {
+                      {productData.list.map((d) => {
                         return (
                           <SelectItem key={d._id} value={String(d._id)}>
                             {d.name}

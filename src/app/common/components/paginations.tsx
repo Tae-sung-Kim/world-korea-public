@@ -7,8 +7,17 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
+
+const PAGE_SIZE_LIST = [5, 10, 20, 30, 40, 50, 100, 200];
 
 export type Pagination = {
   pageNumber: number;
@@ -23,10 +32,14 @@ export default function Paginations({
   pageSize = 10,
   totalPages = 1,
   pageRange = 2,
-  minPages = 5,
+  minPages = 3,
 }: Pagination) {
   const router = useRouter();
   const pathName = usePathname();
+
+  const handlePageSizeChange = (pageSize: string) => {
+    router.push(pathName + '?pageNumber=' + 1 + '&pageSize=' + pageSize);
+  };
 
   // 페이지 번호 배열 생성
   let startPage = Math.max(pageNumber - pageRange, 1);
@@ -35,6 +48,7 @@ export default function Paginations({
   // 최소 페이지 수가 보이도록 조정
   if (endPage - startPage + 1 < minPages) {
     const extraPages = minPages - (endPage - startPage + 1);
+
     // 시작 페이지 조정
     startPage = Math.max(startPage - extraPages, 1);
     // 끝 페이지 조정
@@ -93,6 +107,23 @@ export default function Paginations({
           />
         </PaginationItem>
       </PaginationContent>
+
+      <Select onValueChange={handlePageSizeChange} value={String(pageSize)}>
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder="선택" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            {PAGE_SIZE_LIST.map((d) => {
+              return (
+                <SelectItem key={d} value={String(d)}>
+                  {d} 개
+                </SelectItem>
+              );
+            })}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
     </Pagination>
   );
 }

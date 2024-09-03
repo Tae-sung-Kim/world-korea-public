@@ -1,3 +1,4 @@
+import { FunctionProps, PaginationProp } from './queries.type';
 import { PaginationResponse } from '@/definitions';
 import { Pin } from '@/definitions/pins.type';
 import pinsService from '@/services/pins.service';
@@ -9,21 +10,9 @@ import {
 } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
-type FunctionProps = {
-  onSuccess?: () => void;
-  onError?: () => void;
-  onSettled?: () => void;
-};
-
 const QUERY_KEY = 'pins';
 
-export function usePinsListQuery({
-  pageNumber = 1,
-  pageSize = 10,
-}: {
-  pageNumber: number;
-  pageSize: number;
-}) {
+export function usePinsListQuery({ pageNumber, pageSize }: PaginationProp) {
   const fallback: PaginationResponse<Pin> = {
     pageNumber: -1,
     pageSize: -1,
