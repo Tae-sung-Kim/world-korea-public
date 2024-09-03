@@ -21,7 +21,7 @@ import {
 } from '@/components/ui/table';
 import { MODAL_TYPE, useModalContext } from '@/contexts/modal.context';
 import { PRODUCT_STATUS_MESSAGE } from '@/definitions';
-import { addComma } from '@/utils/number';
+import { addComma, ObjectStrToNum } from '@/utils/number';
 import { useRouter, useSearchParams } from 'next/navigation';
 import qs from 'qs';
 import { FormEvent } from 'react';
@@ -35,7 +35,7 @@ export default function ProductListClient() {
     pageNumber = 1,
     pageSize = 10,
     filter = { name: '' },
-  }: PaginationProp<'name'> = qs.parse(searchParams.toString());
+  }: PaginationProp<'name'> = ObjectStrToNum(qs.parse(searchParams.toString()));
 
   const productData = useProductListQuery({
     pageNumber: Number(pageNumber),

@@ -5,11 +5,13 @@ import qs from 'qs';
 import { ChangeEvent, useState } from 'react';
 
 export default function ProductSearchComponent() {
-  const [value, setValue] = useState('');
-
   const router = useRouter();
   const pathName = usePathname();
   const searchParams = useSearchParams();
+
+  const [value, setValue] = useState(
+    searchParams.getAll('filter[name]').toString() ?? ''
+  );
 
   const pageSize = Number(searchParams.get('pageSize') ?? 5);
 

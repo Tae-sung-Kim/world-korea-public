@@ -15,7 +15,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import qs from 'qs';
 
 const PAGE_SIZE_LIST = [5, 10, 20, 30, 40, 50, 100, 200];
 
@@ -36,6 +37,8 @@ export default function Paginations({
 }: Pagination) {
   const router = useRouter();
   const pathName = usePathname();
+  const searchParams = useSearchParams();
+  const allParams = searchParams.toString();
 
   // 페이지 번호 배열 생성
   let startPage = Math.max(pageNumber - pageRange, 1);
@@ -58,13 +61,19 @@ export default function Paginations({
   }
 
   const handleMovePage = (pageNumber: number) => {
-    router.push(
-      pathName + '?pageNumber=' + pageNumber + '&pageSize=' + pageSize
-    );
+    const params = qs.stringify({ ...qs.parse(allParams), pageNumber });
+
+    router.push(pathName + '?' + params);
   };
 
   const handlePageSizeChange = (pageSize: string) => {
-    router.push(pathName + '?pageNumber=' + 1 + '&pageSize=' + pageSize);
+    const params = qs.stringify({
+      ...qs.parse(allParams),
+      pageNumber: 1,
+      pageSize,
+    });
+
+    router.push(pathName + '?' + params);
   };
   return (
     <Pagination>

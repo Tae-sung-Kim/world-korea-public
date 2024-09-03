@@ -22,3 +22,19 @@ export const addComma = (value: number | string) => {
 
   return new Intl.NumberFormat('ko-KR').format(Number(value));
 };
+
+/**
+ * object의 value를 string에서 number로 변경
+ * @param obj
+ */
+
+export const ObjectStrToNum = (obj: { [key: string]: any }) => {
+  let convertObj: { [key: string]: string | number } = {};
+
+  for (let key in obj) {
+    convertObj[key] =
+      typeof obj[key] === 'string' ? Number(obj[key]) : obj[key];
+  }
+
+  return convertObj;
+};

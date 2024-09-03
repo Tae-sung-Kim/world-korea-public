@@ -5,6 +5,7 @@ import {
   usePinsListQuery,
   useProductListQuery,
 } from '../queries';
+import { PaginationProp } from '../queries/queries.type';
 import { splitFourChar } from './pin.utils';
 import Paginations from '@/app/common/components/paginations';
 import { Button } from '@/components/ui/button';
@@ -28,8 +29,9 @@ import {
 } from '@/components/ui/table';
 import { MODAL_TYPE, useModalContext } from '@/contexts/modal.context';
 import { Pin } from '@/definitions/pins.type';
-import { addComma } from '@/utils/number';
+import { addComma, ObjectStrToNum } from '@/utils/number';
 import { useRouter, useSearchParams } from 'next/navigation';
+import qs from 'qs';
 import { useState } from 'react';
 
 export default function PinClient() {
@@ -37,9 +39,9 @@ export default function PinClient() {
   const productData = useProductListQuery();
   const [selectedProductId, setSelectedProductId] = useState<string>('');
 
-  //이렇게 하는게 맞는건지 잘 모르겠음..
-  const pageNumber = Number(searchParams.get('pageNumber') ?? 1);
-  const pageSize = Number(searchParams.get('pageSize') ?? 10);
+  const { pageNumber = 1, pageSize = 10 }: PaginationProp<''> = ObjectStrToNum(
+    qs.parse(searchParams.toString())
+  );
 
   const pinData = usePinsListQuery({
     pageNumber,
