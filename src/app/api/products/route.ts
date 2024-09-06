@@ -8,7 +8,7 @@ import { FILE_PATH, FILE_TYPE, uploadFile } from '../utils/upload.util';
 import connectMongo from '@/app/api/libs/database';
 import ProductModel from '@/app/api/models/product.model';
 import { createResponse } from '@/app/api/utils/http.util';
-import { HTTP_STATUS } from '@/definitions';
+import { HTTP_STATUS, USER_CATEGORY_LEVEL_ADMIN } from '@/definitions';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
@@ -23,6 +23,7 @@ export async function GET(req: NextRequest) {
       return createResponse(HTTP_STATUS.UNAUTHORIZED);
     }
 
+    const { isAdmin } = userData;
     const { level } = userData.userCategory;
 
     const { pageNumber, pageSize, filter } = getQueryParams(req);
@@ -31,7 +32,7 @@ export async function GET(req: NextRequest) {
       pageNumber,
       pageSize,
       filter,
-      level,
+      level: isAdmin ? USER_CATEGORY_LEVEL_ADMIN : level,
     });
 
     return NextResponse.json(paginationResponse);
