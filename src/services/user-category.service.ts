@@ -1,17 +1,17 @@
-import { UserCategoryType } from '@/definitions';
+import { UserCategory } from '@/definitions';
 import http from '@/services';
 
 class UserCategoryService {
   // 회원 반환
   getUserCategoryList() {
-    return http.get<UserCategoryType[]>(`/api/user-categories`);
+    return http.get<UserCategory[]>(`/api/user-categories`);
   }
 
-  addUserCategory(data: UserCategoryType) {
-    return http.post<UserCategoryType>(`/api/user-categories`, data);
+  addUserCategory(data: UserCategory) {
+    return http.post<UserCategory>(`/api/user-categories`, data);
   }
 
-  updateUserCategory(data: UserCategoryType) {
+  updateUserCategory(data: UserCategory) {
     return http.patch<boolean>(`/api/user-categories/${data._id}`, data);
   }
 

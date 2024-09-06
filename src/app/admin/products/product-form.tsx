@@ -25,7 +25,7 @@ import { Textarea } from '@/components/ui/textarea';
 import {
   PRODUCT_STATUS,
   PRODUCT_STATUS_MESSAGE,
-  UserCategoryType,
+  UserCategory,
 } from '@/definitions';
 import productService from '@/services/product.service';
 import { bytesToMB, fileToBlob } from '@/utils/file';
@@ -89,7 +89,7 @@ type ProductImage = {
 };
 
 type Props = {
-  userCategoryList: UserCategoryType[] | undefined;
+  userCategoryList: UserCategory[] | undefined;
   productId?: string;
 };
 

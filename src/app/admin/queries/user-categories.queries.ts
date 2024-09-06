@@ -1,4 +1,4 @@
-import { UserCategoryType } from '@/definitions';
+import { UserCategory } from '@/definitions';
 import userCategoryService from '@/services/user-category.service';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 const QUERY_KEY = 'user-categories';
 
 export function useUserCategoryListQuery() {
-  const fallback: UserCategoryType[] = [];
+  const fallback: UserCategory[] = [];
 
   const { data = fallback } = useQuery({
     queryKey: [QUERY_KEY],

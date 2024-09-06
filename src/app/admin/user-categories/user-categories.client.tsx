@@ -6,7 +6,7 @@ import {
   useUserCategoryListQuery,
   useUpdateUserCategoryMutation,
 } from '../queries';
-import { UserCategoryType } from '@/definitions';
+import { UserCategory } from '@/definitions';
 import { useEffect, useState } from 'react';
 
 export default function UserCategoriesClient() {
@@ -16,7 +16,7 @@ export default function UserCategoriesClient() {
   const updateMutation = useUpdateUserCategoryMutation();
   const deleteMutation = useDeleteUserCategoryMutation();
 
-  const [list, setList] = useState<UserCategoryType[]>([]);
+  const [list, setList] = useState<UserCategory[]>([]);
 
   useEffect(() => {
     if (userCategoryList) {

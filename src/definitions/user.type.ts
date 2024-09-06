@@ -1,7 +1,7 @@
-import { UserCategoryType } from './user-category.type';
+import { UserCategory } from './user-category.type';
 
 export type User = {
-  userCategory: UserCategoryType;
+  userCategory: UserCategory;
   _id: string;
   loginId: string;
   companyNo: string;

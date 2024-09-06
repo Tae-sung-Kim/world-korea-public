@@ -1,6 +1,6 @@
 import { requiredIsAdmin } from '../utils/auth.util';
 import connectMongo from '@/app/api/libs/database';
-import UserCategory from '@/app/api/models/user-category.model';
+import UserCategoryModel from '@/app/api/models/user-category.model';
 import { createResponse } from '@/app/api/utils/http.util';
 import { HTTP_STATUS } from '@/definitions';
 import { NextRequest, NextResponse } from 'next/server';
@@ -12,7 +12,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
   try {
     await connectMongo();
 
-    const list = await UserCategory.getUserCategoryList();
+    const list = await UserCategoryModel.getUserCategoryList();
 
     return NextResponse.json(list);
   } catch (error) {
@@ -32,23 +32,20 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { name, level } = body;
+    let { name, level } = body;
 
     if (!name || name.trim() === '' || typeof level !== 'number') {
-      return NextResponse.json(
-        { message: '값을 정확하게 입력하세요.' },
-        { status: 400 }
-      );
+      return createResponse(HTTP_STATUS.BAD_REQUEST);
     }
 
-    const newUserCategory = new UserCategory({
+    const newUserCategory = new UserCategoryModel({
       name,
       level,
     });
 
     await newUserCategory.save();
 
-    return NextResponse.json(newUserCategory, { status: 200 });
+    return NextResponse.json(newUserCategory);
   } catch (error: any) {
     return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
   }

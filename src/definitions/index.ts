@@ -2,6 +2,7 @@ export * from './http.constant';
 export * from './user.type';
 export * from './user.constant';
 export * from './user-category.type';
+export * from './user-category.constant';
 export * from './product.type';
 export * from './product.constant';
 export * from './profile.type';

@@ -1,7 +1,11 @@
 // 회원분류
 
 import connectMongo from '@/app/api/libs/database';
-import { UserCategoryType } from '@/definitions';
+import {
+  USER_CATEGORY_LEVEL_DEFAULT,
+  USER_CATEGORY_NAME_DEFAULT,
+  UserCategory,
+} from '@/definitions';
 import { model, models, Schema, Model } from 'mongoose';
 
 export interface UserCategoryDB {
@@ -11,14 +15,14 @@ export interface UserCategoryDB {
 
 interface UserCategoryMethods {}
 
-interface UserCategoryModel
+interface UserCategorySchemaModel
   extends Model<UserCategoryDB, {}, UserCategoryMethods> {
-  getUserCategoryList(): UserCategoryType[];
+  getUserCategoryList(): UserCategory[];
 }
 
 const schema = new Schema<
   UserCategoryDB,
-  UserCategoryModel,
+  UserCategorySchemaModel,
   UserCategoryMethods
 >({
   name: {
@@ -35,21 +39,21 @@ schema.static('getUserCategoryList', function getUserList() {
   return this.find({});
 });
 
-const UserCategory =
-  (models.UserCategory as UserCategoryModel) ||
-  model<UserCategoryDB, UserCategoryModel>('UserCategory', schema);
+const UserCategoryModel =
+  (models.UserCategory as UserCategorySchemaModel) ||
+  model<UserCategoryDB, UserCategorySchemaModel>('UserCategory', schema);
 
 export async function initUserCategory() {
   await connectMongo();
 
-  const len = await UserCategory.countDocuments();
+  const len = await UserCategoryModel.countDocuments();
 
   if (len === 0) {
-    await UserCategory.create({
-      name: '일반회원',
-      level: '1',
+    await UserCategoryModel.create({
+      name: USER_CATEGORY_NAME_DEFAULT,
+      level: USER_CATEGORY_LEVEL_DEFAULT,
     });
   }
 }
 
-export default UserCategory;
+export default UserCategoryModel;

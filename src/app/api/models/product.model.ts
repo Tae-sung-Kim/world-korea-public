@@ -59,7 +59,7 @@ interface ProductMethods {
 interface ProductSchemaModel extends Model<ProductDB, {}, ProductMethods> {
   getProductById(productId: Types.ObjectId): Promise<ProductDocument>;
   getProductList(
-    paginationParams: PaginationParams
+    paginationParams: PaginationParams & { level: string }
   ): PaginationResponse<Promise<Product[]>>;
   deleteProductById(productId: string): Promise<boolean>;
 }
@@ -100,9 +100,12 @@ schema.static(
     pageNumber = PAGE_NUMBER_DEFAULT,
     pageSize = PAGE_SIZE_DEFAULT,
     filter: filterQuery = null,
+    level = 1,
   } = {}) {
     const skip = (pageNumber - 1) * pageSize;
-    const filter: Record<string, any> = {};
+    const filter: Record<string, any> = {
+      accessLevel: { $lte: level },
+    };
     const sort = { createdAt: -1 as SortOrder }; // 최신순 정렬
 
     if (filterQuery) {

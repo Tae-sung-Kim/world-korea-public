@@ -1,6 +1,6 @@
 import { requiredIsAdmin } from '../../utils/auth.util';
 import connectMongo from '@/app/api/libs/database';
-import UserCategory from '@/app/api/models/user-category.model';
+import UserCategoryModel from '@/app/api/models/user-category.model';
 import { createResponse } from '@/app/api/utils/http.util';
 import { HTTP_STATUS } from '@/definitions';
 import { NextRequest, NextResponse } from 'next/server';
@@ -19,7 +19,7 @@ export async function PATCH(req: NextRequest, ctx: { params: { id: string } }) {
       return createResponse(HTTP_STATUS.FORBIDDEN);
     }
 
-    await UserCategory.findByIdAndUpdate(id, {
+    await UserCategoryModel.findByIdAndUpdate(id, {
       name,
       level,
     });
@@ -45,7 +45,7 @@ export async function DELETE(
       return createResponse(HTTP_STATUS.FORBIDDEN);
     }
 
-    await UserCategory.findByIdAndDelete(id);
+    await UserCategoryModel.findByIdAndDelete(id);
 
     return NextResponse.json(true);
   } catch (error) {
