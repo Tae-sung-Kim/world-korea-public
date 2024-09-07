@@ -25,6 +25,7 @@ import { addComma, ObjectStrToNum } from '@/utils/number';
 import { useRouter, useSearchParams } from 'next/navigation';
 import qs from 'qs';
 import { FormEvent } from 'react';
+import { RiDeleteBin6Line } from 'react-icons/ri';
 
 export default function ProductListClient() {
   const router = useRouter();
@@ -88,7 +89,7 @@ export default function ProductListClient() {
             <TableHead className="w-[100px] text-right">할인가</TableHead>
             <TableHead className="w-[100px] text-right">판매가</TableHead>
             <TableHead className="w-[70px] text-right">재고</TableHead>
-            <TableHead className="w-[70px] text-right">삭제</TableHead>
+            <TableHead className="w-[70px] text-right"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -131,7 +132,7 @@ export default function ProductListClient() {
                     })
                   }
                 >
-                  삭제
+                  <RiDeleteBin6Line />
                 </Button>
               </TableCell>
             </TableRow>

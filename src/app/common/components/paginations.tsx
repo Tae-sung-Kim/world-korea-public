@@ -76,46 +76,47 @@ export default function Paginations({
     router.push(pathName + '?' + params);
   };
   return (
-    <Pagination>
-      <PaginationContent>
-        <PaginationItem>
-          <PaginationPrevious
-            href="#"
-            style={{
-              pointerEvents: pageNumber <= 1 ? 'none' : 'auto',
-            }}
-            onClick={() => {
-              handleMovePage(pageNumber - 1);
-            }}
-          />
-        </PaginationItem>
-        {pageNumbers.map((d) => {
-          return (
-            <PaginationItem key={`paginations-${d}`}>
-              <PaginationLink
-                href="#"
-                onClick={() => handleMovePage(d)}
-                isActive={pageNumber === d}
-              >
-                {d}
-              </PaginationLink>
-            </PaginationItem>
-          );
-        })}
+    <div className="flex m-5">
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              href="#"
+              style={{
+                pointerEvents: pageNumber <= 1 ? 'none' : 'auto',
+              }}
+              onClick={() => {
+                handleMovePage(pageNumber - 1);
+              }}
+            />
+          </PaginationItem>
+          {pageNumbers.map((d) => {
+            return (
+              <PaginationItem key={`paginations-${d}`}>
+                <PaginationLink
+                  href="#"
+                  onClick={() => handleMovePage(d)}
+                  isActive={pageNumber === d}
+                >
+                  {d}
+                </PaginationLink>
+              </PaginationItem>
+            );
+          })}
 
-        <PaginationItem>
-          <PaginationNext
-            href="#"
-            style={{
-              pointerEvents: pageNumber >= totalPages ? 'none' : 'auto',
-            }}
-            onClick={() => {
-              handleMovePage(pageNumber + 1);
-            }}
-          />
-        </PaginationItem>
-      </PaginationContent>
-
+          <PaginationItem>
+            <PaginationNext
+              href="#"
+              style={{
+                pointerEvents: pageNumber >= totalPages ? 'none' : 'auto',
+              }}
+              onClick={() => {
+                handleMovePage(pageNumber + 1);
+              }}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
       <Select onValueChange={handlePageSizeChange} value={String(pageSize)}>
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="선택" />
@@ -132,6 +133,6 @@ export default function Paginations({
           </SelectGroup>
         </SelectContent>
       </Select>
-    </Pagination>
+    </div>
   );
 }

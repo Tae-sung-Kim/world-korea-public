@@ -1,6 +1,6 @@
 'use client';
 
-import { useCreatePinMutation } from '../../queries';
+import { useCreatePinMutation, useProductListQuery } from '../../queries';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -19,10 +19,9 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { ProductFormData } from '@/definitions';
 import { PinData } from '@/definitions/pins.type';
-import productService from '@/services/product.service';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -44,11 +43,7 @@ type PinRegister = {
 };
 
 export default function PinRegisterClient() {
-  //상품 목록 조회 - 수정해야함 로딩 만들고
-  const { data: productList = [], isFetching } = useQuery({
-    queryKey: ['getProudctList', 'pin-register'],
-    queryFn: productService.getProudctList,
-  });
+  const productData = useProductListQuery();
 
   const handleResetFormData = () => {
     pinForm.reset();
@@ -101,12 +96,12 @@ export default function PinRegisterClient() {
   };
 
   useEffect(() => {
-    if (!isFetching) {
+    if (Array.isArray(productData.list) && productData.list.length > 0) {
       pinForm.reset({
-        productId: productList[0]?._id,
+        productId: productData.list[0]?._id,
       });
     }
-  }, [productList, pinForm, isFetching]);
+  }, [productData.list, pinForm]);
 
   return (
     <Form {...pinForm}>
@@ -124,7 +119,7 @@ export default function PinRegisterClient() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      {productList.map((d) => {
+                      {productData.list.map((d: ProductFormData) => {
                         return (
                           <SelectItem key={d._id} value={String(d._id)}>
                             {d.name}

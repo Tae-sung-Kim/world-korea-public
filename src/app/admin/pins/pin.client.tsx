@@ -33,6 +33,7 @@ import { addComma, ObjectStrToNum } from '@/utils/number';
 import { useRouter, useSearchParams } from 'next/navigation';
 import qs from 'qs';
 import { useState } from 'react';
+import { RiDeleteBin6Line } from 'react-icons/ri';
 
 export default function PinClient() {
   const searchParams = useSearchParams();
@@ -109,7 +110,7 @@ export default function PinClient() {
             <TableHead className="w-[110px] text-center">종료일</TableHead>
             <TableHead className="w-[110px] text-center">생성일</TableHead>
             <TableHead className="w-[70px] text-center">사용여부</TableHead>
-            <TableHead className="w-[110px] text-center">삭제</TableHead>
+            <TableHead className="w-[110px] text-center"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -141,7 +142,7 @@ export default function PinClient() {
                     })
                   }
                 >
-                  삭제
+                  <RiDeleteBin6Line />
                 </Button>
               </TableCell>
             </TableRow>

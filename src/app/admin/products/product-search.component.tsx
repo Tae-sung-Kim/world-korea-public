@@ -1,8 +1,11 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { EntryType } from 'perf_hooks';
 import qs from 'qs';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, KeyboardEvent, useState } from 'react';
+import { FaSearch } from 'react-icons/fa';
 
 export default function ProductSearchComponent() {
   const router = useRouter();
@@ -19,6 +22,14 @@ export default function ProductSearchComponent() {
     setValue(e.target.value);
   };
 
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    setValue(e.currentTarget.value);
+    if (e.key === 'Enter' || e.key.toLocaleLowerCase() === 'enter') {
+      //엔터일경우 현재값으로 조회
+      handleSearchClick();
+    }
+  };
+
   const handleSearchClick = () => {
     const filter = {
       name: value,
@@ -29,10 +40,18 @@ export default function ProductSearchComponent() {
   };
 
   return (
-    <div className="flex">
-      <Input value={value} name="name" onChange={handleInputChange} />
+    <div className="flex space-x-5 items-center m-5">
+      <Label className="">상품명</Label>
+      <Input
+        value={value}
+        name="name"
+        className="w-64"
+        onChange={handleInputChange}
+        onKeyDown={handleKeyDown}
+      />
+
       <Button type="button" onClick={handleSearchClick}>
-        검색
+        <FaSearch />
       </Button>
     </div>
   );
