@@ -116,7 +116,9 @@ export default function PinClient() {
         <TableBody>
           {pinData.list.map((pin: Pin, idx: number) => (
             <TableRow key={pin._id}>
-              <TableCell>{idx + 1}</TableCell>
+              <TableCell>
+                {pinData.totalItems - (pageNumber - 1) * pageSize - idx}
+              </TableCell>
               <TableCell className="font-medium">
                 {splitFourChar(pin.number)}
               </TableCell>

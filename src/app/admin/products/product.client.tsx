@@ -99,7 +99,7 @@ export default function ProductListClient() {
               className="cursor-pointer"
               onClick={() => handleProductItemClick(product._id)}
             >
-              <TableCell>{idx + 1}</TableCell>
+              <TableCell>{(pageNumber - 1) * pageSize + idx + 1}</TableCell>
               <TableCell className="font-medium">{product.name}</TableCell>
               <TableCell>
                 {
