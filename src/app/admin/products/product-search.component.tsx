@@ -7,7 +7,7 @@ import qs from 'qs';
 import { ChangeEvent, KeyboardEvent, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
 
-export default function ProductSearchComponent() {
+export default function ProductSearch() {
   const router = useRouter();
   const pathName = usePathname();
   const searchParams = useSearchParams();

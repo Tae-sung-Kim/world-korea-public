@@ -6,7 +6,7 @@ import {
   useUserCategoryListQuery,
 } from '../queries';
 import { PaginationProp } from '../queries/queries.type';
-import ProductSearchComponent from './product-search.component';
+import ProductSearch from './product-search.component';
 import Paginations from '@/app/common/components/paginations';
 import { Button } from '@/components/ui/button';
 import {
@@ -76,7 +76,7 @@ export default function ProductListClient() {
 
   return (
     <>
-      <ProductSearchComponent />
+      <ProductSearch />
       <Table>
         {/* {isFetching && <TableCaption>조회 중입니다.</TableCaption>} */}
         <TableHeader>
