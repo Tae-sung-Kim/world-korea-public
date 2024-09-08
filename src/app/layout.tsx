@@ -17,7 +17,9 @@ export default function RootLayout({
   return (
     <OuterProvider>
       <html lang="ko">
-        <body className={`${pretendard.variable} ${pretendard.className}`}>
+        <body
+          className={`${pretendard.variable} ${pretendard.className} bg-gray-50`}
+        >
           <InnerProvider>
             <Layout>{children}</Layout>
           </InnerProvider>
