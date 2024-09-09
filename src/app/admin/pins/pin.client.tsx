@@ -6,7 +6,6 @@ import {
   usePinsListQuery,
   useProductListQuery,
 } from '../queries';
-import { PageFilter, PaginationProp } from '../queries/queries.type';
 import { splitFourChar } from './pin.utils';
 import Paginations from '@/app/common/components/paginations';
 import { Button } from '@/components/ui/button';
