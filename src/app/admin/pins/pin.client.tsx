@@ -7,7 +7,7 @@ import {
   useProductListQuery,
 } from '../queries';
 import { splitFourChar } from './pin.utils';
-import Paginations from '@/app/common/components/paginations';
+import Pagination from '@/app/common/components/pagination';
 import { Button } from '@/components/ui/button';
 import {
   Select,
@@ -156,7 +156,7 @@ export default function PinClient() {
         </TableFooter>
       </Table>
 
-      <Paginations
+      <Pagination
         pageNumber={pageNumber}
         pageSize={pageSize}
         totalPages={pinData.totalPages}

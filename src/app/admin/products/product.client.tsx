@@ -7,7 +7,7 @@ import {
   useUserCategoryListQuery,
 } from '../queries';
 import ProductSearch from './product-search.component';
-import Paginations from '@/app/common/components/paginations';
+import Pagination from '@/app/common/components/pagination';
 import { Button } from '@/components/ui/button';
 import {
   Table,
@@ -143,7 +143,7 @@ export default function ProductListClient() {
           </TableRow>
         </TableFooter>
       </Table>
-      <Paginations
+      <Pagination
         pageNumber={pageNumber}
         pageSize={pageSize}
         totalPages={productData.totalPages}
