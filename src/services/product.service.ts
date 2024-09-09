@@ -1,4 +1,4 @@
-import { PaginationProp } from '@/app/admin/queries/queries.type';
+import { PageFilter, PaginationProp } from '@/app/admin/queries/queries.type';
 import { PaginationResponse, ProductFormData } from '@/definitions';
 import http from '@/services';
 import qs from 'qs';
@@ -14,7 +14,7 @@ class ProductService {
   }
 
   //상품 전체
-  getProudctList<T extends string>(pageParams?: PaginationProp<T>) {
+  getProudctList(pageParams?: PaginationProp<PageFilter>) {
     const params = qs.stringify(pageParams ?? {});
 
     return http.get<PaginationResponse<ProductFormData>>(

@@ -1,4 +1,4 @@
-import { FunctionProps, PaginationProp } from './queries.type';
+import { FunctionProps, PageFilter, PaginationProp } from './queries.type';
 import { PaginationResponse } from '@/definitions';
 import { Pin } from '@/definitions/pins.type';
 import pinsService from '@/services/pins.service';
@@ -12,9 +12,7 @@ import { toast } from 'sonner';
 
 const QUERY_KEY = 'pins';
 
-export function usePinsListQuery<T extends string>(
-  paginationParam?: PaginationProp<T>
-) {
+export function usePinsListQuery(paginationParam?: PaginationProp<PageFilter>) {
   const fallback: PaginationResponse<Pin> = {
     pageNumber: -1,
     pageSize: -1,

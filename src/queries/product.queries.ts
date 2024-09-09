@@ -1,4 +1,4 @@
-import { FunctionProps, PaginationProp } from './queries.type';
+import { PageFilter, PaginationProp } from '@/app/admin/queries/queries.type';
 import { PaginationResponse, ProductFormData } from '@/definitions';
 import productService from '@/services/product.service';
 import {
@@ -11,8 +11,8 @@ import { toast } from 'sonner';
 
 const QUERY_KEY = 'admin-product';
 
-export function useProductListQuery<T extends string>(
-  paginationParam?: PaginationProp<T>
+export function useProductListQuery(
+  paginationParam?: PaginationProp<PageFilter>
 ) {
   const fallback: PaginationResponse<ProductFormData> = {
     pageNumber: -1,

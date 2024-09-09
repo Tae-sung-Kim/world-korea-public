@@ -5,7 +5,7 @@ import {
   usePinsListQuery,
   useProductListQuery,
 } from '../queries';
-import { PaginationProp } from '../queries/queries.type';
+import { PageFilter, PaginationProp } from '../queries/queries.type';
 import { splitFourChar } from './pin.utils';
 import Paginations from '@/app/common/components/paginations';
 import { Button } from '@/components/ui/button';
@@ -40,9 +40,8 @@ export default function PinClient() {
   const productData = useProductListQuery();
   const [selectedProductId, setSelectedProductId] = useState<string>('');
 
-  const { pageNumber = 1, pageSize = 10 }: PaginationProp<''> = ObjectStrToNum(
-    qs.parse(searchParams.toString())
-  );
+  const { pageNumber = 1, pageSize = 10 }: PaginationProp<PageFilter> =
+    ObjectStrToNum(qs.parse(searchParams.toString()));
 
   const pinData = usePinsListQuery({
     pageNumber,

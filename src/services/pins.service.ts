@@ -1,4 +1,4 @@
-import { PaginationProp } from '@/app/admin/queries/queries.type';
+import { PageFilter, PaginationProp } from '@/app/admin/queries/queries.type';
 import { PaginationResponse } from '@/definitions';
 import { Pin } from '@/definitions/pins.type';
 import http from '@/services';
@@ -11,7 +11,7 @@ class PinsService {
   }
 
   //핀 리스트
-  getListPin<T extends string>(pageParams?: PaginationProp<T>) {
+  getListPin(pageParams?: PaginationProp<PageFilter>) {
     const params = qs.stringify(pageParams ?? {});
 
     return http.get<PaginationResponse<Pin>>(`api/pins?${params}`);

@@ -1,11 +1,11 @@
 'use client';
 
+import { usePagination } from '../hooks/usePagination';
 import {
   useDeleteProductMutation,
   useProductListQuery,
   useUserCategoryListQuery,
 } from '../queries';
-import { PaginationProp } from '../queries/queries.type';
 import ProductSearch from './product-search.component';
 import Paginations from '@/app/common/components/paginations';
 import { Button } from '@/components/ui/button';
@@ -21,22 +21,18 @@ import {
 } from '@/components/ui/table';
 import { MODAL_TYPE, useModalContext } from '@/contexts/modal.context';
 import { PRODUCT_STATUS_MESSAGE } from '@/definitions';
-import { addComma, ObjectStrToNum } from '@/utils/number';
-import { useRouter, useSearchParams } from 'next/navigation';
-import qs from 'qs';
+import { addComma } from '@/utils/number';
+import { useRouter } from 'next/navigation';
 import { FormEvent } from 'react';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 
 export default function ProductListClient() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const { openModal } = useModalContext();
 
-  const {
-    pageNumber = 1,
-    pageSize = 10,
-    filter = { name: '' },
-  }: PaginationProp<'name'> = ObjectStrToNum(qs.parse(searchParams.toString()));
+  const { pageNumber, pageSize, filter } = usePagination({
+    queryFilters: { name: '' },
+  });
 
   const productData = useProductListQuery({
     pageNumber: Number(pageNumber),

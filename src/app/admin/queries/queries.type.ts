@@ -4,8 +4,10 @@ export type FunctionProps = {
   onSettled?: () => void;
 };
 
-export type PaginationProp<T extends string> = {
+export type PaginationProp<T> = {
   pageNumber?: number;
   pageSize?: number;
-  filter?: { [key in T]: string };
+  filter?: T;
 };
+
+export type PageFilter = { [key: string]: string };
