@@ -16,7 +16,7 @@ export default function ProductSearch() {
     searchParams.getAll('filter[name]').toString() ?? ''
   );
 
-  const pageSize = Number(searchParams.get('pageSize') ?? 5);
+  const pageSize = Number(searchParams.get('pageSize') ?? 10);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);

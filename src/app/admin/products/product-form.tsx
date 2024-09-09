@@ -333,9 +333,6 @@ export default function ProductForm({ userCategoryList, productId }: Props) {
 
         {productImages.fields.map((d, idx) => {
           const blobImages = productImageList[idx];
-          const newFileImage = productForm.formState.errors.images?.[
-            idx
-          ] as FieldError & { file: { message: string } };
 
           return (
             <div className="flex space-x-4" key={d.id}>
@@ -355,25 +352,26 @@ export default function ProductForm({ userCategoryList, productId }: Props) {
                   <Controller
                     name={`images.${idx}.file`}
                     control={productForm.control}
-                    rules={{ required: true }}
-                    render={({ field }) => {
+                    render={({ field, fieldState }) => {
                       return (
-                        <Input
-                          className="flex-initial"
-                          type="file"
-                          accept="image/*"
-                          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                            handleInputFileChange(e, { ...field })
-                          }
-                        />
+                        <>
+                          <Input
+                            className="flex-initial"
+                            type="file"
+                            accept="image/*"
+                            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                              handleInputFileChange(e, { ...field })
+                            }
+                          />
+                          {fieldState.error && (
+                            <span className="text-red-500 text-sm">
+                              {fieldState.error.message}
+                            </span>
+                          )}
+                        </>
                       );
                     }}
                   />
-                  {newFileImage && (
-                    <span className="text-red-500 text-sm">
-                      {newFileImage?.file.message}
-                    </span>
-                  )}
                 </>
               )}
               <Button type="button" onClick={() => handleDeleteImage(idx)}>
