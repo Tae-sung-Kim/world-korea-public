@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
       pageNumber,
       pageSize,
       filter,
-      level: isAdmin ? USER_CATEGORY_LEVEL_ADMIN : level,
+      level: String(isAdmin ? USER_CATEGORY_LEVEL_ADMIN : level),
     });
 
     return NextResponse.json(paginationResponse);

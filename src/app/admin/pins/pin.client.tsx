@@ -1,5 +1,6 @@
 'use client';
 
+import { usePagination } from '../hooks/usePagination';
 import {
   useDeletePinMutation,
   usePinsListQuery,
@@ -29,19 +30,16 @@ import {
 } from '@/components/ui/table';
 import { MODAL_TYPE, useModalContext } from '@/contexts/modal.context';
 import { Pin } from '@/definitions/pins.type';
-import { addComma, ObjectStrToNum } from '@/utils/number';
-import { useRouter, useSearchParams } from 'next/navigation';
-import qs from 'qs';
+import { addComma } from '@/utils/number';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 
 export default function PinClient() {
-  const searchParams = useSearchParams();
   const productData = useProductListQuery();
   const [selectedProductId, setSelectedProductId] = useState<string>('');
 
-  const { pageNumber = 1, pageSize = 10 }: PaginationProp<PageFilter> =
-    ObjectStrToNum(qs.parse(searchParams.toString()));
+  const { pageNumber = 1, pageSize = 10 } = usePagination();
 
   const pinData = usePinsListQuery({
     pageNumber,
