@@ -7,14 +7,7 @@ import {
   useUserCategoryListQuery,
 } from '../queries';
 import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
+import { Form } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import {
   Table,
@@ -25,15 +18,9 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { UserCategory } from '@/definitions';
-import { addComma } from '@/utils/number';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
-import {
-  Controller,
-  FieldArrayWithId,
-  useFieldArray,
-  useForm,
-} from 'react-hook-form';
+import { useEffect } from 'react';
+import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { AiOutlineUserAdd } from 'react-icons/ai';
 import { BsPencilSquare } from 'react-icons/bs';
 import { FaPlus } from 'react-icons/fa';
@@ -47,8 +34,15 @@ const UserCategoriesFormSchema = z.object({
     z.object({
       _id: z.string().optional(),
       id: z.string().optional(),
-      name: z.string(),
-      level: z.string().or(z.number()),
+      name: z.string().refine((d) => d.length > 0, {
+        message: '회원등급명을 입력해 주세요.',
+      }),
+      level: z
+        .string()
+        .or(z.number())
+        .refine((d) => Number(d) > 0, {
+          message: '레벨을 입력해 주세요.',
+        }),
     })
   ),
 });
@@ -154,13 +148,21 @@ export default function UserCategoriesClient() {
                     <Controller
                       name={`categories.${idx}.name`}
                       control={userCategoriesForm.control}
-                      render={({ field }) => {
+                      render={({ field, fieldState }) => {
                         return (
-                          <Input
-                            {...field}
-                            type="text"
-                            placeholder="회원등급명을 입력해 주세요."
-                          />
+                          <>
+                            <Input
+                              {...field}
+                              type="text"
+                              placeholder="회원등급명을 입력해 주세요."
+                            />
+
+                            {fieldState.error && (
+                              <span className="text-red-500 text-sm">
+                                {fieldState.error.message}
+                              </span>
+                            )}
+                          </>
                         );
                       }}
                     />
@@ -169,9 +171,16 @@ export default function UserCategoriesClient() {
                     <Controller
                       name={`categories.${idx}.level`}
                       control={userCategoriesForm.control}
-                      render={({ field }) => {
+                      render={({ field, fieldState }) => {
                         return (
-                          <Input {...field} type="text" placeholder="레벨" />
+                          <>
+                            <Input {...field} type="text" placeholder="레벨" />
+                            {fieldState.error && (
+                              <span className="text-red-500 text-sm">
+                                {fieldState.error.message}
+                              </span>
+                            )}
+                          </>
                         );
                       }}
                     />
@@ -181,15 +190,20 @@ export default function UserCategoriesClient() {
                       {d._id ? (
                         <>
                           <Button
-                            onClick={() =>
-                              handleUserCategoryUpdate(d._id ?? '')
-                            }
+                            onClick={() => {
+                              userCategoriesForm.handleSubmit(() => {
+                                handleUserCategoryUpdate(d._id ?? '');
+                              })();
+                            }}
                           >
                             <BsPencilSquare />
                           </Button>
                           <Button
                             onClick={() =>
-                              handleUserCategoryDelete({ id: d._id ?? '', idx })
+                              handleUserCategoryDelete({
+                                id: d._id ?? '',
+                                idx,
+                              })
                             }
                           >
                             <RiDeleteBinFill />
@@ -197,12 +211,26 @@ export default function UserCategoriesClient() {
                         </>
                       ) : (
                         <>
-                          <Button onClick={() => handleUserCategoryAdded(idx)}>
+                          <Button
+                            type="button"
+                            onClick={async () => {
+                              const isValid = await userCategoriesForm.trigger([
+                                `categories.${idx}.name`,
+                                `categories.${idx}.level`,
+                              ]);
+                              if (isValid) {
+                                handleUserCategoryAdded(idx);
+                              }
+                            }}
+                          >
                             <AiOutlineUserAdd />
                           </Button>
                           <Button
                             onClick={() =>
-                              handleUserCategoryDelete({ id: d._id ?? '', idx })
+                              handleUserCategoryDelete({
+                                id: d._id ?? '',
+                                idx,
+                              })
                             }
                           >
                             <RiDeleteBinFill />
