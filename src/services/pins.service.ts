@@ -25,6 +25,16 @@ class PinsService {
   deletePin(id: string) {
     return http.delete(`api/pins/${id}`);
   }
+
+  //핀 사용 여부
+  usedDatePin(id: string) {
+    return http.patch(`api/pins/used/${id}`, { used: true });
+  }
+
+  //핀 사용 여부
+  usedDatePinList(pinList: string[]) {
+    return http.post(`api/pins/used`, pinList);
+  }
 }
 
 const pinsService = new PinsService();

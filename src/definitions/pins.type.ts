@@ -4,6 +4,7 @@ export type PinData = {
   pinNumber: string;
   endDate: Date;
 };
+
 export interface Pin {
   endDate?: Date | string;
   pinCount?: number;
@@ -14,6 +15,7 @@ export interface Pin {
   product?: ProductFormData;
   productId?: string;
   number?: string;
+  usedDate?: Date | string;
 }
 
 export type SearchParams = Record<string, number | string | undefined>;

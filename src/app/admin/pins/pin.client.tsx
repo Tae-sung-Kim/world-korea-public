@@ -5,10 +5,12 @@ import {
   useDeletePinMutation,
   usePinsListQuery,
   useProductListQuery,
+  useUsedPinMutation,
 } from '../queries';
 import { splitFourChar } from './pin.utils';
 import Pagination from '@/app/common/components/pagination';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Select,
   SelectContent,
@@ -51,6 +53,8 @@ export default function PinClient() {
 
   const deletePinMutation = useDeletePinMutation();
 
+  const usedPinMutation = useUsedPinMutation();
+
   //리스트 클릭
   const handlePinListClick = (productId: string = '') => {
     router.push('products/' + productId);
@@ -73,6 +77,12 @@ export default function PinClient() {
           deletePinMutation.mutate(id);
         },
       });
+    }
+  };
+
+  const handleUsedPin = (id: string = '') => {
+    if (!!id) {
+      usedPinMutation.mutate(id);
     }
   };
 
@@ -105,47 +115,57 @@ export default function PinClient() {
             <TableHead className="">연결 상품</TableHead>
             <TableHead className="w-[110px] text-center">종료일</TableHead>
             <TableHead className="w-[110px] text-center">생성일</TableHead>
-            <TableHead className="w-[70px] text-center">사용여부</TableHead>
+            <TableHead className="w-[80px] text-center">사용여부</TableHead>
             <TableHead className="w-[110px] text-center"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {pinData.list.map((pin: Pin, idx: number) => (
-            <TableRow key={pin._id}>
-              <TableCell>
-                {pinData.totalItems - (pageNumber - 1) * pageSize - idx}
-              </TableCell>
-              <TableCell className="font-medium">
-                {splitFourChar(pin.number)}
-              </TableCell>
-              <TableCell
-                className="cursor-pointer"
-                onClick={() => handlePinListClick(pin.product?._id)}
-              >
-                {pin.product?.name}
-              </TableCell>
-              <TableCell className="text-right">
-                {pin.endDate && new Date(pin.endDate).toLocaleDateString()}
-              </TableCell>
-              <TableCell className="text-right">
-                {pin.createdAt && new Date(pin.createdAt).toLocaleDateString()}
-              </TableCell>
-              <TableCell className="text-center"></TableCell>
-              <TableCell className="text-center">
-                <Button
-                  size="icon"
-                  onClick={() =>
-                    handleDeletePin({
-                      id: pin._id ?? '',
-                      number: pin.number ?? '',
-                    })
-                  }
+          {pinData.list.map((pin: Pin, idx: number) => {
+            const isUsed = pin.usedDate;
+            return (
+              <TableRow key={pin._id}>
+                <TableCell>
+                  {pinData.totalItems - (pageNumber - 1) * pageSize - idx}
+                </TableCell>
+                <TableCell className="font-medium">
+                  {splitFourChar(pin.number)}
+                </TableCell>
+                <TableCell
+                  className="cursor-pointer"
+                  onClick={() => handlePinListClick(pin.product?._id)}
                 >
-                  <RiDeleteBin6Line />
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
+                  {pin.product?.name}
+                </TableCell>
+                <TableCell className="text-right">
+                  {pin.endDate && new Date(pin.endDate).toLocaleDateString()}
+                </TableCell>
+                <TableCell className="text-right">
+                  {pin.createdAt &&
+                    new Date(pin.createdAt).toLocaleDateString()}
+                </TableCell>
+                <TableCell className="text-center">
+                  <Checkbox
+                    onCheckedChange={() => handleUsedPin(pin._id)}
+                    checked={!!isUsed}
+                    disabled={!!isUsed}
+                  />
+                </TableCell>
+                <TableCell className="text-center">
+                  <Button
+                    size="icon"
+                    onClick={() =>
+                      handleDeletePin({
+                        id: pin._id ?? '',
+                        number: pin.number ?? '',
+                      })
+                    }
+                  >
+                    <RiDeleteBin6Line />
+                  </Button>
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
         <TableFooter>
           <TableRow>

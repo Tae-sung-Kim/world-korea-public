@@ -67,7 +67,9 @@ export default async function AdminLayout({
                   <Link href="/admin/pins/register">핀번호 등록</Link>
                 </li>
 
-                {/* <li className="text-sm mt-[2px] text-gray-600">핀번호 사용</li> */}
+                <li className="text-sm mt-[2px] text-gray-600">
+                  <Link href="/admin/pins/used">핀번호 사용</Link>
+                </li>
               </ul>
             </li>
           </ul>

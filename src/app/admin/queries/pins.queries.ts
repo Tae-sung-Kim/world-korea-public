@@ -70,11 +70,34 @@ export function useCreatePinMutation({
     onSettled,
   });
 }
+
 export function useDeletePinMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (id: string) => pinsService.deletePin(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
+    },
+  });
+}
+
+export function useUsedPinMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => pinsService.usedDatePin(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
+    },
+  });
+}
+
+export function useUsedPinListMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (pinList: string[]) => pinsService.usedDatePinList(pinList),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
     },
