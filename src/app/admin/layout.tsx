@@ -2,6 +2,7 @@ import Loading from './loading.component';
 import AdminProtectedRoute from '@/app/admin/admin-protected-route.component';
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
+import { AiOutlineProduct } from 'react-icons/ai';
 import { TbNumber123, TbTicket, TbUser } from 'react-icons/tb';
 
 export default async function AdminLayout({
@@ -25,10 +26,25 @@ export default async function AdminLayout({
               </span>
               <ul className="mt-2">
                 <li className="text-sm mt-[2px] text-gray-600">
-                  <Link href="/admin/products"> 상품 목록</Link>
+                  <Link href="/admin/products">상품 목록</Link>
                 </li>
                 <li className="text-sm mt-[2px] text-gray-600">
                   <Link href="/admin/products/create">상품 등록</Link>
+                </li>
+              </ul>
+            </li>
+            <Separator />
+            <li className="p-5 my-4">
+              <span className="flex items-center gap-1 text-xl font-bold">
+                판매 관리
+                <AiOutlineProduct />
+              </span>
+              <ul className="mt-2">
+                <li className="text-sm mt-[2px] text-gray-600">
+                  <Link href="/admin/products">판매 목록</Link>
+                </li>
+                <li className="text-sm mt-[2px] text-gray-600">
+                  <Link href="/admin/products/create">판매 등록</Link>
                 </li>
               </ul>
             </li>

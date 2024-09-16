@@ -1,27 +1,21 @@
 'use client';
 
-import productService from '@/services/product.service';
+import { useProductListQuery } from '@/queries/product.queries';
 import { addComma } from '@/utils/number';
-import { useQuery } from '@tanstack/react-query';
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default function HomeClient() {
-  const { data } = useQuery({
-    queryKey: ['product-list'],
-    queryFn: () => {
-      return productService.getProudctList();
-    },
-  });
+  const productData = useProductListQuery();
 
-  if (!Array.isArray(data?.list)) {
+  if (!Array.isArray(productData?.list)) {
     return null;
   }
 
   return (
     <div className="grid grid-cols-4 gap-8">
-      {data.list.map((d) => {
+      {productData.list.map((d) => {
         const { _id, name, images = [], price, regularPrice, salePrice } = d;
-
         return (
           <div key={_id} className="flex items-center justify-center py-12">
             <div className="p-6 w-full bg-white shadow-2xl relative rounded-lg hover:-translate-y-2 hover:transition-transform hover:ease-in">
@@ -33,8 +27,11 @@ export default function HomeClient() {
                   }}
                 >
                   {images[0] && (
-                    <img
+                    <Image
+                      alt="상품 이미지"
                       className="w-full h-full rounded-lg shadow-xl"
+                      width={170}
+                      height={170}
                       src={String(images[0])}
                     />
                   )}
