@@ -133,6 +133,7 @@ export default function PinClient() {
               <TableCell className="text-center"></TableCell>
               <TableCell className="text-center">
                 <Button
+                  size="icon"
                   onClick={() =>
                     handleDeletePin({
                       id: pin._id ?? '',

@@ -28,8 +28,6 @@ export function useProductListQuery(
     endIndex: -1,
   };
 
-  console.log(paginationParam);
-
   const { data = fallback } = useQuery({
     queryKey: [QUERY_KEY, Object.values(paginationParam ?? {})],
     queryFn: () => {
