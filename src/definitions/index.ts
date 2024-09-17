@@ -5,6 +5,7 @@ export * from './user-category.type';
 export * from './user-category.constant';
 export * from './product.type';
 export * from './product.constant';
+export * from './sale-product.type';
 export * from './profile.type';
 export * from './group-reservation.type';
 export * from './pagination.type';

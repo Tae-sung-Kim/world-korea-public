@@ -155,7 +155,7 @@ schema.static(
   }
 );
 
-schema.static('deleteProductById', async function deleteProduct(productId) {
+schema.static('deleteProductById', async function deleteProductById(productId) {
   const product = await this.getProductById(productId);
   if (!product) {
     return false;
