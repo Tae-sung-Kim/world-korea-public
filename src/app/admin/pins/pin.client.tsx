@@ -80,9 +80,16 @@ export default function PinClient() {
     }
   };
 
-  const handleUsedPin = (id: string = '') => {
+  const handleUsedPin = (id: string = '', number: string = '') => {
     if (!!id) {
-      usedPinMutation.mutate(id);
+      return openModal({
+        type: MODAL_TYPE.CONFIRM,
+        title: '핀번호 사용',
+        content: `${splitFourChar(number)}를 사용 하시겠습니까?`,
+        onOk: () => {
+          usedPinMutation.mutate(id);
+        },
+      });
     }
   };
 
@@ -145,7 +152,7 @@ export default function PinClient() {
                 </TableCell>
                 <TableCell className="text-center">
                   <Checkbox
-                    onCheckedChange={() => handleUsedPin(pin._id)}
+                    onCheckedChange={() => handleUsedPin(pin._id, pin.number)}
                     checked={!!isUsed}
                     disabled={!!isUsed}
                   />

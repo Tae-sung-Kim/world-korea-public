@@ -17,7 +17,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 const PinFormSchema = z.object({
-  pinList: z
+  pinNumberList: z
     .string()
     .refine((d) => d.length > 0, { message: '핀 번호를 입력해주세요' }),
 });
@@ -36,7 +36,7 @@ export default function PinUsedClient() {
   const pinForm = useForm<PinFormValues>({
     resolver: zodResolver(PinFormSchema),
     defaultValues: {
-      pinList: '',
+      pinNumberList: '',
     },
   });
 
@@ -55,11 +55,11 @@ export default function PinUsedClient() {
   const handleSubmit = () => {
     const formValues = pinForm.getValues();
     const data: PinUsed = {
-      pinList: [],
+      pinNumberList: [],
     };
 
     for (const [key, value] of Object.entries(formValues)) {
-      if (key === 'pinList') {
+      if (key === 'pinNumberList') {
         data[key] = excelDataToPinUsedData(value);
       } else {
         console.error('키가 존재 하지 않습니다.');
@@ -74,11 +74,11 @@ export default function PinUsedClient() {
       <form onSubmit={pinForm.handleSubmit(handleSubmit)} className="space-y-8">
         <FormField
           control={pinForm.control}
-          name="pinList"
+          name="pinNumberList"
           render={({ field }) => {
             return (
               <FormItem>
-                <FormLabel>핀번호 등록</FormLabel>
+                <FormLabel>핀번호 사용</FormLabel>
                 <FormControl>
                   <Textarea
                     {...field}
