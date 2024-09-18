@@ -4,7 +4,7 @@ import ProductForm from '../../products/product-form';
 import SaleProductCreateForm from './sale-product-create-form';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { ProductFormData } from '@/definitions';
+import { ProductFormData, SaleProductFormData } from '@/definitions';
 import { useProductListQuery } from '@/queries/product.queries';
 import { useState } from 'react';
 
@@ -30,6 +30,10 @@ export default function SaleProductCreateClient() {
     });
   };
 
+  const handleResetData = () => {
+    setSelectProductData([]);
+  };
+
   return (
     <div className="space-y-8">
       <h1>상품목록</h1>
@@ -49,32 +53,37 @@ export default function SaleProductCreateClient() {
         </ToggleGroup>
       </div>
 
-      <div className="space-y-8">
-        <h1>상품 상세</h1>
-        <SaleProductCreateForm />
+      {selectProductData.length > 0 && (
+        <div className="space-y-8">
+          <h1>상품 상세</h1>
+          <SaleProductCreateForm
+            selectProductData={selectProductData}
+            onResetData={handleResetData}
+          />
 
-        {selectProductData.length > 0 && (
-          <Tabs defaultValue={selectProductData[0]._id} className="w-full">
-            <TabsList>
+          {selectProductData.length > 0 && (
+            <Tabs defaultValue={selectProductData[0]._id} className="w-full">
+              <TabsList>
+                {selectProductData.map((d) => {
+                  return (
+                    <TabsTrigger key={d._id} value={d._id ?? ''}>
+                      {d.name}
+                    </TabsTrigger>
+                  );
+                })}
+              </TabsList>
+
               {selectProductData.map((d) => {
                 return (
-                  <TabsTrigger key={d._id} value={d._id ?? ''}>
-                    {d.name}
-                  </TabsTrigger>
+                  <TabsContent key={d._id} value={d._id ?? ''}>
+                    <ProductForm productId={d._id} disabled={true} />
+                  </TabsContent>
                 );
               })}
-            </TabsList>
-
-            {selectProductData.map((d) => {
-              return (
-                <TabsContent key={d._id} value={d._id ?? ''}>
-                  <ProductForm productId={d._id} disabled={true} />
-                </TabsContent>
-              );
-            })}
-          </Tabs>
-        )}
-      </div>
+            </Tabs>
+          )}
+        </div>
+      )}
     </div>
   );
 }

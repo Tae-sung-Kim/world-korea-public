@@ -1,5 +1,5 @@
 import { SaleProductDB } from '@/app/api/models/sale-product.model';
-import { Product, ProductStatus } from '@/definitions';
+import { Product } from '@/definitions';
 
 export type SaleProduct = SaleProductDB & {
   _id: string;
@@ -11,4 +11,5 @@ export interface SaleProductFormData {
   name: string; // 상품명
   price: string; // 판매가
   products?: Product[];
+  accessLevel: string;
 }
