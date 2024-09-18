@@ -50,7 +50,12 @@ export default function ProductSearch() {
         onKeyDown={handleKeyDown}
       />
 
-      <Button type="button" onClick={handleSearchClick}>
+      <Button
+        type="button"
+        variant="secondary"
+        size="icon"
+        onClick={handleSearchClick}
+      >
         <FaSearch />
       </Button>
     </div>

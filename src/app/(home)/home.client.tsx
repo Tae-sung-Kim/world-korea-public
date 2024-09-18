@@ -30,6 +30,7 @@ export default function HomeClient() {
                     <Image
                       alt="상품 이미지"
                       className="w-full h-full rounded-lg shadow-xl"
+                      priority={true}
                       width={170}
                       height={170}
                       src={String(images[0])}

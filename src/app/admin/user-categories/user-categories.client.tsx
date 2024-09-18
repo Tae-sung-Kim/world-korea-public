@@ -190,6 +190,7 @@ export default function UserCategoriesClient() {
                       {d._id ? (
                         <>
                           <Button
+                            variant="outline"
                             size="icon"
                             onClick={() => {
                               userCategoriesForm.handleSubmit(() => {
@@ -200,6 +201,7 @@ export default function UserCategoriesClient() {
                             <BsPencilSquare />
                           </Button>
                           <Button
+                            variant="outline"
                             size="icon"
                             onClick={() =>
                               handleUserCategoryDelete({
@@ -214,6 +216,7 @@ export default function UserCategoriesClient() {
                       ) : (
                         <>
                           <Button
+                            variant="outline"
                             size="icon"
                             type="button"
                             onClick={async () => {
@@ -229,6 +232,7 @@ export default function UserCategoriesClient() {
                             <AiOutlineUserAdd />
                           </Button>
                           <Button
+                            variant="outline"
                             size="icon"
                             onClick={() =>
                               handleUserCategoryDelete({
@@ -249,7 +253,12 @@ export default function UserCategoriesClient() {
           </>
         </TableBody>
       </Table>
-      <Button size="icon" type="button" onClick={handleRowAdd}>
+      <Button
+        variant="outline"
+        size="icon"
+        type="button"
+        onClick={handleRowAdd}
+      >
         <FaPlus />
       </Button>
     </Form>
