@@ -4,8 +4,8 @@ import qs from 'qs';
 
 class SaleProductService {
   //상품 생성
-  createSaleProduct(data: Partial<SaleProductFormData>) {
-    return http.post<Partial<SaleProductFormData>>(`/api/sale-products`, data);
+  createSaleProduct(data: SaleProductFormData) {
+    return http.post<SaleProductFormData>(`/api/sale-products`, data);
   }
 }
 

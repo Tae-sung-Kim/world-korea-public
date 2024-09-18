@@ -10,6 +10,6 @@ export interface SaleProductFormData {
   _id?: string;
   name: string; // 상품명
   price: string; // 판매가
-  products?: Product[];
+  products: string[];
   accessLevel: string;
 }

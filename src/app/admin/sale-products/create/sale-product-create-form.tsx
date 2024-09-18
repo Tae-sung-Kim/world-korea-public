@@ -21,7 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Product, ProductFormData, SaleProductFormData } from '@/definitions';
+import { ProductFormData, SaleProductFormData } from '@/definitions';
 import { addComma, removeComma } from '@/utils/number';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ChangeEvent, useMemo } from 'react';
@@ -29,7 +29,7 @@ import { useForm, ControllerRenderProps } from 'react-hook-form';
 import { z } from 'zod';
 
 const SaleProductFormSchema = z.object({
-  products: z.array(z.object({})).optional(),
+  products: z.array(z.string()),
   name: z.string().refine((d) => d.length > 0, {
     message: '상품명을 입력해 주세요.',
   }), // 상품명
@@ -76,31 +76,18 @@ export default function SaleProductCreateForm({
     defaultValues: {
       name: '', // 상품명
       accessLevel: '1', // 접근 레벨
-      // regularPrice: '0', // 정가
       price: '0', // 판매가
+      products: [],
     },
   });
 
   const handleSubmit = () => {
-    let data: Partial<SaleProductFormData> = {
-      name: '',
-      price: '0',
-      products: [],
-      accessLevel: '-1',
-    };
-    saleProductForm.setValue('products', selectProductData);
+    const products: string[] = selectProductData?.map((d) => d._id ?? '') ?? [];
+
+    saleProductForm.setValue('products', products);
     const formValues = saleProductForm.getValues();
 
-    for (const [key, value] of Object.entries(formValues)) {
-      if (key === 'products') {
-        data[key] =
-          Array.isArray(value) && value.length > 0 ? (value as Product[]) : [];
-      } else {
-        data[key] = value;
-      }
-    }
-
-    saleProductCreateMutation.mutate(data);
+    saleProductCreateMutation.mutate(formValues);
   };
 
   //가격 입력
