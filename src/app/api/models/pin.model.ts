@@ -34,7 +34,7 @@ interface PinSchemaModel extends Model<PinDB, {}, PinMethods> {
   getPinList(paginationParams: PaginationParams): Promise<PaginationResponse<Pin[]>>; // 핀 목록 반환
   getPinById(pinId: string): Promise<Pin>;  // 핀 상세 반환
   updateUsedDatePin(pinId: string, used: boolean): Promise<boolean>; // 빈 사용날짜 수정
-  updateUsedDatePinList(pinList: [string], used: boolean): Promise<boolean>; // 빈 사용날짜 수정
+  updateUsedDatePinNumberList(pinList: [string], used: boolean): Promise<boolean>; // 빈 사용날짜 수정
 }
 
 const schema = new Schema<PinDB, PinSchemaModel, PinMethods>({
@@ -110,9 +110,9 @@ schema.static('updateUsedDatePin', async function updateUsedDatePin(id, used) {
   return !!newPin;
 });
 
-schema.static('updateUsedDatePinList', async function updateUsedDatePinList(pinList, used) {
+schema.static('updateUsedDatePinNumberList', async function updateUsedDatePinNumberList(pinNumberList, used) {
   const newPin = await this.updateMany(
-    { _id: { $in: pinList }},
+    { number: { $in: pinNumberList }},
     {
       $set: {
         usedDate: used ? new Date() : null,

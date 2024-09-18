@@ -10,7 +10,7 @@ import { NextRequest, NextResponse } from 'next/server';
  */
 export async function POST(req: NextRequest) {
   try {
-    const { pinList, used = true } = await req.json();
+    const { pinNumberList, used = true } = await req.json();
 
     await connectMongo();
 
@@ -18,10 +18,7 @@ export async function POST(req: NextRequest) {
       return createResponse(HTTP_STATUS.FORBIDDEN);
     }
 
-    const existingProduct = await PinModel.updateUsedDatePinList(pinList, used);
-    if (!existingProduct) {
-      return NextResponse.json(false);
-    }
+    await PinModel.updateUsedDatePinNumberList(pinNumberList, used);
 
     return NextResponse.json(true);
   } catch (error) {
