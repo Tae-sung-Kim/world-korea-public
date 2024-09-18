@@ -4,8 +4,16 @@ import {
   PAGE_SIZE_DEFAULT,
 } from '@/definitions/pagination.constant';
 import { PaginationParams } from '@/definitions/pagination.type';
-import { Pin } from '@/definitions/pins.type';
-import { model, models, Schema, Model, Types, SortOrder, Document } from 'mongoose';
+import type { Pin } from '@/definitions/pins.type';
+import {
+  model,
+  models,
+  Schema,
+  Model,
+  Types,
+  SortOrder,
+  Document,
+} from 'mongoose';
 
 export interface PinDB {
   number: string;
@@ -31,8 +39,10 @@ type PinDocument =
 interface PinMethods {}
 
 interface PinSchemaModel extends Model<PinDB, {}, PinMethods> {
-  getPinList(paginationParams: PaginationParams): Promise<PaginationResponse<Pin[]>>; // 핀 목록 반환
-  getPinById(pinId: string): Promise<Pin>;  // 핀 상세 반환
+  getPinList(
+    paginationParams: PaginationParams
+  ): Promise<PaginationResponse<Pin[]>>; // 핀 목록 반환
+  getPinById(pinId: string): Promise<Pin>; // 핀 상세 반환
   updateUsedDatePin(pinId: string, used: boolean): Promise<boolean>; // 빈 사용날짜 수정
   updateUsedDatePinNumberList(pinList: [string], used: boolean): Promise<boolean>; // 빈 사용날짜 수정
 }
@@ -53,41 +63,50 @@ const schema = new Schema<PinDB, PinSchemaModel, PinMethods>({
   deletedAt: { type: Date },
 });
 
-schema.static('getPinList', async function getPinList({ pageNumber = PAGE_NUMBER_DEFAULT, pageSize = PAGE_SIZE_DEFAULT } = {}){
-  const skip = (pageNumber - 1) * pageSize;
-  const filter = {}
-  const sort = { createdAt: -1 as SortOrder }; // 최신순 정렬
-  
-  // 총 개수 가져오기
-  const totalItems = await this.countDocuments(filter);
+schema.static(
+  'getPinList',
+  async function getPinList({
+    pageNumber = PAGE_NUMBER_DEFAULT,
+    pageSize = PAGE_SIZE_DEFAULT,
+  } = {}) {
+    const skip = (pageNumber - 1) * pageSize;
+    const filter = {};
+    const sort = { createdAt: -1 as SortOrder }; // 최신순 정렬
 
-  // 데이터 가져오기
-  const list = await this.find(filter).sort(sort).skip(skip).limit(pageSize).populate('product');
+    // 총 개수 가져오기
+    const totalItems = await this.countDocuments(filter);
 
-  // 전체 페이지 수 계산
-  const totalPages = Math.ceil(totalItems / pageSize);
+    // 데이터 가져오기
+    const list = await this.find(filter)
+      .sort(sort)
+      .skip(skip)
+      .limit(pageSize)
+      .populate('product');
 
-  // 페이지네이션 관련 정보 계산
-  const hasPreviousPage = pageNumber > 1;
-  const hasNextPage = pageNumber < totalPages;
-  const previousPage = hasPreviousPage ? pageNumber - 1 : null;
-  const nextPage = hasNextPage ? pageNumber + 1 : null;
+    // 전체 페이지 수 계산
+    const totalPages = Math.ceil(totalItems / pageSize);
 
-  return {
-    list,
-    pageNumber,
-    pageSize,
-    totalItems,
-    totalPages,
-    hasPreviousPage,
-    hasNextPage,
-    previousPage,
-    nextPage,
-    startIndex: skip,
-    endIndex: totalItems - 1,
-  };
-  
-});
+    // 페이지네이션 관련 정보 계산
+    const hasPreviousPage = pageNumber > 1;
+    const hasNextPage = pageNumber < totalPages;
+    const previousPage = hasPreviousPage ? pageNumber - 1 : null;
+    const nextPage = hasNextPage ? pageNumber + 1 : null;
+
+    return {
+      list,
+      pageNumber,
+      pageSize,
+      totalItems,
+      totalPages,
+      hasPreviousPage,
+      hasNextPage,
+      previousPage,
+      nextPage,
+      startIndex: skip,
+      endIndex: totalItems - 1,
+    };
+  }
+);
 
 schema.static('getPinById', function getPinById(pinId) {
   return this.findOne({ _id: pinId }).populate('product');
@@ -117,15 +136,15 @@ schema.static('updateUsedDatePinNumberList', async function updateUsedDatePinNum
       $set: {
         usedDate: used ? new Date() : null,
       },
-    },
-    {
-      new: true,
-      runValidators: true,
-    }
-  );
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
 
-  return true;
-});
+    return true;
+  }
+);
 
 const Pin =
   (models.Pin as PinSchemaModel) || model<PinDB, PinSchemaModel>('Pin', schema);

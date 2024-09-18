@@ -1,6 +1,6 @@
 'use client';
 
-import { useProductListQuery, useUsedPinListMutation } from '../../queries';
+import { useUsedPinListMutation } from '../../queries';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -10,26 +10,13 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { ProductFormData } from '@/definitions';
-import { PinData } from '@/definitions/pins.type';
+import { PinUsed } from '@/definitions/pins.type';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 const PinFormSchema = z.object({
-  productId: z.string().refine((d) => !!d, {
-    message: '상품을 선택해 주세요.',
-  }),
   pinList: z
     .string()
     .refine((d) => d.length > 0, { message: '핀 번호를 입력해주세요' }),
@@ -37,38 +24,29 @@ const PinFormSchema = z.object({
 
 type PinFormValues = z.infer<typeof PinFormSchema>;
 
-type PinUsed = {
-  productId: string;
-  pinList: PinData[];
-};
-
 export default function PinUsedClient() {
-  const productData = useProductListQuery();
-
   const handleResetFormData = () => {
     pinForm.reset();
   };
 
-  const usedPinListMutation = useUsedPinListMutation();
+  const usedPinListMutation = useUsedPinListMutation({
+    onSuccess: handleResetFormData,
+  });
 
   const pinForm = useForm<PinFormValues>({
     resolver: zodResolver(PinFormSchema),
     defaultValues: {
-      productId: '',
       pinList: '',
     },
   });
 
-  const excelDataToPinUsedData = (value: string): PinData[] => {
+  const excelDataToPinUsedData = (value: string): string[] => {
     const splitLineValue = value.split('\n');
 
-    return splitLineValue.reduce((acc: PinData[], cur: string) => {
+    return splitLineValue.reduce((acc: string[], cur: string) => {
       const splitTabValue = cur.split('\t');
 
-      acc.push({
-        pinNumber: splitTabValue[0].replaceAll('-', ''),
-        endDate: new Date(splitTabValue[1] ?? new Date()),
-      });
+      acc.push(splitTabValue[0].replaceAll('-', ''));
 
       return acc;
     }, []);
@@ -77,62 +55,23 @@ export default function PinUsedClient() {
   const handleSubmit = () => {
     const formValues = pinForm.getValues();
     const data: PinUsed = {
-      productId: '',
       pinList: [],
     };
 
     for (const [key, value] of Object.entries(formValues)) {
       if (key === 'pinList') {
         data[key] = excelDataToPinUsedData(value);
-      } else if (key === 'productId') {
-        data[key] = value;
       } else {
         console.error('키가 존재 하지 않습니다.');
       }
     }
+
     usedPinListMutation.mutate(data);
   };
 
-  useEffect(() => {
-    if (Array.isArray(productData.list) && productData.list.length > 0) {
-      pinForm.reset({
-        productId: productData.list[0]?._id,
-      });
-    }
-  }, [productData.list, pinForm]);
-
   return (
     <Form {...pinForm}>
-      <form onSubmit={pinForm.handleSubmit(handleSubmit)} className="space-y-4">
-        <FormField
-          control={pinForm.control}
-          name="productId"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>상품</FormLabel>
-              <FormControl>
-                <Select onValueChange={field.onChange} value={field.value}>
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="선택" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      {productData.list.map((d: ProductFormData) => {
-                        return (
-                          <SelectItem key={d._id} value={String(d._id)}>
-                            {d.name}
-                          </SelectItem>
-                        );
-                      })}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
+      <form onSubmit={pinForm.handleSubmit(handleSubmit)} className="space-y-8">
         <FormField
           control={pinForm.control}
           name="pinList"
@@ -144,7 +83,7 @@ export default function PinUsedClient() {
                   <Textarea
                     {...field}
                     className="h-[400px]"
-                    placeholder={`엑셀에서 복사한 핀 번호와 날짜를 붙여넣기 해주세요.`}
+                    placeholder={`엑셀에서 복사한 핀 번호를 붙여넣기 해주세요.`}
                   ></Textarea>
                 </FormControl>
                 <FormMessage />
@@ -154,7 +93,7 @@ export default function PinUsedClient() {
         />
 
         <div className="flex justify-center pt-4">
-          <Button type="submit">핀번호 사용</Button>
+          <Button>핀번호 사용</Button>
         </div>
       </form>
     </Form>
