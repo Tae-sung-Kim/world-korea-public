@@ -1,6 +1,10 @@
 'use client';
 
-import { useCreateProductMutation, useUpdateProductMutation } from '../queries';
+import {
+  useCreateProductMutation,
+  useUpdateProductMutation,
+  useUserCategoryListQuery,
+} from '../queries';
 import { descriptionShcema, priceShcema } from './product.schema';
 import { Button } from '@/components/ui/button';
 import {
@@ -89,11 +93,12 @@ type ProductImage = {
 };
 
 type Props = {
-  userCategoryList: UserCategory[] | undefined;
   productId?: string;
 };
 
-export default function ProductForm({ userCategoryList, productId }: Props) {
+export default function ProductForm({ productId }: Props) {
+  const userCategoryList = useUserCategoryListQuery();
+
   const [productImageList, setProductImageList] = useState<ProductImage[]>([]);
 
   //상품 등록 후 reset
