@@ -152,6 +152,7 @@ export default function PinClient() {
                 </TableCell>
                 <TableCell className="text-center">
                   <Button
+                    variant="outline"
                     size="icon"
                     onClick={() =>
                       handleDeletePin({
