@@ -93,13 +93,27 @@ export function useUsedPinMutation() {
   });
 }
 
-export function useUsedPinListMutation() {
+export function useUsedPinListMutation({
+  onSuccess,
+  onError,
+  onSettled,
+}: FunctionProps) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (pinList: string[]) => pinsService.usedDatePinList(pinList),
+    mutationFn: ({ pinList }: { pinList: string[] }) =>
+      pinsService.usedDatePinList({ pinList }),
     onSuccess: () => {
+      onSuccess && onSuccess();
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
+      toast.success('핀 사용이 완료 되었습니다.');
     },
+    onError: () => {
+      onError && onError();
+      toast.error(
+        '핀 사용중 에러가 발생했습니다.<br/>잠시 후 다시 시도해주세요.'
+      );
+    },
+    onSettled,
   });
 }

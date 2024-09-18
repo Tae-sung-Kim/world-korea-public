@@ -19,3 +19,7 @@ export interface Pin {
 }
 
 export type SearchParams = Record<string, number | string | undefined>;
+
+export type PinUsed = {
+  pinList: string[];
+};

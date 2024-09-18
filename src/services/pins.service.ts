@@ -32,8 +32,8 @@ class PinsService {
   }
 
   //핀 사용 여부
-  usedDatePinList(pinList: string[]) {
-    return http.post(`api/pins/used`, pinList);
+  usedDatePinList({ pinList }: { pinList: string[] }) {
+    return http.post(`api/pins/used`, { pinList });
   }
 }
 
