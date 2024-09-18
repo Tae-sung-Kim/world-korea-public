@@ -39,6 +39,7 @@ import {
   Controller,
   ControllerRenderProps,
 } from 'react-hook-form';
+import { FaMinus, FaPlus } from 'react-icons/fa';
 import { z } from 'zod';
 
 const ProductFormSchema = z.object({
@@ -333,12 +334,13 @@ export default function ProductForm({ productId, disabled = false }: Props) {
         <div className="flex items-center gap-4">
           <Label>이미지</Label>
           <Button
-            className="size-5"
+            variant="outline"
+            size="icon"
             type="button"
             disabled={disabled}
             onClick={() => handleAddImage()}
           >
-            +
+            <FaPlus />
           </Button>
         </div>
 
@@ -386,11 +388,13 @@ export default function ProductForm({ productId, disabled = false }: Props) {
                 </>
               )}
               <Button
+                variant="outline"
+                size="icon"
                 type="button"
                 disabled={disabled}
                 onClick={() => handleDeleteImage(idx)}
               >
-                -
+                <FaMinus />
               </Button>
             </div>
           );

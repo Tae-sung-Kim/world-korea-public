@@ -120,6 +120,8 @@ export default function ProductListClient() {
               <TableCell className="text-center">
                 <Button
                   type="button"
+                  variant="outline"
+                  size="icon"
                   onClick={(e: FormEvent<HTMLButtonElement>) =>
                     handleDeleteProduct({
                       e,
