@@ -1,6 +1,6 @@
 import { PageFilter, PaginationProp } from '@/app/admin/queries/queries.type';
 import { PaginationResponse } from '@/definitions';
-import { Pin } from '@/definitions/pins.type';
+import { Pin, PinUsed } from '@/definitions/pins.type';
 import http from '@/services';
 import qs from 'qs';
 
@@ -32,8 +32,8 @@ class PinsService {
   }
 
   //핀 사용 여부
-  usedDatePinList({ pinList }: { pinList: string[] }) {
-    return http.post(`api/pins/used`, { pinList });
+  usedDatePinList({ pinNumberList }: PinUsed) {
+    return http.post(`api/pins/used`, { pinNumberList });
   }
 }
 

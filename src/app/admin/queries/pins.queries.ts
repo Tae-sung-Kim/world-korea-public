@@ -1,6 +1,6 @@
 import { FunctionProps, PageFilter, PaginationProp } from './queries.type';
 import { PaginationResponse } from '@/definitions';
-import { Pin } from '@/definitions/pins.type';
+import { Pin, PinUsed } from '@/definitions/pins.type';
 import pinsService from '@/services/pins.service';
 import {
   keepPreviousData,
@@ -101,8 +101,8 @@ export function useUsedPinListMutation({
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ pinList }: { pinList: string[] }) =>
-      pinsService.usedDatePinList({ pinList }),
+    mutationFn: ({ pinNumberList }: PinUsed) =>
+      pinsService.usedDatePinList({ pinNumberList }),
     onSuccess: () => {
       onSuccess && onSuccess();
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
