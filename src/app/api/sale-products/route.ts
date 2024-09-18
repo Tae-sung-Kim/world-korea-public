@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
       return createResponse(HTTP_STATUS.FORBIDDEN);
     }
 
-    const { name, products, price } = await req.json();
+    const { name, accessLevel, products, price } = await req.json();
 
     if (!Array.isArray(products) || products.length === 0) {
       return createResponse(HTTP_STATUS.BAD_REQUEST);
@@ -50,6 +50,7 @@ export async function POST(req: NextRequest) {
 
     const newProduct = new SaleProductModel({
       name,
+      accessLevel,
       products,
       price,
     });

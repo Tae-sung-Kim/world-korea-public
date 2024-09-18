@@ -17,6 +17,7 @@ import {
 
 export interface SaleProductDB {
   name: string; // 상품 판매명
+  accessLevel: number; // 접근 레벨
   products: Types.ObjectId[]; // 상품 목록
   price: number; // 판매가
   createdAt: Date;
@@ -54,6 +55,7 @@ const schema = new Schema<
   SaleProductMethods
 >({
   name: { type: String, required: true },
+  accessLevel: { type: Number, default: 1 },
   products: [{ type: Schema.Types.ObjectId, ref: 'Product' }],
   price: { type: Number, required: true }, // 판매가
   createdAt: { type: Date, default: Date.now },
