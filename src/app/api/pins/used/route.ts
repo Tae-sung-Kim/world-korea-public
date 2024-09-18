@@ -1,17 +1,16 @@
-import PinModel from '../../../models/pin.model';
-import { requiredIsAdmin } from '../../../utils/auth.util';
-import { createResponse } from '../../../utils/http.util';
+import PinModel from '../../models/pin.model';
+import { requiredIsAdmin } from '../../utils/auth.util';
+import { createResponse } from '../../utils/http.util';
 import connectMongo from '@/app/api/libs/database';
 import { HTTP_STATUS } from '@/definitions';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
- * 핀 사용날짜 변경 (핀 단일)
+ * 핀 사용날짜 변경 (핀 목록)
  */
-export async function PATCH(req: NextRequest, ctx: { params: { id: string } }) {
+export async function POST(req: NextRequest) {
   try {
-    const pinId = ctx.params.id;
-    const { used } = await req.json();
+    const { pinList, used = true } = await req.json();
 
     await connectMongo();
 
@@ -19,7 +18,7 @@ export async function PATCH(req: NextRequest, ctx: { params: { id: string } }) {
       return createResponse(HTTP_STATUS.FORBIDDEN);
     }
 
-    const existingProduct = await PinModel.updateUsedDatePin(pinId, used);
+    const existingProduct = await PinModel.updateUsedDatePinList(pinList, used);
     if (!existingProduct) {
       return NextResponse.json(false);
     }
