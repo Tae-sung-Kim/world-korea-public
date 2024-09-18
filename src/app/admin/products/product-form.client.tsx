@@ -7,7 +7,5 @@ export default function ProductFormClient({
 }: {
   productId?: string;
 }) {
-  //회원 등급 조회
-
   return <ProductForm productId={productId} />;
 }

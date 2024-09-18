@@ -1,5 +1,7 @@
 'use client';
 
+import ProductForm from '../../products/product-form';
+import SaleProductCreateForm from './sale-product-create-form';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { ProductFormData } from '@/definitions';
@@ -47,10 +49,12 @@ export default function SaleProductCreateClient() {
         </ToggleGroup>
       </div>
 
-      <div>
+      <div className="space-y-8">
         <h1>상품 상세</h1>
+        <SaleProductCreateForm />
+
         {selectProductData.length > 0 && (
-          <Tabs defaultValue="account" className="w-full">
+          <Tabs defaultValue={selectProductData[0]._id} className="w-full">
             <TabsList>
               {selectProductData.map((d) => {
                 return (
@@ -59,13 +63,12 @@ export default function SaleProductCreateClient() {
                   </TabsTrigger>
                 );
               })}
-              {/* <TabsTrigger value="password">Password</TabsTrigger> */}
             </TabsList>
 
             {selectProductData.map((d) => {
               return (
                 <TabsContent key={d._id} value={d._id ?? ''}>
-                  {d.description1}
+                  <ProductForm productId={d._id} disabled={true} />
                 </TabsContent>
               );
             })}

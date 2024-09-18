@@ -1,11 +1,11 @@
 'use client';
 
+import { descriptionShcema, priceShcema } from '../../products/product.schema';
 import {
   useCreateProductMutation,
   useUpdateProductMutation,
   useUserCategoryListQuery,
-} from '../queries';
-import { descriptionShcema, priceShcema } from './product.schema';
+} from '../../queries';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -89,10 +89,9 @@ type ProductImage = {
 
 type Props = {
   productId?: string;
-  disabled?: boolean;
 };
 
-export default function ProductForm({ productId, disabled = false }: Props) {
+export default function SaleProductCreateForm({ productId }: Props) {
   const userCategoryList = useUserCategoryListQuery();
 
   const [productImageList, setProductImageList] = useState<ProductImage[]>([]);
@@ -103,13 +102,13 @@ export default function ProductForm({ productId, disabled = false }: Props) {
     productForm.reset();
   };
 
-  //상품 추가
-  const createProductMutation = useCreateProductMutation({
-    onSuccess: handleResetForm,
-  });
+  // //상품 추가
+  // const createProductMutation = useCreateProductMutation({
+  //   onSuccess: handleResetForm,
+  // });
 
-  //상품 수정
-  const updateProductMutation = useUpdateProductMutation({});
+  // //상품 수정
+  // const updateProductMutation = useUpdateProductMutation({});
 
   const productForm = useForm<ProductFormValues>({
     resolver: zodResolver(ProductFormSchema),
@@ -179,11 +178,11 @@ export default function ProductForm({ productId, disabled = false }: Props) {
       }
     }
 
-    if (productId) {
-      updateProductMutation.mutate({ id: productId, data });
-    } else {
-      createProductMutation.mutate(data);
-    }
+    // if (productId) {
+    //   updateProductMutation.mutate({ id: productId, data });
+    // } else {
+    //   createProductMutation.mutate(data);
+    // }
   };
 
   const handleAddImage = () => {
@@ -252,7 +251,6 @@ export default function ProductForm({ productId, disabled = false }: Props) {
                   type="text"
                   placeholder="상품명을 입력해 주세요."
                   value={field.value ?? ''}
-                  disabled={disabled}
                 />
               </FormControl>
               <FormMessage />
@@ -268,11 +266,7 @@ export default function ProductForm({ productId, disabled = false }: Props) {
               <FormItem>
                 <FormLabel>Level</FormLabel>
                 <FormControl>
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value}
-                    disabled={disabled}
-                  >
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <SelectTrigger className="w-[180px]">
                       <SelectValue placeholder="선택" />
                     </SelectTrigger>
@@ -302,11 +296,7 @@ export default function ProductForm({ productId, disabled = false }: Props) {
             <FormItem>
               <FormLabel>상태</FormLabel>
               <FormControl>
-                <Select
-                  onValueChange={field.onChange}
-                  value={field.value}
-                  disabled={disabled}
-                >
+                <Select onValueChange={field.onChange} value={field.value}>
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="선택" />
                   </SelectTrigger>
@@ -335,7 +325,6 @@ export default function ProductForm({ productId, disabled = false }: Props) {
           <Button
             className="size-5"
             type="button"
-            disabled={disabled}
             onClick={() => handleAddImage()}
           >
             +
@@ -385,11 +374,7 @@ export default function ProductForm({ productId, disabled = false }: Props) {
                   />
                 </>
               )}
-              <Button
-                type="button"
-                disabled={disabled}
-                onClick={() => handleDeleteImage(idx)}
-              >
+              <Button type="button" onClick={() => handleDeleteImage(idx)}>
                 -
               </Button>
             </div>
@@ -409,7 +394,6 @@ export default function ProductForm({ productId, disabled = false }: Props) {
                       {...field}
                       placeholder="정가를 입력해 주세요."
                       value={addComma(field.value)}
-                      disabled={disabled}
                       onChange={(e) => handlePriceChange(e, { ...field })}
                     />
                   </FormControl>
@@ -429,7 +413,6 @@ export default function ProductForm({ productId, disabled = false }: Props) {
                     {...field}
                     placeholder="할인 가격을 입력해 주세요."
                     value={addComma(field.value)}
-                    disabled={disabled}
                     onChange={(e) => handlePriceChange(e, { ...field })}
                   />
                   {/* 할인율 */}
@@ -449,7 +432,6 @@ export default function ProductForm({ productId, disabled = false }: Props) {
                     {...field}
                     placeholder="판매가를 입력해 주세요."
                     value={addComma(field.value)}
-                    disabled={disabled}
                     onChange={(e) => handlePriceChange(e, { ...field })}
                   />
                 </FormControl>
@@ -467,9 +449,8 @@ export default function ProductForm({ productId, disabled = false }: Props) {
               <FormLabel>추가 정보1</FormLabel>
               <FormControl>
                 <Textarea
-                  {...field}
                   placeholder="추가 정보를 입력해주세요."
-                  disabled={disabled}
+                  {...field}
                 ></Textarea>
               </FormControl>
               <FormMessage />
@@ -484,9 +465,8 @@ export default function ProductForm({ productId, disabled = false }: Props) {
               <FormLabel>추가 정보2</FormLabel>
               <FormControl>
                 <Textarea
-                  {...field}
                   placeholder="추가 정보를 입력해주세요."
-                  disabled={disabled}
+                  {...field}
                 ></Textarea>
               </FormControl>
               <FormMessage />
@@ -501,9 +481,8 @@ export default function ProductForm({ productId, disabled = false }: Props) {
               <FormLabel>추가 정보3</FormLabel>
               <FormControl>
                 <Textarea
-                  {...field}
                   placeholder="추가 정보를 입력해주세요."
-                  disabled={disabled}
+                  {...field}
                 ></Textarea>
               </FormControl>
               <FormMessage />
@@ -518,9 +497,8 @@ export default function ProductForm({ productId, disabled = false }: Props) {
               <FormLabel>추가 정보4</FormLabel>
               <FormControl>
                 <Textarea
-                  {...field}
                   placeholder="추가 정보를 입력해주세요."
-                  disabled={disabled}
+                  {...field}
                 ></Textarea>
               </FormControl>
               <FormMessage />
@@ -528,11 +506,9 @@ export default function ProductForm({ productId, disabled = false }: Props) {
           )}
         />
 
-        {!disabled && (
-          <div className="flex justify-center pt-4">
-            <Button type="submit">상품 {productId ? '수정' : '등록'}</Button>
-          </div>
-        )}
+        <div className="flex justify-center pt-4">
+          <Button type="submit">상품 {productId ? '수정' : '등록'}</Button>
+        </div>
       </form>
     </Form>
   );
