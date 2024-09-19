@@ -1,5 +1,5 @@
 import { FunctionProps, PageFilter, PaginationProp } from './queries.type';
-import { PaginationResponse, ProductFormData } from '@/definitions';
+import { PaginationResponse, SaleProductFormData } from '@/definitions';
 import saleProductService from '@/services/sale-product.service';
 import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
@@ -9,7 +9,7 @@ const QUERY_KEY = 'admin-sale-product';
 export function useSaleProductListQuery(
   paginationParam?: PaginationProp<PageFilter>
 ) {
-  const fallback: PaginationResponse<ProductFormData> = {
+  const fallback: PaginationResponse<SaleProductFormData<string>> = {
     pageNumber: -1,
     pageSize: -1,
     list: [],
@@ -47,4 +47,15 @@ export function useCreateSaleProductMutation({
     onError,
     onSettled,
   });
+}
+
+export function useDetailSaleProductQuery(id: string) {
+  const fallback: Partial<SaleProductFormData<string>> = {};
+
+  const { data = fallback } = useQuery({
+    queryKey: [QUERY_KEY],
+    queryFn: () => saleProductService.detailSaleProudct(id),
+  });
+
+  return data;
 }

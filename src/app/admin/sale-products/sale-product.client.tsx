@@ -40,7 +40,7 @@ export default function SaleProductListClient() {
 
   //테이블 리스트 클릭 -> 상세
   const handleProductItemClick = (id: string = '') => {
-    router.push(`/admin/products/${id}`);
+    router.push(`/admin/sale-products/${id}`);
   };
 
   const deleteProductMutation = useDeleteProductMutation();
@@ -74,6 +74,7 @@ export default function SaleProductListClient() {
           <TableRow>
             <TableHead className="w-[70px]">번호</TableHead>
             <TableHead className="">판매 상품명</TableHead>
+            <TableHead className="w-[150px]">상세 상품명</TableHead>
             <TableHead className="w-[80px]">level</TableHead>
             <TableHead className="w-[100px] text-right">판매가</TableHead>
             <TableHead className="w-[70px] text-right">재고</TableHead>
@@ -81,49 +82,63 @@ export default function SaleProductListClient() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {productData.list.map((product, idx) => (
-            <TableRow
-              key={product._id}
-              className="cursor-pointer"
-              onClick={() => handleProductItemClick(product._id)}
-            >
-              <TableCell>{(pageNumber - 1) * pageSize + idx + 1}</TableCell>
-              <TableCell className="font-medium">{product.name}</TableCell>
-              <TableCell>
-                {
-                  userCategoryList?.find(
-                    (f) => f.level === String(product.accessLevel)
-                  )?.name
-                }
-              </TableCell>
-              <TableCell className="text-right">
-                {addComma(product.price)} 원
-              </TableCell>
-              <TableCell className="text-right">
-                {addComma(product.pinCount ?? 0)} 개
-              </TableCell>
-              <TableCell className="text-center">
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="icon"
-                  onClick={(e: FormEvent<HTMLButtonElement>) =>
-                    handleDeleteProduct({
-                      e,
-                      id: product._id ?? '',
-                      title: product.name,
-                    })
+          {productData.list.map((data, idx) => {
+            const packageDetailName = data.products.map((d) => {
+              if (typeof d === 'string') {
+                return d;
+              } else {
+                return d.name;
+              }
+            });
+
+            return (
+              <TableRow
+                key={data._id}
+                className="cursor-pointer"
+                onClick={() => handleProductItemClick(data._id)}
+              >
+                <TableCell>{(pageNumber - 1) * pageSize + idx + 1}</TableCell>
+                <TableCell className="font-medium">{data.name}</TableCell>
+                <TableCell className="">
+                  {packageDetailName.join('/')}
+                </TableCell>
+                <TableCell>
+                  {
+                    userCategoryList?.find(
+                      (f) => f.level === String(data.accessLevel)
+                    )?.name
                   }
-                >
-                  <RiDeleteBin6Line />
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
+                </TableCell>
+                <TableCell className="text-right">
+                  {addComma(data.price)} 원
+                </TableCell>
+                <TableCell className="text-right">
+                  재고 있어야 하나?
+                  {/* {addComma(data.pinCount ?? 0)} 개 */}
+                </TableCell>
+                <TableCell className="text-center">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    onClick={(e: FormEvent<HTMLButtonElement>) =>
+                      handleDeleteProduct({
+                        e,
+                        id: data._id ?? '',
+                        title: data.name,
+                      })
+                    }
+                  >
+                    <RiDeleteBin6Line />
+                  </Button>
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
         <TableFooter>
           <TableRow>
-            <TableCell colSpan={5}>총 상품</TableCell>
+            <TableCell colSpan={6}>총 상품</TableCell>
             <TableCell className="text-right">
               {addComma(productData.totalItems)} 개
             </TableCell>

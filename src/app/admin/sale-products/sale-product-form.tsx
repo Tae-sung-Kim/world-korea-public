@@ -47,10 +47,10 @@ type SaleProductFormValues = z.infer<typeof SaleProductFormSchema>;
 type Props = {
   selectProductData?: ProductFormData[];
   productId?: string;
-  onResetData: () => void;
+  onResetData?: () => void;
 };
 
-export default function SaleProductCreateForm({
+export default function SaleProductForm({
   selectProductData,
   productId,
   onResetData,
@@ -59,7 +59,7 @@ export default function SaleProductCreateForm({
 
   //상품 등록 후 reset
   const handleResetForm = () => {
-    onResetData();
+    onResetData && onResetData();
     saleProductForm.reset();
   };
   const saleProductCreateMutation = useCreateSaleProductMutation({

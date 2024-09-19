@@ -6,10 +6,17 @@ export type SaleProduct = SaleProductDB & {
   products: Product[];
 };
 
-export interface SaleProductFormData {
+export type PackageDetailName = {
+  _id: string;
+  name: string;
+};
+
+export interface SaleProductFormData<T> {
   _id?: string;
   name: string; // 상품명
   price: string; // 판매가
-  products: string[];
+  products: T[];
   accessLevel: string;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
 }
