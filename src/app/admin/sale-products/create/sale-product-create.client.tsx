@@ -1,6 +1,6 @@
 'use client';
 
-import SaleProductCreateForm from '../sale-product-form';
+import SaleProductCreateForm from './sale-product-create-form';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { ProductFormData } from '@/definitions';
 import { useProductListQuery } from '@/queries/product.queries';

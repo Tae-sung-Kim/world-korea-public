@@ -1,4 +1,4 @@
-import SaleProductForm from '../sale-product-form';
+import SaleProductForm from '../create/sale-product-create-form';
 
 export default function SaleProductDetailPage({
   params,

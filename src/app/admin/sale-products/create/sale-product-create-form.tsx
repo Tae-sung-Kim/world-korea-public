@@ -1,8 +1,11 @@
 'use client';
 
-import { priceShcema } from '../products/product.schema';
-import { useUserCategoryListQuery } from '../queries';
-import { useCreateSaleProductMutation } from '../queries/sale-product.queries';
+import { priceShcema } from '../../products/product.schema';
+import { useUserCategoryListQuery } from '../../queries';
+import {
+  useCreateSaleProductMutation,
+  useDetailSaleProductQuery,
+} from '../../queries/sale-product.queries';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -25,7 +28,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ProductFormData } from '@/definitions';
 import { addComma, removeComma } from '@/utils/number';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ChangeEvent, useMemo } from 'react';
+import { ChangeEvent, useEffect, useMemo } from 'react';
 import { useForm, ControllerRenderProps } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -50,9 +53,9 @@ type Props = {
   onResetData?: () => void;
 };
 
-export default function SaleProductForm({
+export default function SaleProductCreateForm({
   selectProductData,
-  productId,
+  productId = '',
   onResetData,
 }: Props) {
   const userCategoryList = useUserCategoryListQuery();
@@ -62,9 +65,13 @@ export default function SaleProductForm({
     onResetData && onResetData();
     saleProductForm.reset();
   };
+
+  //상품 생성
   const saleProductCreateMutation = useCreateSaleProductMutation({
     onSuccess: handleResetForm,
   });
+
+  const saleDetailProductData = useDetailSaleProductQuery(productId);
 
   const regularPrice = useMemo(
     () =>
@@ -102,6 +109,12 @@ export default function SaleProductForm({
       field.onChange(String(removeComma(e.target.value)));
     }
   };
+
+  // useEffect(() => {
+  //   if (Object.keys(saleDetailProductData).length > 0) {
+  //     saleProductForm.reset(saleDetailProductData);
+  //   }
+  // }, [saleDetailProductData]);
 
   return (
     <div className="space-y-8">

@@ -2,6 +2,7 @@ import { FunctionProps, PageFilter, PaginationProp } from './queries.type';
 import {
   PackageDetailName,
   PaginationResponse,
+  ProductFormData,
   SaleProductFormData,
 } from '@/definitions';
 import saleProductService from '@/services/sale-product.service';
@@ -54,7 +55,7 @@ export function useCreateSaleProductMutation({
 }
 
 export function useDetailSaleProductQuery(id: string) {
-  const fallback: Partial<SaleProductFormData<string>> = {};
+  const fallback: Partial<SaleProductFormData<ProductFormData>> = {};
 
   const { data = fallback } = useQuery({
     queryKey: [QUERY_KEY],
