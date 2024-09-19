@@ -27,7 +27,6 @@ export async function GET(req: NextRequest) {
     });
     return NextResponse.json(paginationResponse);
   } catch (error) {
-    console.log(error.stack);
     return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
   }
 }
