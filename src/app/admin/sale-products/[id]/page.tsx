@@ -1,4 +1,4 @@
-import SaleProductForm from '../create/sale-product-create-form';
+import SaleProductDetailForm from './sale-product-detail-form';
 
 export default function SaleProductDetailPage({
   params,
@@ -7,5 +7,5 @@ export default function SaleProductDetailPage({
     id: string;
   };
 }) {
-  return <SaleProductForm productId={params.id} />;
+  return <SaleProductDetailForm productId={params.id} />;
 }
