@@ -83,13 +83,7 @@ export default function SaleProductListClient() {
         </TableHeader>
         <TableBody>
           {productData.list.map((data, idx) => {
-            const packageDetailName = data.products.map((d) => {
-              if (typeof d === 'string') {
-                return d;
-              } else {
-                return d.name;
-              }
-            });
+            const packageDetailName = data.products.map((d) => d.name);
 
             return (
               <TableRow
