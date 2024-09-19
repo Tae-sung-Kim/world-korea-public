@@ -1,3 +1,4 @@
+import '@/app/api/models/product.model';
 import {
   PAGE_NUMBER_DEFAULT,
   PAGE_SIZE_DEFAULT,
@@ -93,7 +94,10 @@ schema.static(
 
     // 데이터 가져오기
     let list = (
-      await this.find(filter).sort(sort).skip(skip).limit(pageSize)
+      await this.find(filter).sort(sort).skip(skip).limit(pageSize).populate({
+        path: 'products',
+        select: '_id name',
+      })
     ).map((d) => d.toObject());
 
     // 전체 페이지 수 계산
