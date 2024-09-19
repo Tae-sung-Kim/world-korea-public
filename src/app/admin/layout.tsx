@@ -41,7 +41,7 @@ export default async function AdminLayout({
               </span>
               <ul className="mt-2">
                 <li className="text-sm mt-[2px] text-gray-600">
-                  <Link href="/admin/products">판매 목록</Link>
+                  <Link href="/admin/sale-products">판매 목록</Link>
                 </li>
                 <li className="text-sm mt-[2px] text-gray-600">
                   <Link href="/admin/sale-products/create">판매 등록</Link>

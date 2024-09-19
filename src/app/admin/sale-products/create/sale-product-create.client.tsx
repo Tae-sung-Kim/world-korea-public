@@ -1,10 +1,8 @@
 'use client';
 
-import ProductForm from '../../products/product-form';
-import SaleProductCreateForm from './sale-product-create-form';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import SaleProductCreateForm from '../sale-product-create-form';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { ProductFormData, SaleProductFormData } from '@/definitions';
+import { ProductFormData } from '@/definitions';
 import { useProductListQuery } from '@/queries/product.queries';
 import { useState } from 'react';
 
@@ -53,37 +51,13 @@ export default function SaleProductCreateClient() {
         </ToggleGroup>
       </div>
 
-      {selectProductData.length > 0 && (
-        <div className="space-y-8">
-          <h1>상품 상세</h1>
-          <SaleProductCreateForm
-            selectProductData={selectProductData}
-            onResetData={handleResetData}
-          />
-
-          {selectProductData.length > 0 && (
-            <Tabs defaultValue={selectProductData[0]._id} className="w-full">
-              <TabsList>
-                {selectProductData.map((d) => {
-                  return (
-                    <TabsTrigger key={d._id} value={d._id ?? ''}>
-                      {d.name}
-                    </TabsTrigger>
-                  );
-                })}
-              </TabsList>
-
-              {selectProductData.map((d) => {
-                return (
-                  <TabsContent key={d._id} value={d._id ?? ''}>
-                    <ProductForm productId={d._id} disabled={true} />
-                  </TabsContent>
-                );
-              })}
-            </Tabs>
-          )}
-        </div>
-      )}
+      <div className="space-y-8">
+        <h1>상품 상세</h1>
+        <SaleProductCreateForm
+          selectProductData={selectProductData}
+          onResetData={handleResetData}
+        />
+      </div>
     </div>
   );
 }
