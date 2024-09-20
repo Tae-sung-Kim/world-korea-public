@@ -59,7 +59,7 @@ export function useDetailSaleProductQuery(id: string) {
 
   const { data = fallback } = useQuery({
     queryKey: [QUERY_KEY],
-    queryFn: () => saleProductService.detailSaleProudct(id),
+    queryFn: () => saleProductService.getDetailSaleProudct(id),
   });
 
   return data;

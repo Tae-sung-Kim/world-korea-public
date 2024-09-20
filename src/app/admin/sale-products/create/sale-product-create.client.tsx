@@ -1,6 +1,6 @@
 'use client';
 
-import SaleProductCreateForm from './sale-product-create-form';
+import SaleProductForm from '../sale-product-form';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { ProductFormData } from '@/definitions';
 import { useProductListQuery } from '@/queries/product.queries';
@@ -51,13 +51,17 @@ export default function SaleProductCreateClient() {
         </ToggleGroup>
       </div>
 
-      <div className="space-y-8">
-        <h1>상품 상세</h1>
-        <SaleProductCreateForm
-          selectProductData={selectProductData}
-          onResetData={handleResetData}
-        />
-      </div>
+      {selectProductData.length > 0 ? (
+        <div className="space-y-8">
+          <h1>상품 상세</h1>
+          <SaleProductForm
+            selectProductData={selectProductData}
+            onResetData={handleResetData}
+          />
+        </div>
+      ) : (
+        <div>상품을 선택해주세요.</div>
+      )}
     </div>
   );
 }

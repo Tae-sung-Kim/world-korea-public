@@ -24,7 +24,7 @@ class SaleProductService {
   }
 
   //판매 상세
-  detailSaleProudct(id: string) {
+  getDetailSaleProudct(id: string) {
     return http.get<SaleProductFormData<ProductFormData>>(
       `/api/sale-products/${id}`
     );

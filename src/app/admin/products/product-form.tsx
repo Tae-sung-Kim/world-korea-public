@@ -333,15 +333,16 @@ export default function ProductForm({ productId, disabled = false }: Props) {
 
         <div className="flex items-center gap-4">
           <Label>이미지</Label>
-          <Button
-            variant="outline"
-            size="icon"
-            type="button"
-            disabled={disabled}
-            onClick={() => handleAddImage()}
-          >
-            <FaPlus />
-          </Button>
+          {!disabled && (
+            <Button
+              variant="outline"
+              size="icon"
+              type="button"
+              onClick={() => handleAddImage()}
+            >
+              <FaPlus />
+            </Button>
+          )}
         </div>
 
         {productImages.fields.map((d, idx) => {
@@ -387,15 +388,16 @@ export default function ProductForm({ productId, disabled = false }: Props) {
                   />
                 </>
               )}
-              <Button
-                variant="outline"
-                size="icon"
-                type="button"
-                disabled={disabled}
-                onClick={() => handleDeleteImage(idx)}
-              >
-                <FaMinus />
-              </Button>
+              {!disabled && (
+                <Button
+                  variant="outline"
+                  size="icon"
+                  type="button"
+                  onClick={() => handleDeleteImage(idx)}
+                >
+                  <FaMinus />
+                </Button>
+              )}
             </div>
           );
         })}
