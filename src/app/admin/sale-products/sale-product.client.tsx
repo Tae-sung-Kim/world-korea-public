@@ -36,8 +36,6 @@ export default function SaleProductListClient() {
     filter,
   });
 
-  console.log(saleProductData);
-
   //유저 레벨
   const userCategoryList = useUserCategoryListQuery();
 
