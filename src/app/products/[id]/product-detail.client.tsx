@@ -1,15 +1,9 @@
 'use client';
 
+import ProductDetailInfo from './product-detail-info';
 import ProductDetailModal from './product-detail-modal';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from '@/components/ui/carousel';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   Form,
@@ -36,23 +30,23 @@ import {
   SelectValue,
   SelectTrigger,
 } from '@/components/ui/select';
-import { MODAL_TYPE, useModalContext } from '@/contexts/modal.context';
 import { PackageDetailName, SaleProductFormData } from '@/definitions';
 import {
   useDetailSaleProductQuery,
   useSaleProductListQuery,
 } from '@/queries/product.queries';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from 'input-otp';
-import Image from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { FaMinus, FaPlus } from 'react-icons/fa';
 import { z } from 'zod';
 
 const SaleProductBuyFormSchema = z.object({
   buyDate: z.date(),
-  buyHour: z.date(),
-  buyMin: z.date(),
+  buyHour: z.string(),
+  buyMin: z.string(),
   buyProducts: z.array(z.object({})).min(1, '상품을 선택해 주세요.'),
   buyName: z.string().min(1, '이름을 입력해 주세요.'),
   buyPhoneNumber: z.string().min(11, '휴대폰 번호를 모두 입력해 주세요.'),
@@ -68,10 +62,7 @@ type SaleProductBuyFormValues = z.infer<typeof SaleProductBuyFormSchema>;
 
 export default function ProductDetailClient({ id }: { id: string }) {
   const saleProductData = useSaleProductListQuery();
-
   const saleProductDetailData = useDetailSaleProductQuery(id);
-
-  const { openModal } = useModalContext();
 
   const [date, setDate] = useState<Date | undefined>(new Date());
 
@@ -80,6 +71,24 @@ export default function ProductDetailClient({ id }: { id: string }) {
     () => String(Math.ceil(new Date().getMinutes() / 10) * 10),
     []
   );
+
+  const saleProductForm = useForm<SaleProductBuyFormValues>({
+    resolver: zodResolver(SaleProductBuyFormSchema),
+    defaultValues: {
+      buyDate: new Date(),
+      buyHour: new Date().getHours().toString(),
+      buyMin: new Date().getMinutes().toString(),
+      buyProducts: [],
+      buyName: '',
+      buyPhoneNumber: '',
+      buyEmail: '',
+      buyNumber: '',
+      consentCollection: false,
+      consentProvision: false,
+      consentCancellation: false,
+      buyType: '',
+    },
+  });
 
   //체크박스들
   const handleChecked = () => {};
@@ -101,31 +110,6 @@ export default function ProductDetailClient({ id }: { id: string }) {
   //분 선택
   const handleSelectMin = (min: string) => {
     setSelectMin(min);
-  };
-
-  const images = useMemo(
-    () => saleProductDetailData.products?.map((d) => d.images).flat() ?? [],
-    [saleProductDetailData]
-  );
-
-  //상품 상세 정보 팝업
-  const handleDetailSaleProduct = () => {
-    if (!!id) {
-      return openModal({
-        type: MODAL_TYPE.MODAL,
-        title: '상품 상세 정보',
-        useOverlayClose: true,
-        Component: ({ onOk, onCancel }) => {
-          return (
-            <ProductDetailModal
-              saleProductId={id}
-              onOk={onOk}
-              onCancel={onCancel}
-            />
-          );
-        },
-      });
-    }
   };
 
   //추가 상품 선택
@@ -179,60 +163,14 @@ export default function ProductDetailClient({ id }: { id: string }) {
   //동의하는거
 
   return (
-    <Form>
+    <Form {...saleProductForm}>
       <form>
         <div className="flex flex-row space-y-8">
           {/* 상품 상세 정보 */}
-          <div className="basis-1/3 mx-2">
-            <div className="preview flex min-h-[350px] w-full justify-center p-10 items-center">
-              <Carousel className="w-full max-w-xs">
-                <CarouselContent>
-                  {images.map((d) => {
-                    return (
-                      <CarouselItem key={d}>
-                        <div className="p-2">
-                          <Image
-                            className="w-full h-full rounded-full"
-                            alt="상품 이미지"
-                            width={150}
-                            height={150}
-                            src={String(d) ?? ''}
-                          />
-                        </div>
-                      </CarouselItem>
-                    );
-                  })}
-                </CarouselContent>
-                <CarouselPrevious />
-                <CarouselNext />
-              </Carousel>
-            </div>
-
-            <h1 className="text-xl text-center font-bold">
-              {saleProductDetailData.name}
-            </h1>
-
-            <div className="m-4">
-              <Button
-                variant="secondary"
-                type="button"
-                onClick={handleDetailSaleProduct}
-              >
-                상세정보
-              </Button>
-            </div>
-
-            <div className="space-y-4">
-              <ul className="text-sm text-wrap">
-                <li className="p-3">
-                  주소: 서울특별시 송파구 올림픽로 240, 롯데월드 웰빙센터
-                  SP라운지 219호
-                </li>
-                <li className="p-3">전화번호: 02-415-8587 | 010-4074-8587</li>
-                <li className="p-3">이메일: worldk70@daum.net</li>
-              </ul>
-            </div>
-          </div>
+          <ProductDetailInfo
+            saleProductId={id}
+            saleProductDetailData={saleProductDetailData}
+          />
 
           {/* 상품 구매하기 */}
           <div className="basis-1/3 mx-3">

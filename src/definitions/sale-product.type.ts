@@ -27,8 +27,8 @@ export interface SaleProductFormData<T> {
 //일단 생각나는 대로 작성
 export interface SaleProductBuyFormData<T> {
   buyDate: Date | string;
-  buyHour: Date | string;
-  buyMin: Date | string;
+  buyHour: string;
+  buyMin: string;
   buyProducts: T[];
   buyName: string;
   buyPhoneNumber: string;
