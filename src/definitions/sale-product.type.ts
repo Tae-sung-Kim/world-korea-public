@@ -10,8 +10,8 @@ export type SaleProduct = SaleProductDB & {
 export type PackageDetailName = {
   _id: string;
   name: string;
-  images?: string[];
-  pin?: Pin;
+  images: string[];
+  pinCount: number;
 };
 
 export interface SaleProductFormData<T> {
@@ -22,4 +22,20 @@ export interface SaleProductFormData<T> {
   accessLevel: string;
   createdAt?: Date | string;
   updatedAt?: Date | string;
+}
+
+//일단 생각나는 대로 작성
+export interface SaleProductBuyFormData<T> {
+  buyDate: Date | string;
+  buyHour: Date | string;
+  buyMin: Date | string;
+  products: T[];
+  buyerName: string;
+  phoneNumber: string;
+  email: string;
+  buyNumber: string;
+  consentCollection: boolean; //개인정보 수집 동의
+  consentProvision: boolean; //제 3자 제공동의
+  consentCancellation: boolean; //취소 환불
+  buyType: string;
 }
