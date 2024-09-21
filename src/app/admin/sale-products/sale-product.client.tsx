@@ -5,6 +5,7 @@ import { useDeleteProductMutation, useUserCategoryListQuery } from '../queries';
 import { useSaleProductListQuery } from '../queries/sale-product.queries';
 import Pagination from '@/app/common/components/pagination';
 import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
 import {
   Table,
   TableBody,
@@ -34,6 +35,8 @@ export default function SaleProductListClient() {
     pageSize: Number(pageSize),
     filter,
   });
+
+  console.log(saleProductData);
 
   //유저 레벨
   const userCategoryList = useUserCategoryListQuery();
@@ -74,17 +77,15 @@ export default function SaleProductListClient() {
           <TableRow>
             <TableHead className="w-[70px]">번호</TableHead>
             <TableHead className="">판매 상품명</TableHead>
-            <TableHead className="w-[150px]">상세 상품명</TableHead>
+            <TableHead className="w-[200px]">상세 상품명</TableHead>
             <TableHead className="w-[80px]">level</TableHead>
             <TableHead className="w-[100px] text-right">판매가</TableHead>
-            <TableHead className="w-[70px] text-right">재고</TableHead>
+            <TableHead className="w-[200px] text-right">재고</TableHead>
             <TableHead className="w-[70px] text-right"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {saleProductData.list.map((data, idx) => {
-            const packageDetailName = data.products.map((d) => d.name);
-
             return (
               <TableRow
                 key={data._id}
@@ -94,7 +95,14 @@ export default function SaleProductListClient() {
                 <TableCell>{(pageNumber - 1) * pageSize + idx + 1}</TableCell>
                 <TableCell className="font-medium">{data.name}</TableCell>
                 <TableCell className="">
-                  {packageDetailName.join('/')}
+                  {data.products.map((d) => {
+                    return (
+                      <div key={d._id}>
+                        {d.name}
+                        <Separator />
+                      </div>
+                    );
+                  })}
                 </TableCell>
                 <TableCell>
                   {
@@ -107,8 +115,14 @@ export default function SaleProductListClient() {
                   {addComma(data.price)} 원
                 </TableCell>
                 <TableCell className="text-right">
-                  재고 있어야 하나?
-                  {/* {addComma(data.pinCount ?? 0)} 개 */}
+                  {data.products.map((d) => {
+                    return (
+                      <div key={d._id}>
+                        {d.name} : {addComma(d.pinCount ?? 0)} 개
+                        <Separator />
+                      </div>
+                    );
+                  })}
                 </TableCell>
                 <TableCell className="text-center">
                   <Button
