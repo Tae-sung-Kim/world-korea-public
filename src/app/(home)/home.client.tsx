@@ -26,10 +26,10 @@ export default function HomeClient() {
       {saleProductData.list.map((d) => {
         const { _id, name, price, products } = d;
 
-        const images = products.map((d2) => d2.images);
+        const images = products.map((d2) => d2.images).flat();
 
         return (
-          <div key={''} className="flex items-center justify-center py-12">
+          <div key={_id} className="flex items-center justify-center py-12">
             <div className="p-6 w-full bg-white shadow-2xl relative rounded-lg hover:-translate-y-2 hover:transition-transform hover:ease-in">
               <Link href={`/products/${_id}`}>
                 <div

@@ -1,4 +1,5 @@
 import ProductForm from '../../products/product-form';
+import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ProductFormData } from '@/definitions';
 
@@ -10,8 +11,8 @@ export default function SaleProductDetail({
   return (
     <>
       {Array.isArray(products) && products.length > 0 && (
-        <Tabs defaultValue={products[0]._id} className="w-full">
-          <TabsList>
+        <Tabs defaultValue={products[0]._id}>
+          <TabsList className="flex flex-row m-3">
             {products.map((d) => {
               return (
                 <TabsTrigger key={d._id} value={d._id ?? ''}>
@@ -21,9 +22,11 @@ export default function SaleProductDetail({
             })}
           </TabsList>
 
+          <Separator className="my-4" />
+
           {products.map((d) => {
             return (
-              <TabsContent key={d._id} value={d._id ?? ''}>
+              <TabsContent key={d._id} value={d._id ?? ''} className="m-4">
                 <ProductForm productId={d._id} disabled={true} />
               </TabsContent>
             );

@@ -241,33 +241,71 @@ export default function ProductForm({ productId, disabled = false }: Props) {
         className="space-y-8"
       >
         {/* 상품명 undefined 확인 */}
-        <FormField
-          control={productForm.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>상품명</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  type="text"
-                  placeholder="상품명을 입력해 주세요."
-                  value={field.value ?? ''}
-                  disabled={disabled}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={productForm.control}
-          name="accessLevel"
-          render={({ field }) => {
-            return (
+        {!disabled && (
+          <FormField
+            control={productForm.control}
+            name="name"
+            render={({ field }) => (
               <FormItem>
-                <FormLabel>Level</FormLabel>
+                <FormLabel>상품명</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    type="text"
+                    placeholder="상품명을 입력해 주세요."
+                    value={field.value ?? ''}
+                    disabled={disabled}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
+
+        {!disabled && (
+          <FormField
+            control={productForm.control}
+            name="accessLevel"
+            render={({ field }) => {
+              return (
+                <FormItem>
+                  <FormLabel>Level</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value}
+                      disabled={disabled}
+                    >
+                      <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder="선택" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          {userCategoryList?.map((d) => {
+                            return (
+                              <SelectItem key={d._id} value={String(d.level)}>
+                                {d.name}
+                              </SelectItem>
+                            );
+                          })}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
+        )}
+        {!disabled && (
+          <FormField
+            control={productForm.control}
+            name="status"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>상태</FormLabel>
                 <FormControl>
                   <Select
                     onValueChange={field.onChange}
@@ -279,57 +317,24 @@ export default function ProductForm({ productId, disabled = false }: Props) {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        {userCategoryList?.map((d) => {
-                          return (
-                            <SelectItem key={d._id} value={String(d.level)}>
-                              {d.name}
-                            </SelectItem>
-                          );
-                        })}
+                        {Object.entries(PRODUCT_STATUS_MESSAGE).map(
+                          ([key, value]) => {
+                            return (
+                              <SelectItem key={key} value={String(key)}>
+                                {value}
+                              </SelectItem>
+                            );
+                          }
+                        )}
                       </SelectGroup>
                     </SelectContent>
                   </Select>
                 </FormControl>
                 <FormMessage />
               </FormItem>
-            );
-          }}
-        />
-
-        <FormField
-          control={productForm.control}
-          name="status"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>상태</FormLabel>
-              <FormControl>
-                <Select
-                  onValueChange={field.onChange}
-                  value={field.value}
-                  disabled={disabled}
-                >
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="선택" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      {Object.entries(PRODUCT_STATUS_MESSAGE).map(
-                        ([key, value]) => {
-                          return (
-                            <SelectItem key={key} value={String(key)}>
-                              {value}
-                            </SelectItem>
-                          );
-                        }
-                      )}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+            )}
+          />
+        )}
 
         <div className="flex items-center gap-4">
           <Label>이미지</Label>
@@ -345,24 +350,26 @@ export default function ProductForm({ productId, disabled = false }: Props) {
           )}
         </div>
 
-        {productImages.fields.map((d, idx) => {
-          const blobImages = productImageList[idx];
+        <div className=" grid grid-cols-3 gap-5">
+          {productImages.fields.map((d, idx) => {
+            const blobImages = productImageList[idx];
 
-          return (
-            <div className="flex space-x-4" key={d.id}>
-              {blobImages ? (
-                <div>
-                  {!!blobImages.name && <div>파일명 : {blobImages.name}</div>}
-                  {!!blobImages.size && <div>용량 : {blobImages.size} MB</div>}
-                  <Image
-                    src={blobImages.blob}
-                    width={250}
-                    height={250}
-                    alt="등록 이미지"
-                  />
-                </div>
-              ) : (
-                <>
+            return (
+              <div className="flex space-x-4" key={d.id}>
+                {blobImages ? (
+                  <div>
+                    {!!blobImages.name && <div>파일명 : {blobImages.name}</div>}
+                    {!!blobImages.size && (
+                      <div>용량 : {blobImages.size} MB</div>
+                    )}
+                    <Image
+                      src={blobImages.blob}
+                      width={250}
+                      height={250}
+                      alt="등록 이미지"
+                    />
+                  </div>
+                ) : (
                   <Controller
                     name={`images.${idx}.file`}
                     control={productForm.control}
@@ -386,34 +393,75 @@ export default function ProductForm({ productId, disabled = false }: Props) {
                       );
                     }}
                   />
-                </>
-              )}
-              {!disabled && (
-                <Button
-                  variant="outline"
-                  size="icon"
-                  type="button"
-                  onClick={() => handleDeleteImage(idx)}
-                >
-                  <FaMinus />
-                </Button>
-              )}
-            </div>
-          );
-        })}
+                )}
+                {!disabled && (
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    type="button"
+                    onClick={() => handleDeleteImage(idx)}
+                  >
+                    <FaMinus />
+                  </Button>
+                )}
+              </div>
+            );
+          })}
+        </div>
 
-        <div className="grid grid-cols-3 gap-6">
-          <FormField
-            control={productForm.control}
-            name="regularPrice"
-            render={({ field }) => {
-              return (
+        {!disabled && (
+          <div className="grid grid-cols-3 gap-6">
+            <FormField
+              control={productForm.control}
+              name="regularPrice"
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel>정가</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="정가를 입력해 주세요."
+                        value={addComma(field.value)}
+                        disabled={disabled}
+                        onChange={(e) => handlePriceChange(e, { ...field })}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
+            <FormField
+              control={productForm.control}
+              name="salePrice"
+              render={({ field }) => (
                 <FormItem>
-                  <FormLabel>정가</FormLabel>
+                  <FormLabel>할인 가격</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
-                      placeholder="정가를 입력해 주세요."
+                      placeholder="할인 가격을 입력해 주세요."
+                      value={addComma(field.value)}
+                      disabled={disabled}
+                      onChange={(e) => handlePriceChange(e, { ...field })}
+                    />
+                    {/* 할인율 */}
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={productForm.control}
+              name="price"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>판매가</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      placeholder="판매가를 입력해 주세요."
                       value={addComma(field.value)}
                       disabled={disabled}
                       onChange={(e) => handlePriceChange(e, { ...field })}
@@ -421,49 +469,10 @@ export default function ProductForm({ productId, disabled = false }: Props) {
                   </FormControl>
                   <FormMessage />
                 </FormItem>
-              );
-            }}
-          />
-          <FormField
-            control={productForm.control}
-            name="salePrice"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>할인 가격</FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    placeholder="할인 가격을 입력해 주세요."
-                    value={addComma(field.value)}
-                    disabled={disabled}
-                    onChange={(e) => handlePriceChange(e, { ...field })}
-                  />
-                  {/* 할인율 */}
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={productForm.control}
-            name="price"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>판매가</FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    placeholder="판매가를 입력해 주세요."
-                    value={addComma(field.value)}
-                    disabled={disabled}
-                    onChange={(e) => handlePriceChange(e, { ...field })}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+              )}
+            />
+          </div>
+        )}
 
         <FormField
           control={productForm.control}

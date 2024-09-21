@@ -28,6 +28,7 @@ type ModalType = (typeof MODAL_TYPE)[keyof typeof MODAL_TYPE];
 
 type ModalComponentType = {
   id?: string;
+  className?: string;
   title?: ReactNode | string;
   content?: ReactNode | string;
   okName?: string | undefined;
@@ -77,6 +78,7 @@ function ModalProvider({ children }: { children: ReactNode }) {
   //일반 창
   const openModal = async ({
     type = MODAL_TYPE.MODAL,
+    className,
     Component,
     title,
     content,
@@ -136,6 +138,7 @@ function ModalProvider({ children }: { children: ReactNode }) {
           {
             id,
             type,
+            className,
             Component,
             title,
             content,
@@ -165,6 +168,7 @@ function ModalProvider({ children }: { children: ReactNode }) {
         ({
           id,
           type,
+          className,
           Component,
           title,
           content,
@@ -181,6 +185,7 @@ function ModalProvider({ children }: { children: ReactNode }) {
           return (
             <ModalPortal key={id}>
               <ModalContainer
+                className={className}
                 {...(useOverlayClose
                   ? { onClick: (e) => onOverlayClick && onOverlayClick(e) }
                   : {})}
