@@ -1,6 +1,7 @@
 'use client';
 
-import ProductDetailInfo from './product-detail-info';
+import ProductDetailInfo from '../components/product-detail-info';
+import SaleProductItem from '../components/sale-product-item.component';
 import ProductDetailModal from './product-detail-modal';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -37,25 +38,29 @@ import {
 } from '@/queries/product.queries';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
-import { REGEXP_ONLY_DIGITS_AND_CHARS } from 'input-otp';
 import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { FaMinus, FaPlus } from 'react-icons/fa';
 import { z } from 'zod';
 
 const SaleProductBuyFormSchema = z.object({
   buyDate: z.date(),
-  buyHour: z.string(),
-  buyMin: z.string(),
+  buyHour: z.string().min(1, '시간을 선택해 주세요.'),
+  buyMin: z.string().min(1, '분을 선택해 주세요.'),
   buyProducts: z.array(z.object({})).min(1, '상품을 선택해 주세요.'),
   buyName: z.string().min(1, '이름을 입력해 주세요.'),
   buyPhoneNumber: z.string().min(11, '휴대폰 번호를 모두 입력해 주세요.'),
   buyEmail: z.string(),
   buyNumber: z.string().min(6, '구매확인 번호를 입력해 주세요.'),
-  consentCollection: z.boolean(), //개인정보 수집 동의
-  consentProvision: z.boolean(), //제 3자 제공동의
-  consentCancellation: z.boolean(), //취소 환불
-  buyType: z.string(),
+  consentCollection: z.boolean().refine((val) => val === true, {
+    message: '개인정보 수집 동의는 필수입니다.',
+  }),
+  consentProvision: z.boolean().refine((val) => val === true, {
+    message: '제 3자 제공 동의는 필수입니다.',
+  }),
+  consentCancellation: z.boolean().refine((val) => val === true, {
+    message: '취소 및 환불 동의는 필수입니다.',
+  }),
+  buyType: z.string().min(1, '결제 방법을 선택해 주세요.'),
 });
 
 type SaleProductBuyFormValues = z.infer<typeof SaleProductBuyFormSchema>;
@@ -63,8 +68,6 @@ type SaleProductBuyFormValues = z.infer<typeof SaleProductBuyFormSchema>;
 export default function ProductDetailClient({ id }: { id: string }) {
   const saleProductData = useSaleProductListQuery();
   const saleProductDetailData = useDetailSaleProductQuery(id);
-
-  const [date, setDate] = useState<Date | undefined>(new Date());
 
   const currentHour = useMemo(() => String(new Date().getHours()), []);
   const currentMin = useMemo(
@@ -76,8 +79,8 @@ export default function ProductDetailClient({ id }: { id: string }) {
     resolver: zodResolver(SaleProductBuyFormSchema),
     defaultValues: {
       buyDate: new Date(),
-      buyHour: new Date().getHours().toString(),
-      buyMin: new Date().getMinutes().toString(),
+      buyHour: '',
+      buyMin: '',
       buyProducts: [],
       buyName: '',
       buyPhoneNumber: '',
@@ -144,13 +147,21 @@ export default function ProductDetailClient({ id }: { id: string }) {
   };
 
   //구매하기
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+    console.log('aaaaaaaaaaa');
+  };
 
+  //최초 데이터 세팅
   useEffect(() => {
     if (saleProductData.list.length > 0) {
-      setSelectedSaleProduct(saleProductData.list.filter((f) => f._id === id));
+      const initData = saleProductData.list.filter((f) => f._id === id);
+      setSelectedSaleProduct(initData);
     }
   }, [saleProductData, id]);
+
+  useEffect(() => {
+    saleProductForm.setValue('buyProducts', selectedSaleProduct);
+  }, [saleProductForm, selectedSaleProduct]);
 
   if (Object.keys(saleProductDetailData).length < 1) {
     return false;
@@ -164,7 +175,7 @@ export default function ProductDetailClient({ id }: { id: string }) {
 
   return (
     <Form {...saleProductForm}>
-      <form>
+      <form onSubmit={saleProductForm.handleSubmit(handleSubmit)}>
         <div className="flex flex-row space-y-8">
           {/* 상품 상세 정보 */}
           <ProductDetailInfo
@@ -174,137 +185,155 @@ export default function ProductDetailClient({ id }: { id: string }) {
 
           {/* 상품 구매하기 */}
           <div className="basis-1/3 mx-3">
-            <h1 className="">날짜 선택</h1>
-            <div className="w-full">
-              <Calendar
-                mode="single"
-                selected={date}
-                onSelect={setDate}
-                disabled={(date) =>
-                  format(date, 'yyyMMdd') < format(new Date(), 'yyyyMMdd')
-                }
-                className="rounded-md border"
-                classNames={{
-                  months:
-                    'flex w-full flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0 flex-1',
-                  month: 'space-y-4 w-full flex flex-col',
-                  table: 'w-full h-full border-collapse space-y-1',
-                  head_row: '',
-                  row: 'w-full mt-2',
-                }}
+            <FormField
+              control={saleProductForm.control}
+              name="buyDate"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel>날짜 선택</FormLabel>
+                  <Calendar
+                    mode="single"
+                    selected={field.value}
+                    onSelect={field.onChange}
+                    disabled={(date) =>
+                      format(date, 'yyyMMdd') < format(new Date(), 'yyyyMMdd')
+                    }
+                    className="rounded-md border"
+                    classNames={{
+                      months:
+                        'flex w-full flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0 flex-1',
+                      month: 'space-y-4 w-full flex flex-col',
+                      table: 'w-full h-full border-collapse space-y-1',
+                      head_row: '',
+                      row: 'w-full mt-2',
+                    }}
+                  />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="grid grid-cols-2 gap-7">
+              <FormField
+                control={saleProductForm.control}
+                name="buyHour"
+                render={({ field }) => (
+                  <FormItem className="space-y-3">
+                    <FormLabel>시간 선택</FormLabel>
+                    <FormControl>
+                      <RadioGroup
+                        onValueChange={field.onChange}
+                        defaultValue={currentHour}
+                        className="flex flex-col space-y-1"
+                      >
+                        {Array.from(
+                          { length: 12 },
+                          (_, idx: number) => 10 + idx
+                        ).map((d) => {
+                          const value = String(d);
+
+                          return (
+                            <FormItem
+                              key={value}
+                              className="flex items-center space-x-3 space-y-0"
+                            >
+                              <FormControl>
+                                <RadioGroupItem
+                                  value={value}
+                                  disabled={Number(value) < Number(currentHour)}
+                                />
+                              </FormControl>
+                              <FormLabel className="font-normal">
+                                {value} 시
+                              </FormLabel>
+                            </FormItem>
+                          );
+                        })}
+                      </RadioGroup>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={saleProductForm.control}
+                name="buyMin"
+                render={({ field }) => (
+                  <FormItem className="space-y-3">
+                    <FormLabel>분 선택</FormLabel>
+                    <FormControl>
+                      <RadioGroup
+                        onValueChange={field.onChange}
+                        defaultValue={currentHour}
+                        className="flex flex-col space-y-1"
+                      >
+                        {Array.from(
+                          { length: 6 },
+                          (_, idx: number) => 10 * idx
+                        ).map((d) => {
+                          const value = String(d).padEnd(2, '0');
+
+                          return (
+                            <FormItem
+                              key={value}
+                              className="flex items-center space-x-3 space-y-0"
+                            >
+                              <FormControl>
+                                <RadioGroupItem value={value} />
+                              </FormControl>
+                              <FormLabel className="font-normal">
+                                {value} 분
+                              </FormLabel>
+                            </FormItem>
+                          );
+                        })}
+                      </RadioGroup>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
             </div>
+
             <div>
-              <h1>시간 선택</h1>
-              <RadioGroup
-                defaultValue={currentHour}
-                onValueChange={handleSelectHour}
-              >
-                {date && (
-                  <div className="grid grid-cols-6 gap-2 m-4">
-                    {Array.from(
-                      { length: 12 },
-                      (_, idx: number) => 10 + idx
-                    ).map((d) => {
-                      const value = String(d);
-
-                      return (
-                        <div
-                          key={value}
-                          className="flex items-center space-x-2"
-                        >
-                          <RadioGroupItem
-                            value={value}
-                            id={value + 'hour'}
-                            disabled={Number(value) < Number(currentHour)}
-                          />
-                          <Label htmlFor={value + 'hour'}>{value} 시</Label>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </RadioGroup>
+              <h1>상품 선택</h1>
+              <Select onValueChange={handleSelectedSaleProduct}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="상품 선택" />
+                </SelectTrigger>
+                <SelectContent>
+                  {saleProductData.list.map((d) => {
+                    return (
+                      <SelectItem key={d._id} value={d._id ?? ''}>
+                        {d.name}
+                      </SelectItem>
+                    );
+                  })}
+                </SelectContent>
+              </Select>
             </div>
+
             <div>
-              <h1>분 선택</h1>
-              <RadioGroup
-                defaultValue={currentMin}
-                onValueChange={handleSelectMin}
-              >
-                {date && (
-                  <div className="grid grid-cols-6 gap-2 m-4">
-                    {Array.from(
-                      { length: 6 },
-                      (_, idx: number) => 10 * idx
-                    ).map((d) => {
-                      const value = String(d).padEnd(2, '0');
-
-                      return (
-                        <div
-                          key={value}
-                          className="flex items-center space-x-2"
-                        >
-                          <RadioGroupItem
-                            value={value}
-                            id={value + 'min'}
-                            // disabled={}
-                          />
-                          <Label htmlFor={value + 'min'}>{value} 분</Label>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </RadioGroup>
-            </div>
-            <div className="flex gap-5">
+              <h1>선택된 상품</h1>
               <div>
-                <h1>상품 선택</h1>
-
-                <Select onValueChange={handleSelectedSaleProduct}>
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="상품 선택" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      {saleProductData.list.map((d) => {
-                        return (
-                          <SelectItem key={d._id} value={d._id ?? ''}>
-                            {d.name}
-                          </SelectItem>
-                        );
-                      })}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <h1>선택된 상품</h1>
                 {selectedSaleProduct.map((d) => {
                   return (
-                    <div key={d._id}>
-                      <Label>{d.name}</Label>
-                      <Input type="number" className="w-16" />
-                      <Button
-                        size="icon"
-                        variant="outline"
-                        type="button"
-                        onClick={handlePlus}
-                      >
-                        <FaPlus />
-                      </Button>
-                      <Button
-                        size="icon"
-                        variant="outline"
-                        type="button"
-                        onClick={handleMinus}
-                      >
-                        <FaMinus />
-                      </Button>
-                    </div>
+                    <SaleProductItem
+                      key={d._id}
+                      saleProduct={d}
+                      onPlusClick={handlePlus}
+                      onMinusClick={handleMinus}
+                      onDeleteClick={handleDelete}
+                    />
                   );
                 })}
+
+                {saleProductForm.formState.errors.buyProducts && (
+                  <span className="text-red-500 text-sm">
+                    {saleProductForm.formState.errors.buyProducts.message}
+                  </span>
+                )}
               </div>
             </div>
           </div>
@@ -312,83 +341,138 @@ export default function ProductDetailClient({ id }: { id: string }) {
           {/* 상품 구매 정보 */}
           <div className="basis-1/4 mx-3">
             <div className="space-y-8">
-              <h1>구매자 정보</h1>
-              <div className="grid w-full max-w-sm items-center gap-1.5">
-                <Label htmlFor="reserveName">구매자명</Label>
-                <Input id="reserveName" placeholder="구매자 명" />
-              </div>
-              <div className="grid w-full max-w-sm items-center gap-1.5">
-                <Label htmlFor="reserveName">휴대폰 번호</Label>
-                <InputOTP maxLength={11}>
-                  <InputOTPGroup>
-                    <InputOTPSlot index={0} />
-                    <InputOTPSlot index={1} />
-                    <InputOTPSlot index={2} />
-                  </InputOTPGroup>
-                  <InputOTPSeparator />
-                  <InputOTPGroup>
-                    <InputOTPSlot index={3} />
-                    <InputOTPSlot index={4} />
-                    <InputOTPSlot index={5} />
-                    <InputOTPSlot index={6} />
-                  </InputOTPGroup>
-                  <InputOTPSeparator />
-                  <InputOTPGroup>
-                    <InputOTPSlot index={7} />
-                    <InputOTPSlot index={8} />
-                    <InputOTPSlot index={9} />
-                    <InputOTPSlot index={10} />
-                  </InputOTPGroup>
-                </InputOTP>
-              </div>
-              <div className="grid w-full max-w-sm items-center gap-1.5">
-                <Label htmlFor="email">Email</Label>
-                <Input type="email" id="email" placeholder="Email" />
-              </div>
-              <div className="grid w-full max-w-sm items-center gap-1.5">
-                <Label htmlFor="email">구매확인번호(구매 조회시 필요)</Label>
-                <InputOTP maxLength={6} pattern={REGEXP_ONLY_DIGITS_AND_CHARS}>
-                  <InputOTPGroup>
-                    <InputOTPSlot index={0} />
-                    <InputOTPSlot index={1} />
-                    <InputOTPSlot index={2} />
-                    <InputOTPSlot index={3} />
-                    <InputOTPSlot index={4} />
-                    <InputOTPSlot index={5} />
-                  </InputOTPGroup>
-                </InputOTP>
-              </div>
+              <FormField
+                control={saleProductForm.control}
+                name="buyName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>구매자명</FormLabel>
+                    <FormControl>
+                      <Input placeholder="구매자명" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={saleProductForm.control}
+                name="buyPhoneNumber"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>휴대폰 번호</FormLabel>
+                    <FormControl>
+                      <InputOTP maxLength={11} {...field}>
+                        <InputOTPGroup>
+                          <InputOTPSlot index={0} />
+                          <InputOTPSlot index={1} />
+                          <InputOTPSlot index={2} />
+                        </InputOTPGroup>
+                        <InputOTPSeparator />
+                        <InputOTPGroup>
+                          <InputOTPSlot index={3} />
+                          <InputOTPSlot index={4} />
+                          <InputOTPSlot index={5} />
+                          <InputOTPSlot index={6} />
+                        </InputOTPGroup>
+                        <InputOTPSeparator />
+                        <InputOTPGroup>
+                          <InputOTPSlot index={7} />
+                          <InputOTPSlot index={8} />
+                          <InputOTPSlot index={9} />
+                          <InputOTPSlot index={10} />
+                        </InputOTPGroup>
+                      </InputOTP>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={saleProductForm.control}
+                name="buyEmail"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>이메일(선택)</FormLabel>
+                    <FormControl>
+                      <Input placeholder="email" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={saleProductForm.control}
+                name="buyNumber"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>구매확인번호(구매 조회시 필요)</FormLabel>
+                    <FormControl>
+                      <InputOTP maxLength={6} {...field}>
+                        <InputOTPGroup>
+                          <InputOTPSlot index={0} />
+                          <InputOTPSlot index={1} />
+                          <InputOTPSlot index={2} />
+                          <InputOTPSlot index={3} />
+                          <InputOTPSlot index={4} />
+                          <InputOTPSlot index={5} />
+                        </InputOTPGroup>
+                      </InputOTP>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
             <div>
-              <ul>
-                <li>
-                  <Checkbox id="allCheck"></Checkbox>
-                  <Label
-                    htmlFor="allCheck"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    전체동의
-                  </Label>
-                </li>
-                <li>
-                  <Checkbox id="consentCollection"></Checkbox>
-                  <Label
-                    htmlFor="consentCollection"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    개인정보 수집 및 이용 동의
-                  </Label>
-                </li>
-                <li>
-                  <Checkbox id="consentProvision"></Checkbox>
-                  <Label
-                    htmlFor="consentProvision"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    개인정보 제3자 제공 동의
-                  </Label>
-                </li>
-                {/* <li>
+              <div>
+                <Checkbox id="allCheck"></Checkbox>
+                <Label
+                  htmlFor="allCheck"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  전체동의
+                </Label>
+              </div>
+              <FormField
+                control={saleProductForm.control}
+                name="consentCollection"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <div className="space-y-1 leading-none">
+                      <FormLabel>개인정보 수집 및 이용 동의</FormLabel>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={saleProductForm.control}
+                name="consentProvision"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <div className="space-y-1 leading-none">
+                      <FormLabel>개인정보 제3자 제공 동의</FormLabel>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              {/* <li>
                   <Checkbox id="consentAged14andAbove"></Checkbox>
                   <Label
                     htmlFor="consentAged14andAbove"
@@ -397,7 +481,7 @@ export default function ProductDetailClient({ id }: { id: string }) {
                     만 14세 이상에 동의
                   </Label>
                 </li> */}
-                {/* <li>
+              {/* <li>
                   <Checkbox id="consentPromotional"></Checkbox>
                   <Label
                     htmlFor="consentPromotional"
@@ -406,41 +490,73 @@ export default function ProductDetailClient({ id }: { id: string }) {
                     광고성 정보수신 동의
                   </Label>
                 </li> */}
-                <li>
-                  <Checkbox id="consentCancellation"></Checkbox>
-                  <Label
-                    htmlFor="consentCancellation"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    취소/환불규정 동의
-                  </Label>
-                </li>
-                <li>
-                  <Label>결제시 유의사항</Label>
-                </li>
-                <li>결제 예정 금액</li>
-                <li>
-                  <Select onValueChange={() => {}} value={''}>
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="결제 방법" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectItem value={'creditCard'}>신용카드</SelectItem>
-                        <SelectItem value={'accountTransfer'}>
-                          계좌이체
-                        </SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </li>
-              </ul>
+              <FormField
+                control={saleProductForm.control}
+                name="consentCancellation"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <div className="space-y-1 leading-none">
+                      <FormLabel>취소/환불규정 동의</FormLabel>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div>
+                <Label>결제시 유의사항</Label>
+              </div>
+              <div>결제 예정 금액</div>
+
+              <div>
+                <FormField
+                  control={saleProductForm.control}
+                  name="buyType"
+                  render={({ field }) => (
+                    <FormItem className="space-y-3">
+                      <FormLabel>결제 방법</FormLabel>
+                      <FormControl>
+                        <RadioGroup
+                          onValueChange={field.onChange}
+                          defaultValue={currentHour}
+                          className="flex flex-col space-y-1"
+                        >
+                          <div className="flex gap-10">
+                            <FormItem className="flex items-center space-x-3 space-y-0">
+                              <FormControl>
+                                <RadioGroupItem value="creditCard" />
+                              </FormControl>
+                              <FormLabel className="font-normal">
+                                신용카드
+                              </FormLabel>
+                            </FormItem>
+                            <FormItem className="flex items-center space-x-3 space-y-0">
+                              <FormControl>
+                                <RadioGroupItem value="accountTransfer" />
+                              </FormControl>
+                              <FormLabel className="font-normal">
+                                계좌이체
+                              </FormLabel>
+                            </FormItem>
+                          </div>
+                        </RadioGroup>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
           </div>
         </div>
 
         <div className="flex justify-center pt-4">
-          <Button type="submit">구매하기</Button>
+          <Button>구매하기</Button>
         </div>
       </form>
     </Form>

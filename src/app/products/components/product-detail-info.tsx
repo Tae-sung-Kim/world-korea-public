@@ -1,6 +1,6 @@
 'use client';
 
-import ProductDetailModal from './product-detail-modal';
+import ProductDetailModal from '../[id]/product-detail-modal';
 import { Button } from '@/components/ui/button';
 import {
   Carousel,
