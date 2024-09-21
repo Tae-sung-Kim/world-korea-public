@@ -15,11 +15,12 @@ export type ProductImage = {
   file?: File;
 };
 
-export interface ProductFormData {
+export interface ProductFormData<T> {
   name: string; // 상품명
   accessLevel: string; // 접근 레벨
   status: ProductStatus; // 상품 상태
-  images: ProductImage[] | string[]; // 상품 이미지
+  // images: ProductImage[] | string[]; // 상품 이미지
+  images: T[];
   regularPrice: string; // 정가
   salePrice: string; // 할인가
   price: string; // 판매가

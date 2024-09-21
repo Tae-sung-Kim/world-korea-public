@@ -1,20 +1,20 @@
 import { PageFilter, PaginationProp } from '@/app/admin/queries/queries.type';
-import { PaginationResponse, ProductFormData } from '@/definitions';
-import productService from '@/services/product.service';
 import {
-  keepPreviousData,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query';
+  PackageDetailName,
+  PaginationResponse,
+  ProductFormData,
+  SaleProductFormData,
+} from '@/definitions';
+import saleProductService from '@/services/sale-product.service';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
-const QUERY_KEY = 'admin-product';
+const QUERY_KEY = 'sale-product';
 
-export function useProductListQuery(
+export function useSaleProductListQuery(
   paginationParam?: PaginationProp<PageFilter>
 ) {
-  const fallback: PaginationResponse<ProductFormData> = {
+  const fallback: PaginationResponse<SaleProductFormData<PackageDetailName>> = {
     pageNumber: -1,
     pageSize: -1,
     list: [],
@@ -31,9 +31,20 @@ export function useProductListQuery(
   const { data = fallback } = useQuery({
     queryKey: [QUERY_KEY, Object.values(paginationParam ?? {})],
     queryFn: () => {
-      return productService.getProudctList(paginationParam ?? {});
+      return saleProductService.getSaleProudctList(paginationParam ?? {});
     },
     placeholderData: keepPreviousData,
   });
+  return data;
+}
+
+export function useDetailSaleProductQuery(id: string) {
+  const fallback: Partial<SaleProductFormData<ProductFormData<string>>> = {};
+
+  const { data = fallback } = useQuery({
+    queryKey: [QUERY_KEY],
+    queryFn: () => saleProductService.getDetailSaleProudct(id),
+  });
+
   return data;
 }

@@ -14,7 +14,7 @@ const QUERY_KEY = 'admin-product';
 export function useProductListQuery(
   paginationParam?: PaginationProp<PageFilter>
 ) {
-  const fallback: PaginationResponse<ProductFormData> = {
+  const fallback: PaginationResponse<ProductFormData<string>> = {
     pageNumber: -1,
     pageSize: -1,
     list: [],
@@ -39,7 +39,7 @@ export function useProductListQuery(
 }
 
 export function useDetailProductQuery(id: string) {
-  const fallback: Partial<ProductFormData> = {};
+  const fallback: Partial<ProductFormData<string>> = {};
 
   const { data = fallback } = useQuery({
     queryKey: [QUERY_KEY],

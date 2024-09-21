@@ -1,24 +1,24 @@
 'use client';
 
+import { useProductListQuery } from '../../queries';
 import SaleProductForm from '../sale-product-form';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { ProductFormData } from '@/definitions';
-import { useProductListQuery } from '@/queries/product.queries';
 import { useState } from 'react';
 
 export default function SaleProductCreateClient() {
   const productData = useProductListQuery();
 
-  const [selectProductData, setSelectProductData] = useState<ProductFormData[]>(
-    []
-  );
+  const [selectProductData, setSelectProductData] = useState<
+    ProductFormData<string>[]
+  >([]);
 
   if (Array.isArray(productData.list) && productData.list.length < 1) {
     return false;
   }
 
-  const handleToggleClick = (data: ProductFormData) => {
-    setSelectProductData((prevData): ProductFormData[] => {
+  const handleToggleClick = (data: ProductFormData<string>) => {
+    setSelectProductData((prevData): ProductFormData<string>[] => {
       const findData = prevData.find((f) => f._id === data._id);
       if (findData) {
         return prevData.filter((f) => f._id !== data._id);

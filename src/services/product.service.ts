@@ -1,39 +1,51 @@
 import { PageFilter, PaginationProp } from '@/app/admin/queries/queries.type';
-import { PaginationResponse, ProductFormData } from '@/definitions';
+import {
+  PaginationResponse,
+  ProductFormData,
+  ProductImage,
+} from '@/definitions';
 import http from '@/services';
 import qs from 'qs';
 
 class ProductService {
   //상품 생성
   createProduct(data: FormData) {
-    return http.post<Partial<ProductFormData>>(`/api/products`, data, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+    return http.post<Partial<ProductFormData<ProductImage>>>(
+      `/api/products`,
+      data,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
   }
 
   //상품 전체
   getProudctList(pageParams?: PaginationProp<PageFilter>) {
     const params = qs.stringify(pageParams ?? {});
 
-    return http.get<PaginationResponse<ProductFormData>>(
+    return http.get<PaginationResponse<ProductFormData<string>>>(
       `/api/products?${params}`
     );
   }
 
   //개별 상품
   detailProudct(id: string) {
-    return http.get<ProductFormData>(`/api/products/${id}`);
+    return http.get<ProductFormData<string>>(`/api/products/${id}`);
   }
 
   //상품 수정
   updateProduct({ id, data }: { id: string; data: FormData }) {
-    return http.patch<Partial<ProductFormData>>(`/api/products/${id}`, data, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+    return http.patch<Partial<ProductFormData<string | ProductImage>>>(
+      `/api/products/${id}`,
+      data,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
   }
 
   deleteProduct(id: string) {

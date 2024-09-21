@@ -55,7 +55,7 @@ export function useCreateSaleProductMutation({
 }
 
 export function useDetailSaleProductQuery(id: string) {
-  const fallback: Partial<SaleProductFormData<ProductFormData>> = {};
+  const fallback: Partial<SaleProductFormData<ProductFormData<string>>> = {};
 
   const { data = fallback } = useQuery({
     queryKey: [QUERY_KEY],

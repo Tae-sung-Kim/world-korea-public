@@ -1,23 +1,35 @@
 'use client';
 
-import { useProductListQuery } from '@/queries/product.queries';
+import { usePagination } from '../admin/hooks/usePagination';
+import { useSaleProductListQuery } from '@/queries/product.queries';
 import { addComma } from '@/utils/number';
 import Image from 'next/image';
 import Link from 'next/link';
 
 export default function HomeClient() {
-  const productData = useProductListQuery();
+  const { pageNumber, pageSize, filter } = usePagination({
+    queryFilters: { name: '' },
+  });
 
-  if (!Array.isArray(productData?.list)) {
+  const saleProductData = useSaleProductListQuery({
+    pageNumber: Number(pageNumber),
+    pageSize: Number(pageSize),
+    filter,
+  });
+
+  if (!Array.isArray(saleProductData?.list)) {
     return null;
   }
 
   return (
     <div className="grid grid-cols-4 gap-8">
-      {productData.list.map((d) => {
-        const { _id, name, images = [], price, regularPrice, salePrice } = d;
+      {saleProductData.list.map((d) => {
+        const { _id, name, price, products } = d;
+
+        const images = products.map((d2) => d2.images);
+
         return (
-          <div key={_id} className="flex items-center justify-center py-12">
+          <div key={''} className="flex items-center justify-center py-12">
             <div className="p-6 w-full bg-white shadow-2xl relative rounded-lg hover:-translate-y-2 hover:transition-transform hover:ease-in">
               <Link href={`/products/${_id}`}>
                 <div

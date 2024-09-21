@@ -12,7 +12,7 @@ export interface Pin {
   pinPrefixFour?: string;
   _id?: string;
   createdAt?: Date | string;
-  product?: ProductFormData;
+  product?: ProductFormData<string>;
   productId?: string;
   number?: string;
   usedDate?: Date | string;

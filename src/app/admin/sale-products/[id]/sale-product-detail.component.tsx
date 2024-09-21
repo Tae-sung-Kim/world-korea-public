@@ -5,7 +5,7 @@ import { ProductFormData } from '@/definitions';
 export default function SaleProductDetail({
   products,
 }: {
-  products: ProductFormData[];
+  products: ProductFormData<string>[];
 }) {
   return (
     <>

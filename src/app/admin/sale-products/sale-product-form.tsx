@@ -22,7 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { ProductFormData, SaleProductFormData } from '@/definitions';
+import { ProductFormData } from '@/definitions';
 import saleProductService from '@/services/sale-product.service';
 import { addComma, removeComma } from '@/utils/number';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -46,7 +46,7 @@ const SaleProductFormSchema = z.object({
 type SaleProductFormValues = z.infer<typeof SaleProductFormSchema>;
 
 type Props = {
-  selectProductData?: ProductFormData[];
+  selectProductData?: ProductFormData<string>[];
   productId?: string;
   onResetData?: () => void;
 };
@@ -58,7 +58,9 @@ export default function SaleProductForm({
 }: Props) {
   const userCategoryList = useUserCategoryListQuery();
 
-  const [detailProducts, setDetailProducts] = useState<ProductFormData[]>([]);
+  const [detailProducts, setDetailProducts] = useState<
+    ProductFormData<string>[]
+  >([]);
 
   //상품 등록 후 reset
   const handleResetForm = () => {
@@ -75,7 +77,7 @@ export default function SaleProductForm({
     const data =
       detailProducts.length > 0 ? detailProducts : selectProductData ?? [];
 
-    return data.reduce((acc: number, cur: ProductFormData): number => {
+    return data.reduce((acc: number, cur: ProductFormData<string>): number => {
       return Number(acc + cur.regularPrice);
     }, 0);
   }, [selectProductData, detailProducts]);

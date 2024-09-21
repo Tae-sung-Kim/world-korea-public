@@ -8,6 +8,7 @@ import {
   PaginationResponse,
   Product,
   ProductFormData,
+  ProductImage,
   ProductStatus,
 } from '@/definitions';
 import {
@@ -51,7 +52,7 @@ type ProductDocument =
   | null;
 
 interface ProductMethods {
-  updateProduct(productData: ProductFormData): boolean;
+  updateProduct(productData: ProductFormData<string | ProductImage>): boolean;
   addProductPin(pin: Types.ObjectId | Types.ObjectId[]): ProductDocument;
   deleteProductPin(pin: Types.ObjectId | Types.ObjectId[]): ProductDocument;
 }

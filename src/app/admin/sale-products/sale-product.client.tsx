@@ -29,7 +29,7 @@ export default function SaleProductListClient() {
     queryFilters: { name: '' },
   });
 
-  const productData = useSaleProductListQuery({
+  const saleProductData = useSaleProductListQuery({
     pageNumber: Number(pageNumber),
     pageSize: Number(pageSize),
     filter,
@@ -82,7 +82,7 @@ export default function SaleProductListClient() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {productData.list.map((data, idx) => {
+          {saleProductData.list.map((data, idx) => {
             const packageDetailName = data.products.map((d) => d.name);
 
             return (
@@ -134,7 +134,7 @@ export default function SaleProductListClient() {
           <TableRow>
             <TableCell colSpan={6}>총 상품</TableCell>
             <TableCell className="text-right">
-              {addComma(productData.totalItems)} 개
+              {addComma(saleProductData.totalItems)} 개
             </TableCell>
           </TableRow>
         </TableFooter>
@@ -142,7 +142,7 @@ export default function SaleProductListClient() {
       <Pagination
         pageNumber={pageNumber}
         pageSize={pageSize}
-        totalPages={productData.totalPages}
+        totalPages={saleProductData.totalPages}
       />
     </>
   );

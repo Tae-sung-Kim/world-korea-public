@@ -119,7 +119,7 @@ export default function PinRegisterClient() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      {productData.list.map((d: ProductFormData) => {
+                      {productData.list.map((d: ProductFormData<string>) => {
                         return (
                           <SelectItem key={d._id} value={String(d._id)}>
                             {d.name}
