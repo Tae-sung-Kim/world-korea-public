@@ -47,6 +47,24 @@ import { REGEXP_ONLY_DIGITS_AND_CHARS } from 'input-otp';
 import Image from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
 import { FaMinus, FaPlus } from 'react-icons/fa';
+import { z } from 'zod';
+
+const SaleProductBuyFormSchema = z.object({
+  buyDate: z.date(),
+  buyHour: z.date(),
+  buyMin: z.date(),
+  buyProducts: z.array(z.object({})).min(1, '상품을 선택해 주세요.'),
+  buyName: z.string().min(1, '이름을 입력해 주세요.'),
+  buyPhoneNumber: z.string().min(11, '휴대폰 번호를 모두 입력해 주세요.'),
+  buyEmail: z.string(),
+  buyNumber: z.string().min(6, '구매확인 번호를 입력해 주세요.'),
+  consentCollection: z.boolean(), //개인정보 수집 동의
+  consentProvision: z.boolean(), //제 3자 제공동의
+  consentCancellation: z.boolean(), //취소 환불
+  buyType: z.string(),
+});
+
+type SaleProductBuyFormValues = z.infer<typeof SaleProductBuyFormSchema>;
 
 export default function ProductDetailClient({ id }: { id: string }) {
   const saleProductData = useSaleProductListQuery();

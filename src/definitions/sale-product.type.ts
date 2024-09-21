@@ -29,10 +29,10 @@ export interface SaleProductBuyFormData<T> {
   buyDate: Date | string;
   buyHour: Date | string;
   buyMin: Date | string;
-  products: T[];
-  buyerName: string;
-  phoneNumber: string;
-  email: string;
+  buyProducts: T[];
+  buyName: string;
+  buyPhoneNumber: string;
+  buyEmail: string;
   buyNumber: string;
   consentCollection: boolean; //개인정보 수집 동의
   consentProvision: boolean; //제 3자 제공동의
