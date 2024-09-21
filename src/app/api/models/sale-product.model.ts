@@ -4,6 +4,7 @@ import {
   PAGE_SIZE_DEFAULT,
   PaginationParams,
   PaginationResponse,
+  Product,
   SaleProduct,
 } from '@/definitions';
 import {
@@ -96,9 +97,32 @@ schema.static(
     let list = (
       await this.find(filter).sort(sort).skip(skip).limit(pageSize).populate({
         path: 'products',
-        select: '_id name',
+        select: '_id name images pins',
       })
-    ).map((d) => d.toObject());
+    ).map((d) => d.toObject()) as (SaleProductDB & {
+      products: {
+        _id: string;
+        name: string;
+        images: string[];
+        pins: string[];
+        pinCount: number;
+      }[];
+    })[];
+
+    list.forEach((d) => {
+      (
+        d.products as {
+          _id: string;
+          name: string;
+          images: string[];
+          pins?: string[];
+          pinCount?: number;
+        }[]
+      ).forEach((dd) => {
+        dd.pinCount = dd.pins ? dd.pins.length : 0;
+        delete dd.pins;
+      });
+    });
 
     // 전체 페이지 수 계산
     const totalPages = Math.ceil(totalItems / pageSize);
