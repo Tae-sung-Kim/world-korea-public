@@ -1,6 +1,6 @@
 'use client';
 
-import ProductDetailModal from '../[id]/product-detail-modal';
+import ProductDetailModal from '../../group-reservation/[id]/product-detail-modal';
 import { Button } from '@/components/ui/button';
 import {
   Carousel,

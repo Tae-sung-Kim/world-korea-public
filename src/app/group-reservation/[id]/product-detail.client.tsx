@@ -38,8 +38,8 @@ import {
 } from '@/queries/product.queries';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
-import { useEffect, useMemo, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { ChangeEvent, useEffect, useMemo, useState } from 'react';
+import { ControllerRenderProps, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 const SaleProductBuyFormSchema = z.object({
@@ -106,14 +106,20 @@ export default function ProductDetailClient({ id }: { id: string }) {
   >([]);
 
   //시간 선택
-  const handleSelectHour = (hour: string) => {
+  const handleSelectHour = (hour: string, field: ControllerRenderProps) => {
     setSelectHour(hour);
+
+    field.onChange(hour);
   };
 
   //분 선택
-  const handleSelectMin = (min: string) => {
+  const handleSelectMin = (min: string, field: ControllerRenderProps) => {
     setSelectMin(min);
+    field.onChange(min);
   };
+
+  //전체 동의
+  const handleAllCheck = (e: ChangeEvent<HTMLInputElement>) => {};
 
   //추가 상품 선택
   const handleSelectedSaleProduct = (id: string) => {
@@ -134,15 +140,15 @@ export default function ProductDetailClient({ id }: { id: string }) {
     });
   };
 
-  const handlePlus = () => {
+  const handlePlus = (id: string = '') => {
     console.log('현재 상품 더하기');
   };
 
-  const handleMinus = () => {
+  const handleMinus = (id: string = '') => {
     console.log('현재 상품 빼기');
   };
 
-  const handleDelete = () => {
+  const handleDelete = (id: string = '') => {
     console.log('현재 상품 삭제');
   };
 
@@ -222,7 +228,9 @@ export default function ProductDetailClient({ id }: { id: string }) {
                     <FormLabel>시간 선택</FormLabel>
                     <FormControl>
                       <RadioGroup
-                        onValueChange={field.onChange}
+                        onValueChange={(value) =>
+                          handleSelectHour(value, { ...field })
+                        }
                         defaultValue={currentHour}
                         className="flex flex-col space-y-1"
                       >
@@ -264,7 +272,9 @@ export default function ProductDetailClient({ id }: { id: string }) {
                     <FormLabel>분 선택</FormLabel>
                     <FormControl>
                       <RadioGroup
-                        onValueChange={field.onChange}
+                        onValueChange={(value) =>
+                          handleSelectMin(value, { ...field })
+                        }
                         defaultValue={currentHour}
                         className="flex flex-col space-y-1"
                       >
@@ -322,9 +332,9 @@ export default function ProductDetailClient({ id }: { id: string }) {
                     <SaleProductItem
                       key={d._id}
                       saleProduct={d}
-                      onPlusClick={handlePlus}
-                      onMinusClick={handleMinus}
-                      onDeleteClick={handleDelete}
+                      onPlusClick={() => handlePlus(d._id)}
+                      onMinusClick={() => handleMinus(d._id)}
+                      onDeleteClick={() => handleDelete(d._id)}
                     />
                   );
                 })}
@@ -428,7 +438,10 @@ export default function ProductDetailClient({ id }: { id: string }) {
             </div>
             <div>
               <div>
-                <Checkbox id="allCheck"></Checkbox>
+                <Checkbox
+                  id="allCheck"
+                  // onChange={handleAllCheck}
+                ></Checkbox>
                 <Label
                   htmlFor="allCheck"
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
