@@ -31,7 +31,7 @@ export default function HomeClient() {
         return (
           <div key={_id} className="flex items-center justify-center py-12">
             <div className="p-6 w-full bg-white shadow-2xl relative rounded-lg hover:-translate-y-2 hover:transition-transform hover:ease-in">
-              <Link href={`/products/${_id}`}>
+              <Link href={`/sale-products/${_id}`}>
                 <div
                   className="aspect-[5/4] relative rounded-lg"
                   style={{
