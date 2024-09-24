@@ -280,12 +280,12 @@ export default function SellProductDetailClient({ saleProductId = '' }: Props) {
               const { images, name, description2, description3 } = d;
 
               return (
-                <div className="">
+                <div className="" key={d._id}>
                   <h1 className="text-xl mb-10">{name}</h1>
                   <div className="grid grid-cols-3">
                     {images.map((d) => {
                       return (
-                        <div className="w-96">
+                        <div className="w-96" key={d}>
                           <Image
                             className="w-full h-full "
                             alt="상품 이미지"
