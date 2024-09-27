@@ -33,6 +33,7 @@ import { MODAL_TYPE, useModalContext } from '@/contexts/modal.context';
 import { Pin } from '@/definitions/pins.type';
 import { addComma } from '@/utils/number';
 import { useRouter } from 'next/navigation';
+import { QRCodeCanvas } from 'qrcode.react';
 import { useState } from 'react';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 
@@ -93,6 +94,22 @@ export default function PinClient() {
     }
   };
 
+  const handlePinNumberClick = (pinNumber: string = '') => {
+    if (!!pinNumber) {
+      return openModal({
+        type: MODAL_TYPE.CONFIRM,
+        title: `${splitFourChar(pinNumber)}`,
+        content: (
+          <div className="flex justify-center items-stretch">
+            <div className="py-8">
+              <QRCodeCanvas value={`${splitFourChar(pinNumber)}`} />
+            </div>
+          </div>
+        ),
+      });
+    }
+  };
+
   return (
     <>
       <div className="flex">
@@ -120,6 +137,7 @@ export default function PinClient() {
             <TableHead className="w-[50px]">번호</TableHead>
             <TableHead className="w-[200px]">핀 번호</TableHead>
             <TableHead className="">연결 상품</TableHead>
+            <TableHead className="w-[110px] text-center">업체명</TableHead>
             <TableHead className="w-[110px] text-center">종료일</TableHead>
             <TableHead className="w-[110px] text-center">생성일</TableHead>
             <TableHead className="w-[80px] text-center">사용여부</TableHead>
@@ -134,7 +152,10 @@ export default function PinClient() {
                 <TableCell>
                   {pinData.totalItems - (pageNumber - 1) * pageSize - idx}
                 </TableCell>
-                <TableCell className="font-medium">
+                <TableCell
+                  className="font-medium cursor-pointer"
+                  onClick={() => handlePinNumberClick(pin.number)}
+                >
                   {splitFourChar(pin.number)}
                 </TableCell>
                 <TableCell
@@ -143,6 +164,7 @@ export default function PinClient() {
                 >
                   {pin.product?.name}
                 </TableCell>
+                <TableCell>업체명</TableCell>
                 <TableCell className="text-right">
                   {pin.endDate && new Date(pin.endDate).toLocaleDateString()}
                 </TableCell>

@@ -5,7 +5,7 @@ export default function Header() {
   return (
     <header>
       <AccessPanel />
-      {/* <MainNav /> */}
+      <MainNav />
     </header>
   );
 }
