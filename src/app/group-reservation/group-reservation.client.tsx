@@ -1,7 +1,8 @@
 'use client';
 
-import ProductDetailInfo from '../components/product-detail-info';
-import SaleProductItem from '../components/sale-product-item.component';
+// import ProductDetailInfo from '../components/product-detail-info';
+// import SaleProductItem from '../components/sale-product-item.component';
+import SaleProductItem from './components/sale-product-item.component';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -49,7 +50,7 @@ const SaleProductBuyFormSchema = z.object({
   buyName: z.string().min(1, '이름을 입력해 주세요.'),
   buyPhoneNumber: z.string().min(11, '휴대폰 번호를 모두 입력해 주세요.'),
   buyEmail: z.string(),
-  buyNumber: z.string().min(6, '구매확인 번호를 입력해 주세요.'),
+  // buyNumber: z.string().min(6, '구매확인 번호를 입력해 주세요.'),
   consentCollection: z.boolean().refine((val) => val === true, {
     message: '개인정보 수집 동의는 필수입니다.',
   }),
@@ -64,9 +65,9 @@ const SaleProductBuyFormSchema = z.object({
 
 type SaleProductBuyFormValues = z.infer<typeof SaleProductBuyFormSchema>;
 
-export default function ProductDetailClient({ id }: { id: string }) {
+export default function GroupReservationClient() {
   const saleProductData = useSaleProductListQuery();
-  const saleProductDetailData = useDetailSaleProductQuery(id);
+  // const saleProductDetailData = useDetailSaleProductQuery(id);
 
   const currentHour = useMemo(() => String(new Date().getHours()), []);
   const currentMin = useMemo(
@@ -84,7 +85,7 @@ export default function ProductDetailClient({ id }: { id: string }) {
       buyName: '',
       buyPhoneNumber: '',
       buyEmail: '',
-      buyNumber: '',
+      // buyNumber: '',
       consentCollection: false,
       consentProvision: false,
       consentCancellation: false,
@@ -156,21 +157,13 @@ export default function ProductDetailClient({ id }: { id: string }) {
     console.log('aaaaaaaaaaa');
   };
 
-  //최초 데이터 세팅
-  useEffect(() => {
-    if (saleProductData.list.length > 0) {
-      const initData = saleProductData.list.filter((f) => f._id === id);
-      setSelectedSaleProduct(initData);
-    }
-  }, [saleProductData, id]);
-
   useEffect(() => {
     saleProductForm.setValue('buyProducts', selectedSaleProduct);
   }, [saleProductForm, selectedSaleProduct]);
 
-  if (Object.keys(saleProductDetailData).length < 1) {
-    return false;
-  }
+  // if (Object.keys(saleProductDetailData).length < 1) {
+  //   return false;
+  // }
 
   //회원가입하면 - 로그인한 사용자의 정보를 이용해 상품구매 세팅
 
@@ -183,10 +176,10 @@ export default function ProductDetailClient({ id }: { id: string }) {
       <form onSubmit={saleProductForm.handleSubmit(handleSubmit)}>
         <div className="flex flex-row space-y-8">
           {/* 상품 상세 정보 */}
-          <ProductDetailInfo
+          {/* <ProductDetailInfo
             saleProductId={id}
             saleProductDetailData={saleProductDetailData}
-          />
+          /> */}
 
           {/* 상품 구매하기 */}
           <div className="basis-1/3 mx-3">
@@ -412,7 +405,7 @@ export default function ProductDetailClient({ id }: { id: string }) {
                 )}
               />
 
-              <FormField
+              {/* <FormField
                 control={saleProductForm.control}
                 name="buyNumber"
                 render={({ field }) => (
@@ -433,7 +426,7 @@ export default function ProductDetailClient({ id }: { id: string }) {
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
             </div>
             <div>
               <div>
@@ -568,7 +561,7 @@ export default function ProductDetailClient({ id }: { id: string }) {
         </div>
 
         <div className="flex justify-center pt-4">
-          <Button>구매하기</Button>
+          <Button>예약하기</Button>
         </div>
       </form>
     </Form>

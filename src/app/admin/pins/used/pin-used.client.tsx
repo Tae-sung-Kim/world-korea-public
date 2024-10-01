@@ -1,5 +1,6 @@
 'use client';
 
+import QrCodeScanModal from '../../components/qr-code-scan.modal';
 import { useUsedPinListMutation } from '../../queries';
 import { Button } from '@/components/ui/button';
 import {
@@ -11,7 +12,12 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
+<<<<<<< HEAD
 import { PinUsed } from '@/definitions/pin.type';
+=======
+import { useModalContext } from '@/contexts/modal.context';
+import { PinUsed } from '@/definitions/pins.type';
+>>>>>>> 095b811f84dd9905025373f56202ab1cff5a51b7
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -25,6 +31,8 @@ const PinFormSchema = z.object({
 type PinFormValues = z.infer<typeof PinFormSchema>;
 
 export default function PinUsedClient() {
+  const { openModal } = useModalContext();
+
   const handleResetFormData = () => {
     pinForm.reset();
   };
@@ -69,33 +77,75 @@ export default function PinUsedClient() {
     usedPinListMutation.mutate(data);
   };
 
-  return (
-    <Form {...pinForm}>
-      <form onSubmit={pinForm.handleSubmit(handleSubmit)} className="space-y-8">
-        <FormField
-          control={pinForm.control}
-          name="pinNumberList"
-          render={({ field }) => {
-            return (
-              <FormItem>
-                <FormLabel>핀번호 사용</FormLabel>
-                <FormControl>
-                  <Textarea
-                    {...field}
-                    className="h-[400px]"
-                    placeholder={`엑셀에서 복사한 핀 번호를 붙여넣기 해주세요.`}
-                  ></Textarea>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            );
-          }}
-        />
+  //formData에 추가
+  const handleSetData = (qrData: string) => {
+    const prevData = pinForm.getValues('pinNumberList').split('\n');
+    let sumData: string[] = [];
 
-        <div className="flex justify-center pt-4">
-          <Button>핀번호 사용</Button>
-        </div>
-      </form>
-    </Form>
+    //이전 데이터가 있다면, \n 추가
+    if (prevData.length > 0) {
+      sumData = prevData;
+    }
+    sumData.push(qrData);
+
+    const pinNumbers = sumData.reduce((acc: string[], cur: string) => {
+      if (!acc.includes(cur) && !!cur) {
+        acc.push(cur);
+      }
+      return acc;
+    }, []);
+
+    pinForm.setValue('pinNumberList', pinNumbers.join('\n'));
+  };
+
+  const handleQRCodeScan = async () => {
+    return await openModal({
+      title: 'QR CODE SCAN',
+      Component: ({ onCancel }) => {
+        return (
+          <QrCodeScanModal onCancel={onCancel} onResiveData={handleSetData} />
+        );
+      },
+    });
+  };
+
+  return (
+    <div className="space-y-8">
+      <div>
+        <Button variant="secondary" onClick={handleQRCodeScan}>
+          QR SCAN
+        </Button>
+      </div>
+      <Form {...pinForm}>
+        <form
+          onSubmit={pinForm.handleSubmit(handleSubmit)}
+          className="space-y-8"
+        >
+          <FormField
+            control={pinForm.control}
+            name="pinNumberList"
+            render={({ field }) => {
+              return (
+                <FormItem>
+                  <FormLabel className="text-2xl">핀번호 사용</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      {...field}
+                      className="h-[400px]"
+                      placeholder={`엑셀에서 복사한 핀 번호를 붙여넣기 해주세요.`}
+                    ></Textarea>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
+
+          <div className="flex justify-center pt-4">
+            <Button>핀번호 사용</Button>
+          </div>
+        </form>
+      </Form>
+    </div>
   );
 }
