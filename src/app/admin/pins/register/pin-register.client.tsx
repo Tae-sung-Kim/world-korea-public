@@ -1,6 +1,7 @@
 'use client';
 
 import { useCreatePinMutation, useProductListQuery } from '../../queries';
+import { excelDataToPinRegisterData } from '../pin.utils';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -60,21 +61,6 @@ export default function PinRegisterClient() {
       pinList: '',
     },
   });
-
-  const excelDataToPinRegisterData = (value: string): PinData[] => {
-    const splitLineValue = value.split('\n');
-
-    return splitLineValue.reduce((acc: PinData[], cur: string) => {
-      const splitTabValue = cur.split('\t');
-
-      acc.push({
-        pinNumber: splitTabValue[0].replaceAll('-', ''),
-        endDate: new Date(splitTabValue[1] ?? new Date()),
-      });
-
-      return acc;
-    }, []);
-  };
 
   const handleSubmit = () => {
     const formValues = pinForm.getValues();

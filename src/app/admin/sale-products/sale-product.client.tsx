@@ -47,15 +47,12 @@ export default function SaleProductListClient() {
   const deleteProductMutation = useDeleteProductMutation();
 
   const handleDeleteProduct = ({
-    e,
     id,
     title,
   }: {
-    e: FormEvent<HTMLButtonElement>;
     id: string;
     title: string;
   }) => {
-    e.stopPropagation();
     if (!!id) {
       openModal({
         type: MODAL_TYPE.CONFIRM,
@@ -129,7 +126,6 @@ export default function SaleProductListClient() {
                     size="icon"
                     onClick={(e: FormEvent<HTMLButtonElement>) =>
                       handleDeleteProduct({
-                        e,
                         id: data._id ?? '',
                         title: data.name,
                       })
