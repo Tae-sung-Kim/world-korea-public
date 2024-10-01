@@ -30,7 +30,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { MODAL_TYPE, useModalContext } from '@/contexts/modal.context';
-import { Pin } from '@/definitions/pins.type';
+import { Pin } from '@/definitions/pin.type';
 import { addComma } from '@/utils/number';
 import { useRouter } from 'next/navigation';
 import { QRCodeCanvas } from 'qrcode.react';

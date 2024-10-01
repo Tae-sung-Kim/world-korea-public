@@ -1,10 +1,10 @@
-import { PaginationResponse } from '@/definitions';
+import { OrderStatus, PaginationResponse } from '@/definitions';
 import {
   PAGE_NUMBER_DEFAULT,
   PAGE_SIZE_DEFAULT,
 } from '@/definitions/pagination.constant';
 import { PaginationParams } from '@/definitions/pagination.type';
-import type { Pin } from '@/definitions/pins.type';
+import type { Pin } from '@/definitions/pin.type';
 import {
   model,
   models,
@@ -18,6 +18,7 @@ import {
 export interface PinDB {
   number: string;
   product: Types.ObjectId;
+  orderStatus: OrderStatus;
   endDate?: Date;
   usedDate?: Date;
   createdAt?: Date;
@@ -58,6 +59,11 @@ const schema = new Schema<PinDB, PinSchemaModel, PinMethods>({
   product: {
     type: Schema.Types.ObjectId,
     ref: 'Product',
+  },
+  orderStatus: {
+    type: String,
+    enum: Object.values(OrderStatus),
+    default: OrderStatus.Unpaid,
   },
   endDate: { type: Date },
   usedDate: { type: Date },
@@ -124,7 +130,6 @@ schema.static('updateUsedDatePin', async function updateUsedDatePin(id, used) {
       },
     },
     {
-      new: true,
       runValidators: true,
     }
   );
@@ -150,6 +155,14 @@ schema.static(
 
     return true;
   }
+);
+
+/**
+ * 핀 상태 변경 (결제 중)
+ */
+schema.static(
+  'updatePendingPinIdList',
+  async function updatePendingPinList(pinIdList) {}
 );
 
 const Pin =

@@ -1,6 +1,6 @@
 import { PageFilter, PaginationProp } from '@/app/admin/queries/queries.type';
 import { PaginationResponse } from '@/definitions';
-import { Pin, PinUsed } from '@/definitions/pins.type';
+import { Pin, PinUsed } from '@/definitions/pin.type';
 import http from '@/services';
 import qs from 'qs';
 

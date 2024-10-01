@@ -1,3 +1,4 @@
+import { OrderStatus } from '.';
 import { ProductFormData } from './product.type';
 
 export type PinData = {
@@ -12,6 +13,7 @@ export interface Pin {
   pinPrefixFour?: string;
   _id?: string;
   createdAt?: Date | string;
+  orderStatus: OrderStatus;
   product?: ProductFormData<string>;
   productId?: string;
   number?: string;
@@ -23,3 +25,9 @@ export type SearchParams = Record<string, number | string | undefined>;
 export type PinUsed = {
   pinNumberList: string[];
 };
+
+export enum PinStatus {
+  Unused = 'unused',
+  Pending = 'pending',
+  Used = 'used',
+}

@@ -4,10 +4,10 @@ import {
 } from '@/definitions/http.constant';
 import { NextResponse } from 'next/server';
 
-export function createResponse(status: HttpStatusValues) {
+export function createResponse(status: HttpStatusValues, message?: string) {
   return NextResponse.json(
     {
-      message: HTTP_STATUS_MESSAGES[status],
+      message: message || HTTP_STATUS_MESSAGES[status],
     },
     {
       status,

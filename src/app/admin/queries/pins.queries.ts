@@ -1,6 +1,6 @@
 import { FunctionProps, PageFilter, PaginationProp } from './queries.type';
 import { PaginationResponse } from '@/definitions';
-import { Pin, PinUsed } from '@/definitions/pins.type';
+import { Pin, PinUsed } from '@/definitions/pin.type';
 import pinsService from '@/services/pins.service';
 import {
   keepPreviousData,

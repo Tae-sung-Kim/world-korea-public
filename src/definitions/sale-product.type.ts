@@ -1,4 +1,4 @@
-import { Pin } from './pins.type';
+import { Pin } from './pin.type';
 import { SaleProductDB } from '@/app/api/models/sale-product.model';
 import { Product } from '@/definitions';
 
