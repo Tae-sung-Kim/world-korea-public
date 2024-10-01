@@ -1,12 +1,19 @@
-import { FunctionProps } from './queries.type';
+import { PageFilter, PaginationProp } from './queries.type';
+import {
+  Order,
+  PaginationResponse,
+  SaleProductBuyFormData,
+} from '@/definitions';
 import ordersService from '@/services/orders.service';
-import { useMutation } from '@tanstack/react-query';
+import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { toast } from 'sonner';
 
 interface ErrorResponse {
   message: string;
 }
+
+const QUERY_KEY = 'admin-orders';
 
 export function useOrderSaleProductMutation() {
   return useMutation({
@@ -22,4 +29,31 @@ export function useOrderSaleProductMutation() {
       }
     },
   });
+}
+
+export function useOrderListQuery(
+  paginationParam?: PaginationProp<PageFilter>
+) {
+  const fallback: PaginationResponse<SaleProductBuyFormData> = {
+    pageNumber: -1,
+    pageSize: -1,
+    list: [],
+    totalItems: -1,
+    totalPages: -1,
+    hasPreviousPage: false,
+    hasNextPage: false,
+    previousPage: -1,
+    nextPage: -1,
+    startIndex: -1,
+    endIndex: -1,
+  };
+
+  const { data = fallback } = useQuery({
+    queryKey: [QUERY_KEY, Object.values(paginationParam ?? {})],
+    queryFn: () => {
+      return ordersService.getOrderList(paginationParam ?? {});
+    },
+    placeholderData: keepPreviousData,
+  });
+  return data;
 }
