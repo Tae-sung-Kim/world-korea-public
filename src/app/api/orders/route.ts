@@ -121,6 +121,8 @@ export async function POST(req: NextRequest) {
       status: OrderStatus.Pending,
     });
 
+    new orderData.save();
+
     return NextResponse.json(orderData);
   } catch (error) {
     return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);

@@ -60,6 +60,7 @@ const schema = new Schema<OrderDB, OrderSchemaModel, OrderMethods>({
   status: {
     type: String,
     enum: Object.values(OrderStatus),
+    default: OrderStatus.Pending,
   },
   user: {
     type: Schema.Types.ObjectId,
