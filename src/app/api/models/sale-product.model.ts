@@ -109,7 +109,12 @@ schema.static(
             select: '_id orderStatus',
           },
         })
-    ).map((d) => d.toObject()) as (SaleProductDB & {
+    )
+      // .populate({
+      //   path: 'products.pins',
+      //   select: '_id orderStatus',
+      // })
+      .map((d) => d.toObject()) as (SaleProductDB & {
       products: {
         _id: string;
         name: string;
