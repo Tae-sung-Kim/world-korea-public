@@ -111,7 +111,7 @@ export async function POST(req: NextRequest) {
     );
 
     // 구매 추가
-    const orderData = await new OrderModel({
+    const orderData = new OrderModel({
       saleProduct,
       pins: pinList,
       quantity,
@@ -121,7 +121,7 @@ export async function POST(req: NextRequest) {
       status: OrderStatus.Pending,
     });
 
-    new orderData.save();
+    await orderData.save();
 
     return NextResponse.json(orderData);
   } catch (error) {
