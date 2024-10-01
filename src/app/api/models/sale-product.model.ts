@@ -130,7 +130,6 @@ schema.static(
           pinCount?: number;
         }[]
       ).forEach((dd) => {
-        console.log(dd);
         dd.pins = dd.pins?.filter(({ orderStatus }) => {
           return orderStatus === OrderStatus.Unpaid;
         });
