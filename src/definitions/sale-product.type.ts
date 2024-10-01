@@ -1,4 +1,3 @@
-import { Pin } from './pin.type';
 import { SaleProductDB } from '@/app/api/models/sale-product.model';
 import { Product } from '@/definitions';
 
@@ -25,8 +24,9 @@ export interface SaleProductFormData<T> {
 }
 
 export interface SaleProductBuyFormData {
-  buyDate: Date | string;
-  buyProductCount: number;
+  // buyDate: Date | string;
+  quantity: number; //상품수량
+  saleProduct: string; //판매 상품 아이디
   buyType: string;
 
   //나중에 비회원 예약일때 사용

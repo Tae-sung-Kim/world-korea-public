@@ -199,7 +199,7 @@ export default function PinClient() {
         </TableBody>
         <TableFooter>
           <TableRow>
-            <TableCell colSpan={6}>총 상품</TableCell>
+            <TableCell colSpan={7}>총 상품</TableCell>
             <TableCell className="text-right">
               {addComma(pinData.totalItems)} 개
             </TableCell>

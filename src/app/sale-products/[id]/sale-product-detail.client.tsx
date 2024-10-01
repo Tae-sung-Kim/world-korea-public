@@ -1,5 +1,6 @@
 'use client';
 
+import { useOrderSaleProductMutation } from '@/app/admin/queries';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import {
@@ -25,7 +26,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Separator } from '@radix-ui/react-separator';
 import { format } from 'date-fns';
 import Image from 'next/image';
-import { ChangeEvent, useMemo } from 'react';
+import { ChangeEvent, useEffect, useMemo } from 'react';
 import { ControllerRenderProps, useForm } from 'react-hook-form';
 import { FcInfo } from 'react-icons/fc';
 import { z } from 'zod';
@@ -36,25 +37,24 @@ type Props = {
 
 const SaleProductBuyFormSchema = z.object({
   buyDate: z.date(),
-  buyProductCount: z
-    .string()
-    .refine((d) => Number(d) > 0, {
-      message: '수량을 선택해 주세요.',
-    })
-    .refine((d) => Number(d) < 100, {
-      message: '최대 수량은 99개입니다.',
-    }),
+  saleProduct: z.string(),
+  quantity: z
+    .number()
+    .min(1, '수량을 선택해 주세요.')
+    .max(99, '최대 수량은 99개입니다.'),
   buyType: z.string().min(1, '결제 방법을 선택해 주세요.'),
 });
 
 type SaleProductBuyFormValues = z.infer<typeof SaleProductBuyFormSchema>;
 
-export default function SellProductDetailClient({ saleProductId = '' }: Props) {
+export default function SaleProductDetailClient({ saleProductId = '' }: Props) {
+  const createOrderSaleProduct = useOrderSaleProductMutation();
+
   const saleProductForm = useForm<SaleProductBuyFormValues>({
     resolver: zodResolver(SaleProductBuyFormSchema),
     defaultValues: {
       buyDate: new Date(),
-      buyProductCount: '0',
+      quantity: 0,
       buyType: 'creditCard',
     },
   });
@@ -74,7 +74,7 @@ export default function SellProductDetailClient({ saleProductId = '' }: Props) {
 
   //구매하기
   const handleSubmit = () => {
-    console.log('aaaaaaaaaaa');
+    createOrderSaleProduct.mutate(saleProductForm.getValues());
   };
 
   //수량 선택
@@ -86,9 +86,14 @@ export default function SellProductDetailClient({ saleProductId = '' }: Props) {
 
     //0보다 클때만
     if (Number(value) > -1) {
-      field.onChange(e.target.value);
+      field.onChange(Number(e.target.value));
     }
   };
+
+  //최초 상품 아이디 지정
+  useEffect(() => {
+    saleProductForm.setValue('saleProduct', saleProductId);
+  }, [saleProductForm, saleProductId]);
 
   if (Object.keys(saleProductDetailData).length < 1) {
     return false;
@@ -171,7 +176,7 @@ export default function SellProductDetailClient({ saleProductId = '' }: Props) {
             <div>
               <FormField
                 control={saleProductForm.control}
-                name="buyProductCount"
+                name="quantity"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>수량</FormLabel>
