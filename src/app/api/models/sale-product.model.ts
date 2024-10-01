@@ -18,6 +18,7 @@ import {
   Document,
   SortOrder,
 } from 'mongoose';
+import '@/app/api/models/pin.model';
 
 export interface SaleProductDB {
   name: string; // 상품 판매명
@@ -109,12 +110,7 @@ schema.static(
             select: '_id orderStatus',
           },
         })
-    )
-      // .populate({
-      //   path: 'products.pins',
-      //   select: '_id orderStatus',
-      // })
-      .map((d) => d.toObject()) as (SaleProductDB & {
+    ).map((d) => d.toObject()) as (SaleProductDB & {
       products: {
         _id: string;
         name: string;
@@ -134,6 +130,7 @@ schema.static(
           pinCount?: number;
         }[]
       ).forEach((dd) => {
+        console.log(dd);
         dd.pins = dd.pins?.filter(({ orderStatus }) => {
           return orderStatus === OrderStatus.Unpaid;
         });
