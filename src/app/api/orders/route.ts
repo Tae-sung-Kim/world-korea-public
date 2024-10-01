@@ -117,6 +117,7 @@ export async function POST(req: NextRequest) {
       quantity,
       totalPrice: saleProductItem.price * quantity,
       user: userData._id,
+      orderDate: Date.now(),
       status: OrderStatus.Pending,
     });
   } catch (error) {

@@ -22,6 +22,7 @@ export interface OrderDB extends Document {
   totalPrice: number;
   user: Types.ObjectId; // User ID 참조
   status: OrderStatus;
+  orderDate: Date;
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;
@@ -64,6 +65,7 @@ const schema = new Schema<OrderDB, OrderSchemaModel, OrderMethods>({
     type: Schema.Types.ObjectId,
     ref: 'User',
   },
+  orderDate: { type: Date },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
   deletedAt: { type: Date },
