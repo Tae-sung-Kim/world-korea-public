@@ -2,7 +2,6 @@
 
 import ProductDetailInfo from '../components/product-detail-info';
 import SaleProductItem from '../components/sale-product-item.component';
-import ProductDetailModal from './product-detail-modal';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Checkbox } from '@/components/ui/checkbox';
