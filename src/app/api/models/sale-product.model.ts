@@ -1,9 +1,11 @@
 import '@/app/api/models/product.model';
 import {
+  OrderStatus,
   PAGE_NUMBER_DEFAULT,
   PAGE_SIZE_DEFAULT,
   PaginationParams,
   PaginationResponse,
+  Pin,
   Product,
   SaleProduct,
 } from '@/definitions';
@@ -95,16 +97,24 @@ schema.static(
 
     // 데이터 가져오기
     let list = (
-      await this.find(filter).sort(sort).skip(skip).limit(pageSize).populate({
-        path: 'products',
-        select: '_id name images pins',
-      })
+      await this.find(filter)
+        .sort(sort)
+        .skip(skip)
+        .limit(pageSize)
+        .populate({
+          path: 'products',
+          select: '_id name images pins',
+          populate: {
+            path: 'pins',
+            select: '_id orderStatus',
+          },
+        })
     ).map((d) => d.toObject()) as (SaleProductDB & {
       products: {
         _id: string;
         name: string;
         images: string[];
-        pins: string[];
+        pins: Pin[];
         pinCount: number;
       }[];
     })[];
@@ -115,10 +125,14 @@ schema.static(
           _id: string;
           name: string;
           images: string[];
-          pins?: string[];
+          pins?: Pin[];
           pinCount?: number;
         }[]
       ).forEach((dd) => {
+        dd.pins = dd.pins?.filter(({ orderStatus }) => {
+          return orderStatus === OrderStatus.Unpaid;
+        });
+
         dd.pinCount = dd.pins ? dd.pins.length : 0;
         delete dd.pins;
       });

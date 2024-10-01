@@ -63,7 +63,6 @@ export async function POST(req: NextRequest) {
         populate: {
           path: 'pins',
           select: '_id orderStatus',
-          match: { someCondition: true },
         },
       })
       .lean<{ products: Product[]; price: number }>()
@@ -88,7 +87,9 @@ export async function POST(req: NextRequest) {
     // 2. 상품 재고 체크
     let pinList: string[] = [];
     let isInValid = saleProductItem.products.some(({ pins }) => {
-      pinList = pinList.concat(pins.map((pinItem) => pinItem._id as string));
+      pinList = pinList.concat(
+        pins.map((pinItem) => pinItem._id as string).slice(0, quantity)
+      );
       return quantity > pins.length;
     });
 
@@ -102,7 +103,7 @@ export async function POST(req: NextRequest) {
       { _id: { $in: pinList } },
       {
         $set: {
-          orderState: OrderStatus.Pending,
+          orderStatus: OrderStatus.Pending,
         },
       },
       {
