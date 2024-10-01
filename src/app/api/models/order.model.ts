@@ -44,7 +44,7 @@ interface OrderMethods {}
 
 interface OrderSchemaModel extends Model<OrderDB, {}, OrderMethods> {
   getOrderList(
-    paginationParams: PaginationParams & { level: string }
+    paginationParams: PaginationParams
   ): PaginationResponse<Promise<Order[]>>;
 }
 
@@ -83,7 +83,6 @@ schema.static(
     pageNumber = PAGE_NUMBER_DEFAULT,
     pageSize = PAGE_SIZE_DEFAULT,
     filter: filterQuery = null,
-    level = 1,
   } = {}) {
     const skip = (pageNumber - 1) * pageSize;
     const filter: Record<string, any> = {
@@ -103,10 +102,18 @@ schema.static(
 
     // 데이터 가져오기
     let list = (
-      await this.find(filter).sort(sort).skip(skip).limit(pageSize).populate({
-        path: 'user',
-        select: '_id name',
-      })
+      await this.find(filter)
+        .sort(sort)
+        .skip(skip)
+        .limit(pageSize)
+        .populate({
+          path: 'user',
+          select: '_id name',
+        })
+        .populate({
+          path: 'saleProduct',
+          select: '_id name',
+        })
     ).map((d) => d.toObject());
 
     // 전체 페이지 수 계산

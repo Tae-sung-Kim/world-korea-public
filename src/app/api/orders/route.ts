@@ -1,5 +1,6 @@
 import OrderModel from '../models/order.model';
 import SaleProductModel from '../models/sale-product.model';
+import { getQueryParams } from '../utils/api.utils';
 import { getCurrentUser, requiredIsMe } from '../utils/auth.util';
 import { createResponse } from '../utils/http.util';
 import connectMongo from '@/app/api/libs/database';
@@ -21,6 +22,14 @@ export async function GET(req: NextRequest) {
     if (!userData) {
       return createResponse(HTTP_STATUS.UNAUTHORIZED);
     }
+
+    const { pageNumber, pageSize, filter } = getQueryParams(req);
+    const paginationResponse = await OrderModel.getOrderList({
+      pageNumber,
+      pageSize,
+      filter,
+    });
+    return NextResponse.json(paginationResponse);
   } catch (error) {
     return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
   }
