@@ -1,6 +1,5 @@
 'use client';
 
-import SaleProductDetailsTab from './sale-product-detail.component';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import {
