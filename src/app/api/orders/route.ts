@@ -11,7 +11,7 @@ import {
   Product,
   SaleProduct,
 } from '@/definitions';
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
   try {
@@ -111,7 +111,7 @@ export async function POST(req: NextRequest) {
     );
 
     // 구매 추가
-    await new OrderModel({
+    const orderData = await new OrderModel({
       saleProduct,
       pins: pinList,
       quantity,
@@ -120,6 +120,8 @@ export async function POST(req: NextRequest) {
       orderDate: Date.now(),
       status: OrderStatus.Pending,
     });
+
+    return NextResponse.json(orderData);
   } catch (error) {
     return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
   }
