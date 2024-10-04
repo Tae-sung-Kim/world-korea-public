@@ -16,12 +16,9 @@ export default function MainNav() {
           </Link>
         </h1>
         <ul className="flex items-center justify-center h-full text-xl gap-16">
-          <li>
-            <Link href="/">상품목록</Link>
-          </li>
-          <li>
+          {/* <li>
             <Link href="/group-reservation">단체예약</Link>
-          </li>
+          </li> */}
         </ul>
       </div>
     </nav>
