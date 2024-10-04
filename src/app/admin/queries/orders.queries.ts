@@ -1,9 +1,5 @@
 import { PageFilter, PaginationProp } from './queries.type';
-import {
-  Order,
-  PaginationResponse,
-  SaleProductBuyFormData,
-} from '@/definitions';
+import { PaginationResponse, SaleProductBuyFormData } from '@/definitions';
 import ordersService from '@/services/orders.service';
 import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';

@@ -12,12 +12,8 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
-<<<<<<< HEAD
-import { PinUsed } from '@/definitions/pin.type';
-=======
 import { useModalContext } from '@/contexts/modal.context';
-import { PinUsed } from '@/definitions/pins.type';
->>>>>>> 095b811f84dd9905025373f56202ab1cff5a51b7
+import { PinUsed } from '@/definitions/pin.type';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';

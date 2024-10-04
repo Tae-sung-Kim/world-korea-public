@@ -3,7 +3,6 @@
 import { usePagination } from '../hooks/usePagination';
 import { useOrderListQuery } from '../queries';
 import Pagination from '@/app/common/components/pagination';
-import { Button } from '@/components/ui/button';
 import {
   Table,
   TableBody,
@@ -14,7 +13,6 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { addComma } from '@/utils/number';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 export default function OrderListClient() {

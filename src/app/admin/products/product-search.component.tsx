@@ -2,7 +2,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { EntryType } from 'perf_hooks';
 import qs from 'qs';
 import { ChangeEvent, KeyboardEvent, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';

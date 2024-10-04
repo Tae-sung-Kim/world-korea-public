@@ -13,7 +13,7 @@ export interface Pin {
   pinPrefixFour?: string;
   _id?: string;
   createdAt?: Date | string;
-  orderStatus: OrderStatus;
+  orderStatus?: OrderStatus;
   product?: ProductFormData<string>;
   productId?: string;
   number?: string;
