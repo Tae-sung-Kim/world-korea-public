@@ -2,6 +2,7 @@
 
 import { usePagination } from '../hooks/usePagination';
 import { useOrderListQuery } from '../queries';
+import OrderSearch from './order-search.component';
 import Pagination from '@/app/common/components/pagination';
 import {
   Table,
@@ -31,6 +32,7 @@ export default function OrderListClient() {
 
   return (
     <>
+      <OrderSearch />
       <Table>
         <TableHeader>
           <TableRow>

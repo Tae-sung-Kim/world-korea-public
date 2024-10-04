@@ -7,6 +7,7 @@ import {
   useProductListQuery,
   useUsedPinMutation,
 } from '../queries';
+import PinSearch from './pin-search.component';
 import { splitFourChar } from './pin.utils';
 import Pagination from '@/app/common/components/pagination';
 import { Button } from '@/components/ui/button';
@@ -113,7 +114,8 @@ export default function PinClient() {
   return (
     <>
       <div className="flex">
-        <Select onValueChange={handleProductChange} value={selectedProductId}>
+        <PinSearch />
+        {/* <Select onValueChange={handleProductChange} value={selectedProductId}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="선택" />
           </SelectTrigger>
@@ -128,7 +130,7 @@ export default function PinClient() {
               })}
             </SelectGroup>
           </SelectContent>
-        </Select>
+        </Select> */}
       </div>
       <Table>
         {/* {isFetching && <TableCaption>조회 중입니다.</TableCaption>} */}

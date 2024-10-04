@@ -9,7 +9,7 @@ export default function SaleProductDetailsTab({
   products: ProductFormData<string>[];
 }) {
   return (
-    <>
+    <div className="bg-white">
       {Array.isArray(products) && products.length > 0 && (
         <Tabs defaultValue={products[0]._id}>
           <TabsList className="flex flex-row m-3">
@@ -33,6 +33,6 @@ export default function SaleProductDetailsTab({
           })}
         </Tabs>
       )}
-    </>
+    </div>
   );
 }

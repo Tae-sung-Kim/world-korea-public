@@ -3,6 +3,7 @@
 import { usePagination } from '../hooks/usePagination';
 import { useDeleteProductMutation, useUserCategoryListQuery } from '../queries';
 import { useSaleProductListQuery } from '../queries/sale-product.queries';
+import SaleProductSearch from './sale-product-search.component';
 import Pagination from '@/app/common/components/pagination';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -65,6 +66,7 @@ export default function SaleProductListClient() {
 
   return (
     <>
+      <SaleProductSearch />
       {/* <ProductSearch /> */}
       <Table>
         {/* {isFetching && <TableCaption>조회 중입니다.</TableCaption>} */}

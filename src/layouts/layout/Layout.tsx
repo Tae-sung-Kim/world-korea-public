@@ -6,7 +6,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="root-layout h-screen">
       <Header />
-      <main className="bg-gray-50 bg-[url('/images/slide1.jpg')] h-full">
+      <main className="bg-gray-50 bg-[url('/images/slide1.jpg')] h-max">
         {children}
       </main>
       <Footer />

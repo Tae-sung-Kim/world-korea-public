@@ -66,7 +66,9 @@ export default function UsersClient() {
                 <TableCell>{companyName}</TableCell>
                 <TableCell>{email}</TableCell>
                 <TableCell>{contactNumber}</TableCell>
-                <TableCell>{createdAt?.toString()}</TableCell>
+                <TableCell>
+                  {createdAt && new Date(createdAt).toLocaleDateString()}
+                </TableCell>
                 <TableCell>{isApproved ? '승인' : '미승인'}</TableCell>
               </TableRow>
             );
