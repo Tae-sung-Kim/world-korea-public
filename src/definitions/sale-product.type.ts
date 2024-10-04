@@ -23,11 +23,19 @@ export interface SaleProductFormData<T> {
   updatedAt?: Date | string;
 }
 
-export interface SaleProductBuyFormData {
+export interface SaleProductBuyFormData<T> {
   // buyDate: Date | string;
   quantity: number; //상품수량
-  saleProduct: string; //판매 상품 아이디
+  saleProduct: T; //판매 상품 아이디
   buyType: string;
+  _id?: string;
+  pins?: string[];
+  createdAt?: Date | string;
+  orderDate?: Date | string;
+  updatedAt?: Date | string;
+  status?: string;
+  totalPrice?: number;
+  user?: { name: string; _id: string };
 
   //나중에 비회원 예약일때 사용
   // buyDate: Date | string;

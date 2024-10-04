@@ -1,4 +1,4 @@
-import { PinData } from '@/definitions/pins.type';
+import { PinData } from '@/definitions';
 
 //핀번호 4자리씩 대쉬 추가
 export const splitFourChar = (pinNumber: string = '') => {

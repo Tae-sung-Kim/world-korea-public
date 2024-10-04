@@ -34,7 +34,9 @@ export function useOrderSaleProductMutation() {
 export function useOrderListQuery(
   paginationParam?: PaginationProp<PageFilter>
 ) {
-  const fallback: PaginationResponse<SaleProductBuyFormData> = {
+  const fallback: PaginationResponse<
+    SaleProductBuyFormData<{ name: string; _id: string }>
+  > = {
     pageNumber: -1,
     pageSize: -1,
     list: [],
