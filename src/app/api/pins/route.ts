@@ -48,6 +48,7 @@ export async function POST(req: NextRequest) {
       pinPrefixFour, // 핀번호 앞자리 (자동)
       pinCount, // 생성할 개수 (자동)
       pinList, // 핀 번호 목록 (수동)
+      orderStatus, //핀 상태
       endDate,
     } = body;
 
@@ -65,6 +66,7 @@ export async function POST(req: NextRequest) {
       const listToInsert: PinDB[] = [];
       new Array(pinCount).fill(undefined).forEach(() => {
         listToInsert.push({
+          orderStatus,
           product: productId,
           number: `${pinPrefixFour}${generate12CharUUID()}`,
           endDate,
@@ -87,6 +89,7 @@ export async function POST(req: NextRequest) {
         ({ pinNumber, endDate }: { pinNumber: string; endDate?: Date }) => {
           if (typeof pinNumber === 'string' && pinNumber.length === 16) {
             listToInsert.push({
+              orderStatus,
               product: productId,
               number: pinNumber,
               endDate,
