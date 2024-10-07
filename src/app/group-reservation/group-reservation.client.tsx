@@ -1,7 +1,6 @@
 'use client';
 
 // import ProductDetailInfo from '../components/product-detail-info';
-// import SaleProductItem from '../components/sale-product-item.component';
 import SaleProductItem from './components/sale-product-item.component';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
