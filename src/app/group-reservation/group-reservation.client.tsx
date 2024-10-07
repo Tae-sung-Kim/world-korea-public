@@ -170,6 +170,8 @@ export default function GroupReservationClient() {
   //구매자이름, 휴대폰 정보, 이메일, 구매확인비번
   //동의하는거
 
+  //개발 해야함
+
   return (
     <Form {...saleProductForm}>
       <form onSubmit={saleProductForm.handleSubmit(handleSubmit)}>
