@@ -153,7 +153,7 @@ export default function GroupReservationClient() {
 
   //구매하기
   const handleSubmit = () => {
-    console.log('aaaaaaaaaaa');
+    console.log('예약하기');
   };
 
   useEffect(() => {
@@ -169,8 +169,6 @@ export default function GroupReservationClient() {
   //판매 상품 아이디, 구매날짜, 구매시간, 추가된 상품,
   //구매자이름, 휴대폰 정보, 이메일, 구매확인비번
   //동의하는거
-
-  //배포 테스트
 
   return (
     <Form {...saleProductForm}>
