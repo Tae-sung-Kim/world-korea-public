@@ -8,4 +8,4 @@
 https://worldkorea.vercel.app/
 
 XPT
-s2
+s22
