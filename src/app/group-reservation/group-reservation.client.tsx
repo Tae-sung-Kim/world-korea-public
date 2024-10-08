@@ -153,7 +153,7 @@ export default function GroupReservationClient() {
 
   //구매하기
   const handleSubmit = () => {
-    console.log('예약하기');
+    console.log('예약하기 개발해야함');
   };
 
   useEffect(() => {
