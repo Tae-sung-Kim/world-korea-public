@@ -38,10 +38,10 @@ export default function HomeClient() {
                     marginTop: 'calc((3rem)* -1)',
                   }}
                 >
-                  <div className="absolute">
+                  {/* <div className="absolute">
                     <div className="animate-fade">재고량 : </div>
                     <div className="animate-fade">사용량 : </div>
-                  </div>
+                  </div> */}
                   {images[0] && (
                     <Image
                       alt="상품 이미지"
