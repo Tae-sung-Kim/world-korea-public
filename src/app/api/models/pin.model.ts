@@ -44,6 +44,7 @@ interface PinSchemaModel extends Model<PinDB, {}, PinMethods> {
     paginationParams: PaginationParams
   ): Promise<PaginationResponse<Pin[]>>; // 핀 목록 반환
   getPinById(pinId: string): Promise<Pin>; // 핀 상세 반환
+  getPinByNumber(pinNumber: string): Promise<Pin>; // 핀 상세 반환
   updateUsedDatePin(pinId: string, used: boolean): Promise<boolean>; // 빈 사용날짜 수정
   updateUsedDatePinNumberList(
     pinList: [string],
@@ -119,6 +120,13 @@ schema.static(
 
 schema.static('getPinById', function getPinById(pinId) {
   return this.findOne({ _id: pinId }).populate('product');
+});
+
+/**
+ * 번호로 핀 데이터 반환
+ */
+schema.static('getPinByNumber', function getPinByNumber(pinNumber) {
+  return this.findOne({ number: pinNumber });
 });
 
 schema.static('updateUsedDatePin', async function updateUsedDatePin(id, used) {
