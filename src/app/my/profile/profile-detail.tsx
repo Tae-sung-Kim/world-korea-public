@@ -29,6 +29,8 @@ export default function ProfileDetail({
   const handleModalOpen = async () => {
     return await openModal({
       // type: MODAL_TYPE.CONFIRM,
+      showHeader: false,
+      showFooter: false,
       Component: ({ id, onOk, onCancel }) => {
         return (
           <ProfileChangePasswordModal id={id} onOk={onOk} onCancel={onCancel} />

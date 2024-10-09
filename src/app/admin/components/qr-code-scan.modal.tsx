@@ -14,6 +14,7 @@ export default function QrCodeScanModal({
   const handleScan = useCallback(
     (result: QrScanner.ScanResult) => {
       if (!!result.data) {
+        //여기서 먼저 api 요청 후 성공시 값 입력, 이미 사용된  QR이라면 안 보냄
         onResiveData && onResiveData(result.data);
         onCancel && onCancel();
       }

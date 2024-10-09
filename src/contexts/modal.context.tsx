@@ -190,48 +190,48 @@ function ModalProvider({ children }: { children: ReactNode }) {
                   ? { onClick: (e) => onOverlayClick && onOverlayClick(e) }
                   : {})}
               >
-                {type === MODAL_TYPE.MODAL && Component ? (
-                  cloneElement(
-                    <Component id={id} onOk={onOk} onCancel={onCancel} />
-                  )
-                ) : (
-                  <>
-                    {showHeader && (
-                      <ModalHeader>
-                        {title}
-                        {useCloseButton && (
+                <>
+                  {showHeader && (
+                    <ModalHeader>
+                      {title}
+                      {useCloseButton && (
+                        <Button
+                          className="bg-red-400 rounded-full hover:bg-red-300 absolute top-0 right-0 h-7 w-7"
+                          onClick={() => closeModal(id)}
+                        >
+                          X
+                        </Button>
+                      )}
+                    </ModalHeader>
+                  )}
+                  {type === MODAL_TYPE.MODAL && Component ? (
+                    cloneElement(
+                      <Component id={id} onOk={onOk} onCancel={onCancel} />
+                    )
+                  ) : (
+                    <ModalContent>{content}</ModalContent>
+                  )}
+                  {showFooter && (
+                    <ModalFooter>
+                      <div className="flex justify-center">
+                        {type === MODAL_TYPE.CONFIRM && (
                           <Button
-                            className="bg-red-400 rounded-full hover:bg-red-300 absolute top-0 right-0 h-7 w-7"
-                            onClick={() => closeModal(id)}
+                            className="p-2 mx-5 bg-slate-400 hover:bg-slate-300 min-w-36"
+                            onClick={onCancel}
                           >
-                            X
+                            {cancelName ?? '취소'}
                           </Button>
                         )}
-                      </ModalHeader>
-                    )}
-                    <ModalContent>{content}</ModalContent>
-                    {showFooter && (
-                      <ModalFooter>
-                        <div className="flex justify-center">
-                          {type === MODAL_TYPE.CONFIRM && (
-                            <Button
-                              className="p-2 mx-5 bg-slate-400 hover:bg-slate-300 min-w-36"
-                              onClick={onCancel}
-                            >
-                              {cancelName ?? '취소'}
-                            </Button>
-                          )}
-                          <Button
-                            className="p-2 mx-5 bg-blue-400 hover:bg-blue-300 min-w-36"
-                            onClick={onOk}
-                          >
-                            {okName ?? '확인'}
-                          </Button>
-                        </div>
-                      </ModalFooter>
-                    )}
-                  </>
-                )}
+                        <Button
+                          className="p-2 mx-5 bg-blue-400 hover:bg-blue-300 min-w-36"
+                          onClick={onOk}
+                        >
+                          {okName ?? '확인'}
+                        </Button>
+                      </div>
+                    </ModalFooter>
+                  )}
+                </>
               </ModalContainer>
             </ModalPortal>
           );

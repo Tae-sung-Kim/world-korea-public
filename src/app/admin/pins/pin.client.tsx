@@ -1,5 +1,6 @@
 'use client';
 
+import QrCodeModal from '../components/qr-code.modal';
 import { usePagination } from '../hooks/usePagination';
 import {
   useDeletePinMutation,
@@ -34,7 +35,6 @@ import { MODAL_TYPE, useModalContext } from '@/contexts/modal.context';
 import { Pin } from '@/definitions/pin.type';
 import { addComma } from '@/utils/number';
 import { useRouter } from 'next/navigation';
-import { QRCodeCanvas } from 'qrcode.react';
 import { useState } from 'react';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 
@@ -95,18 +95,13 @@ export default function PinClient() {
     }
   };
 
-  const handlePinNumberClick = (pinNumber: string = '') => {
+  const handlePinNumberClick = async (pinNumber: string = '') => {
     if (!!pinNumber) {
-      return openModal({
-        type: MODAL_TYPE.CONFIRM,
+      return await openModal({
         title: `${splitFourChar(pinNumber)}`,
-        content: (
-          <div className="flex justify-center items-stretch">
-            <div className="py-8">
-              <QRCodeCanvas value={`${splitFourChar(pinNumber)}`} />
-            </div>
-          </div>
-        ),
+        Component: () => {
+          return <QrCodeModal pinNumber={splitFourChar(pinNumber) ?? ''} />;
+        },
       });
     }
   };

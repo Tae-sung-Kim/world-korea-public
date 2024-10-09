@@ -77,6 +77,9 @@ const config = {
         'accordion-up': 'accordion-up 0.2s ease-out',
         fade: 'fade 2s ease-in-out infinite',
       },
+      screens: {
+        print: { raw: 'print' }, // print 미디어 쿼리 추가
+      },
     },
   },
   plugins: [require('tailwindcss-animate')],
