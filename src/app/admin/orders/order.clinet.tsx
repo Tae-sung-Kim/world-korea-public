@@ -123,7 +123,7 @@ export default function OrderListClient() {
         </TableBody>
         <TableFooter>
           <TableRow>
-            <TableCell colSpan={6}>총 구매</TableCell>
+            <TableCell colSpan={7}>총 구매</TableCell>
             <TableCell className="text-right">
               {addComma(ordersData.totalItems)} 개
             </TableCell>
