@@ -5,7 +5,7 @@ import React from 'react';
 
 const ModalContainer = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & { useOverlayOpacity: boolean }
+  React.HTMLAttributes<HTMLDivElement> & { useOverlayOpacity?: boolean }
 >(({ className, children, ...props }, ref) => {
   return (
     <>
