@@ -52,6 +52,7 @@ export default function HomeClient() {
             showHeader: false,
             showFooter: false,
             Component: ({ onCancel }) => {
+              console.log('11111111111111');
               return (
                 <HomePopupModal onCancel={onCancel}>
                   {POPUP_DATA[index]}
@@ -74,6 +75,7 @@ export default function HomeClient() {
       );
 
       showPopup(0); // 첫 번째 팝업을 띄움
+      console.log('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb');
       setOpenPopup(true); // 상태 변경하여 팝업이 다시 호출되지 않게 설정
     }
   }, [openPopup, openModal]);
