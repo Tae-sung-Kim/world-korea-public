@@ -21,7 +21,6 @@ export default function QrCodeScanModal({
     async (result: QrScanner.ScanResult) => {
       if (!!result.data && !isProcessing) {
         setIsProcessing(true);
-        qrScannerRef.current?.stop();
 
         const usedPinQrCode = await pinsService.usedPinQrCode(
           result.data.replaceAll('-', '')
@@ -35,21 +34,25 @@ export default function QrCodeScanModal({
           });
         } else {
           onResiveData && onResiveData(result.data);
+          onCancel && onCancel();
         }
-        onCancel && onCancel();
       }
     },
-    [onResiveData, onCancel, openModal]
+    [onResiveData, onCancel, openModal, isProcessing]
   );
 
   useEffect(() => {
     (async () => {
       const videoElement = videoRef.current;
 
-      if (videoElement) {
+      if (videoElement && !qrScannerRef.current) {
         const qrScanner = new QrScanner(
           videoElement,
-          (result) => handleScan(result),
+          (result) => {
+            if (!isProcessing) {
+              return handleScan(result);
+            }
+          },
           QrOptions
         );
 
@@ -60,7 +63,7 @@ export default function QrCodeScanModal({
         return () => qrScanner.destroy();
       }
     })();
-  }, [handleScan]);
+  }, [handleScan, isProcessing]);
 
   return (
     <div className="space-y-8">
