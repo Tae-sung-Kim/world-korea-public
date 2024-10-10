@@ -13,6 +13,8 @@ export default function HomePopupModal({ onCancel, children }: PopupProps) {
     onCancel && onCancel();
   };
 
+  console.log('여기까지 타는데????', children);
+
   return (
     <div className="container space-y-8">
       <ScrollArea className="max-h-[400px] max-w-[600px]">
