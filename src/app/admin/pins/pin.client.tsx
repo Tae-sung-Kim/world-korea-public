@@ -109,7 +109,12 @@ export default function PinClient() {
   return (
     <>
       <div className="flex">
-        <PinSearch />
+        <div className="grow">
+          <PinSearch />
+        </div>
+        <div className="flex-none m-5">
+          {/* <Button onClick={}>선택삭제</Button> */}
+        </div>
         {/* <Select onValueChange={handleProductChange} value={selectedProductId}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="선택" />
@@ -131,6 +136,9 @@ export default function PinClient() {
         {/* {isFetching && <TableCaption>조회 중입니다.</TableCaption>} */}
         <TableHeader>
           <TableRow>
+            <TableHead className="w-[50px]">
+              <Checkbox />
+            </TableHead>
             <TableHead className="w-[50px]">번호</TableHead>
             <TableHead className="w-[200px]">핀 번호</TableHead>
             <TableHead className="">연결 상품</TableHead>
@@ -138,7 +146,7 @@ export default function PinClient() {
             <TableHead className="w-[110px] text-center">종료일</TableHead>
             <TableHead className="w-[110px] text-center">생성일</TableHead>
             <TableHead className="w-[80px] text-center">사용여부</TableHead>
-            <TableHead className="w-[110px] text-center"></TableHead>
+            <TableHead className="w-[50px] text-center"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -146,6 +154,9 @@ export default function PinClient() {
             const isUsed = pin.usedDate;
             return (
               <TableRow key={pin._id}>
+                <TableCell>
+                  <Checkbox />
+                </TableCell>
                 <TableCell>
                   {pinData.totalItems - (pageNumber - 1) * pageSize - idx}
                 </TableCell>
@@ -196,7 +207,7 @@ export default function PinClient() {
         </TableBody>
         <TableFooter>
           <TableRow>
-            <TableCell colSpan={7}>총 상품</TableCell>
+            <TableCell colSpan={8}>총 상품</TableCell>
             <TableCell className="text-right">
               {addComma(pinData.totalItems)} 개
             </TableCell>
