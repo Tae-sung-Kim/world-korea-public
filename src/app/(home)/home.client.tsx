@@ -29,11 +29,11 @@ export default function HomeClient() {
   //팝업을 하나씩만 띄우기
   useEffect(() => {
     // 팝업이 처음에만 띄워지도록 설정
-    if (!openPopup) {
-      // openCountRef.current = POPUP_DATA.length;
+    if (!openPopup && openCountRef.current < POPUP_DATA.length) {
+      openCountRef.current = POPUP_DATA.length;
       const showPopup = (index: number) => {
         if (index < POPUP_DATA.length) {
-          return openModal({
+          openModal({
             useOverlayOpacity: false,
             showHeader: false,
             showFooter: false,

@@ -270,6 +270,7 @@ function ModalProvider({ children }: { children: ReactNode }) {
 
 const ModalPortal = ({ children }: { children: ReactNode }) => {
   let ModalRootElement = document.getElementById('modal-root');
+  console.log('ModalRootElement 확인', ModalRootElement);
   if (!ModalRootElement) {
     document.body.insertAdjacentHTML(
       'beforeend',
