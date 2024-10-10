@@ -43,7 +43,7 @@ export default function HomeClient() {
         POPUP_DATA.length
       );
 
-      openCountRef.current = POPUP_DATA.length;
+      openCountRef.current = POPUP_DATA.length + 1;
       const showPopup = (index: number) => {
         if (index < POPUP_DATA.length) {
           openModal({
