@@ -30,12 +30,12 @@ export default function HomeClient() {
 
         return (
           <div key={_id} className="flex items-center justify-center py-12">
-            <div className="p-6 w-full bg-white shadow-2xl relative rounded-lg hover:-translate-y-2 hover:transition-transform hover:ease-in">
+            <div className="py-6 px-4 w-full bg-white shadow-2xl relative rounded hover:-translate-y-2 hover:transition-transform hover:ease-in">
               <Link href={`/sale-products/${_id}`}>
                 <div
-                  className="aspect-[5/4] relative rounded-lg"
+                  className="aspect-[5/4] relative rounded"
                   style={{
-                    marginTop: 'calc((3rem)* -1)',
+                    marginTop: 'calc((2.5rem)* -1)',
                   }}
                 >
                   {/* <div className="absolute">
@@ -45,10 +45,10 @@ export default function HomeClient() {
                   {images[0] && (
                     <Image
                       alt="상품 이미지"
-                      className="w-full h-full rounded-lg shadow-xl"
+                      className="w-full h-full rounded shadow-xl"
                       priority={true}
-                      width={170}
-                      height={170}
+                      width={180}
+                      height={180}
                       src={String(images[0])}
                     />
                   )}
