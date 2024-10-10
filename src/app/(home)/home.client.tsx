@@ -29,7 +29,20 @@ export default function HomeClient() {
   //팝업을 하나씩만 띄우기
   useEffect(() => {
     // 팝업이 처음에만 띄워지도록 설정
+    console.log(
+      'openPopup',
+      openPopup,
+      openCountRef.current,
+      POPUP_DATA.length
+    );
     if (!openPopup && openCountRef.current < POPUP_DATA.length) {
+      console.log(
+        'openPopup1',
+        openPopup,
+        openCountRef.current,
+        POPUP_DATA.length
+      );
+
       openCountRef.current = POPUP_DATA.length;
       const showPopup = (index: number) => {
         if (index < POPUP_DATA.length) {
@@ -51,6 +64,13 @@ export default function HomeClient() {
           });
         }
       };
+
+      console.log(
+        'openPopup2',
+        openPopup,
+        openCountRef.current,
+        POPUP_DATA.length
+      );
 
       showPopup(0); // 첫 번째 팝업을 띄움
       setOpenPopup(true); // 상태 변경하여 팝업이 다시 호출되지 않게 설정
