@@ -35,7 +35,7 @@ export default function HomeClient() {
       openCountRef.current,
       POPUP_DATA.length
     );
-    if (!openPopup && openCountRef.current <= POPUP_DATA.length) {
+    if (!openPopup && openCountRef.current < POPUP_DATA.length) {
       console.log(
         'openPopup1',
         openPopup,
@@ -45,6 +45,7 @@ export default function HomeClient() {
 
       openCountRef.current = POPUP_DATA.length;
       const showPopup = (index: number) => {
+        console.log('aaaaaaaaaaaaaa', index, POPUP_DATA.length);
         if (index < POPUP_DATA.length) {
           openModal({
             useOverlayOpacity: false,
@@ -75,7 +76,7 @@ export default function HomeClient() {
       showPopup(0); // 첫 번째 팝업을 띄움
       setOpenPopup(true); // 상태 변경하여 팝업이 다시 호출되지 않게 설정
     }
-  }, [openPopup, openModal]); // 의존성 배열에 isPopupShown 추가
+  }, [openPopup, openModal]);
 
   // //모두 띄울때 - 다건 한번에
   // useEffect(() => {
