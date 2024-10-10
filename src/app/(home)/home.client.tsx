@@ -45,9 +45,9 @@ export default function HomeClient() {
 
       openCountRef.current = POPUP_DATA.length;
       const showPopup = (index: number) => {
-        console.log('aaaaaaaaaaaaaa', index, POPUP_DATA.length);
         if (index < POPUP_DATA.length) {
-          openModal({
+          console.log('aaaaaaaaaaaaaa', index, POPUP_DATA.length);
+          return openModal({
             useOverlayOpacity: false,
             showHeader: false,
             showFooter: false,
