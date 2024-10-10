@@ -14,6 +14,7 @@ import {
   useState,
   MouseEvent,
   cloneElement,
+  useEffect,
 } from 'react';
 import ReactDOM from 'react-dom';
 import { v4 as uuidv4 } from 'uuid';
@@ -268,20 +269,47 @@ function ModalProvider({ children }: { children: ReactNode }) {
   );
 }
 
+// const ModalPortal = ({ children }: { children: ReactNode }) => {
+//   let ModalRootElement = document.getElementById('modal-root');
+//   console.log('ModalRootElement 확인', ModalRootElement);
+//   if (!ModalRootElement) {
+//     document.body.insertAdjacentHTML(
+//       'beforeend',
+//       '<div id="modal-root"></div>'
+//     );
+
+//     ModalRootElement = document.createElement('div');
+//     ModalRootElement.id = 'modal-root';
+//   }
+
+//   return ReactDOM.createPortal(children, ModalRootElement);
+// };
+
 const ModalPortal = ({ children }: { children: ReactNode }) => {
-  let ModalRootElement = document.getElementById('modal-root');
-  console.log('ModalRootElement 확인', ModalRootElement);
-  if (!ModalRootElement) {
-    document.body.insertAdjacentHTML(
-      'beforeend',
-      '<div id="modal-root"></div>'
-    );
+  const [modalRootElement, setModalRootElement] = useState<HTMLElement | null>(
+    null
+  );
 
-    ModalRootElement = document.createElement('div');
-    ModalRootElement.id = 'modal-root';
-  }
+  useEffect(() => {
+    let rootElement = document.getElementById('modal-root');
 
-  return ReactDOM.createPortal(children, ModalRootElement);
+    if (!rootElement) {
+      // 'modal-root'가 없는 경우 생성
+      rootElement = document.createElement('div');
+      rootElement.id = 'modal-root';
+      document.body.appendChild(rootElement);
+    }
+
+    setModalRootElement(rootElement);
+
+    return () => {
+      // 모달이 사라질 때 모달 root를 삭제하고 싶다면 이 부분에서 추가
+    };
+  }, []);
+
+  if (!modalRootElement) return null;
+
+  return ReactDOM.createPortal(children, modalRootElement);
 };
 
 export function useModalContext() {
