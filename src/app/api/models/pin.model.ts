@@ -145,6 +145,11 @@ schema.static('updateUsedDatePin', async function updateUsedDatePin(id, used) {
   return !!newPin;
 });
 
+/**
+ * 핀 번호 목록으로 핀 사용날짜 설정
+ * - 유효성 체크는 함수 사용 전에 진행
+ *
+ */
 schema.static(
   'updateUsedDatePinNumberList',
   async function updateUsedDatePinNumberList(pinNumberList, used) {

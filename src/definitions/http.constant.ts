@@ -18,6 +18,7 @@ export const HTTP_STATUS = {
   UNAUTHORIZED: 401,
   FORBIDDEN: 403,
   NOT_FOUND: 404,
+  UNPROCESSABLE_ENTITY: 422,
   INTERNAL_SERVER_ERROR: 500,
 } as const;
 
@@ -32,5 +33,6 @@ export const HTTP_STATUS_MESSAGES: Record<HttpStatusValues, string> = {
   401: 'Authentication required',
   403: 'Forbidden',
   404: 'Not Found',
+  422: 'Unprocessable Entity',
   500: 'Internal Server Error',
 };

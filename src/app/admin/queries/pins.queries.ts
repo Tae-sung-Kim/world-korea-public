@@ -8,6 +8,7 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { toast } from 'sonner';
 
 const QUERY_KEY = 'pins';
@@ -108,11 +109,16 @@ export function useUsedPinListMutation({
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
       toast.success('핀 사용이 완료 되었습니다.');
     },
-    onError: () => {
+    onError: (error: AxiosError<{ message: string; data: string[] }>) => {
+      const errorMessage = error?.response?.data?.message
+        ? `${error.response.data.message} ${
+            Array.isArray(error.response.data.data)
+              ? JSON.stringify(error.response.data.data)
+              : ''
+          }`
+        : '핀 사용중 에러가 발생하였습니다.<br/>잠시 후 다시 시도해주세요.';
       onError && onError();
-      toast.error(
-        '핀 사용중 에러가 발생했습니다.<br/>잠시 후 다시 시도해주세요.'
-      );
+      toast.error(errorMessage);
     },
     onSettled,
   });
