@@ -97,6 +97,7 @@ export default function PinUsedClient() {
   const handleQRCodeScan = async () => {
     return await openModal({
       title: 'QR CODE SCAN',
+      showFooter: false,
       Component: ({ onCancel }) => {
         return (
           <QrCodeScanModal onCancel={onCancel} onResiveData={handleSetData} />

@@ -1,6 +1,8 @@
 import { Button } from '@/components/ui/button';
+import { MODAL_TYPE, useModalContext } from '@/contexts/modal.context';
+import pinsService from '@/services/pins.service';
 import QrScanner from 'qr-scanner';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export default function QrCodeScanModal({
   onCancel,
@@ -10,16 +12,34 @@ export default function QrCodeScanModal({
   onResiveData?: (qrData: string) => void;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const { openModal } = useModalContext();
+
+  const qrScannerRef = useRef<QrScanner | null>(null); // qrScanner 인스턴스를 저장할 ref
+  const [isProcessing, setIsProcessing] = useState(false); // 스캔 처리 중 상태
 
   const handleScan = useCallback(
-    (result: QrScanner.ScanResult) => {
-      if (!!result.data) {
-        //여기서 먼저 api 요청 후 성공시 값 입력, 이미 사용된  QR이라면 안 보냄
-        onResiveData && onResiveData(result.data);
+    async (result: QrScanner.ScanResult) => {
+      if (!!result.data && !isProcessing) {
+        setIsProcessing(true);
+        qrScannerRef.current?.stop();
+
+        const usedPinQrCode = await pinsService.usedPinQrCode(
+          result.data.replaceAll('-', '')
+        );
+
+        if (usedPinQrCode) {
+          openModal({
+            type: MODAL_TYPE.ALERT,
+            title: result.data,
+            content: `${result.data}는 이미 사용된 코드입니다.\n다시 확인해 주세요.`,
+          });
+        } else {
+          onResiveData && onResiveData(result.data);
+        }
         onCancel && onCancel();
       }
     },
-    [onResiveData, onCancel]
+    [onResiveData, onCancel, openModal]
   );
 
   useEffect(() => {
@@ -32,6 +52,9 @@ export default function QrCodeScanModal({
           (result) => handleScan(result),
           QrOptions
         );
+
+        qrScannerRef.current = qrScanner;
+
         await qrScanner.start();
 
         return () => qrScanner.destroy();

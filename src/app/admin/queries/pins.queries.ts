@@ -123,3 +123,15 @@ export function useUsedPinListMutation({
     onSettled,
   });
 }
+
+export function useUsedPinQrCodeQuery(pinNumber: string) {
+  const fallback: boolean = false;
+
+  const { data = fallback } = useQuery({
+    queryKey: [QUERY_KEY, pinNumber],
+    queryFn: () => pinsService.usedPinQrCode(pinNumber),
+    enabled: !!pinNumber,
+  });
+
+  return data;
+}

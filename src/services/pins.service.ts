@@ -35,6 +35,11 @@ class PinsService {
   usedDatePinList({ pinNumberList }: PinUsed) {
     return http.post(`api/pins/used`, { pinNumberList });
   }
+
+  //QRCODE(pin번호) 등록 여부
+  usedPinQrCode(pinNumber: string) {
+    return http.get(`api/pins/used/number/${pinNumber}`);
+  }
 }
 
 const pinsService = new PinsService();
