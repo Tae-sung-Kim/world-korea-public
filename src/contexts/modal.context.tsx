@@ -36,11 +36,13 @@ type ModalComponentType = {
   showHeader?: boolean;
   showFooter?: boolean;
   useOverlayClose?: boolean;
+  useOverlayOpacity?: boolean;
   useCloseButton?: boolean;
   useOkClose?: boolean;
   useCancelClose?: boolean;
   onOk?: () => void;
   onCancel?: () => void;
+  onClose?: () => void;
   onOverlayClick?: (e: MouseEvent) => void;
 };
 
@@ -50,7 +52,11 @@ type ModalPropsType = {
     id,
     onOk,
     onCancel,
-  }: Pick<ModalComponentType, 'id' | 'onOk' | 'onCancel'>) => ReactNode;
+    onClose,
+  }: Pick<
+    ModalComponentType,
+    'id' | 'onOk' | 'onCancel' | 'onClose'
+  >) => ReactNode;
 } & ModalComponentType;
 
 type AsyncPropsType = {
@@ -84,6 +90,7 @@ function ModalProvider({ children }: { children: ReactNode }) {
     content,
     okName,
     cancelName,
+    useOverlayOpacity = true,
     useCloseButton = true,
     showFooter = true,
     showHeader = true,
@@ -92,6 +99,7 @@ function ModalProvider({ children }: { children: ReactNode }) {
     useCancelClose = true,
     onOk,
     onCancel,
+    onClose,
     onOverlayClick,
   }: ModalPropsType): Promise<AsyncPropsType> => {
     return new Promise<AsyncPropsType>((resolve) => {
@@ -124,6 +132,10 @@ function ModalProvider({ children }: { children: ReactNode }) {
         }
       };
 
+      const handleClose = () => {
+        onClose && onClose();
+      };
+
       //바깥영역 클릭시 닫기 처리
       const handlOverlayClick = (e: MouseEvent) => {
         if (e.target === e.currentTarget) {
@@ -144,6 +156,7 @@ function ModalProvider({ children }: { children: ReactNode }) {
             content,
             okName,
             cancelName,
+            useOverlayOpacity,
             useCloseButton,
             showFooter,
             showHeader,
@@ -151,6 +164,7 @@ function ModalProvider({ children }: { children: ReactNode }) {
             useOkClose,
             onOk: handleOk,
             onCancel: handleCancel,
+            onClose: handleClose,
             onOverlayClick: handlOverlayClick,
           },
         ];
@@ -174,18 +188,21 @@ function ModalProvider({ children }: { children: ReactNode }) {
           content,
           okName,
           cancelName,
+          useOverlayOpacity = true,
           useCloseButton,
           showFooter,
           showHeader,
           useOverlayClose,
           onOk,
           onCancel,
+          onClose,
           onOverlayClick,
         }) => {
           return (
             <ModalPortal key={id}>
               <ModalContainer
                 className={className}
+                useOverlayOpacity={useOverlayOpacity}
                 {...(useOverlayClose
                   ? { onClick: (e) => onOverlayClick && onOverlayClick(e) }
                   : {})}
@@ -197,7 +214,10 @@ function ModalProvider({ children }: { children: ReactNode }) {
                       {useCloseButton && (
                         <Button
                           className="bg-red-400 rounded-full hover:bg-red-300 absolute top-0 right-0 h-7 w-7"
-                          onClick={() => closeModal(id)}
+                          onClick={() => {
+                            onClose && onClose();
+                            closeModal(id);
+                          }}
                         >
                           X
                         </Button>
@@ -206,7 +226,12 @@ function ModalProvider({ children }: { children: ReactNode }) {
                   )}
                   {type === MODAL_TYPE.MODAL && Component ? (
                     cloneElement(
-                      <Component id={id} onOk={onOk} onCancel={onCancel} />
+                      <Component
+                        id={id}
+                        onOk={onOk}
+                        onCancel={onCancel}
+                        onClose={onClose}
+                      />
                     )
                   ) : (
                     <ModalContent>{content}</ModalContent>

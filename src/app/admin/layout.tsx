@@ -2,7 +2,7 @@ import Loading from './components/loading.component';
 import AdminProtectedRoute from '@/app/admin/admin-protected-route.component';
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
-import { AiOutlineProduct } from 'react-icons/ai';
+import { AiOutlineProduct, AiOutlineNotification } from 'react-icons/ai';
 import { BiPurchaseTag } from 'react-icons/bi';
 import { TbNumber123, TbTicket, TbUser } from 'react-icons/tb';
 
@@ -95,9 +95,20 @@ export default async function AdminLayout({
                 <li className="text-sm mt-[2px] text-gray-600">
                   <Link href="/admin/pins/register">핀번호 등록</Link>
                 </li>
-
                 <li className="text-sm mt-[2px] text-gray-600">
                   <Link href="/admin/pins/used">핀번호 사용</Link>
+                </li>
+              </ul>
+            </li>
+            <Separator />
+            <li className="p-5 my-4">
+              <span className="flex text-lg font-bold">
+                팝업 관리
+                <AiOutlineNotification />
+              </span>
+              <ul className="mt-2">
+                <li className="text-sm mt-[2px] text-gray-600">
+                  <Link href="/admin/popups">팝업 목록</Link>
                 </li>
               </ul>
             </li>

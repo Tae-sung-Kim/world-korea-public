@@ -1,12 +1,21 @@
 'use client';
 
 import { usePagination } from '../admin/hooks/usePagination';
+import HomePopupModal from './home-popup.modal';
+import { useModalContext } from '@/contexts/modal.context';
 import { useSaleProductListQuery } from '@/queries/product.queries';
 import { addComma } from '@/utils/number';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useEffect, useRef, useState } from 'react';
+
+const POPUP_DATA = ['이미지1', '이미지2', '이미지3', '이미지4'];
 
 export default function HomeClient() {
+  const { openModal } = useModalContext();
+  const [openPopup, setOpenPopup] = useState(false);
+  const openCountRef = useRef(0);
+
   const { pageNumber, pageSize, filter } = usePagination({
     queryFilters: { name: '' },
   });
@@ -16,6 +25,55 @@ export default function HomeClient() {
     pageSize: Number(pageSize),
     filter,
   });
+
+  //팝업을 하나씩만 띄우기
+  useEffect(() => {
+    // 팝업이 처음에만 띄워지도록 설정
+    if (!openPopup && openCountRef.current < POPUP_DATA.length) {
+      openCountRef.current = POPUP_DATA.length;
+      const showPopup = (index: number) => {
+        if (index < POPUP_DATA.length) {
+          openModal({
+            useOverlayOpacity: false,
+            showHeader: false,
+            showFooter: false,
+            Component: ({ onCancel }) => {
+              return (
+                <HomePopupModal onCancel={onCancel}>
+                  {POPUP_DATA[index]}
+                </HomePopupModal>
+              );
+            },
+            onCancel: () => {
+              // 팝업이 닫힐 때 다음 팝업을 띄움
+              showPopup(index + 1);
+            },
+          });
+        }
+      };
+
+      showPopup(0); // 첫 번째 팝업을 띄움
+      setOpenPopup(true); // 상태 변경하여 팝업이 다시 호출되지 않게 설정
+    }
+  }, [openPopup, openModal]); // 의존성 배열에 isPopupShown 추가
+
+  // //모두 띄울때 - 다건 한번에
+  // useEffect(() => {
+  //   (async () => {
+  //     if (POPUP_DATA.length > 0 && openCountRef.current < POPUP_DATA.length) {
+  //       openCountRef.current = POPUP_DATA.length;
+  //       POPUP_DATA.map((d) => {
+  //         return openModal({
+  //           useOverlayOpacity: false,
+  //           showFooter: false,
+  //           Component: () => {
+  //             return <HomePopupModal>{d}</HomePopupModal>;
+  //           },
+  //         });
+  //       });
+  //     }
+  //   })();
+  // }, [openModal]);
 
   if (!Array.isArray(saleProductData?.list)) {
     return null;

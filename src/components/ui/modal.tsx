@@ -5,13 +5,17 @@ import React from 'react';
 
 const ModalContainer = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
+  React.HTMLAttributes<HTMLDivElement> & { useOverlayOpacity: boolean }
 >(({ className, children, ...props }, ref) => {
   return (
     <>
       {/* modal backgroundStyle */}
       <div
-        className={cn('top-0 w-full h-full fixed bg-black opacity-50')}
+        className={cn(
+          `top-0 w-full h-full fixed bg-black ${
+            props.useOverlayOpacity ? 'opacity-50' : 'opacity-0'
+          }`
+        )}
       ></div>
 
       <div
