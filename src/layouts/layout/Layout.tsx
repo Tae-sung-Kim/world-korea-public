@@ -6,8 +6,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="root-layout h-screen">
       <Header />
-      <main className="bg-gray-50 bg-[url('/images/slide1.jpg')] bg-no-repeat h-max min-h-screen">
-        {children}
+      <main className="bg-gray-50 bg-[url('/images/slide1.jpg')] bg-no-repeat h-max min-h-screen ">
+        <div className="flex justify-center">{children}</div>
       </main>
       <Footer />
       <Toaster />
