@@ -1,6 +1,7 @@
 'use client';
 
 import QrCodeModal from '../components/qr-code.modal';
+import useExcelExport from '../hooks/useExcelExport';
 import { usePagination } from '../hooks/usePagination';
 import { splitFourChar } from '../pins/pin.utils';
 import { useOrderListQuery } from '../queries';
@@ -22,12 +23,15 @@ import { addComma } from '@/utils/number';
 import { useRouter } from 'next/navigation';
 import { IoMdPrint } from 'react-icons/io';
 import { LuQrCode } from 'react-icons/lu';
+import { RiFileExcel2Line } from 'react-icons/ri';
 
 export default function OrderListClient() {
   const { openModal } = useModalContext();
   const router = useRouter();
 
   const { pageNumber = 1, pageSize = 10 } = usePagination();
+
+  const exportToExcel = useExcelExport();
 
   const ordersData = useOrderListQuery({
     pageNumber,
@@ -62,11 +66,29 @@ export default function OrderListClient() {
 
   return (
     <>
-      <OrderSearch />
-      <Table>
+      <div className="flex">
+        <OrderSearch />
+        <div className="flex-grow" />
+
+        <Button
+          className="m-5"
+          variant="outline"
+          size="icon"
+          onClick={() =>
+            exportToExcel({
+              tableId: 'orderExportExcelTable',
+              fileName: 'test',
+              excludeClassName: 'not-excel',
+            })
+          }
+        >
+          <RiFileExcel2Line />
+        </Button>
+      </div>
+      <Table id="orderExportExcelTable">
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[50px]">번호</TableHead>
+            <TableHead className="w-[50px] not-excel">번호</TableHead>
             <TableHead className="">상품명</TableHead>
             <TableHead className="w-[120px]">업체명</TableHead>
             <TableHead className="w-[120px]">담당자명</TableHead>
@@ -74,16 +96,16 @@ export default function OrderListClient() {
             <TableHead className="w-[110px] text-right">가격</TableHead>
             <TableHead className="w-[130px] text-center">구매일</TableHead>
             <TableHead className="w-[130px] text-center">방문예정일</TableHead>
-            <TableHead className="w-[30px] text-center"></TableHead>
-            <TableHead className="w-[30px] text-center"></TableHead>
+            <TableHead className="w-[30px] text-center not-excel"></TableHead>
+            <TableHead className="w-[30px] text-center not-excel"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {ordersData.list.map((d, idx) => {
-            console.log(d);
+            console.log('개별 상품 정보', d);
             return (
               <TableRow key={d._id}>
-                <TableCell>
+                <TableCell className="not-excel">
                   {ordersData.totalItems - (pageNumber - 1) * pageSize - idx}
                 </TableCell>
                 <TableCell
@@ -112,7 +134,7 @@ export default function OrderListClient() {
                 <TableCell className="text-right">
                   방문예정일은(유효기간, 선택 날짜)
                 </TableCell>
-                <TableCell className="text-right">
+                <TableCell className="text-right not-excel">
                   <Button
                     variant="outline"
                     size="icon"
@@ -121,7 +143,7 @@ export default function OrderListClient() {
                     <LuQrCode />
                   </Button>
                 </TableCell>
-                <TableCell className="text-right">
+                <TableCell className="text-right not-excel">
                   <Button
                     variant="outline"
                     size="icon"
