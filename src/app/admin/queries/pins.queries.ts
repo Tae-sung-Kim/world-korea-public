@@ -87,7 +87,8 @@ export function useUsedPinMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: string) => pinsService.usedDatePin(id),
+    mutationFn: ({ id, used }: { id: string; used: boolean }) =>
+      pinsService.usedDatePin(id, used),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
     },

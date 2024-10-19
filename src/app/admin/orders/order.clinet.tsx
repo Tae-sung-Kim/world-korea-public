@@ -68,16 +68,19 @@ export default function OrderListClient() {
           <TableRow>
             <TableHead className="w-[50px]">번호</TableHead>
             <TableHead className="">상품명</TableHead>
-            <TableHead className="w-[120px]">구매자명</TableHead>
+            <TableHead className="w-[120px]">업체명</TableHead>
+            <TableHead className="w-[120px]">담당자명</TableHead>
             <TableHead className="w-[80px] text-center">구매수량</TableHead>
             <TableHead className="w-[110px] text-right">가격</TableHead>
             <TableHead className="w-[130px] text-center">구매일</TableHead>
+            <TableHead className="w-[130px] text-center">방문예정일</TableHead>
             <TableHead className="w-[30px] text-center"></TableHead>
             <TableHead className="w-[30px] text-center"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {ordersData.list.map((d, idx) => {
+            console.log(d);
             return (
               <TableRow key={d._id}>
                 <TableCell>
@@ -89,7 +92,14 @@ export default function OrderListClient() {
                 >
                   {d.saleProduct.name}
                 </TableCell>
-                <TableCell>{d.user && d.user.name}</TableCell>
+                <TableCell>
+                  {/* {d.user && d.user.name} */}
+                  업체명으로
+                </TableCell>
+                <TableCell>
+                  {/* {d.user && d.user.name} */}
+                  업체 담당자명
+                </TableCell>
                 <TableCell className="text-right">
                   {addComma(d.quantity ?? 0)}
                 </TableCell>
@@ -98,6 +108,9 @@ export default function OrderListClient() {
                 </TableCell>
                 <TableCell className="text-right">
                   {d.orderDate && new Date(d.orderDate).toLocaleDateString()}
+                </TableCell>
+                <TableCell className="text-right">
+                  방문예정일은(유효기간, 선택 날짜)
                 </TableCell>
                 <TableCell className="text-right">
                   <Button
@@ -123,7 +136,7 @@ export default function OrderListClient() {
         </TableBody>
         <TableFooter>
           <TableRow>
-            <TableCell colSpan={7}>총 구매</TableCell>
+            <TableCell colSpan={9}>총 구매</TableCell>
             <TableCell className="text-right">
               {addComma(ordersData.totalItems)} 개
             </TableCell>

@@ -76,11 +76,11 @@ export default function ProductListClient() {
           <TableRow>
             <TableHead className="w-[70px]">번호</TableHead>
             <TableHead className="">상품명</TableHead>
-            <TableHead className="w-[80px]">level</TableHead>
+            <TableHead className="w-[90px]">level</TableHead>
             <TableHead className="w-[90px]">상태</TableHead>
             <TableHead className="w-[100px] text-right">정가</TableHead>
             <TableHead className="w-[100px] text-right">할인가</TableHead>
-            <TableHead className="w-[100px] text-right">판매가</TableHead>
+            {/* <TableHead className="w-[100px] text-right">판매가</TableHead> */}
             <TableHead className="w-[70px] text-right">재고</TableHead>
             <TableHead className="w-[70px] text-right"></TableHead>
           </TableRow>
@@ -108,9 +108,9 @@ export default function ProductListClient() {
               <TableCell className="text-right">
                 {addComma(product.salePrice)} 원
               </TableCell>
-              <TableCell className="text-right">
+              {/* <TableCell className="text-right">
                 {addComma(product.price)} 원
-              </TableCell>
+              </TableCell> */}
               <TableCell className="text-right">
                 {addComma(product.pinCount ?? 0)} 개
               </TableCell>
@@ -134,7 +134,7 @@ export default function ProductListClient() {
         </TableBody>
         <TableFooter>
           <TableRow>
-            <TableCell colSpan={8}>총 상품</TableCell>
+            <TableCell colSpan={7}>총 상품</TableCell>
             <TableCell className="text-right">
               {addComma(productData.totalItems)} 개
             </TableCell>

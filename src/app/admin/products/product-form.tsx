@@ -73,7 +73,7 @@ const ProductFormSchema = z.object({
   ), // 상품 이미지
   regularPrice: priceShcema(), // 정가
   salePrice: priceShcema(), // 할인가
-  price: priceShcema(), // 판매가
+  price: priceShcema(true), // 판매가
   description1: descriptionShcema(),
   description2: descriptionShcema(),
   description3: descriptionShcema(),
@@ -452,7 +452,7 @@ export default function ProductForm({ productId, disabled = false }: Props) {
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               control={productForm.control}
               name="price"
               render={({ field }) => (
@@ -463,14 +463,14 @@ export default function ProductForm({ productId, disabled = false }: Props) {
                       {...field}
                       placeholder="판매가를 입력해 주세요."
                       value={addComma(field.value)}
-                      disabled={disabled}
+                      disabled={true}
                       onChange={(e) => handlePriceChange(e, { ...field })}
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
           </div>
         )}
 

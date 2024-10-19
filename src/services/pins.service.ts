@@ -27,8 +27,8 @@ class PinsService {
   }
 
   //핀 사용 여부
-  usedDatePin(id: string) {
-    return http.patch(`api/pins/used/${id}`, { used: true });
+  usedDatePin(id: string, used: boolean) {
+    return http.patch(`api/pins/used/${id}`, { used });
   }
 
   //핀 사용 여부
