@@ -1,6 +1,8 @@
 'use client';
 
+import SortIcons from '../components/sort-icons.comonent';
 import { usePagination } from '../hooks/usePagination';
+import useSort, { SortOrder } from '../hooks/useSort';
 import {
   useDeleteProductMutation,
   useProductListQuery,
@@ -20,10 +22,10 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { MODAL_TYPE, useModalContext } from '@/contexts/modal.context';
-import { PRODUCT_STATUS_MESSAGE } from '@/definitions';
+import { PRODUCT_STATUS_MESSAGE, ProductFormData } from '@/definitions';
 import { addComma } from '@/utils/number';
 import { useRouter } from 'next/navigation';
-import { FormEvent } from 'react';
+import { FormEvent, useMemo, useState } from 'react';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 
 export default function ProductListClient() {
@@ -39,6 +41,34 @@ export default function ProductListClient() {
     pageSize: Number(pageSize),
     filter,
   });
+
+  const data = useMemo(() => {
+    return productData.list;
+  }, [productData]);
+
+  const [sortColumn, setSortColumn] = useState<keyof (typeof data)[0] | string>(
+    ''
+  );
+  const [order, setOrder] = useState<SortOrder>('');
+
+  const sortedData = useSort<ProductFormData<string>>({
+    data,
+    sortColumn,
+    order,
+  });
+
+  const handleSortClick = (column: string) => {
+    const isPrevColumn = sortColumn !== column;
+
+    setSortColumn(column);
+    if (isPrevColumn) {
+      setOrder('asc');
+    } else {
+      setOrder((prevData) =>
+        prevData === '' ? 'asc' : prevData === 'asc' ? 'desc' : ''
+      );
+    }
+  };
 
   //유저 레벨
   const userCategoryList = useUserCategoryListQuery();
@@ -75,18 +105,63 @@ export default function ProductListClient() {
         <TableHeader>
           <TableRow>
             <TableHead className="w-[70px]">번호</TableHead>
-            <TableHead className="">상품명</TableHead>
-            <TableHead className="w-[90px]">level</TableHead>
-            <TableHead className="w-[90px]">상태</TableHead>
-            <TableHead className="w-[100px] text-right">정가</TableHead>
-            <TableHead className="w-[100px] text-right">할인가</TableHead>
+            <TableHead className="" onClick={() => handleSortClick('name')}>
+              <SortIcons
+                title="상품명"
+                order={sortColumn === 'name' ? order : ''}
+              />
+            </TableHead>
+            <TableHead
+              className="w-[90px]"
+              onClick={() => handleSortClick('name')}
+            >
+              <SortIcons
+                title="level"
+                order={sortColumn === 'accessLevel' ? order : ''}
+              />
+            </TableHead>
+            <TableHead
+              className="w-[90px]"
+              onClick={() => handleSortClick('status')}
+            >
+              <SortIcons
+                title="상태"
+                order={sortColumn === 'status' ? order : ''}
+              />
+            </TableHead>
+            <TableHead
+              className="w-[100px] text-right"
+              onClick={() => handleSortClick('regularPrice')}
+            >
+              <SortIcons
+                title="정가"
+                order={sortColumn === 'regularPrice' ? order : ''}
+              />
+            </TableHead>
+            <TableHead
+              className="w-[100px] text-right"
+              onClick={() => handleSortClick('salePrice')}
+            >
+              <SortIcons
+                title="할인가"
+                order={sortColumn === 'salePrice' ? order : ''}
+              />
+            </TableHead>
             {/* <TableHead className="w-[100px] text-right">판매가</TableHead> */}
-            <TableHead className="w-[70px] text-right">재고</TableHead>
+            <TableHead
+              className="w-[70px] text-right"
+              onClick={() => handleSortClick('pinCount')}
+            >
+              <SortIcons
+                title="재고"
+                order={sortColumn === 'pinCount' ? order : ''}
+              />
+            </TableHead>
             <TableHead className="w-[70px] text-right"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {productData.list.map((product, idx) => (
+          {sortedData.map((product, idx) => (
             <TableRow
               key={product._id}
               className="cursor-pointer"
