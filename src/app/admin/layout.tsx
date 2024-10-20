@@ -75,7 +75,7 @@ export default async function AdminLayout({
                   <Link href="/admin/users">회원 목록</Link>
                 </li>
                 <li className="text-sm mt-[2px] text-gray-600">
-                  파트너사 목록
+                  <Link href="/admin/partners">파트너사 목록</Link>
                 </li>
               </ul>
             </li>

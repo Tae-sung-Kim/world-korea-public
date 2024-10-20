@@ -35,7 +35,7 @@ const useExcelExport = () => {
 
       // 제외할 td, th 요소 선택
       const excludeElements = clonedTable.querySelectorAll(
-        `[data-exclude-excel], th:empty, td:empty, td:has(button), th:has(button)`
+        `[data-exclude-excel], th:empty, td:empty, td:first-child > button, th:first-child > button`
       );
 
       excludeElements.forEach((el) => el.remove());

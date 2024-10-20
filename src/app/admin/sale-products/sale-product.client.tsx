@@ -1,6 +1,8 @@
 'use client';
 
+import SortIcons from '../components/sort-icons.comonent';
 import { usePagination } from '../hooks/usePagination';
+import useSort, { SortOrder } from '../hooks/useSort';
 import { useDeleteProductMutation, useUserCategoryListQuery } from '../queries';
 import { useSaleProductListQuery } from '../queries/sale-product.queries';
 import SaleProductSearch from './sale-product-search.component';
@@ -18,9 +20,10 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { MODAL_TYPE, useModalContext } from '@/contexts/modal.context';
+import { PackageDetailName, SaleProductFormData } from '@/definitions';
 import { addComma } from '@/utils/number';
 import { useRouter } from 'next/navigation';
-import { FormEvent } from 'react';
+import { FormEvent, useMemo, useState } from 'react';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 
 export default function SaleProductListClient() {
@@ -36,6 +39,34 @@ export default function SaleProductListClient() {
     pageSize: Number(pageSize),
     filter,
   });
+
+  const data = useMemo(() => {
+    return saleProductData.list;
+  }, [saleProductData]);
+
+  const [sortColumn, setSortColumn] = useState<keyof (typeof data)[0] | string>(
+    ''
+  );
+  const [order, setOrder] = useState<SortOrder>('');
+
+  const sortedData = useSort<SaleProductFormData<PackageDetailName>>({
+    data,
+    sortColumn,
+    order,
+  });
+
+  const handleSortClick = (column: string) => {
+    const isPrevColumn = sortColumn !== column;
+
+    setSortColumn(column);
+    if (isPrevColumn) {
+      setOrder('asc');
+    } else {
+      setOrder((prevData) =>
+        prevData === '' ? 'asc' : prevData === 'asc' ? 'desc' : ''
+      );
+    }
+  };
 
   //유저 레벨
   const userCategoryList = useUserCategoryListQuery();
@@ -66,23 +97,39 @@ export default function SaleProductListClient() {
 
   return (
     <>
-      <SaleProductSearch />
-      {/* <ProductSearch /> */}
-      <Table>
-        {/* {isFetching && <TableCaption>조회 중입니다.</TableCaption>} */}
+      <div className="flex">
+        <SaleProductSearch />
+      </div>
+      <Table id="saleProductExportExcelTable">
         <TableHeader>
           <TableRow>
             <TableHead className="w-[70px]">번호</TableHead>
-            <TableHead className="">판매 상품명</TableHead>
+            <TableHead
+              className="cursor-pointer"
+              onClick={() => handleSortClick('name')}
+            >
+              <SortIcons
+                title="판매 상품명"
+                order={sortColumn === 'name' ? order : ''}
+              />
+            </TableHead>
             <TableHead className="w-[200px]">상세 상품명</TableHead>
             <TableHead className="w-[80px]">level</TableHead>
-            <TableHead className="w-[100px] text-right">판매가</TableHead>
+            <TableHead
+              className="w-[100px] text-right cursor-pointer"
+              onClick={() => handleSortClick('price')}
+            >
+              <SortIcons
+                title="판매가"
+                order={sortColumn === 'price' ? order : ''}
+              />
+            </TableHead>
             <TableHead className="w-[200px] text-right">재고</TableHead>
             <TableHead className="w-[70px] text-right"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {saleProductData.list.map((data, idx) => {
+          {sortedData.map((data, idx) => {
             return (
               <TableRow
                 key={data._id}

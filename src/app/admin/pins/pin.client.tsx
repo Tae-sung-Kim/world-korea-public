@@ -1,7 +1,10 @@
 'use client';
 
+import ExportExcelButton from '../components/export-excel-button.component';
 import QrCodeModal from '../components/qr-code.modal';
+import SortIcons from '../components/sort-icons.comonent';
 import { usePagination } from '../hooks/usePagination';
+import useSort, { SortOrder } from '../hooks/useSort';
 import {
   useDeletePinMutation,
   usePinsListQuery,
@@ -35,12 +38,18 @@ import { MODAL_TYPE, useModalContext } from '@/contexts/modal.context';
 import { Pin } from '@/definitions/pin.type';
 import { addComma } from '@/utils/number';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 
 export default function PinClient() {
+  const router = useRouter();
   const productData = useProductListQuery();
   const [selectedProductId, setSelectedProductId] = useState<string>('');
+  const { openModal } = useModalContext();
+
+  const deletePinMutation = useDeletePinMutation();
+
+  const usedPinMutation = useUsedPinMutation();
 
   const { pageNumber = 1, pageSize = 10 } = usePagination();
 
@@ -48,14 +57,33 @@ export default function PinClient() {
     pageNumber,
     pageSize,
   });
+  const data = useMemo(() => {
+    return pinData.list;
+  }, [pinData]);
 
-  const router = useRouter();
+  const [sortColumn, setSortColumn] = useState<keyof (typeof data)[0] | string>(
+    ''
+  );
+  const [order, setOrder] = useState<SortOrder>('');
 
-  const { openModal } = useModalContext();
+  const sortedData = useSort<Pin>({
+    data,
+    sortColumn,
+    order,
+  });
 
-  const deletePinMutation = useDeletePinMutation();
+  const handleSortClick = (column: string) => {
+    const isPrevColumn = sortColumn !== column;
 
-  const usedPinMutation = useUsedPinMutation();
+    setSortColumn(column);
+    if (isPrevColumn) {
+      setOrder('asc');
+    } else {
+      setOrder((prevData) =>
+        prevData === '' ? 'asc' : prevData === 'asc' ? 'desc' : ''
+      );
+    }
+  };
 
   //리스트 클릭
   const handlePinListClick = (productId: string = '') => {
@@ -119,12 +147,12 @@ export default function PinClient() {
   return (
     <>
       <div className="flex">
-        <div className="grow">
-          <PinSearch />
-        </div>
-        <div className="flex-none m-5">
-          {/* <Button onClick={}>선택삭제</Button> */}
-        </div>
+        <PinSearch />
+        <ExportExcelButton tableId="pinExportExcelTable" fileName="핀리스트" />
+
+        {/* <div className="flex-none m-5"> */}
+        {/* <Button onClick={}>선택삭제</Button> */}
+        {/* </div> */}
         {/* <Select onValueChange={handleProductChange} value={selectedProductId}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="선택" />
@@ -142,32 +170,78 @@ export default function PinClient() {
           </SelectContent>
         </Select> */}
       </div>
-      <Table>
-        {/* {isFetching && <TableCaption>조회 중입니다.</TableCaption>} */}
+      <Table id="pinExportExcelTable">
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[50px]">
+            <TableHead className="w-[50px]" data-exclude-excel>
               <Checkbox />
             </TableHead>
-            <TableHead className="w-[50px]">번호</TableHead>
-            <TableHead className="w-[200px]">핀 번호</TableHead>
-            <TableHead className="">연결 상품</TableHead>
-            <TableHead className="w-[110px] text-center">업체명</TableHead>
-            <TableHead className="w-[110px] text-center">종료일</TableHead>
-            <TableHead className="w-[110px] text-center">생성일</TableHead>
-            <TableHead className="w-[80px] text-center">사용여부</TableHead>
+            <TableHead className="w-[50px]" data-exclude-excel>
+              번호
+            </TableHead>
+            <TableHead
+              className="w-[200px]"
+              onClick={() => handleSortClick('number')}
+            >
+              <SortIcons
+                title="핀 번호"
+                order={sortColumn === 'number' ? order : ''}
+              />
+            </TableHead>
+            <TableHead
+              className=""
+              onClick={() => handleSortClick('product.name')}
+            >
+              <SortIcons
+                title="연결 상품"
+                order={sortColumn === 'product.name' ? order : ''}
+              />
+            </TableHead>
+            <TableHead className="w-[110px] text-center">
+              <SortIcons
+                title="업체명"
+                order={sortColumn === 'product.name' ? order : ''}
+              />
+            </TableHead>
+            <TableHead
+              className="w-[110px] text-center"
+              onClick={() => handleSortClick('endDate')}
+            >
+              <SortIcons
+                title="종료일"
+                order={sortColumn === 'endDate' ? order : ''}
+              />
+            </TableHead>
+            <TableHead
+              className="w-[110px] text-center"
+              onClick={() => handleSortClick('createdAt')}
+            >
+              <SortIcons
+                title="생성일"
+                order={sortColumn === 'createdAt' ? order : ''}
+              />
+            </TableHead>
+            <TableHead
+              className="w-[100px] text-center"
+              onClick={() => handleSortClick('usedDate')}
+            >
+              <SortIcons
+                title="사용여부"
+                order={sortColumn === 'usedDate' ? order : ''}
+              />
+            </TableHead>
             <TableHead className="w-[50px] text-center"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {pinData.list.map((pin: Pin, idx: number) => {
+          {sortedData.map((pin: Pin, idx: number) => {
             const isUsed = pin.usedDate;
             return (
               <TableRow key={pin._id}>
-                <TableCell>
+                <TableCell data-exclude-excel>
                   <Checkbox />
                 </TableCell>
-                <TableCell>
+                <TableCell data-exclude-excel>
                   {pinData.totalItems - (pageNumber - 1) * pageSize - idx}
                 </TableCell>
                 <TableCell
@@ -191,16 +265,20 @@ export default function PinClient() {
                     new Date(pin.createdAt).toLocaleDateString()}
                 </TableCell>
                 <TableCell className="text-center">
-                  <Checkbox
-                    onCheckedChange={() =>
-                      handleUsedPin({
-                        id: pin._id,
-                        number: pin.number,
-                        used: !!isUsed,
-                      })
-                    }
-                    checked={!!isUsed}
-                  />
+                  <>
+                    <Checkbox
+                      onCheckedChange={() =>
+                        handleUsedPin({
+                          id: pin._id,
+                          number: pin.number,
+                          used: !!isUsed,
+                        })
+                      }
+                      checked={!!isUsed}
+                    />
+                    {/* 엑셀에 값 표현을 위해 만듦 */}
+                    <span className="hidden">{!!isUsed ? 'Y' : 'N'}</span>
+                  </>
                 </TableCell>
                 <TableCell className="text-center">
                   <Button

@@ -32,6 +32,7 @@ export default function UsersClient() {
             <TableHead>이름</TableHead>
             <TableHead>업체No</TableHead>
             <TableHead>업체명</TableHead>
+            <TableHead>파트너여부</TableHead>
             <TableHead>이메일</TableHead>
             <TableHead>연락처</TableHead>
             <TableHead>등록일</TableHead>
@@ -64,6 +65,7 @@ export default function UsersClient() {
                 <TableCell>{name}</TableCell>
                 <TableCell>{companyNo}</TableCell>
                 <TableCell>{companyName}</TableCell>
+                <TableCell>파트너 체크</TableCell>
                 <TableCell>{email}</TableCell>
                 <TableCell>{contactNumber}</TableCell>
                 <TableCell>
