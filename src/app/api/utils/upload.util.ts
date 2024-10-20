@@ -2,6 +2,7 @@ import { put } from '@vercel/blob';
 
 export const FILE_PATH = {
   PRODUCT: 'product',
+  NOTIFICATION: 'notification',
 } as const;
 
 export const FILE_TYPE = {

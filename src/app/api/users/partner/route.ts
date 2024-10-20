@@ -1,4 +1,4 @@
-import { requiredIsAdmin } from '../utils/auth.util';
+import { requiredIsAdmin } from '../../utils/auth.util';
 import connectMongo from '@/app/api/libs/database';
 import UserModel from '@/app/api/models/user.model';
 import { createResponse } from '@/app/api/utils/http.util';
@@ -6,13 +6,7 @@ import { HTTP_STATUS } from '@/definitions/http.constant';
 import { NextResponse } from 'next/server';
 
 /**
- * @swagger
- * /api/users:
- *    get:
- *      description: 회원 목록을 반환한다.
- *      responses:
- *        200:
- *          description: OK
+ * 회원 목록 반환
  */
 export async function GET() {
   try {
@@ -22,7 +16,7 @@ export async function GET() {
       return createResponse(HTTP_STATUS.FORBIDDEN);
     }
 
-    const users = await UserModel.getUserList();
+    const users = await UserModel.getPartnerUserList();
 
     return NextResponse.json(users);
   } catch (error) {

@@ -16,8 +16,9 @@ interface UserDB {
   email: string; // 이메일
   isApproved: boolean; // 승인 여부
   userCategory: Types.ObjectId; // 회원 분류 Ref
-  partner: Types.ObjectId; // 파트너 Ref
   isAdmin: boolean; // 관리자 여부
+  isPartner: boolean; // 파트너 여부
+  partnerProducts: Types.ObjectId[]; // 파트너 상품
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;
@@ -25,7 +26,8 @@ interface UserDB {
 
 interface UserMethods {
   fullName(): string;
-  updateUser(userData: UserDB): boolean;
+  updateUser(userData: UserDB): Promise<boolean>;
+  updateUserPartnerProduct(partnerProductList: string[]): Promise<boolean>;
 }
 
 interface UserSchemaModel extends Model<UserDB, {}, UserMethods> {
@@ -34,6 +36,8 @@ interface UserSchemaModel extends Model<UserDB, {}, UserMethods> {
   getUserHasPasswordByLoginId(loginId: string): Promise<UserHasPassword>;
   getUserByLoginId(loginId: string): Promise<User>;
   updateUserPasswordById(userId: string, password: string): Promise<User>;
+
+  getPartnerUserList(): Promise<User[]>;
 }
 
 const schema = new Schema<UserDB, UserSchemaModel, UserMethods>({
@@ -104,18 +108,25 @@ const schema = new Schema<UserDB, UserSchemaModel, UserMethods>({
     default: null,
   },
 
-  // 파트너 Ref
-  partner: {
-    type: Schema.Types.ObjectId,
-    ref: 'Partner',
-    default: null,
-  },
-
   // 관리자 여부
   isAdmin: {
     type: Boolean,
     default: false,
   },
+
+  // 파트너 여부
+  isPartner: {
+    type: Boolean,
+    default: false,
+  },
+
+  // 파트너 상품
+  partnerProducts: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Product',
+    },
+  ],
 
   createdAt: {
     type: Date,
@@ -159,41 +170,70 @@ schema.static(
   }
 );
 
+/**
+ * 파트너 목록 반환
+ */
+schema.static('getPartnerUserList', function getPartnerUserList() {
+  return this.find({ isPartner: true }, '-password').populate('userCategory');
+});
+
+/**
+ * 유저 정보 업데이트
+ */
 schema.method('updateUser', function updateUser(userData) {
   if (typeof userData.userCategoryId === 'string') {
     this.userCategory = userData.userCategoryId;
   }
-  this.isAdmin =
-    typeof userData.isAdmin === 'boolean' ? userData.isAdmin : this.isAdmin;
-  this.isApproved =
-    typeof userData.isApproved === 'boolean'
-      ? userData.isApproved
-      : this.isApproved;
-  this.companyName =
-    typeof userData.companyName !== 'undefined'
-      ? userData.companyName
-      : this.companyName;
-  this.companyNo =
-    typeof userData.companyNo !== 'undefined'
-      ? userData.companyNo
-      : this.companyNo;
-  this.address =
-    typeof userData.address !== 'undefined' ? userData.address : this.address;
-  this.contactNumber =
-    typeof userData.contactNumber !== 'undefined'
-      ? userData.contactNumber
-      : this.contactNumber;
-  this.name = typeof userData.name !== 'undefined' ? userData.name : this.name;
-  this.phoneNumber =
-    typeof userData.phoneNumber !== 'undefined'
-      ? userData.phoneNumber
-      : this.phoneNumber;
-  this.email =
-    typeof userData.email !== 'undefined' ? userData.email : this.email;
+  if (typeof userData.isAdmin === 'boolean') {
+    this.isAdmin = userData.isAdmin;
+  }
+  if (typeof userData.isPartner === 'boolean') {
+    this.isPartner = userData.isPartner;
+  }
+  if (typeof userData.isApproved === 'boolean') {
+    this.isApproved = userData.isApproved;
+  }
+  if (typeof userData.companyName === 'string') {
+    this.companyName = userData.companyName;
+  }
+  if (typeof userData.companyNo === 'string') {
+    this.companyNo = userData.companyNo;
+  }
+  if (typeof userData.address === 'string') {
+    this.address = userData.address;
+  }
+  if (typeof userData.contactNumber === 'string') {
+    this.contactNumber = userData.contactNumber;
+  }
+  if (typeof userData.name === 'string') {
+    this.name = userData.name;
+  }
+  if (typeof userData.phoneNumber === 'string') {
+    this.phoneNumber = userData.phoneNumber;
+  }
+  if (typeof userData.email === 'string') {
+    this.email = userData.email;
+  }
   this.updatedAt = new Date();
 
   return this.save();
 });
+
+/**
+ * 파트너 상품 업데이트
+ */
+schema.method(
+  'updateUserPartnerProduct',
+  function updateUserPartnerProduct(partnerProductList) {
+    if (Array.isArray(partnerProductList)) {
+      this.partnerProducts = partnerProductList;
+    }
+
+    this.updatedAt = new Date();
+
+    return this.save();
+  }
+);
 
 const UserModel =
   (models.User as UserSchemaModel) ||
