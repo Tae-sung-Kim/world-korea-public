@@ -12,7 +12,7 @@ export default function OrderSearch() {
   const searchParams = useSearchParams();
 
   const [value, setValue] = useState(
-    searchParams.getAll('filter[name]').toString() ?? ''
+    searchParams.getAll('filter[saleProduct.name]').toString() ?? ''
   );
 
   const pageSize = Number(searchParams.get('pageSize') ?? 10);
@@ -31,7 +31,7 @@ export default function OrderSearch() {
 
   const handleSearchClick = () => {
     const filter = {
-      name: value,
+      ['saleProduct.name']: value,
     };
     const params = qs.stringify({ pageNumber: 1, pageSize, filter });
 

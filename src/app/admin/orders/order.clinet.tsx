@@ -1,8 +1,10 @@
 'use client';
 
+import ExportExcelButton from '../components/export-excel-button.component';
 import QrCodeModal from '../components/qr-code.modal';
-import useExcelExport from '../hooks/useExcelExport';
+import SortIcons from '../components/sort-icons.comonent';
 import { usePagination } from '../hooks/usePagination';
+import useSort, { SortOrder } from '../hooks/useSort';
 import { splitFourChar } from '../pins/pin.utils';
 import { useOrderListQuery } from '../queries';
 import QrCodePrintModal from './order-qrcode-print.modal';
@@ -19,24 +21,60 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useModalContext } from '@/contexts/modal.context';
+import { SaleProductBuyFormData } from '@/definitions';
 import { addComma } from '@/utils/number';
 import { useRouter } from 'next/navigation';
+import { useMemo, useState } from 'react';
 import { IoMdPrint } from 'react-icons/io';
 import { LuQrCode } from 'react-icons/lu';
-import { RiFileExcel2Line } from 'react-icons/ri';
 
 export default function OrderListClient() {
   const { openModal } = useModalContext();
   const router = useRouter();
 
-  const { pageNumber = 1, pageSize = 10 } = usePagination();
-
-  const exportToExcel = useExcelExport();
+  const {
+    pageNumber = 1,
+    pageSize = 10,
+    filter,
+  } = usePagination({
+    queryFilters: { 'saleProduct.name': '' },
+  });
 
   const ordersData = useOrderListQuery({
-    pageNumber,
-    pageSize,
+    pageNumber: Number(pageNumber),
+    pageSize: Number(pageSize),
+    filter,
   });
+
+  const data = useMemo(() => {
+    return ordersData.list;
+  }, [ordersData]);
+
+  const [sortColumn, setSortColumn] = useState<keyof (typeof data)[0] | string>(
+    ''
+  );
+  const [order, setOrder] = useState<SortOrder>('');
+
+  const sortedData = useSort<
+    SaleProductBuyFormData<{ name: string; _id: string }>
+  >({
+    data,
+    sortColumn,
+    order,
+  });
+
+  const handleSortClick = (column: string) => {
+    const isPrevColumn = sortColumn !== column;
+
+    setSortColumn(column);
+    if (isPrevColumn) {
+      setOrder('asc');
+    } else {
+      setOrder((prevData) =>
+        prevData === '' ? 'asc' : prevData === 'asc' ? 'desc' : ''
+      );
+    }
+  };
 
   const handleOrderListClick = (productId: string = '') => {
     router.push('/sale-products/' + productId);
@@ -68,44 +106,63 @@ export default function OrderListClient() {
     <>
       <div className="flex">
         <OrderSearch />
-        <div className="flex-grow" />
-
-        <Button
-          className="m-5"
-          variant="outline"
-          size="icon"
-          onClick={() =>
-            exportToExcel({
-              tableId: 'orderExportExcelTable',
-              fileName: 'test',
-              excludeClassName: 'not-excel',
-            })
-          }
-        >
-          <RiFileExcel2Line />
-        </Button>
+        <ExportExcelButton tableId="orderExportExcelTable" fileName="test" />
       </div>
       <Table id="orderExportExcelTable">
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[50px] not-excel">번호</TableHead>
-            <TableHead className="">상품명</TableHead>
+            <TableHead className="w-[50px]" data-exclude-excel>
+              번호
+            </TableHead>
+            <TableHead
+              className="cursor-pointer"
+              onClick={() => handleSortClick('saleProduct.name')}
+            >
+              <SortIcons
+                title="상품명"
+                order={sortColumn === 'saleProduct.name' ? order : ''}
+              />
+            </TableHead>
             <TableHead className="w-[120px]">업체명</TableHead>
             <TableHead className="w-[120px]">담당자명</TableHead>
-            <TableHead className="w-[80px] text-center">구매수량</TableHead>
-            <TableHead className="w-[110px] text-right">가격</TableHead>
-            <TableHead className="w-[130px] text-center">구매일</TableHead>
+            <TableHead
+              className="cursor-pointer w-[100px] text-center"
+              onClick={() => handleSortClick('quantity')}
+            >
+              <SortIcons
+                title="구매수량"
+                order={sortColumn === 'quantity' ? order : ''}
+              />
+            </TableHead>
+            <TableHead
+              className="cursor-pointer w-[110px] text-right"
+              onClick={() => handleSortClick('totalPrice')}
+            >
+              <SortIcons
+                title="가격"
+                order={sortColumn === 'totalPrice' ? order : ''}
+              />
+            </TableHead>
+            <TableHead
+              className="cursor-pointer w-[130px] text-center"
+              onClick={() => handleSortClick('orderDate')}
+            >
+              <SortIcons
+                title="구매일"
+                order={sortColumn === 'orderDate' ? order : ''}
+              />
+            </TableHead>
             <TableHead className="w-[130px] text-center">방문예정일</TableHead>
-            <TableHead className="w-[30px] text-center not-excel"></TableHead>
-            <TableHead className="w-[30px] text-center not-excel"></TableHead>
+            <TableHead className="w-[30px] text-center"></TableHead>
+            <TableHead className="w-[30px] text-center"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {ordersData.list.map((d, idx) => {
-            console.log('개별 상품 정보', d);
+          {sortedData.map((d, idx) => {
+            // console.log('개별 상품 정보', d);
             return (
               <TableRow key={d._id}>
-                <TableCell className="not-excel">
+                <TableCell data-exclude-excel>
                   {ordersData.totalItems - (pageNumber - 1) * pageSize - idx}
                 </TableCell>
                 <TableCell
@@ -134,7 +191,7 @@ export default function OrderListClient() {
                 <TableCell className="text-right">
                   방문예정일은(유효기간, 선택 날짜)
                 </TableCell>
-                <TableCell className="text-right not-excel">
+                <TableCell className="text-right">
                   <Button
                     variant="outline"
                     size="icon"
@@ -143,7 +200,7 @@ export default function OrderListClient() {
                     <LuQrCode />
                   </Button>
                 </TableCell>
-                <TableCell className="text-right not-excel">
+                <TableCell className="text-right">
                   <Button
                     variant="outline"
                     size="icon"
