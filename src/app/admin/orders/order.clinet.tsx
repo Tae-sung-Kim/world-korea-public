@@ -78,7 +78,6 @@ export default function OrderListClient() {
             exportToExcel({
               tableId: 'orderExportExcelTable',
               fileName: 'test',
-              excludeClassName: 'not-excel',
             })
           }
         >
@@ -88,7 +87,9 @@ export default function OrderListClient() {
       <Table id="orderExportExcelTable">
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[50px] not-excel">번호</TableHead>
+            <TableHead className="w-[50px]" data-exclude-excel>
+              번호
+            </TableHead>
             <TableHead className="">상품명</TableHead>
             <TableHead className="w-[120px]">업체명</TableHead>
             <TableHead className="w-[120px]">담당자명</TableHead>
@@ -96,8 +97,8 @@ export default function OrderListClient() {
             <TableHead className="w-[110px] text-right">가격</TableHead>
             <TableHead className="w-[130px] text-center">구매일</TableHead>
             <TableHead className="w-[130px] text-center">방문예정일</TableHead>
-            <TableHead className="w-[30px] text-center not-excel"></TableHead>
-            <TableHead className="w-[30px] text-center not-excel"></TableHead>
+            <TableHead className="w-[30px] text-center"></TableHead>
+            <TableHead className="w-[30px] text-center"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -105,7 +106,7 @@ export default function OrderListClient() {
             console.log('개별 상품 정보', d);
             return (
               <TableRow key={d._id}>
-                <TableCell className="not-excel">
+                <TableCell data-exclude-excel>
                   {ordersData.totalItems - (pageNumber - 1) * pageSize - idx}
                 </TableCell>
                 <TableCell
@@ -134,7 +135,7 @@ export default function OrderListClient() {
                 <TableCell className="text-right">
                   방문예정일은(유효기간, 선택 날짜)
                 </TableCell>
-                <TableCell className="text-right not-excel">
+                <TableCell className="text-right">
                   <Button
                     variant="outline"
                     size="icon"
@@ -143,7 +144,7 @@ export default function OrderListClient() {
                     <LuQrCode />
                   </Button>
                 </TableCell>
-                <TableCell className="text-right not-excel">
+                <TableCell className="text-right">
                   <Button
                     variant="outline"
                     size="icon"
