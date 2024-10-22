@@ -16,6 +16,8 @@ export type User = {
   name: string;
   isApproved: boolean;
   isAdmin: boolean;
+  isPartner: boolean;
+  partnerProducts?: string[];
 };
 
 export type UserHasPassword = User & {

@@ -25,6 +25,7 @@ class UserService {
       | 'phoneNumber'
       | 'email'
       | 'isApproved'
+      | 'isPartner'
     > & { userCategoryId: string }
   ) {
     return http.patch<User>(`/api/users/${userData._id}`, userData);
@@ -61,6 +62,20 @@ class UserService {
   // 비밀번호 초기화 (사용자)
   resetPassword() {
     return http.post<boolean>(`/api/users/reset-password`);
+  }
+
+  getPartnerUserList() {
+    return http.get<User[]>(`/api/users/partner`);
+  }
+
+  // 유저 목록 반환 (관리자)
+  getPartnerUser(id: string) {
+    return http.get<Partial<User>>(`/api/users/partner/${id}`);
+  }
+
+  // 유저 수정 (사용자)
+  patchPartner(userData: Partial<User>) {
+    return http.patch<User>(`/api/users/partner/${userData._id}`, userData);
   }
 }
 

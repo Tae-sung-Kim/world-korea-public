@@ -3,3 +3,4 @@ export * from './products.queries';
 export * from './users.queries';
 export * from './pins.queries';
 export * from './orders.queries';
+export * from './sale-product.queries';

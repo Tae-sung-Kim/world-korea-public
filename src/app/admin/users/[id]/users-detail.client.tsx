@@ -2,8 +2,8 @@
 
 import {
   useUserDetailQuery,
-  useUpdateUserMutation,
   useUserCategoryListQuery,
+  useUpdateUserMutation,
 } from '../../queries';
 import { Button } from '@/components/ui/button';
 import {
@@ -52,6 +52,7 @@ const formSchema = z.object({
   phoneNumber: z.string(),
   email: z.string().email('유효하지 않은 이메일 입니다.'),
   isApproved: z.boolean(),
+  isPartner: z.boolean(),
 });
 
 export default function UsersDetailClient({ userId }: IProps) {
@@ -75,6 +76,7 @@ export default function UsersDetailClient({ userId }: IProps) {
       phoneNumber: '',
       email: '',
       isApproved: false,
+      isPartner: false,
     },
   });
 
@@ -100,20 +102,12 @@ export default function UsersDetailClient({ userId }: IProps) {
       phoneNumber: values.phoneNumber,
       email: values.email,
       isApproved: values.isApproved,
+      isPartner: values.isPartner,
     });
   };
 
   useEffect(() => {
     if (Object.keys(userData).length > 0) {
-      // const userData = userDataRef.current;
-
-      // form.setValue(
-      //   'userCategory',
-      //   userData.userCategory?._id || ('' as string),
-      //   {
-      //     shouldDirty: true,
-      //   },
-      // );
       form.setValue(
         'userCategoryId',
         userData.userCategory?._id || ('' as string)
@@ -127,6 +121,7 @@ export default function UsersDetailClient({ userId }: IProps) {
       form.setValue('name', userData.name);
       form.setValue('phoneNumber', userData.phoneNumber);
       form.setValue('email', userData.email);
+      form.setValue('isPartner', userData.isPartner);
 
       setIsInitialLoading(false);
     }
@@ -176,25 +171,46 @@ export default function UsersDetailClient({ userId }: IProps) {
             }}
           />
 
-          <FormField
-            control={form.control}
-            name="isApproved"
-            render={({ field }) => {
-              return (
-                <FormItem>
-                  <div>
-                    <FormLabel>관리자 승인</FormLabel>
-                  </div>
-                  <FormControl>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                </FormItem>
-              );
-            }}
-          />
+          <div className="grid grid-cols-2">
+            <FormField
+              control={form.control}
+              name="isApproved"
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <div>
+                      <FormLabel>관리자 승인</FormLabel>
+                    </div>
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                  </FormItem>
+                );
+              }}
+            />
+            <FormField
+              control={form.control}
+              name="isPartner"
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <div>
+                      <FormLabel>파트너 승인</FormLabel>
+                    </div>
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                  </FormItem>
+                );
+              }}
+            />
+          </div>
 
           <FormField
             control={form.control}

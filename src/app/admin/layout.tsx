@@ -4,7 +4,8 @@ import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
 import { AiOutlineProduct, AiOutlineNotification } from 'react-icons/ai';
 import { BiPurchaseTag } from 'react-icons/bi';
-import { TbNumber123, TbTicket, TbUser } from 'react-icons/tb';
+import { TbTicket, TbUser } from 'react-icons/tb';
+import { TiSortNumericallyOutline } from 'react-icons/ti';
 
 export default async function AdminLayout({
   children,
@@ -75,7 +76,7 @@ export default async function AdminLayout({
                   <Link href="/admin/users">회원 목록</Link>
                 </li>
                 <li className="text-sm mt-[2px] text-gray-600">
-                  <Link href="/admin/partners">파트너사 목록</Link>
+                  <Link href="/admin/users/partner">파트너사 목록</Link>
                 </li>
               </ul>
             </li>
@@ -83,7 +84,7 @@ export default async function AdminLayout({
             <li className="p-5 my-4">
               <span className="flex text-lg font-bold">
                 핀번호 관리
-                <TbNumber123 />
+                <TiSortNumericallyOutline />
               </span>
               <ul className="mt-2">
                 <li className="text-sm mt-[2px] text-gray-600">
