@@ -109,7 +109,10 @@ export default async function AdminLayout({
               </span>
               <ul className="mt-2">
                 <li className="text-sm mt-[2px] text-gray-600">
-                  <Link href="/admin/popups">팝업 목록</Link>
+                  <Link href="/admin/notifications">팝업 목록</Link>
+                </li>
+                <li className="text-sm mt-[2px] text-gray-600">
+                  <Link href="/admin/notifications/create">팝업 등록</Link>
                 </li>
               </ul>
             </li>
