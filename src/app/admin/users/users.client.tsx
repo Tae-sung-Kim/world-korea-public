@@ -32,6 +32,7 @@ export default function UsersClient() {
             <TableHead>이름</TableHead>
             <TableHead>업체No</TableHead>
             <TableHead>업체명</TableHead>
+            <TableHead>파트너여부</TableHead>
             <TableHead>이메일</TableHead>
             <TableHead>연락처</TableHead>
             <TableHead>등록일</TableHead>
@@ -39,42 +40,42 @@ export default function UsersClient() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {userList
-            .filter((f) => !f.isPartner)
-            .map((user) => {
-              const {
-                _id,
-                userCategory,
-                loginId,
-                name,
-                companyNo,
-                companyName,
-                email,
-                contactNumber,
-                createdAt,
-                isApproved,
-              } = user;
+          {userList.map((user) => {
+            const {
+              _id,
+              userCategory,
+              loginId,
+              name,
+              companyNo,
+              companyName,
+              email,
+              contactNumber,
+              createdAt,
+              isApproved,
+              isPartner,
+            } = user;
 
-              return (
-                <TableRow
-                  className="cursor-pointer"
-                  key={_id}
-                  onClick={handleTrClick(user)}
-                >
-                  <TableCell>{userCategory?.name}</TableCell>
-                  <TableCell>{loginId}</TableCell>
-                  <TableCell>{name}</TableCell>
-                  <TableCell>{companyNo}</TableCell>
-                  <TableCell>{companyName}</TableCell>
-                  <TableCell>{email}</TableCell>
-                  <TableCell>{contactNumber}</TableCell>
-                  <TableCell>
-                    {createdAt && new Date(createdAt).toLocaleDateString()}
-                  </TableCell>
-                  <TableCell>{isApproved ? '승인' : '미승인'}</TableCell>
-                </TableRow>
-              );
-            })}
+            return (
+              <TableRow
+                className="cursor-pointer"
+                key={_id}
+                onClick={handleTrClick(user)}
+              >
+                <TableCell>{userCategory?.name}</TableCell>
+                <TableCell>{loginId}</TableCell>
+                <TableCell>{name}</TableCell>
+                <TableCell>{companyNo}</TableCell>
+                <TableCell>{companyName}</TableCell>
+                <TableCell>{isPartner ? 'Y' : 'N'}</TableCell>
+                <TableCell>{email}</TableCell>
+                <TableCell>{contactNumber}</TableCell>
+                <TableCell>
+                  {createdAt && new Date(createdAt).toLocaleDateString()}
+                </TableCell>
+                <TableCell>{isApproved ? '승인' : '미승인'}</TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </div>

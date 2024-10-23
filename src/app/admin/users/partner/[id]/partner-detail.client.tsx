@@ -3,7 +3,6 @@
 import {
   useProductListQuery,
   useUpdatePartnerMutation,
-  useUserCategoryListQuery,
 } from '@/app/admin/queries';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -18,19 +17,10 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { ProductFormData, User } from '@/definitions';
 import userService from '@/services/user.service';
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -39,10 +29,7 @@ interface IProps {
 }
 
 const PartnerFormSchema = z.object({
-  userCategoryId: z.string(),
-  id: z.string(),
   companyName: z.string(),
-  companyNo: z.string(),
   address: z.string(),
   contactNumber: z.string(),
   name: z
@@ -55,29 +42,21 @@ const PartnerFormSchema = z.object({
     }),
   phoneNumber: z.string(),
   email: z.string().email('유효하지 않은 이메일 입니다.'),
-  isApproved: z.boolean(),
-  isPartner: z.boolean(),
   partnerProducts: z.array(z.string()),
 });
 
 type PartnerFormValues = z.infer<typeof PartnerFormSchema>;
 const defaultDetailData = {
-  userCategoryId: '',
-  id: '',
-  companyNo: '',
   companyName: '',
   address: '',
   contactNumber: '',
   name: '',
   phoneNumber: '',
   email: '',
-  isApproved: false,
-  isPartner: false,
   partnerProducts: [],
 };
 
 export default function PartnerDetailClient({ userId }: IProps) {
-  const userCategoryList = useUserCategoryListQuery();
   const updatePartner = useUpdatePartnerMutation(userId);
 
   const [partnerProducts, setPartnerProducts] = useState<
@@ -133,115 +112,16 @@ export default function PartnerDetailClient({ userId }: IProps) {
 
           <FormField
             control={partnerForm.control}
-            name="userCategoryId"
-            render={({ field }) => {
-              return (
-                <FormItem>
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <FormLabel>회원 구분</FormLabel>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {userCategoryList?.map((item) => {
-                        return (
-                          <SelectItem key={item._id} value={item._id}>
-                            {item.name}
-                          </SelectItem>
-                        );
-                      })}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              );
-            }}
-          />
-
-          <div className="grid grid-cols-2">
-            <FormField
-              control={partnerForm.control}
-              name="isApproved"
-              render={({ field }) => {
-                return (
-                  <FormItem>
-                    <div>
-                      <FormLabel>관리자 승인</FormLabel>
-                    </div>
-                    <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                  </FormItem>
-                );
-              }}
-            />
-
-            <FormField
-              control={partnerForm.control}
-              name="isPartner"
-              render={({ field }) => {
-                return (
-                  <FormItem>
-                    <div>
-                      <FormLabel>파트너 승인</FormLabel>
-                    </div>
-                    <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                  </FormItem>
-                );
-              }}
-            />
-          </div>
-
-          <div>
-            <FormLabel>파트너 상품 리스트</FormLabel>
-            <div className="flex">
-              <ToggleGroup variant="outline" type="multiple">
-                {productData.list.map((d) => {
-                  return (
-                    <ToggleGroupItem
-                      key={d._id}
-                      value={d._id ?? ''}
-                      onClick={() => handleToggleClick(d)}
-                    >
-                      {d.name}
-                    </ToggleGroupItem>
-                  );
-                })}
-              </ToggleGroup>
-            </div>
-          </div>
-          <div>
-            <FormLabel>선택된 상품</FormLabel>
-            <div className="flex">
-              <ToggleGroup variant="outline" type="multiple">
-                {partnerProducts.map((d) => {
-                  return <Badge key={d._id}>{d.name}</Badge>;
-                })}
-              </ToggleGroup>
-            </div>
-          </div>
-
-          <FormField
-            control={partnerForm.control}
-            name="id"
+            name="companyName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>아이디</FormLabel>
+                <FormLabel>업체명</FormLabel>
                 <FormControl>
                   <Input
                     placeholder=""
-                    disabled
                     {...field}
+                    disabled
+                    readOnly
                     value={field.value ?? ''}
                   />
                 </FormControl>
@@ -250,33 +130,39 @@ export default function PartnerDetailClient({ userId }: IProps) {
             )}
           />
 
-          <FormField
-            control={partnerForm.control}
-            name="companyName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>업체명</FormLabel>
-                <FormControl>
-                  <Input placeholder="" {...field} value={field.value ?? ''} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={partnerForm.control}
-            name="companyNo"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>업체 번호</FormLabel>
-                <FormControl>
-                  <Input placeholder="" {...field} value={field.value ?? ''} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className="grid grid-cols-2">
+            <div>
+              <Label>파트너 상품 리스트</Label>
+              <div>
+                {productData.list.map((d) => {
+                  return (
+                    <Button
+                      key={d._id}
+                      type="button"
+                      value={d._id ?? ''}
+                      className="m-1"
+                      variant={
+                        partnerProducts.map((d) => d._id).includes(d._id)
+                          ? 'secondary'
+                          : 'outline'
+                      }
+                      onClick={() => handleToggleClick(d)}
+                    >
+                      {d.name}
+                    </Button>
+                  );
+                })}
+              </div>
+            </div>
+            <div>
+              <Label>선택된 상품</Label>
+              <div>
+                {partnerProducts.map((d) => {
+                  return <Badge key={d._id}>{d.name}</Badge>;
+                })}
+              </div>
+            </div>
+          </div>
 
           <FormField
             control={partnerForm.control}
