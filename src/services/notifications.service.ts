@@ -15,6 +15,11 @@ class NotificationsService {
   getNotificationList() {
     return http.get<NotificationForm>(`/api/notifications`);
   }
+
+  //팝업 삭제
+  deleteNotification(id: string) {
+    return http.delete(`/api/notifications/${id}`);
+  }
 }
 
 const notificationService = new NotificationsService();

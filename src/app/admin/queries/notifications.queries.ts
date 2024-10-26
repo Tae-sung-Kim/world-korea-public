@@ -47,3 +47,15 @@ export function useGetNotificationListQuery() {
 
   return data;
 }
+
+export function useDeleteNotificationMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => notificationService.deleteNotification(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
+      toast.success('팝업이 삭제 되었습니다.');
+    },
+  });
+}
