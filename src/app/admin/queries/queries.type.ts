@@ -11,3 +11,7 @@ export type PaginationProp<T> = {
 };
 
 export type PageFilter = { [key: string]: string };
+
+export interface ErrorResponse {
+  message: string;
+}

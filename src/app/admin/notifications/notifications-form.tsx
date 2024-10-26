@@ -17,25 +17,31 @@ import { Label } from '@radix-ui/react-label';
 import Image from 'next/image';
 import { ChangeEvent, useState } from 'react';
 import { ControllerRenderProps, useForm } from 'react-hook-form';
+import { FaMinus } from 'react-icons/fa';
 import { z } from 'zod';
 
 const NotificationsFormSchema = z.object({
   title: z.string().refine((d) => d.length > 0, {
     message: '제목을 입력해 주세요',
   }),
-  image: z.array(z.union([z.instanceof(File), z.string()])),
+  image: z.instanceof(File).or(z.string()),
 });
 
 type NotificationsFormValues = z.infer<typeof NotificationsFormSchema>;
 
 export default function NotificationsForm() {
+  const [blobImage, setBlobImage] = useState<string | undefined>(undefined);
   const notificationsForm = useForm<NotificationsFormValues>({
     resolver: zodResolver(NotificationsFormSchema),
   });
 
-  const createNotifications = useCreateNotificationsMutation();
-
-  const [blobImage, setBlobImage] = useState<string>('');
+  const createNotifications = useCreateNotificationsMutation({
+    onSuccess: () => {
+      //완료후 초기화
+      notificationsForm.reset();
+      setBlobImage(undefined);
+    },
+  });
 
   const handleInputFileChange = (
     e: ChangeEvent<HTMLInputElement>,
@@ -49,24 +55,26 @@ export default function NotificationsForm() {
         file,
         handler: ({ blob }: { blob: string }) => {
           setBlobImage(blob);
-          field.onChange([file]);
+          field.onChange(file);
         },
       });
     }
   };
 
-  const handleSubmit = () => {
-    const currentValues = notificationsForm.getValues();
-    const formData = new FormData();
-    // 제목 추가
-    formData.append('title', currentValues.title);
+  const handleDeleteImage = () => {
+    setBlobImage(undefined);
+    notificationsForm.resetField('image');
+  };
 
-    // 이미지가 배열이므로 각각 추가
-    currentValues.image.forEach((img) => {
-      if (img instanceof File) {
-        formData.append('image', img); // File만 추가
-      }
-    });
+  const handleSubmit = () => {
+    const { title, image } = notificationsForm.getValues();
+    const formData = new FormData();
+
+    // 제목 추가
+    formData.append('title', title);
+    if (image instanceof File) {
+      formData.append('image', image); // File만 추가
+    }
 
     // FormData를 전달
     createNotifications.mutate(formData);
@@ -102,34 +110,47 @@ export default function NotificationsForm() {
             />
 
             <div>
-              <FormField
-                control={notificationsForm.control}
-                name="image"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>이미지</FormLabel>
-                    <FormControl>
-                      <Input
-                        className="flex-initial"
-                        type="file"
-                        accept="image/*"
-                        onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                          handleInputFileChange(e, { ...field })
-                        }
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {blobImage ? (
+                <div>
+                  <Label>이미지</Label>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    type="button"
+                    onClick={() => handleDeleteImage()}
+                  >
+                    <FaMinus />
+                  </Button>
 
-              <Label>이미지 미보기</Label>
-              {blobImage && (
-                <Image
-                  src={blobImage}
-                  width={250}
-                  height={250}
-                  alt="등록 이미지"
+                  {blobImage && (
+                    <Image
+                      src={blobImage}
+                      width={250}
+                      height={250}
+                      alt="등록 이미지"
+                    />
+                  )}
+                </div>
+              ) : (
+                <FormField
+                  control={notificationsForm.control}
+                  name="image"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>이미지</FormLabel>
+                      <FormControl>
+                        <Input
+                          className="flex-initial"
+                          type="file"
+                          accept="image/*"
+                          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                            handleInputFileChange(e, { ...field })
+                          }
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
               )}
             </div>

@@ -1,13 +1,9 @@
-import { PageFilter, PaginationProp } from './queries.type';
+import { ErrorResponse, PageFilter, PaginationProp } from './queries.type';
 import { PaginationResponse, SaleProductBuyFormData } from '@/definitions';
 import ordersService from '@/services/orders.service';
 import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { toast } from 'sonner';
-
-interface ErrorResponse {
-  message: string;
-}
 
 const QUERY_KEY = 'admin-orders';
 
