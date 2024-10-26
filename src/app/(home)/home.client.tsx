@@ -4,13 +4,13 @@ import { usePagination } from '../admin/hooks/usePagination';
 import { useGetNotificationListQuery } from '../admin/queries/notifications.queries';
 import HomePopupModal from './home-popup.modal';
 import { useModalContext } from '@/contexts/modal.context';
+import { NotificationForm } from '@/definitions/notifications.type';
 import { useSaleProductListQuery } from '@/queries/product.queries';
 import { addComma } from '@/utils/number';
+import Cookies from 'js-cookie';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
-
-const POPUP_DATA = ['이미지1', '이미지2', '이미지3', '이미지4'];
 
 export default function HomeClient() {
   const { openModal } = useModalContext();
@@ -19,8 +19,9 @@ export default function HomeClient() {
 
   //팝업목록
   const notificationList = useGetNotificationListQuery();
-
-  console.log(notificationList);
+  const [showNotificationList, setShowNotificationList] = useState<
+    NotificationForm[]
+  >([]);
 
   const { pageNumber, pageSize, filter } = usePagination({
     queryFilters: { name: '' },
@@ -32,15 +33,34 @@ export default function HomeClient() {
     filter,
   });
 
+  //쿠키값 확인
+  useEffect(() => {
+    if (Array.isArray(notificationList) && notificationList.length > 0) {
+      const tempList = notificationList.reduce<NotificationForm[]>(
+        (acc, cur) => {
+          const isShow = !Cookies.get(cur._id ?? '');
+          if (isShow) {
+            acc.push(cur);
+          }
+          return acc;
+        },
+        []
+      );
+      setShowNotificationList(tempList);
+    }
+  }, [notificationList]);
+
   //팝업을 하나씩만 띄우기
   useEffect(() => {
     // 팝업이 처음에만 띄워지도록 설정
-
-    if (Array.isArray(notificationList)) {
-      if (!openPopup && openCountRef.current < notificationList.length) {
-        openCountRef.current = notificationList.length;
+    if (
+      Array.isArray(showNotificationList) &&
+      showNotificationList.length > 0
+    ) {
+      if (!openPopup && openCountRef.current < showNotificationList.length) {
+        openCountRef.current = showNotificationList.length;
         const showPopup = (index: number) => {
-          if (index < notificationList.length) {
+          if (index < showNotificationList.length) {
             openModal({
               useOverlayOpacity: false,
               showHeader: false,
@@ -49,7 +69,7 @@ export default function HomeClient() {
                 return (
                   <HomePopupModal
                     onCancel={onCancel}
-                    data={notificationList[index]}
+                    data={showNotificationList[index]}
                   />
                 );
               },
@@ -65,7 +85,7 @@ export default function HomeClient() {
         setOpenPopup(true); // 상태 변경하여 팝업이 다시 호출되지 않게 설정
       }
     }
-  }, [openPopup, openModal, notificationList]);
+  }, [openPopup, openModal, showNotificationList]);
 
   // //모두 띄울때 - 다건 한번에
   // useEffect(() => {

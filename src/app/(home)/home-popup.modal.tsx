@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { NotificationForm } from '@/definitions/notifications.type';
+import Cookies from 'js-cookie';
 import Image from 'next/image';
 
 type PopupProps = {
@@ -10,8 +11,9 @@ type PopupProps = {
 };
 
 export default function HomePopupModal({ onCancel, data }: PopupProps) {
-  const noneShow24Hour = () => {
-    console.log('개발 예정');
+  const noneShow24Hour = (id: string = '') => {
+    // 24시간 후 만료되는 쿠키를 설정합니다. - 일단위로만 설정 가능
+    Cookies.set(id, 'true', { expires: 1 }); // 1일 = 24시간
     onCancel && onCancel();
   };
 
@@ -24,7 +26,9 @@ export default function HomePopupModal({ onCancel, data }: PopupProps) {
         )}
       </ScrollArea>
       <div className="flex justify-center gap-4">
-        <Button onClick={noneShow24Hour}>24시간 보지않기</Button>
+        <Button onClick={() => noneShow24Hour(data._id)}>
+          24시간 보지않기
+        </Button>
         <Button onClick={onCancel}>닫기</Button>
       </div>
     </div>
