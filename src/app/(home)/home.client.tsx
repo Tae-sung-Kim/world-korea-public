@@ -3,12 +3,12 @@
 import { usePagination } from '../admin/hooks/usePagination';
 import { useGetNotificationListQuery } from '../admin/queries/notifications.queries';
 import HomePopupModal from './home-popup.modal';
+import ProductImage from './product-image.component';
+import ProductInfo from './product-info.component';
 import { useModalContext } from '@/contexts/modal.context';
 import { NotificationForm } from '@/definitions/notifications.type';
 import { useSaleProductListQuery } from '@/queries/product.queries';
-import { addComma } from '@/utils/number';
 import Cookies from 'js-cookie';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 
@@ -17,7 +17,7 @@ export default function HomeClient() {
   const [openPopup, setOpenPopup] = useState(false);
   const openCountRef = useRef(0);
 
-  //팝업목록
+  // 팝업목록
   const notificationList = useGetNotificationListQuery();
   const [showNotificationList, setShowNotificationList] = useState<
     NotificationForm[]
@@ -33,15 +33,17 @@ export default function HomeClient() {
     filter,
   });
 
-  //쿠키값 확인
+  // 쿠키값 확인
   useEffect(() => {
     if (Array.isArray(notificationList) && notificationList.length > 0) {
       const tempList = notificationList.reduce<NotificationForm[]>(
         (acc, cur) => {
           const isShow = !Cookies.get(cur._id ?? '');
+
           if (isShow) {
             acc.push(cur);
           }
+
           return acc;
         },
         []
@@ -50,40 +52,42 @@ export default function HomeClient() {
     }
   }, [notificationList]);
 
-  //팝업을 하나씩만 띄우기
+  // 팝업을 하나씩만 띄우기
   useEffect(() => {
-    // 팝업이 처음에만 띄워지도록 설정
     if (
-      Array.isArray(showNotificationList) &&
-      showNotificationList.length > 0
+      !Array.isArray(showNotificationList) ||
+      showNotificationList.length <= 0
     ) {
-      if (!openPopup && openCountRef.current < showNotificationList.length) {
-        openCountRef.current = showNotificationList.length;
-        const showPopup = (index: number) => {
-          if (index < showNotificationList.length) {
-            openModal({
-              useOverlayOpacity: false,
-              showHeader: false,
-              showFooter: false,
-              Component: ({ onCancel }) => {
-                return (
-                  <HomePopupModal
-                    onCancel={onCancel}
-                    data={showNotificationList[index]}
-                  />
-                );
-              },
-              onCancel: () => {
-                // 팝업이 닫힐 때 다음 팝업을 띄움
-                showPopup(index + 1);
-              },
-            });
-          }
-        };
+      return;
+    }
 
-        showPopup(0); // 첫 번째 팝업을 띄움
-        setOpenPopup(true); // 상태 변경하여 팝업이 다시 호출되지 않게 설정
-      }
+    // 팝업이 처음에만 띄워지도록 설정
+    if (!openPopup && openCountRef.current < showNotificationList.length) {
+      openCountRef.current = showNotificationList.length;
+      const showPopup = (index: number) => {
+        if (index < showNotificationList.length) {
+          openModal({
+            useOverlayOpacity: false,
+            showHeader: false,
+            showFooter: false,
+            Component: ({ onCancel }) => {
+              return (
+                <HomePopupModal
+                  onCancel={onCancel}
+                  data={showNotificationList[index]}
+                />
+              );
+            },
+            onCancel: () => {
+              // 팝업이 닫힐 때 다음 팝업을 띄움
+              showPopup(index + 1);
+            },
+          });
+        }
+      };
+
+      showPopup(0); // 첫 번째 팝업을 띄움
+      setOpenPopup(true); // 상태 변경하여 팝업이 다시 호출되지 않게 설정
     }
   }, [openPopup, openModal, showNotificationList]);
 
@@ -130,22 +134,10 @@ export default function HomeClient() {
                     <div className="animate-fade">재고량 : </div>
                     <div className="animate-fade">사용량 : </div>
                   </div> */}
-                  {images[0] && (
-                    <Image
-                      alt="상품 이미지"
-                      className="w-full h-full rounded shadow-xl"
-                      priority={true}
-                      width={180}
-                      height={180}
-                      src={String(images[0])}
-                    />
-                  )}
+                  <ProductImage url={images[0]} />
                 </div>
                 <div className="mt-6">
-                  <div className="text-lg font-medium">{name}</div>
-                  <div className="text-gray-500 mt-1 tracking-wide">
-                    ₩{addComma(price)}
-                  </div>
+                  <ProductInfo name={name} price={price} />
                 </div>
               </Link>
             </div>

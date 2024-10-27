@@ -32,7 +32,7 @@ export async function GET(req: NextRequest, ctx: { params: { id: string } }) {
 export async function PATCH(req: NextRequest, ctx: { params: { id: string } }) {
   try {
     const userId = ctx.params.id;
-    const { list }: { list: string[] } = await req.json();
+    const { partnerProducts }: { partnerProducts: string[] } = await req.json();
 
     await connectMongo();
 
@@ -45,7 +45,7 @@ export async function PATCH(req: NextRequest, ctx: { params: { id: string } }) {
       return createResponse(HTTP_STATUS.NOT_FOUND);
     }
 
-    await existingUser.updateUserPartnerProduct(list);
+    await existingUser.updateUserPartnerProduct(partnerProducts);
 
     return NextResponse.json(true);
   } catch (error) {

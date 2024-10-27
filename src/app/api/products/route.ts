@@ -91,7 +91,7 @@ export async function POST(req: NextRequest) {
 
     await newProduct.save();
 
-    return NextResponse.json(newProduct, { status: 200 });
+    return NextResponse.json(newProduct);
   } catch (error) {
     return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
   }
