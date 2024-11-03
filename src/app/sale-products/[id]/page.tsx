@@ -1,11 +1,11 @@
 import SaleProductDetailClient from './sale-product-detail.client';
 
 export default function SellProductDetailPage({
-  params,
+  params: { id },
 }: {
   params: {
     id: string;
   };
 }) {
-  return <SaleProductDetailClient saleProductId={params.id} />;
+  return <SaleProductDetailClient saleProductId={id} />;
 }

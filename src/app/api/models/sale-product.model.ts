@@ -25,6 +25,7 @@ export interface SaleProductDB {
   accessLevel: number; // 접근 레벨
   products: Types.ObjectId[]; // 상품 목록
   price: number; // 판매가
+  shortId: string; // shortUrl
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;
@@ -47,11 +48,13 @@ interface SaleProductSchemaModel
   extends Model<SaleProductDB, {}, SaleProductMethods> {
   getSaleProductById(
     saleProductId: Types.ObjectId
-  ): Promise<SaleProductDocument>;
+  ): Promise<SaleProductDocument | null>;
   getSaleProductList(
     paginationParams: PaginationParams & { level: string }
   ): PaginationResponse<Promise<SaleProduct[]>>;
   deleteSaleProductById(saleProductId: string): Promise<boolean>;
+  checkShortUrlExists(shortId: string): Promise<boolean>; // shortUrl 이 이미 있는지 여부 반환
+  getSaleProductByShortId(shortId: string): Promise<SaleProductDocument | null>;
 }
 
 const schema = new Schema<
@@ -62,7 +65,8 @@ const schema = new Schema<
   name: { type: String, required: true },
   accessLevel: { type: Number, default: 1 },
   products: [{ type: Schema.Types.ObjectId, ref: 'Product' }],
-  price: { type: Number, required: true }, // 판매가
+  price: { type: Number, required: true },
+  shortId: { type: String },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
   deletedAt: { type: Date },
@@ -176,6 +180,18 @@ schema.static(
     await product.save();
 
     return true;
+  }
+);
+
+schema.static('checkShortUrlExists', async function checkShortUrlExists(url) {
+  const exists = await this.exists({ shortId: url });
+  return exists;
+});
+
+schema.static(
+  'getSaleProductByShortId',
+  function getSaleProductByShortId(shortId) {
+    return this.findOne({ shortId });
   }
 );
 

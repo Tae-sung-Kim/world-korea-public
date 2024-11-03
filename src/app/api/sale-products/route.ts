@@ -1,5 +1,6 @@
 import { getQueryParams } from '../utils/api.utils';
 import { getCurrentUser, requiredIsAdmin } from '../utils/auth.util';
+import { generateShortUrl } from '../utils/short-url.utils';
 import connectMongo from '@/app/api/libs/database';
 import SaleProductModel from '@/app/api/models/sale-product.model';
 import { createResponse } from '@/app/api/utils/http.util';
@@ -48,11 +49,28 @@ export async function POST(req: NextRequest) {
       return createResponse(HTTP_STATUS.BAD_REQUEST);
     }
 
+    const shortUrlData = {
+      url: '',
+      generateShortUrl,
+    };
+
+    while (!shortUrlData.url) {
+      const generatedUrl = shortUrlData.generateShortUrl();
+      const isDuplicate = await SaleProductModel.checkShortUrlExists(
+        generatedUrl
+      );
+
+      if (!isDuplicate) {
+        shortUrlData.url = generatedUrl;
+      }
+    }
+
     const newProduct = new SaleProductModel({
       name,
       accessLevel,
       products,
       price,
+      shortId: shortUrlData.url,
     });
 
     await newProduct.save();

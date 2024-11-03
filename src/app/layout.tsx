@@ -1,4 +1,3 @@
-import Layout from '@/layouts/layout/Layout';
 import { pretendard } from '@/utils/fonts';
 import type { Metadata } from 'next';
 import './globals.css';
@@ -20,9 +19,7 @@ export default function RootLayout({
         <body
           className={`${pretendard.variable} ${pretendard.className} bg-gray-50`}
         >
-          <InnerProvider>
-            <Layout>{children}</Layout>
-          </InnerProvider>
+          <InnerProvider>{children}</InnerProvider>
         </body>
       </html>
     </OuterProvider>

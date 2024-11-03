@@ -28,7 +28,7 @@ class AuthService {
   }
 
   // 세션 반환
-  async getSession() {
+  getSession() {
     return typeof window === 'undefined'
       ? getServerSession(authOptions)
       : getSession();

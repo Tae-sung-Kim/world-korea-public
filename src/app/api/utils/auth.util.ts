@@ -13,10 +13,10 @@ export async function getAuthData(loginId?: string) {
   };
 
   const session = await authService.getSession();
-
   if (!session) {
     return returnValue;
   }
+
   returnValue.isMe = !loginId ? true : loginId === session.user?.id;
   returnValue.isLoggedIn = true;
 
