@@ -2,7 +2,7 @@ import { addComma } from '@/utils/number';
 
 type Props = {
   name: string;
-  price: number;
+  price: string;
 };
 
 export default function ProductInfo({ name, price }: Props) {
