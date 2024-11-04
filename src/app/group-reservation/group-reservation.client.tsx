@@ -1,5 +1,11 @@
 'use client';
 
+import GroupReservationInfo from './group-reservation-info.component';
+
 export default function GroupReservationClient() {
-  return <div>작업 예정</div>;
+  return (
+    <>
+      <GroupReservationInfo />
+    </>
+  );
 }
