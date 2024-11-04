@@ -28,86 +28,113 @@ export default function GroupReservationInfo() {
         </p>
       </div>
 
-      <Table className="border-2">
+      <Table className="[&>tbody>tr:hover]:bg-transparent">
         <TableHeader>
-          <TableRow>
-            <TableHead className="text-center w-[100px]">구분</TableHead>
-            <TableHead className="text-center">권종</TableHead>
-            <TableHead className="text-center w-[100px]">당일 예약시</TableHead>
-            <TableHead className="text-center w-[100px] text-red-500">
+          <TableRow className="border">
+            <TableHead className="border text-center w-[100px] min-w-[50px]">
+              구분
+            </TableHead>
+            <TableHead className="border text-center min-w-[50px]" colSpan={2}>
+              권종
+            </TableHead>
+            <TableHead className="border text-center w-[100px] min-w-[50px]">
+              당일 예약시
+            </TableHead>
+            <TableHead className="border text-center w-[100px] min-w-[50px] text-red-500">
               사전 예약시
             </TableHead>
-            <TableHead className="text-center w-[550px]">비고</TableHead>
+            <TableHead className="border text-center min-w-[100px]">
+              비고
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           <TableRow>
-            <TableCell rowSpan={3}>단품</TableCell>
-            <TableCell>롯데월드</TableCell>
-            <TableCell>29,000</TableCell>
-            <TableCell className="text-red-500">27,000</TableCell>
-            <TableCell rowSpan={7}>
+            <TableCell className="border" rowSpan={3}>
+              단품
+            </TableCell>
+            <TableCell className="border" colSpan={2}>
+              롯데월드
+            </TableCell>
+            <TableCell className="border">29,000</TableCell>
+            <TableCell className="border text-red-500">27,000</TableCell>
+            <TableCell className="border" rowSpan={7}>
               <span>&lt;월드코리아 상품 예약 안내 (공통)&gt;</span>
-              <ul className="text-left list-disc m-2 space-y-2">
+              <ul className="text-left list-disc m-5 space-y-2">
                 <li>
-                  방문일자 (방문시간) / 업체명 / 이용상품 인원 (손님+인솔자
-                  각각) / 국적 / 인솔자 정보
+                  방문일자 (방문시간) / 업체명 / 이용상품
+                  <br />
+                  인원 (손님+인솔자 각각) / 국적 / 인솔자 정보
                 </li>
                 <li className="text-red-500">
                   예약은 방문 1일 전까지 가능합니다.
                 </li>
                 <li>
-                  매표소에서 구매하실 경우 사전 예약 요금은 적용되지 않습니다.{' '}
-                  <span className="text-red-500">
+                  매표소에서 구매하실 경우 사전 예약 요금은 적용되지 않습니다.
+                  <p className="text-red-500">
                     티켓수령 및 결제는 반드 시 월드코리아 담당자와 대면
                     진행하시도록 전달 바랍니다.
-                  </span>
+                  </p>
                 </li>
               </ul>
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell>아쿠아리움</TableCell>
-            <TableCell>22,000</TableCell>
-            <TableCell className="text-red-500">20,000</TableCell>
+            <TableCell className="border" colSpan={2}>
+              아쿠아리움
+            </TableCell>
+            <TableCell className="border">22,000</TableCell>
+            <TableCell className="border text-red-500">20,000</TableCell>
           </TableRow>
           <TableRow>
-            <TableCell>서울스카이 </TableCell>
-            <TableCell>24,000</TableCell>
-            <TableCell className="text-red-500">22,000</TableCell>
+            <TableCell className="border" colSpan={2}>
+              서울스카이{' '}
+            </TableCell>
+            <TableCell className="border">24,000</TableCell>
+            <TableCell className="border text-red-500">22,000</TableCell>
           </TableRow>
           <TableRow>
-            <TableCell rowSpan={4}>
+            <TableCell className="border" rowSpan={4}>
               롯데월드
               <br />
               패키지
             </TableCell>
-            <TableCell>롯데월드+아쿠아리움</TableCell>
-            <TableCell>38,000</TableCell>
-            <TableCell className="text-red-500">35,000</TableCell>
+            <TableCell className="border" colSpan={2}>
+              롯데월드+아쿠아리움
+            </TableCell>
+            <TableCell className="border">38,000</TableCell>
+            <TableCell className="border text-red-500">35,000</TableCell>
           </TableRow>
           <TableRow>
-            <TableCell>롯데월드+서울스카이</TableCell>
-            <TableCell>40,000</TableCell>
-            <TableCell className="text-red-500">37,000</TableCell>
+            <TableCell className="border" colSpan={2}>
+              롯데월드+서울스카이
+            </TableCell>
+            <TableCell className="border">40,000</TableCell>
+            <TableCell className="border text-red-500">37,000</TableCell>
           </TableRow>
           <TableRow>
-            <TableCell>서울스카이+아쿠아리움</TableCell>
-            <TableCell>40,000</TableCell>
-            <TableCell className="text-red-500">37,000</TableCell>
+            <TableCell className="border" colSpan={2}>
+              서울스카이+아쿠아리움
+            </TableCell>
+            <TableCell className="border">40,000</TableCell>
+            <TableCell className="border text-red-500">37,000</TableCell>
           </TableRow>
           <TableRow>
-            <TableCell>롯데월드+서울스카이+아쿠아리움</TableCell>
-            <TableCell>50,000</TableCell>
-            <TableCell className="text-red-500">47,000</TableCell>
+            <TableCell className="border" colSpan={2}>
+              롯데월드+서울스카이+아쿠아리움
+            </TableCell>
+            <TableCell className="border">50,000</TableCell>
+            <TableCell className="border text-red-500">47,000</TableCell>
           </TableRow>
           <TableRow>
-            <TableCell>부산</TableCell>
-            <TableCell>부산 롯데월드</TableCell>
-            <TableCell>35,000</TableCell>
-            <TableCell className="text-red-500">26,000</TableCell>
-            <TableCell>
-              <ul className="text-left list-disc space-y-2 m-2 space-y-2">
+            <TableCell className="border">부산</TableCell>
+            <TableCell className="border" colSpan={2}>
+              부산 롯데월드
+            </TableCell>
+            <TableCell className="border">35,000</TableCell>
+            <TableCell className="border text-red-500">26,000</TableCell>
+            <TableCell className="border">
+              <ul className="text-left list-disc space-y-2 m-5 space-y-2">
                 <li>
                   단체 매표소에서 직접 매표 <br />※ 방문 전 안내 문자
                   발송드립니다.
@@ -116,18 +143,16 @@ export default function GroupReservationInfo() {
               </ul>
             </TableCell>
           </TableRow>
-        </TableBody>
-      </Table>
-
-      <Table className="border-2">
-        <TableBody>
           <TableRow>
-            <TableCell className="w-[100px]" rowSpan={2}>
+            <TableCell colSpan={5}></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border" rowSpan={2}>
               밀쿠폰
             </TableCell>
-            <TableCell>엠테이블</TableCell>
-            <TableCell>
-              <ul className="list-disc text-left space-y-2">
+            <TableCell className="border">엠테이블</TableCell>
+            <TableCell className="border">
+              <ul className="list-disc text-left m-5 space-y-2">
                 <li>
                   <span className="text-blue-500">
                     「지정 메뉴 중 택 1 + 음료」
@@ -138,23 +163,23 @@ export default function GroupReservationInfo() {
                 <li>밀쿠폰 내 지도 기재</li>
               </ul>
             </TableCell>
-            <TableCell rowSpan={2} className="w-[100px]">
+            <TableCell rowSpan={2} className="border">
               -
             </TableCell>
-            <TableCell rowSpan={2} className="text-red-500 w-[100px]">
+            <TableCell rowSpan={2} className="border text-red-500">
               10,000
             </TableCell>
-            <TableCell className="w-[550px]">
-              <ul className="list-disc text-left space-y-2">
+            <TableCell className="border">
+              <ul className="list-disc text-left m-5 space-y-2">
                 <li>롯데월드 어드벤처 내 3층</li>
                 <li>식권 뒷편 약도 첨부</li>
               </ul>
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell>얼오브샌드위치</TableCell>
-            <TableCell>
-              <ul className="list-disc text-left space-y-2">
+            <TableCell className="border">얼오브샌드위치</TableCell>
+            <TableCell className="border">
+              <ul className="list-disc text-left m-5 space-y-2">
                 <li>
                   <span className="text-blue-500">
                     「샌드위치 15종 중 택 1 + 음료」
@@ -163,8 +188,8 @@ export default function GroupReservationInfo() {
                 <li>밀쿠폰 내 지도 기재</li>
               </ul>
             </TableCell>
-            <TableCell>
-              <ul className="list-disc text-left space-y-2">
+            <TableCell className="border">
+              <ul className="list-disc text-left m-5 space-y-2">
                 <li>롯데월드 정문매표소 옆 연간이용센터 앞</li>
                 <li>포장 or 매장이용 가능 ( 입장 전/ 퇴장 후)</li>
                 <li className="text-blue-500 underline">
