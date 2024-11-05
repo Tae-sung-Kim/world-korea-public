@@ -1,10 +1,10 @@
 'use client';
 
 import ExportExcelButton from '../components/export-excel-button.component';
-import QrCodeModal from '../components/qr-code.modal';
 import SortIcons from '../components/sort-icons.comonent';
 import { usePagination } from '../hooks/usePagination';
 import useSort, { SortOrder } from '../hooks/useSort';
+import QrCodeModal from '../modals/qr-code.modal';
 import { splitFourChar } from '../pins/pin.utils';
 import { useOrderListQuery } from '../queries';
 import QrCodePrintModal from './order-qrcode-print.modal';

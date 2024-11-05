@@ -1,6 +1,6 @@
 'use client';
 
-import QrCodeScanModal from '../../components/qr-code-scan.modal';
+import QrCodeScanModal from '../../modals/qr-code-scan.modal';
 import { useUsedPinListMutation } from '../../queries';
 import { Button } from '@/components/ui/button';
 import {
