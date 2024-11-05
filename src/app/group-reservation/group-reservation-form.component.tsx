@@ -14,6 +14,12 @@ import {
 import { Input } from '@/components/ui/input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { GroupReservtionForm } from '@/definitions';
+import {
+  ADDITIONAL_OPTIONS,
+  ESTIMATED_ARRIVAL_TIME,
+  MEAL_COUPON,
+  PAYMENT_TYPE,
+} from '@/definitions/group-reservation.constant';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -89,8 +95,8 @@ export default function GroupReservationForm() {
                   <FormLabel>예약 담당자 성함 및 연락처</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="(가이드님 직접 예약일 경우 기재 안 하셔도 됩니다.)"
                       {...field}
+                      placeholder="(가이드님 직접 예약일 경우 기재 안 하셔도 됩니다.)"
                     />
                   </FormControl>
                   <FormMessage />
@@ -172,40 +178,33 @@ export default function GroupReservationForm() {
                 <FormDescription>
                   (해당 없을 시 비워두시면 됩니다.)
                 </FormDescription>
-                {[
-                  { label: '교복체험', id: 'schoolUniformTrial' },
-                  {
-                    label: '한강유람선(이크루즈)',
-                    id: 'hanRiverCruise',
-                    boardingTime: '',
-                  },
-                ].map((item) => (
+                {ADDITIONAL_OPTIONS.map((d) => (
                   <FormField
-                    key={item.id}
+                    key={d.id}
                     control={groupReservationForm.control}
                     name="additionalOptions"
                     render={({ field }) => {
                       return (
                         <FormItem
-                          key={item.id}
+                          key={d.id}
                           className="flex flex-row items-start space-x-3 space-y-0"
                         >
                           <FormControl>
                             <Checkbox
-                              checked={field.value?.includes(item.id)}
+                              checked={field.value?.includes(d.id)}
                               //   onCheckedChange={(checked) => {
                               //     return checked
-                              //       ? field.onChange([...field.value, item.id])
+                              //       ? field.onChange([...field.value, d.id])
                               //       : field.onChange(
                               //           field.value?.filter(
-                              //             (value) => value !== item.id
+                              //             (value) => value !== d.id
                               //           )
                               //         );
                               //   }}
                             />
                           </FormControl>
                           <FormLabel className="font-normal">
-                            {item.label}
+                            {d.label}
                           </FormLabel>
                         </FormItem>
                       );
@@ -232,26 +231,21 @@ export default function GroupReservationForm() {
                     defaultValue={field.value}
                     className="flex flex-col space-y-1"
                   >
-                    <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem value="allOfSandwich" />
-                      </FormControl>
-                      <FormLabel className="font-normal">
-                        얼오브샌드위치
-                      </FormLabel>
-                    </FormItem>
-                    <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem value="mTable" />
-                      </FormControl>
-                      <FormLabel className="font-normal">엠테이블</FormLabel>
-                    </FormItem>
-                    <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem value="multiUse" />
-                      </FormControl>
-                      <FormLabel className="font-normal">겸용</FormLabel>
-                    </FormItem>
+                    {MEAL_COUPON.map((d) => {
+                      return (
+                        <FormItem
+                          key={d.value}
+                          className="flex items-center space-x-3 space-y-0"
+                        >
+                          <FormControl>
+                            <RadioGroupItem value={d.value} />
+                          </FormControl>
+                          <FormLabel className="font-normal">
+                            {d.label}
+                          </FormLabel>
+                        </FormItem>
+                      );
+                    })}
                   </RadioGroup>
                 </FormControl>
                 <FormMessage />
@@ -264,41 +258,36 @@ export default function GroupReservationForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>결제 방법</FormLabel>
-                <FormDescription>
+                {/* <FormDescription>
                   (현금 혹은 입금의 경우, 아래 메모란에 세금계산서 및 현금영수증
                   발급여부와 발급하실 사업자번호 혹은 현금영수증 번호를 기재
                   부탁드립니다.)
-                </FormDescription>
+                </FormDescription> */}
                 <FormControl>
                   <RadioGroup
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                     className="flex flex-col space-y-1"
                   >
-                    <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem value="dayOfCardPayment" />
-                      </FormControl>
-                      <FormLabel className="font-normal">
-                        당일 카드결제
-                      </FormLabel>
-                    </FormItem>
-                    <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem value="cashPayment" />
-                      </FormControl>
-                      <FormLabel className="font-normal">현금 결제</FormLabel>
-                    </FormItem>
-                    <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem value="preDeposit" />
-                      </FormControl>
-                      <FormLabel className="font-normal">사전 입금</FormLabel>
-                    </FormItem>
+                    {PAYMENT_TYPE.map((d) => {
+                      return (
+                        <FormItem
+                          key={d.value}
+                          className="flex items-center space-x-3 space-y-0"
+                        >
+                          <FormControl>
+                            <RadioGroupItem value={d.value} />
+                          </FormControl>
+                          <FormLabel className="font-normal">
+                            {d.label}
+                          </FormLabel>
+                        </FormItem>
+                      );
+                    })}
                   </RadioGroup>
                 </FormControl>
                 <FormControl>
-                  <Input placeholder="현금 및 입금일때 활성화" />
+                  <Input placeholder="현금 혹은 입금의 경우, 이 메모란에 세금계산서 및 현금영수증 발급여부와 발급하실 사업자번호 혹은 현금영수증 번호를 기재 부탁드립니다." />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -306,7 +295,7 @@ export default function GroupReservationForm() {
           />
           <FormField
             control={groupReservationForm.control}
-            name="paymentType"
+            name="estimatedArrivalTime"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>예상 도착시간 및 미팅장소</FormLabel>
@@ -319,45 +308,29 @@ export default function GroupReservationForm() {
                     defaultValue={field.value}
                     className="flex flex-col space-y-1"
                   >
-                    <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem value="mainEntrance" />
-                      </FormControl>
-                      <FormLabel className="font-normal">정문</FormLabel>
-                    </FormItem>
-                    <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem value="southEntrance" />
-                      </FormControl>
-                      <FormLabel className="font-normal">남문</FormLabel>
-                    </FormItem>
-                    <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem value="lotteWorldBusPark" />
-                      </FormControl>
-                      <FormLabel className="font-normal">
-                        롯데월드 버스 주차장
-                      </FormLabel>
-                    </FormItem>
-                    <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem value="seoulSkyEntrance" />
-                      </FormControl>
-                      <FormLabel className="font-normal">
-                        서울스카이 입구
-                      </FormLabel>
-                    </FormItem>
-                    <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem value="etc" />
-                      </FormControl>
-                      <FormLabel className="font-normal">기타</FormLabel>
-                    </FormItem>
+                    {ESTIMATED_ARRIVAL_TIME.map((d) => {
+                      return (
+                        <FormItem
+                          key={d.value}
+                          className="flex items-center space-x-3 space-y-0"
+                        >
+                          <FormControl>
+                            <RadioGroupItem value={d.value} />
+                          </FormControl>
+                          <FormLabel className="font-normal">
+                            {d.label}
+                          </FormLabel>
+                          {d.value === 'etc' && (
+                            <FormControl>
+                              <Input placeholder="기타 장소" />
+                            </FormControl>
+                          )}
+                        </FormItem>
+                      );
+                    })}
                   </RadioGroup>
                 </FormControl>
-                <FormControl>
-                  <Input placeholder="현금 및 입금일때 활성화" />
-                </FormControl>
+                <FormControl></FormControl>
                 <FormMessage />
               </FormItem>
             )}
