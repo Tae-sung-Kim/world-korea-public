@@ -17,9 +17,7 @@ const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         try {
-          console.log(credentials);
           const response = await authService.login(credentials as UserSignIn);
-          console.log(response);
 
           if (response && credentials) {
             const userData = jwtUtils.verify(response);

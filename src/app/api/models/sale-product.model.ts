@@ -26,6 +26,7 @@ export interface SaleProductDB {
   products: Types.ObjectId[]; // 상품 목록
   price: number; // 판매가
   shortId: string; // shortUrl
+  isReservable: boolean;
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;
@@ -55,6 +56,7 @@ interface SaleProductSchemaModel
   deleteSaleProductById(saleProductId: string): Promise<boolean>;
   checkShortUrlExists(shortId: string): Promise<boolean>; // shortUrl 이 이미 있는지 여부 반환
   getSaleProductByShortId(shortId: string): Promise<SaleProductDocument | null>;
+  getReservableSaleProductList(): Promise<SaleProductDocument[]>; // 예약 가능 판매상품 목록 반환
 }
 
 const schema = new Schema<
@@ -67,6 +69,7 @@ const schema = new Schema<
   products: [{ type: Schema.Types.ObjectId, ref: 'Product' }],
   price: { type: Number, required: true },
   shortId: { type: String },
+  isReservable: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
   deletedAt: { type: Date },
@@ -192,6 +195,13 @@ schema.static(
   'getSaleProductByShortId',
   function getSaleProductByShortId(shortId) {
     return this.findOne({ shortId });
+  }
+);
+
+schema.static(
+  'getReservableSaleProductList',
+  function getReservableSaleProductList() {
+    return this.find({ isReservable: true });
   }
 );
 

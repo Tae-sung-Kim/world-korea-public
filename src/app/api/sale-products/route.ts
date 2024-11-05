@@ -43,7 +43,8 @@ export async function POST(req: NextRequest) {
       return createResponse(HTTP_STATUS.FORBIDDEN);
     }
 
-    const { name, accessLevel, products, price } = await req.json();
+    const { name, accessLevel, products, price, isReservable } =
+      await req.json();
 
     if (!Array.isArray(products) || products.length === 0) {
       return createResponse(HTTP_STATUS.BAD_REQUEST);
@@ -71,6 +72,7 @@ export async function POST(req: NextRequest) {
       products,
       price,
       shortId: shortUrlData.url,
+      isReservable,
     });
 
     await newProduct.save();

@@ -12,10 +12,6 @@ export async function POST(req: NextRequest) {
 
   try {
     const formData = await req.formData();
-    console.log(formData.get('name'));
-    console.log(formData.get('images'));
-    console.log(formData.getAll('images'));
-
     const imageFiles = Array.from(formData.getAll('images')) as File[];
 
     const list = await uploadFile(imageFiles, {
