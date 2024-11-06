@@ -103,7 +103,7 @@ export default function SaleProductListClient() {
       <Table id="saleProductExportExcelTable">
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[70px]">번호</TableHead>
+            <TableHead className="min-w-[70px]">번호</TableHead>
             <TableHead
               className="cursor-pointer"
               onClick={() => handleSortClick('name')}
@@ -113,10 +113,11 @@ export default function SaleProductListClient() {
                 order={sortColumn === 'name' ? order : ''}
               />
             </TableHead>
-            <TableHead className="w-[200px]">상세 상품명</TableHead>
-            <TableHead className="w-[80px]">level</TableHead>
+            <TableHead className="min-w-[100px]">상세 상품명</TableHead>
+            <TableHead className="min-w-[80px]">level</TableHead>
+            <TableHead className="min-w-[80px]">단체예약여부</TableHead>
             <TableHead
-              className="w-[100px] text-right cursor-pointer"
+              className="min-w-[100px] text-right cursor-pointer"
               onClick={() => handleSortClick('price')}
             >
               <SortIcons
@@ -124,8 +125,8 @@ export default function SaleProductListClient() {
                 order={sortColumn === 'price' ? order : ''}
               />
             </TableHead>
-            <TableHead className="w-[200px] text-right">재고</TableHead>
-            <TableHead className="w-[70px] text-right"></TableHead>
+            <TableHead className="min-w-[100px] text-right">재고</TableHead>
+            <TableHead className="min-w-[70px] text-right"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -155,6 +156,7 @@ export default function SaleProductListClient() {
                     )?.name
                   }
                 </TableCell>
+                <TableCell>{data.isReservable ? 'Y' : 'N'}</TableCell>
                 <TableCell className="text-right">
                   {addComma(data.price)} 원
                 </TableCell>
@@ -189,7 +191,7 @@ export default function SaleProductListClient() {
         </TableBody>
         <TableFooter>
           <TableRow>
-            <TableCell colSpan={6}>총 상품</TableCell>
+            <TableCell colSpan={7}>총 상품</TableCell>
             <TableCell className="text-right">
               {addComma(saleProductData.totalItems)} 개
             </TableCell>

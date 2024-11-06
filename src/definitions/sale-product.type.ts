@@ -19,6 +19,7 @@ export interface SaleProductFormData<T> {
   price: string; // 판매가
   products: T[];
   accessLevel: string;
+  isReservable: boolean;
   createdAt?: Date | string;
   updatedAt?: Date | string;
 }

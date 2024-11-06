@@ -1,5 +1,6 @@
 'use client';
 
+import useReservableSaleProductQuery from '../admin/queries/sale-product.queries';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -30,7 +31,7 @@ const GroupReservationFormSchema = z.object({
   guideContactInfo: z.string().min(0, '인솔자(가이드)정보는 필수 입니다.'), // 인솔자명 연락처
   numberOfPeopel: z.string().min(0, '인원수는 필수 입니다.'),
   nationality: z.string().min(0, '국적은 필수 입니다.'),
-  product: z.object({}),
+  productId: z.string().min(0, '상품은 필수 입니다.'),
   mealCoupon: z.string(),
   paymentType: z.string(), //결제 방법 체크해야함
   estimatedArrivalTime: z.string(),
@@ -42,6 +43,8 @@ const GroupReservationFormSchema = z.object({
 });
 
 export default function GroupReservationForm() {
+  const reservableSaleProduct = useReservableSaleProductQuery();
+
   const groupReservationForm = useForm<GroupReservtionForm>({
     resolver: zodResolver(GroupReservationFormSchema),
     defaultValues: {
@@ -50,7 +53,7 @@ export default function GroupReservationForm() {
       guideContactInfo: '',
       numberOfPeopel: '',
       nationality: '',
-      product: {},
+      productId: '',
       additionalOptions: '',
       mealCoupon: '',
       paymentType: '',
@@ -129,7 +132,7 @@ export default function GroupReservationForm() {
                     <FormLabel>인원수(구매인원+인솔인원(TC포함))</FormLabel>
                     <FormLabel className="ml-auto text-red-500">
                       ※ 해외단체는 대소인 구분이 없으며, 36개월 미만은
-                      무료입장이 가능합니다.{' '}
+                      무료입장이 가능합니다.
                     </FormLabel>
                   </div>
                   <FormControl>
@@ -158,12 +161,35 @@ export default function GroupReservationForm() {
 
           <FormField
             control={groupReservationForm.control}
-            name="product"
+            name="productId"
             render={({ field }) => {
               return (
                 <FormItem>
                   <FormLabel>이용상품(메인상품)</FormLabel>
-                  <FormControl>{/* 라디오 버튼으로 구성해야 함 */}</FormControl>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex flex-col space-y-1"
+                    >
+                      {Array.isArray(reservableSaleProduct) &&
+                        reservableSaleProduct.map((d) => {
+                          return (
+                            <FormItem
+                              key={d._id}
+                              className="flex items-center space-x-3 space-y-0"
+                            >
+                              <FormControl>
+                                <RadioGroupItem value={d._id ?? ''} />
+                              </FormControl>
+                              <FormLabel className="font-normal">
+                                {d.name}
+                              </FormLabel>
+                            </FormItem>
+                          );
+                        })}
+                    </RadioGroup>
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               );

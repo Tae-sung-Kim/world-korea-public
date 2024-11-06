@@ -12,7 +12,7 @@ export type GroupReservtionForm = {
   guideContactInfo: string; // 인솔자명 연락처
   numberOfPeopel: string; // 인원수
   nationality: string; // 국적
-  product: Product; // 이용상품
+  productId: string; // 이용상품
   additionalOptions: string; // 추가 옵션
   mealCoupon: string; // 밀 쿠폰
   paymentType: string; // 결제 방법

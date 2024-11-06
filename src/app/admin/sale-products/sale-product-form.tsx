@@ -22,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
 import { ProductFormData } from '@/definitions';
 import saleProductService from '@/services/sale-product.service';
 import { addComma, removeComma } from '@/utils/number';
@@ -38,7 +39,7 @@ const SaleProductFormSchema = z.object({
   accessLevel: z.string().refine((d) => d.length > 0, {
     message: '레벨을 선택해 주세요.',
   }), // 접근 레벨
-
+  isReservable: z.boolean(), // 단체 예약 상품 여부
   // regularPrice: z.string().optional(), // 정가
   price: priceShcema(), // 판매가
 });
@@ -102,6 +103,7 @@ export default function SaleProductForm({
           accessLevel: '1', // 접근 레벨
           price: '0', // 판매가
           products: [],
+          isReservable: false,
         },
   });
 
@@ -151,36 +153,61 @@ export default function SaleProductForm({
             )}
           />
 
-          <FormField
-            control={saleProductForm.control}
-            name="accessLevel"
-            render={({ field }) => {
-              return (
-                <FormItem>
-                  <FormLabel>Level</FormLabel>
-                  <FormControl>
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <SelectTrigger className="w-[180px]">
-                        <SelectValue placeholder="선택" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          {userCategoryList?.map((d) => {
-                            return (
-                              <SelectItem key={d._id} value={String(d.level)}>
-                                {d.name}
-                              </SelectItem>
-                            );
-                          })}
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              );
-            }}
-          />
+          <div className="grid grid-cols-2">
+            <FormField
+              control={saleProductForm.control}
+              name="accessLevel"
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel>Level</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <SelectTrigger className="w-[180px]">
+                          <SelectValue placeholder="선택" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            {userCategoryList?.map((d) => {
+                              return (
+                                <SelectItem key={d._id} value={String(d.level)}>
+                                  {d.name}
+                                </SelectItem>
+                              );
+                            })}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
+
+            <FormField
+              control={saleProductForm.control}
+              name="isReservable"
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <div>
+                      <FormLabel>단체예약 가능</FormLabel>
+                    </div>
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                  </FormItem>
+                );
+              }}
+            />
+          </div>
 
           <div className="grid grid-cols-3 gap-6">
             <FormItem>

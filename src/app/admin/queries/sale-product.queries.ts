@@ -64,3 +64,14 @@ export function useDetailSaleProductQuery(id: string) {
 
   return data;
 }
+
+export default function useReservableSaleProductQuery() {
+  const fallback: SaleProductFormData<ProductFormData<string>>[] = [];
+
+  const { data = fallback } = useQuery({
+    queryKey: [QUERY_KEY],
+    queryFn: () => saleProductService.getReservationSaleProductList(),
+  });
+
+  return data;
+}
