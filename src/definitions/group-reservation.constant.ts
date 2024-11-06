@@ -11,8 +11,8 @@ export const MEAL_COUPON = [
 
 export const PAYMENT_TYPE = [
   { value: 'dayOfCardPayment', label: '당일 카드결제' },
-  { value: 'cashPayment', label: '현금 결제' },
-  { value: 'preDeposit', label: '사전 입금' },
+  { value: 'cashPayment', label: '현금 결제', etc: true },
+  { value: 'preDeposit', label: '사전 입금', etc: true },
 ];
 
 export const ESTIMATED_ARRIVAL_TIME = [

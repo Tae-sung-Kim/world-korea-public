@@ -54,12 +54,12 @@ export default function GroupReservationBottom() {
             <TableCell>장재은 주임</TableCell>
             <TableCell>롯데월드 어드벤처</TableCell>
             <TableCell>010-9234-8587</TableCell>
-            <TableCell>010-2742-8587</TableCell>
+            <TableCell>worldkorea_info</TableCell>
           </TableRow>
           <TableRow>
             <TableCell>한상탁 매니저</TableCell>
             <TableCell>서울스카이 / 아쿠아리움</TableCell>
-            <TableCell> worldkorea_info</TableCell>
+            <TableCell>010-2742-8587</TableCell>
             <TableCell></TableCell>
           </TableRow>
         </TableBody>

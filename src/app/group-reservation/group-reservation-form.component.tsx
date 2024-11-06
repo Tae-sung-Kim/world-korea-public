@@ -307,13 +307,15 @@ export default function GroupReservationForm() {
                           <FormLabel className="font-normal">
                             {d.label}
                           </FormLabel>
+                          {d.etc && (
+                            <FormControl>
+                              <Input placeholder="현금 혹은 입금의 경우, 이 메모란에 세금계산서 및 현금영수증 발급여부와 발급하실 사업자번호 혹은 현금영수증 번호를 기재 부탁드립니다." />
+                            </FormControl>
+                          )}
                         </FormItem>
                       );
                     })}
                   </RadioGroup>
-                </FormControl>
-                <FormControl>
-                  <Input placeholder="현금 혹은 입금의 경우, 이 메모란에 세금계산서 및 현금영수증 발급여부와 발급하실 사업자번호 혹은 현금영수증 번호를 기재 부탁드립니다." />
                 </FormControl>
                 <FormMessage />
               </FormItem>
