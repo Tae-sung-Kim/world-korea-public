@@ -1,11 +1,11 @@
 'use client';
 
+import { descriptionShcema, priceShcema } from '../products/product.schema';
 import {
   useCreateProductMutation,
   useUpdateProductMutation,
   useUserCategoryListQuery,
 } from '../queries';
-import { descriptionShcema, priceShcema } from './product.schema';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -93,7 +93,7 @@ type Props = {
   disabled?: boolean;
 };
 
-export default function ProductForm({ productId, disabled = false }: Props) {
+export default function ProductDetail({ productId, disabled = false }: Props) {
   const userCategoryList = useUserCategoryListQuery();
 
   const [productImageList, setProductImageList] = useState<ProductImage[]>([]);

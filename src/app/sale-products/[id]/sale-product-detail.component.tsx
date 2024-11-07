@@ -1,4 +1,4 @@
-import ProductForm from '@/app/admin/products/product-form';
+import ProductDetail from '@/app/admin/components/product-detail.component';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ProductFormData } from '@/definitions';
@@ -27,7 +27,7 @@ export default function SaleProductDetailsTab({
           {products.map((d) => {
             return (
               <TabsContent key={d._id} value={d._id ?? ''} className="m-4">
-                <ProductForm productId={d._id} disabled={true} />
+                <ProductDetail productId={d._id} disabled={true} />
               </TabsContent>
             );
           })}

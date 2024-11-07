@@ -1,11 +1,11 @@
 'use client';
 
-import ProductForm from './product-form';
+import ProductDetail from '../components/product-detail.component';
 
 export default function ProductFormClient({
   productId,
 }: {
   productId?: string;
 }) {
-  return <ProductForm productId={productId} />;
+  return <ProductDetail productId={productId} />;
 }
