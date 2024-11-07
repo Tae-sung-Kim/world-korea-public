@@ -22,6 +22,7 @@ export interface OrderDB extends Document {
   quantity: number;
   totalPrice: number;
   user: Types.ObjectId; // User ID 참조
+  shortId: string; // shortId
   status: OrderStatus;
   orderDate: Date;
   createdAt: Date;
@@ -46,6 +47,8 @@ interface OrderSchemaModel extends Model<OrderDB, {}, OrderMethods> {
   getOrderList(
     paginationParams: PaginationParams
   ): PaginationResponse<Promise<Order[]>>;
+  checkShortUrlExists(shortId: string): Promise<boolean>; // shortUrl 이 이미 있는지 여부 반환
+  getOrderByShortId(shortId: string): Promise<OrderDocument | null>;
 }
 
 const schema = new Schema<OrderDB, OrderSchemaModel, OrderMethods>({
@@ -62,6 +65,7 @@ const schema = new Schema<OrderDB, OrderSchemaModel, OrderMethods>({
     type: Number,
     required: true,
   },
+  shortId: { type: String },
   status: {
     type: String,
     enum: Object.values(OrderStatus),
@@ -140,6 +144,15 @@ schema.static(
     };
   }
 );
+
+schema.static('checkShortUrlExists', async function checkShortUrlExists(url) {
+  const exists = await this.exists({ shortId: url });
+  return exists;
+});
+
+schema.static('getOrderByShortId', function getOrderByShortId(shortId) {
+  return this.findOne({ shortId });
+});
 
 const OrderModel =
   (models.Order as OrderSchemaModel) ||

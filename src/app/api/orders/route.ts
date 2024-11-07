@@ -3,6 +3,7 @@ import SaleProductModel from '../models/sale-product.model';
 import { getQueryParams } from '../utils/api.utils';
 import { getCurrentUser, requiredIsMe } from '../utils/auth.util';
 import { createResponse } from '../utils/http.util';
+import { generateShortId } from '../utils/short-id.utils';
 import connectMongo from '@/app/api/libs/database';
 import PinModel from '@/app/api/models/pin.model';
 import {
@@ -14,6 +15,9 @@ import {
 } from '@/definitions';
 import { NextRequest, NextResponse } from 'next/server';
 
+/**
+ * 주문 목록 반환
+ */
 export async function GET(req: NextRequest) {
   try {
     await connectMongo();
@@ -29,6 +33,7 @@ export async function GET(req: NextRequest) {
       pageSize,
       filter,
     });
+
     return NextResponse.json(paginationResponse);
   } catch (error) {
     return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
@@ -120,12 +125,27 @@ export async function POST(req: NextRequest) {
       }
     );
 
+    const shortIdData = {
+      id: '',
+      generateShortId,
+    };
+
+    while (!shortIdData.id) {
+      const generatedId = shortIdData.generateShortId();
+      const isDuplicate = await OrderModel.checkShortUrlExists(generatedId);
+
+      if (!isDuplicate) {
+        shortIdData.id = generatedId;
+      }
+    }
+
     // 구매 추가
     const orderData = new OrderModel({
       saleProduct,
       pins: pinList,
       quantity,
       totalPrice: saleProductItem.price * quantity,
+      shortId: shortIdData.id,
       user: userData._id,
       orderDate: Date.now(),
       status: OrderStatus.Pending,

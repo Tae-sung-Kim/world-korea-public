@@ -7,7 +7,7 @@ type Length8String<T extends string> =
 // short URL 타입 정의
 type ShortUrl = Length8String<string>;
 
-export function generateShortUrl(): ShortUrl {
+export function generateShortId(): ShortUrl {
   const characters =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let shortUrl = '';
