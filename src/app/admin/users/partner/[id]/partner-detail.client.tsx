@@ -1,9 +1,6 @@
 'use client';
 
-import {
-  useProductListQuery,
-  useUpdatePartnerMutation,
-} from '@/app/admin/queries';
+import { useUpdatePartnerMutation } from '@/app/admin/queries';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -17,10 +14,11 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { ProductFormData, User } from '@/definitions';
+import { ProductFormData } from '@/definitions';
+import productService from '@/services/product.service';
 import userService from '@/services/user.service';
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -63,8 +61,8 @@ export default function PartnerDetailClient({ userId }: IProps) {
     ProductFormData<string>[]
   >([]);
 
-  //상품조회(판매 상품이 아님)
-  const productData = useProductListQuery();
+  // 상품조회(판매 상품이 아님)
+  const [productData, setProductData] = useState<ProductFormData<string>[]>([]);
 
   const handleToggleClick = (data: ProductFormData<string>) => {
     setPartnerProducts((prevData): ProductFormData<string>[] => {
@@ -77,12 +75,35 @@ export default function PartnerDetailClient({ userId }: IProps) {
     });
   };
 
+  const _setProductData = async () => {
+    const productData = await productService.getProudctList();
+
+    const listData = productData.list;
+    setProductData(listData);
+
+    return listData;
+  };
+
+  const isReadOnly = useMemo(() => {
+    return {
+      disabled: !!userId,
+      readOnly: !!userId,
+    };
+  }, [userId]);
+
   const partnerForm = useForm<PartnerFormValues>({
     resolver: zodResolver(PartnerFormSchema),
     defaultValues: !!userId
       ? async () =>
           userService.getPartnerUser(userId).then(async (res) => {
             const userData = await userService.getUserById(userId);
+            const listData = await _setProductData();
+
+            const partnerProducts = listData.filter((f) =>
+              res.partnerProducts?.includes(f._id ?? '')
+            );
+
+            setPartnerProducts(partnerProducts);
 
             return {
               ...defaultDetailData,
@@ -91,7 +112,11 @@ export default function PartnerDetailClient({ userId }: IProps) {
               id: userData.loginId,
             };
           })
-      : defaultDetailData,
+      : async () => {
+          await _setProductData();
+
+          return defaultDetailData;
+        },
   });
 
   const handleSubmit = () => {
@@ -134,7 +159,7 @@ export default function PartnerDetailClient({ userId }: IProps) {
             <div>
               <Label>파트너 상품 리스트</Label>
               <div>
-                {productData.list.map((d) => {
+                {productData.map((d) => {
                   return (
                     <Button
                       key={d._id}
@@ -171,7 +196,12 @@ export default function PartnerDetailClient({ userId }: IProps) {
               <FormItem>
                 <FormLabel>주소</FormLabel>
                 <FormControl>
-                  <Input placeholder="" {...field} value={field.value ?? ''} />
+                  <Input
+                    placeholder=""
+                    {...field}
+                    value={field.value ?? ''}
+                    {...isReadOnly}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -185,7 +215,12 @@ export default function PartnerDetailClient({ userId }: IProps) {
               <FormItem>
                 <FormLabel>연락처</FormLabel>
                 <FormControl>
-                  <Input placeholder="" {...field} value={field.value ?? ''} />
+                  <Input
+                    placeholder=""
+                    {...field}
+                    value={field.value ?? ''}
+                    {...isReadOnly}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -199,7 +234,12 @@ export default function PartnerDetailClient({ userId }: IProps) {
               <FormItem>
                 <FormLabel>이름</FormLabel>
                 <FormControl>
-                  <Input placeholder="" {...field} value={field.value ?? ''} />
+                  <Input
+                    placeholder=""
+                    {...field}
+                    value={field.value ?? ''}
+                    {...isReadOnly}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -213,7 +253,12 @@ export default function PartnerDetailClient({ userId }: IProps) {
               <FormItem>
                 <FormLabel>휴대폰</FormLabel>
                 <FormControl>
-                  <Input placeholder="" {...field} value={field.value ?? ''} />
+                  <Input
+                    placeholder=""
+                    {...field}
+                    value={field.value ?? ''}
+                    {...isReadOnly}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -227,7 +272,12 @@ export default function PartnerDetailClient({ userId }: IProps) {
               <FormItem>
                 <FormLabel>이메일</FormLabel>
                 <FormControl>
-                  <Input placeholder="" {...field} value={field.value ?? ''} />
+                  <Input
+                    placeholder=""
+                    {...field}
+                    value={field.value ?? ''}
+                    {...isReadOnly}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
