@@ -99,11 +99,30 @@ export async function POST(req: NextRequest) {
     });
 
     // 2. 상품 재고 체크
-    let pinList: string[] = [];
+    let ticketList: {
+      shortId: string;
+      pins: string[];
+    }[] = [];
     let isInValid = saleProductItem.products.some(({ pins }) => {
-      pinList = pinList.concat(
-        pins.map((pinItem) => pinItem._id as string).slice(0, quantity)
-      );
+      const pinList = pins
+        .map((pinItem) => pinItem._id as string)
+        .slice(0, quantity);
+
+      for (let i = 0, len = pinList.length; i < len; i++) {
+        let ticket = ticketList[i];
+
+        if (!ticket) {
+          ticketList[i] = {
+            shortId: '',
+            pins: [],
+          };
+
+          ticket = ticketList[i];
+        }
+
+        ticket.pins.push(pinList[i]);
+      }
+
       return quantity > pins.length;
     });
 
@@ -111,45 +130,46 @@ export async function POST(req: NextRequest) {
       return createResponse(HTTP_STATUS.BAD_REQUEST, '재고가 부족합니다.');
     }
 
-    // 3. 상품
-    // - 핀 상태 결제 중으로 변경
-    await PinModel.updateMany(
-      { _id: { $in: pinList } },
-      {
-        $set: {
-          orderStatus: OrderStatus.Pending,
-        },
-      },
-      {
-        runValidators: true,
-      }
-    );
+    // 3. shortId 삽입
+    for (let ticket of ticketList) {
+      while (!ticket.shortId) {
+        const generatedId = generateShortId();
+        const isDuplicate = await OrderModel.checkShortIdExists(generatedId);
 
-    const shortIdData = {
-      id: '',
-      generateShortId,
-    };
-
-    while (!shortIdData.id) {
-      const generatedId = shortIdData.generateShortId();
-      const isDuplicate = await OrderModel.checkShortUrlExists(generatedId);
-
-      if (!isDuplicate) {
-        shortIdData.id = generatedId;
+        if (!isDuplicate) {
+          ticket.shortId = generatedId;
+        }
       }
     }
 
     // 구매 추가
     const orderData = new OrderModel({
       saleProduct,
-      pins: pinList,
+      tickets: ticketList,
       quantity,
       totalPrice: saleProductItem.price * quantity,
-      shortId: shortIdData.id,
       user: userData._id,
       orderDate: Date.now(),
       status: OrderStatus.Pending,
     });
+
+    // 4. 상품
+    // - 핀 상태 결제 중으로 변경
+    for (let pinNumber of ticketList.map((d) => d.pins).flat()) {
+      await PinModel.updateOne(
+        { _id: pinNumber },
+        {
+          $set: {
+            saleProduct,
+            orderStatus: OrderStatus.Pending,
+            order: orderData._id,
+          },
+        },
+        {
+          runValidators: true,
+        }
+      );
+    }
 
     await orderData.save();
 

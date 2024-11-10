@@ -18,7 +18,12 @@ import {
 
 export interface OrderDB extends Document {
   saleProduct: Types.ObjectId; // SaleProduct ID 참조
-  pins: Types.ObjectId[]; // 빈 아이디 목록
+  tickets: [
+    {
+      pins: Types.ObjectId[];
+      shortId: string;
+    }
+  ];
   quantity: number;
   totalPrice: number;
   user: Types.ObjectId; // User ID 참조
@@ -47,7 +52,7 @@ interface OrderSchemaModel extends Model<OrderDB, {}, OrderMethods> {
   getOrderList(
     paginationParams: PaginationParams
   ): PaginationResponse<Promise<Order[]>>;
-  checkShortUrlExists(shortId: string): Promise<boolean>; // shortUrl 이 이미 있는지 여부 반환
+  checkShortIdExists(shortId: string): Promise<boolean>; // shortUrl 이 이미 있는지 여부 반환
   getOrderByShortId(shortId: string): Promise<OrderDocument | null>;
 }
 
@@ -56,7 +61,12 @@ const schema = new Schema<OrderDB, OrderSchemaModel, OrderMethods>({
     type: Schema.Types.ObjectId,
     ref: 'SaleProduct',
   },
-  pins: [{ type: Schema.Types.ObjectId, ref: 'Pin' }],
+  tickets: [
+    {
+      shortId: String,
+      pins: [{ type: Schema.Types.ObjectId, ref: 'Pin' }],
+    },
+  ],
   quantity: {
     type: Number,
     required: true,
@@ -65,7 +75,6 @@ const schema = new Schema<OrderDB, OrderSchemaModel, OrderMethods>({
     type: Number,
     required: true,
   },
-  shortId: { type: String },
   status: {
     type: String,
     enum: Object.values(OrderStatus),
@@ -145,13 +154,13 @@ schema.static(
   }
 );
 
-schema.static('checkShortUrlExists', async function checkShortUrlExists(url) {
-  const exists = await this.exists({ shortId: url });
+schema.static('checkShortIdExists', async function checkShortIdExists(shortId) {
+  const exists = await this.exists({ 'tickets.shortId': shortId });
   return exists;
 });
 
 schema.static('getOrderByShortId', function getOrderByShortId(shortId) {
-  return this.findOne({ shortId });
+  return this.findOne({ 'tickets.shortId': shortId });
 });
 
 const OrderModel =

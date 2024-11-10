@@ -1,15 +1,11 @@
-import SaleProductModel from '../../../models/sale-product.model';
-import { requiredIsMe } from '../../../utils/auth.util';
-import authOptions from '@/app/api/auth/[...nextauth]/authOptions';
 import connectMongo from '@/app/api/libs/database';
 import OrderModel from '@/app/api/models/order.model';
 import { createResponse } from '@/app/api/utils/http.util';
 import { HTTP_STATUS } from '@/definitions';
-import authService from '@/services/auth.service';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
- * 주문 _id 반환
+ * shortId 로 Pin _id 반환
  */
 export async function GET(req: NextRequest, ctx: { params: { id: string } }) {
   try {

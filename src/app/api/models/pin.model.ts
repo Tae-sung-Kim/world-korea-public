@@ -18,6 +18,8 @@ import {
 export interface PinDB {
   number: string;
   product: Types.ObjectId;
+  saleProduct: Types.ObjectId;
+  order: Types.ObjectId;
   orderStatus: OrderStatus;
   endDate?: Date;
   usedDate?: Date;
@@ -50,6 +52,8 @@ interface PinSchemaModel extends Model<PinDB, {}, PinMethods> {
     pinList: [string],
     used: boolean
   ): Promise<boolean>; // 빈 사용날짜 수정
+  checkShortIdExists(shortId: string): Promise<boolean>; // shortId 이 이미 있는지 여부 반환
+  getPinByShortId(shortId: string): Promise<PinDocument | null>;
 }
 
 const schema = new Schema<PinDB, PinSchemaModel, PinMethods>({
@@ -60,6 +64,14 @@ const schema = new Schema<PinDB, PinSchemaModel, PinMethods>({
   product: {
     type: Schema.Types.ObjectId,
     ref: 'Product',
+  },
+  saleProduct: {
+    type: Schema.Types.ObjectId,
+    ref: 'SaleProduct',
+  },
+  order: {
+    type: Schema.Types.ObjectId,
+    ref: 'Order',
   },
   orderStatus: {
     type: String,
