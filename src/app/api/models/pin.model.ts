@@ -18,9 +18,9 @@ import {
 export interface PinDB {
   number: string;
   product: Types.ObjectId;
-  saleProduct: Types.ObjectId;
-  order: Types.ObjectId;
   orderStatus: OrderStatus;
+  saleProduct?: Types.ObjectId;
+  order?: Types.ObjectId;
   endDate?: Date;
   usedDate?: Date;
   createdAt?: Date;
