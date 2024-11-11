@@ -1,4 +1,4 @@
-import OrderClient from './order.clinet';
+import OrderClient from './order.client';
 
 export default function OrderPage() {
   return <OrderClient />;
