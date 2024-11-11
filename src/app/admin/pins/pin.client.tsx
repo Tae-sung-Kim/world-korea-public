@@ -13,7 +13,7 @@ import {
 } from '../queries';
 import PinSearch from './pin-search.component';
 import { splitFourChar } from './pin.utils';
-import Pagination from '@/app/common/components/pagination';
+import Pagination from '@/app/components/common/pagination';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {

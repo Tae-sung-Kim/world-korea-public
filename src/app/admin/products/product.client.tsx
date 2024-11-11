@@ -9,7 +9,7 @@ import {
   useUserCategoryListQuery,
 } from '../queries';
 import ProductSearch from './product-search.component';
-import Pagination from '@/app/common/components/pagination';
+import Pagination from '@/app/components/common/pagination';
 import { Button } from '@/components/ui/button';
 import {
   Table,

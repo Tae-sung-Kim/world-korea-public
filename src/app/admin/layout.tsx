@@ -1,5 +1,5 @@
 import AdminProtectedRoute from '@/app/admin/admin-protected-route.component';
-import Loading from '@/components/common/loading.component';
+import Loading from '@/app/components/loading.component';
 import { Separator } from '@/components/ui/separator';
 import Layout from '@/layouts/layout/Layout';
 import Link from 'next/link';

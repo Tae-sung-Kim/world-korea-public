@@ -6,7 +6,7 @@ import useSort, { SortOrder } from '../hooks/useSort';
 import { useDeleteProductMutation, useUserCategoryListQuery } from '../queries';
 import { useSaleProductListQuery } from '../queries/sale-product.queries';
 import SaleProductSearch from './sale-product-search.component';
-import Pagination from '@/app/common/components/pagination';
+import Pagination from '@/app/components/common/pagination';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import {
