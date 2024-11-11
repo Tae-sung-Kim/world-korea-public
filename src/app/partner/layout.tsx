@@ -1,4 +1,4 @@
-import PartnerProtectedRoute from './partner-protected-route.component';
+import AdminProtectedRoute from '../admin/admin-protected-route.component';
 import Loading from '@/app/components/loading.component';
 import { Separator } from '@/components/ui/separator';
 import Layout from '@/layouts/layout/Layout';
@@ -13,7 +13,7 @@ export default async function AdminLayout({
 }>) {
   return (
     <Layout>
-      <PartnerProtectedRoute>
+      <AdminProtectedRoute>
         <Loading />
         <div className="container flex py-12 gap-6">
           <div className="w-[260px] border border-gray-200 bg-white">
@@ -52,7 +52,7 @@ export default async function AdminLayout({
           </div>
           <div className="flex-grow bg-white p-6">{children}</div>
         </div>
-      </PartnerProtectedRoute>
+      </AdminProtectedRoute>
     </Layout>
   );
 }
