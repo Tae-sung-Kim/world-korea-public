@@ -16,6 +16,8 @@ export interface IAuthProps {
   user:
     | (UserSession & {
         isApproved: boolean;
+        isAdmin: boolean;
+        isPartner: boolean;
       })
     | null;
   isLoggedIn: boolean | null;
@@ -40,6 +42,8 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
           id: session.data.user.id,
           name: session.data.user.name,
           role: session.data.user.role,
+          isAdmin: currentUser.isAdmin,
+          isPartner: currentUser.isPartner,
           isApproved: currentUser.isApproved,
         },
         isLoggedIn: true,

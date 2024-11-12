@@ -4,33 +4,19 @@ import { useAuthContext } from '@/contexts/auth.context';
 import { redirect, usePathname } from 'next/navigation';
 import { useEffect, useMemo } from 'react';
 
-export default function AdminProtectedRoute({
+export default function HomeProtectedRoute({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const { isLoggedIn, user } = useAuthContext();
 
-  const { isPartner, isUser } = useMemo(() => {
-    const isPartner = user?.isPartner;
-    const isAdmin = user?.isAdmin;
-    const isUser = !isPartner && !isAdmin;
-
-    return {
-      isPartner,
-      isAdmin,
-      isUser,
-    };
-  }, [user]);
+  const isPartner = useMemo(() => user?.isPartner, [user]);
 
   const pathName = usePathname();
 
   useEffect(() => {
-    if (isLoggedIn === false || isUser) {
-      redirect('/');
-    }
-
-    if (isPartner) {
+    if (isLoggedIn && isPartner) {
       //파트너 일때는 파트너만
       const isUrlValid = pathName.includes('/partner/');
       if (!isUrlValid) {
