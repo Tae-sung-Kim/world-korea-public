@@ -1,6 +1,10 @@
 'use client';
 
 import { ProfileStep } from './profile.constant';
+import {
+  useGetCurentUserQuery,
+  usePatchUserMutation,
+} from '@/app/admin/queries';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -12,13 +16,9 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import userService from '@/services/user.service';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
 import { z } from 'zod';
 
 const formSchema = z.object({
@@ -44,25 +44,10 @@ export default function ProfileEdit({
 }: {
   onStep: (type: ProfileStep) => void;
 }) {
-  const queryClient = useQueryClient();
+  const currentUserData = useGetCurentUserQuery();
 
-  const { isFetching, data: currentUserData } = useQuery({
-    queryKey: ['userService.getCurrentUser'],
-    queryFn: userService.getCurrentUser,
-  });
-
-  const patchMutation = useMutation({
-    mutationFn: userService.patchUser,
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ['userService.getCurrentUser'],
-      });
-      toast.success('정보 수정이 완료 되었습니다.');
-      onStep(ProfileStep.Detail);
-    },
-    onError: () => {
-      toast.error('정보 수정이 실패 하였습니다. 잠시 후 다시 시도하여 주세요.');
-    },
+  const patchMutation = usePatchUserMutation({
+    onSuccess: () => onStep(ProfileStep.Detail),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -96,8 +81,7 @@ export default function ProfileEdit({
 
   useEffect(() => {
     //비밀번호는 나중에
-
-    if (currentUserData && !isFetching) {
+    if (Object.keys(currentUserData).length > 0) {
       const {
         loginId,
         companyName,
@@ -118,7 +102,7 @@ export default function ProfileEdit({
       form.setValue('phoneNumber', phoneNumber);
       form.setValue('email', email);
     }
-  }, [isFetching, currentUserData, form]);
+  }, [currentUserData, form]);
 
   return (
     <>
@@ -235,7 +219,7 @@ export default function ProfileEdit({
                 </FormItem>
               )}
             />
-            <Button type="submit" className="ml-2" disabled={isFetching}>
+            <Button type="submit" className="ml-2" disabled={!currentUserData}>
               수정 완료
             </Button>
           </form>

@@ -1,3 +1,4 @@
+import { FunctionProps } from './queries.type';
 import { User } from '@/definitions';
 import userService from '@/services/user.service';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -69,6 +70,39 @@ export function useUpdatePartnerMutation(userId: string) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY, userId] });
       toast.success('파트너 정보를 수정하였습니다.');
+    },
+  });
+}
+
+export function useGetCurentUserQuery() {
+  const fallback: User = {} as User;
+
+  const { data = fallback } = useQuery({
+    queryKey: [QUERY_KEY, 'current-user'],
+    queryFn: userService.getCurrentUser,
+  });
+
+  return data;
+}
+
+export function usePatchUserMutation({
+  onSuccess,
+  onError,
+  onSettled,
+}: FunctionProps) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: userService.patchUser,
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ['userService.patchUser'],
+      });
+      toast.success('정보 수정이 완료 되었습니다.');
+      onSuccess && onSuccess();
+    },
+    onError: () => {
+      toast.error('정보 수정이 실패 하였습니다. 잠시 후 다시 시도하여 주세요.');
     },
   });
 }

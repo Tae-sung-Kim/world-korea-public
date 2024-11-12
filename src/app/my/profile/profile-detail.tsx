@@ -2,12 +2,11 @@
 
 import ProfileChangePasswordModal from './profile-change-password.modal';
 import { ProfileStep } from './profile.constant';
+import { useGetCurentUserQuery } from '@/app/admin/queries';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useModalContext, MODAL_TYPE } from '@/contexts/modal.context';
-import userService from '@/services/user.service';
-import { useQuery } from '@tanstack/react-query';
+import { useModalContext } from '@/contexts/modal.context';
 
 export default function ProfileDetail({
   onStep,
@@ -16,10 +15,7 @@ export default function ProfileDetail({
 }) {
   const { openModal } = useModalContext();
 
-  const { isFetching, data: currentUserData } = useQuery({
-    queryKey: ['userService.getCurrentUser'],
-    queryFn: userService.getCurrentUser,
-  });
+  const currentUserData = useGetCurentUserQuery();
 
   const handleUpdate = () => {
     onStep(ProfileStep.ConfirmPassword);
@@ -92,7 +88,11 @@ export default function ProfileDetail({
           <Label>이메일</Label>
           <Input readOnly disabled value={currentUserData?.email ?? ''} />
         </div>
-        <Button className="ml-2" disabled={isFetching} onClick={handleUpdate}>
+        <Button
+          className="ml-2"
+          disabled={!currentUserData}
+          onClick={handleUpdate}
+        >
           수정하기
         </Button>
       </div>
