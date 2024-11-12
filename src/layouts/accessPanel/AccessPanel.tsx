@@ -27,13 +27,6 @@ export default function AccessPanel() {
             >
               {user?.id}님 환영합니다.
             </Link>
-            <Separator orientation="vertical" className="bg-gray-400 h-3" />
-            <button
-              className="text-sm hover:text-gray-700"
-              onClick={handleLogoutBtnClick}
-            >
-              로그아웃
-            </button>
             {isAdmin && (
               <>
                 <Separator orientation="vertical" className="bg-gray-400 h-3" />
@@ -41,17 +34,24 @@ export default function AccessPanel() {
                   href="/admin/users"
                   className="text-sm hover:text-gray-700 hover:underline"
                 >
-                  관리자페이지
+                  관리자 페이지
                 </Link>
                 <Separator orientation="vertical" className="bg-gray-400 h-3" />
                 <Link
                   href="/partner/orders"
                   className="text-sm hover:text-gray-700 hover:underline"
                 >
-                  파트너페이지
+                  파트너 페이지
                 </Link>
               </>
             )}
+            <Separator orientation="vertical" className="bg-gray-400 h-3" />
+            <button
+              className="text-sm hover:text-gray-700"
+              onClick={handleLogoutBtnClick}
+            >
+              로그아웃
+            </button>
           </>
         ) : (
           <>
