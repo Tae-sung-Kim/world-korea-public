@@ -9,8 +9,9 @@ export default async function SaleProductShortUrlPage({
   params: { id: string };
 }) {
   const session = await authService.getSession();
+
   if (!session) {
-    return <h2>판매처에서 QR코드를 보여주세요. TODO...</h2>;
+    redirect('/no-session');
   }
 
   const isAdmin = session.user.role === USER_ROLE.ADMIN;
