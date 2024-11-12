@@ -36,13 +36,6 @@ export default function AccessPanel() {
                 >
                   관리자 페이지
                 </Link>
-                <Separator orientation="vertical" className="bg-gray-400 h-3" />
-                {/* <Link
-                  href="/partner/orders"
-                  className="text-sm hover:text-gray-700 hover:underline"
-                >
-                  파트너 페이지
-                </Link> */}
               </>
             )}
             <Separator orientation="vertical" className="bg-gray-400 h-3" />

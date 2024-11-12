@@ -37,7 +37,7 @@ export default function AdminProtectedRoute({
         redirect('/partner/orders');
       }
     }
-  }, [isLoggedIn, isPartner, pathName]);
+  }, [isLoggedIn, isPartner, , isUser, pathName]);
 
   return children;
 }
