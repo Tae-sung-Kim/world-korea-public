@@ -64,7 +64,7 @@ const ModalContent = React.forwardRef<
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, children, ...props }, ref) => {
   return (
-    <div ref={ref} className={cn('p-5 min-h-64', className)}>
+    <div ref={ref} className={cn('p-5', className)}>
       {children}
     </div>
   );

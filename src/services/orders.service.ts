@@ -1,5 +1,9 @@
 import { PageFilter, PaginationProp } from '@/app/admin/queries/queries.type';
-import { PaginationResponse, SaleProductBuyFormData } from '@/definitions';
+import {
+  PaginationResponse,
+  SaleProductBuyDisplayData,
+  SaleProductBuyFormData,
+} from '@/definitions';
 import http from '@/services';
 import qs from 'qs';
 
@@ -14,7 +18,9 @@ class OrdersService {
     const params = qs.stringify(pageParams ?? {});
 
     return http.get<
-      PaginationResponse<SaleProductBuyFormData<{ name: string; _id: string }>>
+      PaginationResponse<
+        SaleProductBuyDisplayData<{ name: string; _id: string }>
+      >
     >(`/api/orders?${params}`);
   }
 }

@@ -19,12 +19,13 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useModalContext } from '@/contexts/modal.context';
-import { SaleProductBuyFormData } from '@/definitions';
+import { SaleProductBuyDisplayData, Tickets } from '@/definitions';
 import { addComma } from '@/utils/number';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { IoMdPrint } from 'react-icons/io';
 import { LuQrCode } from 'react-icons/lu';
+import { toast } from 'sonner';
 
 type Props = {
   tableId?: string;
@@ -58,7 +59,7 @@ export default function OrderList({ tableId }: Props) {
   const [order, setOrder] = useState<SortOrder>('');
 
   const sortedData = useSort<
-    SaleProductBuyFormData<{ name: string; _id: string }>
+    SaleProductBuyDisplayData<{ name: string; _id: string }>
   >({
     data,
     sortColumn,
@@ -82,14 +83,16 @@ export default function OrderList({ tableId }: Props) {
     router.push('/sale-products/' + productId);
   };
 
-  const handleQrCodeClick = async (pinNumber: string = '') => {
-    if (!!pinNumber) {
+  const handleQrCodeClick = async (tickets: Tickets[]) => {
+    if (Array.isArray(tickets) && tickets.length > 0) {
       return await openModal({
-        title: `${splitFourChar(pinNumber)}`,
+        title: '구매 상품 정보',
         Component: () => {
-          return <QrCodeModal pinNumber={splitFourChar(pinNumber) ?? ''} />;
+          return <QrCodeModal tickets={tickets} />;
         },
       });
+    } else {
+      toast.error('구매 상품이 잘못 되었습니다. 다시 확인해주세요.');
     }
   };
 
@@ -109,7 +112,7 @@ export default function OrderList({ tableId }: Props) {
       <Table id={tableId ?? 'exportExcelTableId'}>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[50px]" data-exclude-excel>
+            <TableHead className="min-w-[50px]" data-exclude-excel>
               번호
             </TableHead>
             <TableHead
@@ -121,10 +124,10 @@ export default function OrderList({ tableId }: Props) {
                 order={sortColumn === 'saleProduct.name' ? order : ''}
               />
             </TableHead>
-            <TableHead className="w-[120px]">업체명</TableHead>
-            <TableHead className="w-[120px]">담당자명</TableHead>
+            <TableHead className="min-w-[100px]">업체명</TableHead>
+            <TableHead className="min-w-[100px]">담당자명</TableHead>
             <TableHead
-              className="cursor-pointer w-[100px] text-center"
+              className="cursor-pointer min-w-[100px] text-center"
               onClick={() => handleSortClick('quantity')}
             >
               <SortIcons
@@ -133,7 +136,7 @@ export default function OrderList({ tableId }: Props) {
               />
             </TableHead>
             <TableHead
-              className="cursor-pointer w-[110px] text-right"
+              className="cursor-pointer min-w-[110px] text-right"
               onClick={() => handleSortClick('totalPrice')}
             >
               <SortIcons
@@ -142,7 +145,7 @@ export default function OrderList({ tableId }: Props) {
               />
             </TableHead>
             <TableHead
-              className="cursor-pointer w-[130px] text-center"
+              className="cursor-pointer min-w-[130px] text-center"
               onClick={() => handleSortClick('orderDate')}
             >
               <SortIcons
@@ -150,14 +153,15 @@ export default function OrderList({ tableId }: Props) {
                 order={sortColumn === 'orderDate' ? order : ''}
               />
             </TableHead>
-            <TableHead className="w-[130px] text-center">방문예정일</TableHead>
-            <TableHead className="w-[30px] text-center"></TableHead>
-            <TableHead className="w-[30px] text-center"></TableHead>
+            <TableHead className="min-w-[130px] text-center">
+              방문예정일
+            </TableHead>
+            <TableHead className="min-w-[30px] text-center"></TableHead>
+            <TableHead className="min-w-[30px] text-center"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {sortedData.map((d, idx) => {
-            // console.log('개별 상품 정보', d);
             return (
               <TableRow key={d._id}>
                 <TableCell data-exclude-excel>
@@ -193,7 +197,7 @@ export default function OrderList({ tableId }: Props) {
                   <Button
                     variant="outline"
                     size="icon"
-                    onClick={() => handleQrCodeClick(d.saleProduct._id)}
+                    onClick={() => handleQrCodeClick(d.tickets ?? [])}
                   >
                     <LuQrCode />
                   </Button>

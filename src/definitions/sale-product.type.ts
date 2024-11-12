@@ -24,8 +24,19 @@ export interface SaleProductFormData<T> {
   updatedAt?: Date | string;
 }
 
+export type Tickets = {
+  shortId: string;
+  pins: string[];
+  _id: string;
+};
+
 export interface SaleProductBuyFormData<T> {
-  // buyDate: Date | string;
+  quantity: number; //상품수량
+  saleProduct: T; //판매 상품 아이디
+  buyType: string;
+}
+
+export interface SaleProductBuyDisplayData<T> {
   quantity: number; //상품수량
   saleProduct: T; //판매 상품 아이디
   buyType: string;
@@ -37,18 +48,5 @@ export interface SaleProductBuyFormData<T> {
   status?: string;
   totalPrice?: number;
   user?: { name: string; _id: string };
-
-  //나중에 비회원 예약일때 사용
-  // buyDate: Date | string;
-  // buyHour: string;
-  // buyMin: string;
-  // buyProducts: T[];
-  // buyName: string;
-  // buyPhoneNumber: string;
-  // buyEmail: string;
-  // buyNumber: string;
-  // consentCollection: boolean; //개인정보 수집 동의
-  // consentProvision: boolean; //제 3자 제공동의
-  // consentCancellation: boolean; //취소 환불
-  // buyType: string;
+  tickets?: Tickets[];
 }
