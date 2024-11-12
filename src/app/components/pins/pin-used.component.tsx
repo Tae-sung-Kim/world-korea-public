@@ -1,5 +1,6 @@
 'use client';
 
+import QrCodeScanButton from '@/app/admin/components/qr-code-scan-button.component';
 import QrCodeScanModal from '@/app/admin/modals/qr-code-scan.modal';
 import { useUsedPinListMutation } from '@/app/admin/queries';
 import { Button } from '@/components/ui/button';
@@ -109,9 +110,7 @@ export default function PinUsed() {
   return (
     <div className="space-y-8">
       <div>
-        <Button variant="secondary" onClick={handleQRCodeScan}>
-          QR SCAN
-        </Button>
+        <QrCodeScanButton onResiveData={handleSetData} />
       </div>
       <Form {...pinForm}>
         <form

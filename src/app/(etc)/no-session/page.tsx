@@ -9,6 +9,8 @@ export default function NoSessionPage() {
         </AlertTitle>
         <AlertDescription className="mt-2 text-sm">
           판매처에 QR코드를 보여주세요.
+          <br />
+          판매처라면, 로그인해주세요.
         </AlertDescription>
       </Alert>
     </div>
