@@ -76,9 +76,6 @@ QR코드 찍었을 경우 해당 Url 로 이동
 
 - 롯데월드랑 월코 상품이랑 항상 한셋트인데 그렇다면, 롯데월드 1개, 상품 1개 이렇게 세트로 10개 구매하면 qrCODE는 총 20개 인가?
   그렇다면 tickets[{롯데월드1, 판매상품1}, {롯데월드2, 판매상품2}]가 이렇게 내려와야 하는건가?
-
-  SaleProductShortUrlPage에서 user.role 권한 체크하는데...
-  currentuser는 client파일만 가능한데, 저건 현재 server인데
   //////////////////
 
 short url

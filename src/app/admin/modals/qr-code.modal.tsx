@@ -37,7 +37,12 @@ export default function QrCodeModal({ pinNumber, tickets }: Props) {
                 return (
                   <QRCodeCanvas
                     key={d._id}
-                    value={window.location.origin + '/short/o/' + d.shortId}
+                    value={
+                      window.location.origin +
+                      '/short/o/' +
+                      d.shortId +
+                      `?shortId=${d.shortId}`
+                    }
                     className="m-10"
                   />
                 );
