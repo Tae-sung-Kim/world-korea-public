@@ -31,6 +31,11 @@ type Props = {
   tableId?: string;
 };
 
+type QrCodeProps = {
+  title?: string;
+  tickets: Tickets[];
+};
+
 export default function OrderList({ tableId }: Props) {
   const { openModal } = useModalContext();
   const router = useRouter();
@@ -83,12 +88,17 @@ export default function OrderList({ tableId }: Props) {
     router.push('/sale-products/' + productId);
   };
 
-  const handleQrCodeClick = async (tickets: Tickets[]) => {
+  const handleQrCodeClick = async ({
+    title = '구매 상품 정보',
+    tickets,
+  }: QrCodeProps) => {
     if (Array.isArray(tickets) && tickets.length > 0) {
+      //일단은 가장 첫번째것만
+      const firstTickets = [tickets[0]];
       return await openModal({
-        title: '구매 상품 정보',
+        title,
         Component: () => {
-          return <QrCodeModal tickets={tickets} />;
+          return <QrCodeModal tickets={firstTickets} />;
         },
       });
     } else {
@@ -197,7 +207,12 @@ export default function OrderList({ tableId }: Props) {
                   <Button
                     variant="outline"
                     size="icon"
-                    onClick={() => handleQrCodeClick(d.tickets ?? [])}
+                    onClick={() =>
+                      handleQrCodeClick({
+                        tickets: d.tickets ?? [],
+                        title: d.saleProduct.name,
+                      })
+                    }
                   >
                     <LuQrCode />
                   </Button>
