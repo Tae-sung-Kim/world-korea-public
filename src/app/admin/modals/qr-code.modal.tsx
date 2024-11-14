@@ -1,3 +1,5 @@
+'use client';
+
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tickets } from '@/definitions';
 import { QRCodeCanvas } from 'qrcode.react';
@@ -37,12 +39,7 @@ export default function QrCodeModal({ pinNumber, tickets }: Props) {
                 return (
                   <QRCodeCanvas
                     key={d._id}
-                    value={
-                      window.location.origin +
-                      '/short/o/' +
-                      d.shortId +
-                      `?shortId=${d.shortId}`
-                    }
+                    value={window.location.origin + '/short/o/' + d.shortId}
                     className="m-10"
                   />
                 );

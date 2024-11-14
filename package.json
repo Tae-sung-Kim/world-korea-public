@@ -60,7 +60,7 @@
     "uuid": "^10.0.0",
     "xlsx": "^0.18.5",
     "zod": "^3.23.6",
-    "zustand": "^4.5.2"
+    "zustand": "^5.0.1"
   },
   "devDependencies": {
     "@tanstack/react-query-devtools": "^5.35.1",

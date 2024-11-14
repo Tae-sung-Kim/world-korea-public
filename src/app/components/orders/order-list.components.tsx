@@ -5,7 +5,6 @@ import { usePagination } from '@/app/admin/hooks/usePagination';
 import useSort, { SortOrder } from '@/app/admin/hooks/useSort';
 import QrCodeModal from '@/app/admin/modals/qr-code.modal';
 import QrCodePrintModal from '@/app/admin/orders/order-qrcode-print.modal';
-import { splitFourChar } from '@/app/admin/pins/pin.utils';
 import { useOrderListQuery } from '@/app/admin/queries';
 import Pagination from '@/app/components/common/pagination';
 import { Button } from '@/components/ui/button';
