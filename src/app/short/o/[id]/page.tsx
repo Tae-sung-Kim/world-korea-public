@@ -1,5 +1,5 @@
 import authService from '@/services/auth.service';
-import shortService from '@/services/short.service';
+import { createShortIdStore } from '@/stores/short-id.store';
 import { redirect } from 'next/navigation';
 
 export default async function OrderProductShortUrlPage({
@@ -8,10 +8,14 @@ export default async function OrderProductShortUrlPage({
   params: { id: string };
 }) {
   const session = await authService.getSession();
+
+  const { getState } = createShortIdStore();
+
   // 로그인하지 않았다면
   if (!session) {
     redirect('/no-session');
   } else {
-    redirect('/with-session?id=' + id);
+    getState().setShortId(id);
+    redirect('/with-session');
   }
 }

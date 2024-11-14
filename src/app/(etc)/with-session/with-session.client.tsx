@@ -7,9 +7,11 @@ import { useEffect } from 'react';
 export default function WithSessionClient({
   shortId,
 }: {
-  shortId: string | undefined | null;
+  shortId: string | null;
 }) {
   const currentUser = useGetCurentUserQuery();
+
+  console.log('shortId', shortId);
 
   useEffect(() => {
     if (Object.keys(currentUser).length < 1) {
