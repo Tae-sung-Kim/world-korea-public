@@ -3,22 +3,22 @@
 import { useProductListQuery } from '../../queries';
 import SaleProductForm from '../sale-product-form';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { ProductFormData } from '@/definitions';
+import { ProductDisplayData } from '@/definitions';
 import { useState } from 'react';
 
 export default function SaleProductCreateClient() {
   const productData = useProductListQuery();
 
   const [selectProductData, setSelectProductData] = useState<
-    ProductFormData<string>[]
+    ProductDisplayData[]
   >([]);
 
   if (Array.isArray(productData.list) && productData.list.length < 1) {
     return false;
   }
 
-  const handleToggleClick = (data: ProductFormData<string>) => {
-    setSelectProductData((prevData): ProductFormData<string>[] => {
+  const handleToggleClick = (data: ProductDisplayData) => {
+    setSelectProductData((prevData): ProductDisplayData[] => {
       const findData = prevData.find((f) => f._id === data._id);
       if (findData) {
         return prevData.filter((f) => f._id !== data._id);
@@ -41,7 +41,7 @@ export default function SaleProductCreateClient() {
             return (
               <ToggleGroupItem
                 key={d._id}
-                value={d._id ?? ''}
+                value={d._id}
                 onClick={() => handleToggleClick(d)}
               >
                 {d.name}

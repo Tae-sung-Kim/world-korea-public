@@ -1,6 +1,7 @@
 import { PageFilter, PaginationProp } from '@/app/admin/queries/queries.type';
 import {
   PaginationResponse,
+  ProductDisplayData,
   ProductFormData,
   ProductImage,
 } from '@/definitions';
@@ -25,14 +26,14 @@ class ProductService {
   getProudctList(pageParams?: PaginationProp<PageFilter>) {
     const params = qs.stringify(pageParams ?? {});
 
-    return http.get<PaginationResponse<ProductFormData<string>>>(
+    return http.get<PaginationResponse<ProductDisplayData>>(
       `/api/products?${params}`
     );
   }
 
   //개별 상품
   detailProudct(id: string) {
-    return http.get<ProductFormData<string>>(`/api/products/${id}`);
+    return http.get<ProductDisplayData>(`/api/products/${id}`);
   }
 
   //상품 수정

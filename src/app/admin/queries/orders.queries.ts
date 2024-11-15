@@ -1,5 +1,9 @@
 import { ErrorResponse, PageFilter, PaginationProp } from './queries.type';
-import { PaginationResponse, SaleProductBuyDisplayData } from '@/definitions';
+import {
+  NameAndId,
+  PaginationResponse,
+  SaleProductBuyDisplayData,
+} from '@/definitions';
 import ordersService from '@/services/orders.service';
 import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
@@ -26,9 +30,7 @@ export function useOrderSaleProductMutation() {
 export function useOrderListQuery(
   paginationParam?: PaginationProp<PageFilter>
 ) {
-  const fallback: PaginationResponse<
-    SaleProductBuyDisplayData<{ name: string; _id: string }>
-  > = {
+  const fallback: PaginationResponse<SaleProductBuyDisplayData<NameAndId>> = {
     pageNumber: -1,
     pageSize: -1,
     list: [],

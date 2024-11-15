@@ -45,7 +45,7 @@ export interface ProductFormData<T> {
   unavailableDates?: string[];
 }
 
-export interface ProductDisplayData extends ProductFormData<String> {
+export interface ProductDisplayData extends ProductFormData<string> {
   _id: string;
   createdAt: string;
   updatedAt: string;

@@ -1,6 +1,11 @@
 import { SaleProductDB } from '@/app/api/models/sale-product.model';
 import { Product } from '@/definitions';
 
+export type NameAndId = {
+  name: string;
+  _id: string;
+};
+
 export type SaleProduct = SaleProductDB & {
   _id: string;
   products: Product[];
@@ -36,17 +41,15 @@ export interface SaleProductBuyFormData<T> {
   buyType: string;
 }
 
-export interface SaleProductBuyDisplayData<T> {
-  quantity: number; //상품수량
-  saleProduct: T; //판매 상품 아이디
-  buyType: string;
-  _id?: string;
-  pins?: string[];
-  createdAt?: Date | string;
-  orderDate?: Date | string;
-  updatedAt?: Date | string;
-  status?: string;
-  totalPrice?: number;
-  user?: { name: string; _id: string };
-  tickets?: Tickets[];
+export interface SaleProductBuyDisplayData<T>
+  extends SaleProductBuyFormData<T> {
+  _id: string;
+  pins: string[];
+  createdAt: Date | string;
+  orderDate: Date | string;
+  updatedAt: Date | string;
+  status: string;
+  totalPrice: number;
+  user: NameAndId;
+  tickets: Tickets[];
 }

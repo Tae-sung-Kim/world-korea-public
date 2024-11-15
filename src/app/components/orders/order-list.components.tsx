@@ -18,7 +18,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useModalContext } from '@/contexts/modal.context';
-import { SaleProductBuyDisplayData, Tickets } from '@/definitions';
+import { NameAndId, SaleProductBuyDisplayData, Tickets } from '@/definitions';
 import { addComma } from '@/utils/number';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
@@ -62,9 +62,7 @@ export default function OrderList({ tableId }: Props) {
   );
   const [order, setOrder] = useState<SortOrder>('');
 
-  const sortedData = useSort<
-    SaleProductBuyDisplayData<{ name: string; _id: string }>
-  >({
+  const sortedData = useSort<SaleProductBuyDisplayData<NameAndId>>({
     data,
     sortColumn,
     order,

@@ -1,5 +1,6 @@
 import { PageFilter, PaginationProp } from '@/app/admin/queries/queries.type';
 import {
+  NameAndId,
   PaginationResponse,
   SaleProductBuyDisplayData,
   SaleProductBuyFormData,
@@ -17,11 +18,9 @@ class OrdersService {
   getOrderList(pageParams?: PaginationProp<PageFilter>) {
     const params = qs.stringify(pageParams ?? {});
 
-    return http.get<
-      PaginationResponse<
-        SaleProductBuyDisplayData<{ name: string; _id: string }>
-      >
-    >(`/api/orders?${params}`);
+    return http.get<PaginationResponse<SaleProductBuyDisplayData<NameAndId>>>(
+      `/api/orders?${params}`
+    );
   }
 }
 

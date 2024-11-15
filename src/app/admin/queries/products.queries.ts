@@ -1,5 +1,5 @@
 import { FunctionProps, PageFilter, PaginationProp } from './queries.type';
-import { PaginationResponse, ProductFormData } from '@/definitions';
+import { PaginationResponse, ProductDisplayData } from '@/definitions';
 import productService from '@/services/product.service';
 import {
   keepPreviousData,
@@ -14,7 +14,7 @@ const QUERY_KEY = 'admin-product';
 export function useProductListQuery(
   paginationParam?: PaginationProp<PageFilter>
 ) {
-  const fallback: PaginationResponse<ProductFormData<string>> = {
+  const fallback: PaginationResponse<ProductDisplayData> = {
     pageNumber: -1,
     pageSize: -1,
     list: [],
@@ -39,7 +39,7 @@ export function useProductListQuery(
 }
 
 export function useDetailProductQuery(id: string) {
-  const fallback: Partial<ProductFormData<string>> = {};
+  const fallback: Partial<ProductDisplayData> = {};
 
   const { data = fallback } = useQuery({
     queryKey: [QUERY_KEY],
