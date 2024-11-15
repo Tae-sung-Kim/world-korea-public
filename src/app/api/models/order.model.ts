@@ -54,6 +54,7 @@ interface OrderSchemaModel extends Model<OrderDB, {}, OrderMethods> {
   ): PaginationResponse<Promise<Order[]>>;
   checkShortIdExists(shortId: string): Promise<boolean>; // shortUrl 이 이미 있는지 여부 반환
   getOrderByShortId(shortId: string): Promise<OrderDocument | null>;
+  getSaleProductIdByShortId(shortId: string): Promise<string | null>;
 }
 
 const schema = new Schema<OrderDB, OrderSchemaModel, OrderMethods>({
@@ -162,6 +163,20 @@ schema.static('checkShortIdExists', async function checkShortIdExists(shortId) {
 schema.static('getOrderByShortId', function getOrderByShortId(shortId) {
   return this.findOne({ 'tickets.shortId': shortId });
 });
+
+schema.static(
+  'getSaleProductIdByShortId',
+  async function getSaleProductIdByShortId(shortId) {
+    const orderData: OrderDocument | null = await this.findOne({
+      'tickets.shortId': shortId,
+    });
+    if (!orderData) {
+      return null;
+    }
+
+    return orderData.saleProduct;
+  }
+);
 
 const OrderModel =
   (models.Order as OrderSchemaModel) ||
