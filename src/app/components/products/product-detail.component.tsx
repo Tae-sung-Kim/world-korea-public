@@ -1,11 +1,14 @@
 'use client';
 
-import { descriptionShcema, priceShcema } from '../products/product.schema';
+import {
+  descriptionShcema,
+  priceShcema,
+} from '@/app/admin/products/product.schema';
 import {
   useCreateProductMutation,
   useUpdateProductMutation,
   useUserCategoryListQuery,
-} from '../queries';
+} from '@/app/admin/queries';
 import { Button } from '@/components/ui/button';
 import {
   Form,

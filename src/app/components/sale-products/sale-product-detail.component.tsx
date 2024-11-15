@@ -1,12 +1,12 @@
-import ProductDetail from '../../components/product-detail.component';
+import ProductDetail from '../products/product-detail.component';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ProductFormData } from '@/definitions';
+import { ProductDisplayData } from '@/definitions';
 
 export default function SaleProductDetail({
   products,
 }: {
-  products: ProductFormData<string>[];
+  products: ProductDisplayData[];
 }) {
   return (
     <>

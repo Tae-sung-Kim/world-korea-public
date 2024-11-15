@@ -3,6 +3,7 @@ import {
   PackageDetailName,
   PaginationResponse,
   ProductFormData,
+  ProductDisplayData,
   SaleProductFormData,
 } from '@/definitions';
 import http from '@/services';
@@ -25,14 +26,14 @@ class SaleProductService {
 
   // 판매 상세
   getDetailSaleProudct(id: string) {
-    return http.get<SaleProductFormData<ProductFormData<string>>>(
+    return http.get<SaleProductFormData<ProductDisplayData>>(
       `/api/sale-products/${id}`
     );
   }
 
   // 단체 예약 가능 상품 list
   getReservationSaleProductList() {
-    return http.get<SaleProductFormData<ProductFormData<string>>>(
+    return http.get<SaleProductFormData<ProductDisplayData>>(
       `/api/sale-products/reservable`
     );
   }

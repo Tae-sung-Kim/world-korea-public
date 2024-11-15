@@ -42,10 +42,13 @@ export interface ProductFormData<T> {
   description2: string;
   description3: string;
   description4: string;
-  _id?: string;
-  createdAt?: string;
-  updatedAt?: string;
-  pins?: Pin[];
-  pinCount?: number;
   unavailableDates?: string[];
+}
+
+export interface ProductDisplayData extends ProductFormData<String> {
+  _id: string;
+  createdAt: string;
+  updatedAt: string;
+  pins: Pin[];
+  pinCount: number;
 }

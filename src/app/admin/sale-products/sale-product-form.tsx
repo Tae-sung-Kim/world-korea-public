@@ -3,7 +3,7 @@
 import { priceShcema } from '../products/product.schema';
 import { useUserCategoryListQuery } from '../queries';
 import { useCreateSaleProductMutation } from '../queries/sale-product.queries';
-import SaleProductDetail from './[id]/sale-product-detail.component';
+import SaleProductDetail from '@/app/components/sale-products/sale-product-detail.component';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -23,7 +23,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
-import { ProductFormData } from '@/definitions';
+import { ProductDisplayData } from '@/definitions';
 import saleProductService from '@/services/sale-product.service';
 import { addComma, removeComma } from '@/utils/number';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -47,7 +47,7 @@ const SaleProductFormSchema = z.object({
 type SaleProductFormValues = z.infer<typeof SaleProductFormSchema>;
 
 type Props = {
-  selectProductData?: ProductFormData<string>[];
+  selectProductData?: ProductDisplayData[];
   productId?: string;
   onResetData?: () => void;
 };
@@ -59,9 +59,9 @@ export default function SaleProductForm({
 }: Props) {
   const userCategoryList = useUserCategoryListQuery();
 
-  const [detailProducts, setDetailProducts] = useState<
-    ProductFormData<string>[]
-  >([]);
+  const [detailProducts, setDetailProducts] = useState<ProductDisplayData[]>(
+    []
+  );
 
   //상품 등록 후 reset
   const handleResetForm = () => {
@@ -78,7 +78,7 @@ export default function SaleProductForm({
     const data =
       detailProducts.length > 0 ? detailProducts : selectProductData ?? [];
 
-    return data.reduce((acc: number, cur: ProductFormData<string>): number => {
+    return data.reduce((acc: number, cur: ProductDisplayData): number => {
       return Number(acc + cur.regularPrice);
     }, 0);
   }, [selectProductData, detailProducts]);
