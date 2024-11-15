@@ -2,7 +2,7 @@ import { FunctionProps, PageFilter, PaginationProp } from './queries.type';
 import {
   PackageDetailName,
   PaginationResponse,
-  ProductFormData,
+  ProductDisplayData,
   SaleProductFormData,
 } from '@/definitions';
 import saleProductService from '@/services/sale-product.service';
@@ -55,7 +55,7 @@ export function useCreateSaleProductMutation({
 }
 
 export function useDetailSaleProductQuery(id: string) {
-  const fallback: Partial<SaleProductFormData<ProductFormData<string>>> = {};
+  const fallback: Partial<SaleProductFormData<ProductDisplayData>> = {};
 
   const { data = fallback } = useQuery({
     queryKey: [QUERY_KEY],
@@ -66,7 +66,7 @@ export function useDetailSaleProductQuery(id: string) {
 }
 
 export default function useReservableSaleProductQuery() {
-  const fallback: SaleProductFormData<ProductFormData<string>>[] = [];
+  const fallback: SaleProductFormData<ProductDisplayData>[] = [];
 
   const { data = fallback } = useQuery({
     queryKey: [QUERY_KEY],

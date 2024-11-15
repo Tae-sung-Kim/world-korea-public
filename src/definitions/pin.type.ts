@@ -1,5 +1,5 @@
 import { OrderStatus } from '.';
-import { ProductFormData } from './product.type';
+import { ProductDisplayData } from './product.type';
 
 export type PinData = {
   pinNumber: string;
@@ -14,7 +14,7 @@ export interface Pin {
   _id?: string;
   createdAt?: Date | string;
   orderStatus?: OrderStatus;
-  product?: ProductFormData<string>;
+  product?: ProductDisplayData;
   productId?: string;
   number?: string;
   usedDate?: Date | string;

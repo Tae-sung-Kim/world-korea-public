@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { ProductFormData } from '@/definitions';
+import { ProductDisplayData } from '@/definitions';
 import { PinData } from '@/definitions/pin.type';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
@@ -105,7 +105,7 @@ export default function PinRegisterClient() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      {productData.list.map((d: ProductFormData<string>) => {
+                      {productData.list.map((d: ProductDisplayData) => {
                         return (
                           <SelectItem key={d._id} value={String(d._id)}>
                             {d.name}

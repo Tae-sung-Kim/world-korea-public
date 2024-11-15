@@ -22,7 +22,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { MODAL_TYPE, useModalContext } from '@/contexts/modal.context';
-import { PRODUCT_STATUS_MESSAGE, ProductFormData } from '@/definitions';
+import { PRODUCT_STATUS_MESSAGE, ProductDisplayData } from '@/definitions';
 import { addComma } from '@/utils/number';
 import { useRouter } from 'next/navigation';
 import { FormEvent, useMemo, useState } from 'react';
@@ -51,7 +51,7 @@ export default function ProductListClient() {
   );
   const [order, setOrder] = useState<SortOrder>('');
 
-  const sortedData = useSort<ProductFormData<string>>({
+  const sortedData = useSort<ProductDisplayData>({
     data,
     sortColumn,
     order,

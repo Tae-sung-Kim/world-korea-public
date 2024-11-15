@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { ProductFormData } from '@/definitions';
+import { ProductDisplayData } from '@/definitions';
 import productService from '@/services/product.service';
 import userService from '@/services/user.service';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -57,15 +57,15 @@ const defaultDetailData = {
 export default function PartnerDetailClient({ userId }: IProps) {
   const updatePartner = useUpdatePartnerMutation(userId);
 
-  const [partnerProducts, setPartnerProducts] = useState<
-    ProductFormData<string>[]
-  >([]);
+  const [partnerProducts, setPartnerProducts] = useState<ProductDisplayData[]>(
+    []
+  );
 
   // 상품조회(판매 상품이 아님)
-  const [productData, setProductData] = useState<ProductFormData<string>[]>([]);
+  const [productData, setProductData] = useState<ProductDisplayData[]>([]);
 
-  const handleToggleClick = (data: ProductFormData<string>) => {
-    setPartnerProducts((prevData): ProductFormData<string>[] => {
+  const handleToggleClick = (data: ProductDisplayData) => {
+    setPartnerProducts((prevData): ProductDisplayData[] => {
       const findData = prevData.find((f) => f._id === data._id);
       if (findData) {
         return prevData.filter((f) => f._id !== data._id);
