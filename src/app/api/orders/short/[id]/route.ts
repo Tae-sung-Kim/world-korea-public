@@ -19,7 +19,7 @@ export async function GET(req: NextRequest, ctx: { params: { id: string } }) {
       return createResponse(HTTP_STATUS.NOT_FOUND);
     }
 
-    return NextResponse.json(orderData._id);
+    return NextResponse.json(orderData);
   } catch (error) {
     return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
   }
