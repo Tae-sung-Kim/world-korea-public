@@ -5,7 +5,7 @@ import { HTTP_STATUS } from '@/definitions';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
- * shortId 로 Pin _id 반환
+ * shortId 로 주문 반환
  */
 export async function GET(req: NextRequest, ctx: { params: { id: string } }) {
   try {
