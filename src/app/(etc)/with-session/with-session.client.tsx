@@ -1,6 +1,7 @@
 'use client';
 
 import { useGetCurentUserQuery } from '@/app/admin/queries';
+import shortService from '@/services/short.service';
 import { redirect } from 'next/navigation';
 import { useEffect } from 'react';
 
@@ -10,8 +11,6 @@ export default function WithSessionClient({
   shortId: string | null;
 }) {
   const currentUser = useGetCurentUserQuery();
-
-  console.log('shortId', shortId);
 
   useEffect(() => {
     if (Object.keys(currentUser).length < 1) {
@@ -23,10 +22,14 @@ export default function WithSessionClient({
       // pin 사용 page로 이동
       redirect('/partner/pins/used');
     } else {
-      // 어드민일때 처리 해야함 -> shortId  전달
-      redirect('/');
+      (async () => {
+        const stringShortId = shortId ?? '';
+        const orderId = await shortService.getOrderIdByShortId(stringShortId);
+        alert('orderId' + orderId);
+        // redirect(`/admin/sale-products/${orderId}`);
+      })();
     }
-  }, [currentUser]);
+  }, [currentUser, shortId]);
 
   // const orderId = await shortService.getOrderIdByShortId(id);
   // if (!orderId) {

@@ -1,6 +1,6 @@
 'use client';
 
-import ProductDetail from '../components/product-detail.component';
+import ProductDetail from '@/app/components/products/product-detail.component';
 
 export default function ProductFormClient({
   productId,

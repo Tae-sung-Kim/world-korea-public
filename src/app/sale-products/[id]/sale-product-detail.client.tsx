@@ -47,7 +47,7 @@ const SaleProductBuyFormSchema = z.object({
 
 type SaleProductBuyFormValues = z.infer<typeof SaleProductBuyFormSchema>;
 
-export default function SaleProductDetailClient({ saleProductId = '' }: Props) {
+export default function SaleProductDetailClient({ saleProductId }: Props) {
   const createOrderSaleProduct = useOrderSaleProductMutation();
 
   const saleProductForm = useForm<SaleProductBuyFormValues>({
@@ -62,13 +62,13 @@ export default function SaleProductDetailClient({ saleProductId = '' }: Props) {
   const saleProductDetailData = useDetailSaleProductQuery(saleProductId);
 
   const productList = useMemo(
-    () => saleProductDetailData.products,
+    () => saleProductDetailData.products ?? [],
     [saleProductDetailData.products]
   );
 
   //모든 상품 이지미
   const images = useMemo(
-    () => productList?.map((d) => d.images).flat() ?? [],
+    () => productList.map((d) => d.images).flat() ?? [],
     [productList]
   );
 
@@ -109,7 +109,7 @@ export default function SaleProductDetailClient({ saleProductId = '' }: Props) {
                 <CarouselContent>
                   {images.map((d) => {
                     return (
-                      <CarouselItem key={d}>
+                      <CarouselItem key={String(d)}>
                         <div className="p-2">
                           <Image
                             className="w-full h-full rounded-full"
@@ -289,7 +289,7 @@ export default function SaleProductDetailClient({ saleProductId = '' }: Props) {
                   <div className="grid grid-cols-3">
                     {images.map((d) => {
                       return (
-                        <div className="w-96" key={d}>
+                        <div className="w-96" key={String(d)}>
                           <Image
                             className="w-full h-full "
                             alt="상품 이미지"
