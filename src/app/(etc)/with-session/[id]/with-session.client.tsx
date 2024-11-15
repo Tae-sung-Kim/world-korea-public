@@ -18,8 +18,6 @@ export default function WithSessionClient({
   const router = useRouter();
 
   useEffect(() => {
-    alert('stringShortId : ' + shortId);
-
     if (!isLoggedIn) {
       return;
     }
@@ -32,9 +30,8 @@ export default function WithSessionClient({
       } else {
         //전체 상품이 옴
         const { saleProduct } = await shortService.getOrderIdByShortId(
-          shortId ?? ''
+          String(shortId)
         );
-
         router.replace(`/admin/sale-products/${saleProduct}`);
       }
     })();
