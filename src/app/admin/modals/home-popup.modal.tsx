@@ -1,12 +1,12 @@
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { NotificationForm } from '@/definitions/notifications.type';
+import { NotificationDisplayData } from '@/definitions/notifications.type';
 import Cookies from 'js-cookie';
 import Image from 'next/image';
 
 type PopupProps = {
   onCancel?: () => void;
-  data: NotificationForm;
+  data: NotificationDisplayData<string>;
   // children: ReactElement | any;
 };
 

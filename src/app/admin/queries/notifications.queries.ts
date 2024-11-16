@@ -1,12 +1,7 @@
 import { ErrorResponse, FunctionProps } from './queries.type';
-import { NotificationForm } from '@/definitions/notifications.type';
+import { NotificationDisplayData } from '@/definitions/notifications.type';
 import notificationService from '@/services/notifications.service';
-import {
-  keepPreviousData,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { toast } from 'sonner';
 
@@ -38,7 +33,7 @@ export function useCreateNotificationsMutation({
 }
 
 export function useGetNotificationListQuery() {
-  const fallback: NotificationForm[] = [];
+  const fallback: NotificationDisplayData<string>[] = [];
 
   const { data = fallback } = useQuery({
     queryKey: [QUERY_KEY],

@@ -1,7 +1,7 @@
 import HomePopupModal from '@/app/admin/modals/home-popup.modal';
 import { useGetNotificationListQuery } from '@/app/admin/queries';
 import { useModalContext } from '@/contexts/modal.context';
-import { NotificationForm } from '@/definitions/notifications.type';
+import { NotificationDisplayData } from '@/definitions/notifications.type';
 import Cookies from 'js-cookie';
 import React, { useEffect, useRef, useState } from 'react';
 
@@ -9,7 +9,7 @@ export default function useNotifications() {
   const { openModal } = useModalContext();
   const openCountRef = useRef(0);
   const [showNotificationList, setShowNotificationList] = useState<
-    NotificationForm[]
+    NotificationDisplayData<string>[]
   >([]);
 
   // 팝업 목록을 가져오는 쿼리
