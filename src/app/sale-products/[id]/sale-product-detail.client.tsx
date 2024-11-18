@@ -36,7 +36,7 @@ type Props = {
 };
 
 const SaleProductBuyFormSchema = z.object({
-  buyDate: z.date(),
+  orderDate: z.date(),
   saleProduct: z.string(),
   quantity: z
     .number()
@@ -53,7 +53,7 @@ export default function SaleProductDetailClient({ saleProductId }: Props) {
   const saleProductForm = useForm<SaleProductBuyFormValues>({
     resolver: zodResolver(SaleProductBuyFormSchema),
     defaultValues: {
-      buyDate: new Date(),
+      orderDate: new Date(),
       quantity: 0,
       buyType: 'creditCard',
     },
@@ -145,7 +145,7 @@ export default function SaleProductDetailClient({ saleProductId }: Props) {
             <div>
               <FormField
                 control={saleProductForm.control}
-                name="buyDate"
+                name="orderDate"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
                     <FormLabel>날짜 선택</FormLabel>

@@ -36,6 +36,7 @@ export type Tickets = {
 };
 
 export interface SaleProductBuyFormData<T> {
+  orderDate: Date | string;
   quantity: number; //상품수량
   saleProduct: T; //판매 상품 아이디
   buyType: string;
@@ -46,7 +47,6 @@ export interface SaleProductBuyDisplayData<T>
   _id: string;
   pins: string[];
   createdAt: Date | string;
-  orderDate: Date | string;
   updatedAt: Date | string;
   status: string;
   totalPrice: number;
