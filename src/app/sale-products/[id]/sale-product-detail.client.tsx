@@ -74,7 +74,9 @@ export default function SaleProductDetailClient({ saleProductId }: Props) {
 
   //구매하기
   const handleSubmit = () => {
-    createOrderSaleProduct.mutate(saleProductForm.getValues());
+    console.log('상품구매', saleProductForm.getValues());
+
+    // createOrderSaleProduct.mutate(saleProductForm.getValues());
   };
 
   //수량 선택
@@ -276,6 +278,10 @@ export default function SaleProductDetailClient({ saleProductId }: Props) {
           </div>
         </div>
 
+        <div className="flex justify-center p-4">
+          <Button>구매하기</Button>
+        </div>
+
         <Separator className="my-2 bg-indigo-100 h-0.5 mt-10" />
 
         {Array.isArray(productList) && (
@@ -314,9 +320,6 @@ export default function SaleProductDetailClient({ saleProductId }: Props) {
             })}
           </div>
         )}
-        <div className="flex justify-center p-4">
-          <Button>구매하기</Button>
-        </div>
       </form>
     </Form>
   );

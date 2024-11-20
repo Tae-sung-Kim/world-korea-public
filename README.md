@@ -87,3 +87,6 @@ QR코드 찍었을 경우 해당 Url 로 이동
 #결제
 포트원(아임포트)으로 개발예정
 컴포넌트화!
+
+- 참고 블로그
+  https://velog.io/@easyxxu/Next.js-%EA%B2%B0%EC%A0%9C-%EA%B8%B0%EB%8A%A5-%EA%B5%AC%ED%98%84-with-%ED%8F%AC%ED%8A%B8%EC%9B%90
