@@ -46,7 +46,7 @@ const SaleProductBuyFormSchema = z.object({
     .number()
     .min(1, '수량을 선택해 주세요.')
     .max(99, '최대 수량은 99개입니다.'),
-  buyType: z.string().min(1, '결제 방법을 선택해 주세요.'),
+  buyType: z.enum(['card', 'trans']),
 });
 
 type SaleProductBuyFormValues = z.infer<typeof SaleProductBuyFormSchema>;
@@ -61,7 +61,7 @@ export default function SaleProductDetailClient({ saleProductId }: Props) {
     defaultValues: {
       orderDate: new Date(),
       quantity: 0,
-      buyType: 'creditCard',
+      buyType: 'card',
     },
   });
 
@@ -82,8 +82,10 @@ export default function SaleProductDetailClient({ saleProductId }: Props) {
   const handleSubmit = () => {
     console.log('상품구매', saleProductForm.getValues());
 
+    console.log(saleProductForm.getValues().buyType);
+
     const reqData: RequestPayParams = {
-      pay_method: 'card', // 결제수단
+      pay_method: saleProductForm.getValues().buyType, // 결제수단
       merchant_uid: `mid_${new Date().getTime()}`, // 주문번호
       amount: saleProductForm.getValues().amount,
       name: saleProductDetailData.name, // 주문명
@@ -294,13 +296,13 @@ export default function SaleProductDetailClient({ saleProductId }: Props) {
                     <FormControl>
                       <RadioGroup
                         onValueChange={field.onChange}
-                        defaultValue={'creditCard'}
+                        defaultValue={'card'}
                         className="flex flex-col space-y-1"
                       >
                         <div className="flex gap-10">
                           <FormItem className="flex items-center space-x-3 space-y-0">
                             <FormControl>
-                              <RadioGroupItem value="creditCard" />
+                              <RadioGroupItem value="card" />
                             </FormControl>
                             <FormLabel className="font-normal">
                               신용카드
@@ -308,7 +310,7 @@ export default function SaleProductDetailClient({ saleProductId }: Props) {
                           </FormItem>
                           <FormItem className="flex items-center space-x-3 space-y-0">
                             <FormControl>
-                              <RadioGroupItem value="accountTransfer" />
+                              <RadioGroupItem value="trans" />
                             </FormControl>
                             <FormLabel className="font-normal">
                               계좌이체
