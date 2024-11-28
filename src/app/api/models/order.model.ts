@@ -29,6 +29,7 @@ export interface OrderDB extends Document {
   user: Types.ObjectId; // User ID 참조
   shortId: string; // shortId
   status: OrderStatus;
+  paymentId: string;
   orderDate: Date;
   createdAt: Date;
   updatedAt: Date;
@@ -85,6 +86,7 @@ const schema = new Schema<OrderDB, OrderSchemaModel, OrderMethods>({
     type: Schema.Types.ObjectId,
     ref: 'User',
   },
+  paymentId: { type: String },
   orderDate: { type: Date },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
