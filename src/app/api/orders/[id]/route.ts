@@ -6,7 +6,7 @@ import { HTTP_STATUS } from '@/definitions';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
- * 상품 상세 반환
+ * 주문 상세 반환
  */
 export async function GET(req: NextRequest, ctx: { params: { id: string } }) {
   try {
@@ -18,13 +18,13 @@ export async function GET(req: NextRequest, ctx: { params: { id: string } }) {
       return createResponse(HTTP_STATUS.UNAUTHORIZED);
     }
 
-    const saleProductData = await OrderModel.findOne({
+    const orderData = await OrderModel.findOne({
       _id: orderId,
     }).populate({
       path: 'sale-products',
     });
 
-    return NextResponse.json(saleProductData);
+    return NextResponse.json(orderData);
   } catch (error) {
     return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
   }
