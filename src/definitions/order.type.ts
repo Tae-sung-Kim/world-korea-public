@@ -10,3 +10,10 @@ export enum OrderStatus {
 export type Order = OrderDB & {
   _id: string;
 };
+
+export enum PaymentStatus {
+  Success = 'success',
+  Fail = 'fail',
+  Error = 'error',
+  Ready = 'ready',
+}

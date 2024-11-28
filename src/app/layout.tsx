@@ -2,6 +2,7 @@ import { pretendard } from '@/utils/fonts';
 import type { Metadata } from 'next';
 import './globals.css';
 import { OuterProvider, InnerProvider } from './providers/Providers';
+import Script from 'next/script';
 
 export const metadata: Metadata = {
   title: '월드코리아',
@@ -19,6 +20,7 @@ export default function RootLayout({
         <body
           className={`${pretendard.variable} ${pretendard.className} bg-gray-50`}
         >
+          <Script src="https://cdn.iamport.kr/v1/iamport.js" />
           <InnerProvider>{children}</InnerProvider>
         </body>
       </html>

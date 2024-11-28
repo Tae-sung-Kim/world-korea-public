@@ -20,6 +20,9 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { PaymentStatus } from '@/definitions';
+import { RequestPayParams } from '@/definitions/portone.type';
+import usePortonePayment from '@/hooks/usePortonePaymnent';
 import { useDetailSaleProductQuery } from '@/queries/product.queries';
 import { addComma } from '@/utils/number';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -38,6 +41,7 @@ type Props = {
 const SaleProductBuyFormSchema = z.object({
   orderDate: z.date(),
   saleProduct: z.string(),
+  amount: z.number(),
   quantity: z
     .number()
     .min(1, '수량을 선택해 주세요.')
@@ -49,6 +53,8 @@ type SaleProductBuyFormValues = z.infer<typeof SaleProductBuyFormSchema>;
 
 export default function SaleProductDetailClient({ saleProductId }: Props) {
   const createOrderSaleProduct = useOrderSaleProductMutation();
+
+  const { onPayment, paymentStatus } = usePortonePayment();
 
   const saleProductForm = useForm<SaleProductBuyFormValues>({
     resolver: zodResolver(SaleProductBuyFormSchema),
@@ -66,36 +72,56 @@ export default function SaleProductDetailClient({ saleProductId }: Props) {
     [saleProductDetailData.products]
   );
 
-  //모든 상품 이지미
+  // 모든 상품 이지미
   const images = useMemo(
     () => productList.map((d) => d.images).flat() ?? [],
     [productList]
   );
 
-  //구매하기
+  // 구매하기
   const handleSubmit = () => {
     console.log('상품구매', saleProductForm.getValues());
 
+    const reqData: RequestPayParams = {
+      pay_method: 'card', // 결제수단
+      merchant_uid: `mid_${new Date().getTime()}`, // 주문번호
+      amount: saleProductForm.getValues().amount,
+      name: saleProductDetailData.name, // 주문명
+    };
+
+    onPayment(reqData);
     // createOrderSaleProduct.mutate(saleProductForm.getValues());
   };
 
-  //수량 선택
+  // 수량 선택
   const handleCountChange = (
     e: ChangeEvent<HTMLInputElement>,
     field: ControllerRenderProps
   ) => {
     const value = e.target.value;
 
-    //0보다 클때만
+    // 0보다 클때만
     if (Number(value) > -1) {
       field.onChange(Number(e.target.value));
+
+      saleProductForm.setValue(
+        'amount',
+        Number(saleProductDetailData.price) * Number(e.target.value)
+      );
     }
   };
 
-  //최초 상품 아이디 지정
+  // 최초 상품 아이디 지정
   useEffect(() => {
     saleProductForm.setValue('saleProduct', saleProductId);
   }, [saleProductForm, saleProductId]);
+
+  // payment 상태에 따라 db추가
+  useEffect(() => {
+    if (paymentStatus === PaymentStatus.Success) {
+      createOrderSaleProduct.mutate(saleProductForm.getValues());
+    }
+  }, [paymentStatus, createOrderSaleProduct, saleProductForm]);
 
   if (Object.keys(saleProductDetailData).length < 1) {
     return false;
@@ -188,6 +214,27 @@ export default function SaleProductDetailClient({ saleProductId }: Props) {
                         type="number"
                         placeholder="수량"
                         onChange={(e) => handleCountChange(e, { ...field })}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={saleProductForm.control}
+                name="amount"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>구매 가격</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        value={addComma(field.value)}
+                        type="text"
+                        readOnly
+                        disabled
+                        placeholder="구매 가격"
+                        // onChange={(e) => handleCountChange(e, { ...field })}
                       />
                     </FormControl>
                     <FormMessage />
