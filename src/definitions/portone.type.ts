@@ -406,6 +406,11 @@ export interface Iamport {
   updateLoadUIRequest: (type: PaypalUI, params: PaypalRequestPayParams) => void;
 }
 
+export interface RefundRequest {
+  imp_uid: string; // 아임포트 결제 고유 UID
+  amount: number; // 환불 금액 (부분 환불 시 필수)
+}
+
 declare global {
   interface Window {
     IMP?: Iamport;

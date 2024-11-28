@@ -1,17 +1,22 @@
 import { PaymentStatus } from '@/definitions';
 import {
+  RefundRequest,
   RequestPayParams,
   RequestPayResponse,
 } from '@/definitions/portone.type';
 import userService from '@/services/user.service';
+import axios from 'axios';
 import { useState } from 'react';
 import { toast } from 'sonner';
+
+const IAMPORT_API_URL = 'https://api.iamport.kr';
 
 export default function usePortonePayment() {
   const [paymentStatus, setPaymentStatus] = useState<PaymentStatus>(
     PaymentStatus.Ready
   );
 
+  // 결제 함수
   const handlePaymentClick = async (reqData: RequestPayParams) => {
     if (!window.IMP) return;
     setPaymentStatus(PaymentStatus.Ready);
@@ -55,8 +60,24 @@ export default function usePortonePayment() {
     }
   };
 
+  // 환불 함수
+  const handleRefundClick = async (refundData: RefundRequest) => {
+    try {
+      const response = await axios.post(
+        `${IAMPORT_API_URL}/payments/cancel`,
+        refundData
+      );
+
+      // 3. 환불 결과 반환
+      return response.data;
+    } catch (error) {
+      console.error('환불 요청 실패:', error);
+      throw new Error('환불 처리 중 오류가 발생했습니다.');
+    }
+  };
   return {
     onPayment: handlePaymentClick,
+    onRefund: handleRefundClick,
     paymentStatus,
   };
 }

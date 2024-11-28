@@ -19,11 +19,14 @@ import {
 } from '@/components/ui/table';
 import { useModalContext } from '@/contexts/modal.context';
 import { NameAndId, SaleProductBuyDisplayData, Tickets } from '@/definitions';
+import { RefundRequest } from '@/definitions/portone.type';
+import usePortonePayment from '@/hooks/usePortonePaymnent';
 import { addComma } from '@/utils/number';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { IoMdPrint } from 'react-icons/io';
 import { LuQrCode } from 'react-icons/lu';
+import { RiRefundLine } from 'react-icons/ri';
 import { toast } from 'sonner';
 
 type Props = {
@@ -38,6 +41,8 @@ type QrCodeProps = {
 export default function OrderList({ tableId }: Props) {
   const { openModal } = useModalContext();
   const router = useRouter();
+
+  const { onRefund } = usePortonePayment();
 
   const {
     pageNumber = 1,
@@ -114,6 +119,14 @@ export default function OrderList({ tableId }: Props) {
     });
   };
 
+  // 환불하기
+  const handleRefundClick = ({ imp_uid, amount }: RefundRequest) => {
+    onRefund({
+      imp_uid: 'imp_920274477579',
+      amount: 1000,
+    });
+  };
+
   return (
     <>
       <Table id={tableId ?? 'exportExcelTableId'}>
@@ -160,9 +173,10 @@ export default function OrderList({ tableId }: Props) {
                 order={sortColumn === 'orderDate' ? order : ''}
               />
             </TableHead>
-            <TableHead className="min-w-[130px] text-center">
+            <TableHead className="min-w-[100px] text-center">
               방문예정일
             </TableHead>
+            <TableHead className="min-w-[30px] text-center"></TableHead>
             <TableHead className="min-w-[30px] text-center"></TableHead>
             <TableHead className="min-w-[30px] text-center"></TableHead>
           </TableRow>
@@ -223,13 +237,27 @@ export default function OrderList({ tableId }: Props) {
                     <IoMdPrint />
                   </Button>
                 </TableCell>
+                <TableCell className="text-right">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() =>
+                      handleRefundClick({
+                        imp_uid: 'imp_920274477579',
+                        amount: d.totalPrice,
+                      })
+                    }
+                  >
+                    <RiRefundLine />
+                  </Button>
+                </TableCell>
               </TableRow>
             );
           })}
         </TableBody>
         <TableFooter>
           <TableRow>
-            <TableCell colSpan={9}>총 구매</TableCell>
+            <TableCell colSpan={10}>총 구매</TableCell>
             <TableCell className="text-right">
               {addComma(ordersData.totalItems)} 개
             </TableCell>
