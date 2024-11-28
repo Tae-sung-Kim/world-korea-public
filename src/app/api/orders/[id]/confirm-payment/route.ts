@@ -12,11 +12,16 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function POST(req: NextRequest, ctx: { params: { id: string } }) {
   try {
     const orderId = ctx.params.id;
+    const { paymentId }: { paymentId: string } = await req.json();
 
     await connectMongo();
 
     if (!(await requiredIsMe())) {
       return createResponse(HTTP_STATUS.UNAUTHORIZED);
+    }
+
+    if (!paymentId) {
+      return createResponse(HTTP_STATUS.BAD_REQUEST, 'paymentId 가 없습니다.');
     }
 
     const orderData = await OrderModel.findOne({
@@ -61,6 +66,7 @@ export async function POST(req: NextRequest, ctx: { params: { id: string } }) {
     }
 
     orderData.status = OrderStatus.Completed;
+    orderData.paymentId = paymentId;
     await orderData.save();
 
     return NextResponse.json(true);
