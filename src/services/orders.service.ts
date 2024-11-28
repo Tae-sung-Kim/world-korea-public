@@ -2,6 +2,7 @@ import { PageFilter, PaginationProp } from '@/app/admin/queries/queries.type';
 import {
   NameAndId,
   PaginationResponse,
+  PaymentRequest,
   SaleProductBuyDisplayData,
   SaleProductBuyFormData,
 } from '@/definitions';
@@ -20,6 +21,13 @@ class OrdersService {
 
     return http.get<PaginationResponse<SaleProductBuyDisplayData<NameAndId>>>(
       `/api/orders?${params}`
+    );
+  }
+
+  createPayment({ orderId, paymentId }: PaymentRequest) {
+    return http.post<string>(
+      `/api/orders/${orderId}/confirm-payment`,
+      paymentId
     );
   }
 }

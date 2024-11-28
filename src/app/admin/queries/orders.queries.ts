@@ -7,6 +7,7 @@ import {
 import {
   NameAndId,
   PaginationResponse,
+  PaymentRequest,
   SaleProductBuyDisplayData,
 } from '@/definitions';
 import ordersService from '@/services/orders.service';
@@ -58,4 +59,11 @@ export function useOrderListQuery(
     placeholderData: keepPreviousData,
   });
   return data;
+}
+
+export function usePaymentMutation() {
+  return useMutation({
+    mutationFn: ({ orderId, paymentId }: PaymentRequest) =>
+      ordersService.createPayment({ orderId, paymentId }),
+  });
 }

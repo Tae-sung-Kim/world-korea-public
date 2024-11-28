@@ -4,6 +4,7 @@ import {
   RequestPayParams,
   RequestPayResponse,
 } from '@/definitions/portone.type';
+import ordersService from '@/services/orders.service';
 import userService from '@/services/user.service';
 import axios from 'axios';
 import { useState } from 'react';
@@ -46,10 +47,11 @@ export default function usePortonePayment() {
   };
 
   /* 3. 콜백 함수 정의하기 */
-  const callback = (response: RequestPayResponse) => {
-    const { success, error_msg } = response;
+  const callback = async (response: RequestPayResponse) => {
+    const { success, imp_uid, error_msg } = response;
 
     if (success) {
+      await ordersService.createPayment({ orderId: '', paymentId: imp_uid });
       toast.success('결제 성공');
       alert('결제 성공!!');
       setPaymentStatus(PaymentStatus.Success);

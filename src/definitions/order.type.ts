@@ -17,3 +17,8 @@ export enum PaymentStatus {
   Error = 'error',
   Ready = 'ready',
 }
+
+export type PaymentRequest = {
+  orderId: string;
+  paymentId: string | null | undefined;
+};
