@@ -20,7 +20,6 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { PaymentStatus } from '@/definitions';
 import { RequestPayParams } from '@/definitions/portone.type';
 import usePortonePayment from '@/hooks/usePortonePaymnent';
 import { useDetailSaleProductQuery } from '@/queries/product.queries';
@@ -52,9 +51,19 @@ const SaleProductBuyFormSchema = z.object({
 type SaleProductBuyFormValues = z.infer<typeof SaleProductBuyFormSchema>;
 
 export default function SaleProductDetailClient({ saleProductId }: Props) {
-  const createOrderSaleProduct = useOrderSaleProductMutation();
+  const { onPayment } = usePortonePayment();
 
-  const { onPayment, paymentStatus } = usePortonePayment();
+  const createOrderSaleProduct = useOrderSaleProductMutation({
+    onSuccess: () => {
+      const reqData: RequestPayParams = {
+        pay_method: saleProductForm.getValues().buyType, // 결제수단
+        merchant_uid: `mid_${new Date().getTime()}`, // 주문번호
+        amount: saleProductForm.getValues().amount,
+        name: saleProductDetailData.name, // 주문명
+      };
+      onPayment(reqData);
+    },
+  });
 
   const saleProductForm = useForm<SaleProductBuyFormValues>({
     resolver: zodResolver(SaleProductBuyFormSchema),
@@ -80,19 +89,7 @@ export default function SaleProductDetailClient({ saleProductId }: Props) {
 
   // 구매하기
   const handleSubmit = () => {
-    console.log('상품구매', saleProductForm.getValues());
-
-    console.log(saleProductForm.getValues().buyType);
-
-    const reqData: RequestPayParams = {
-      pay_method: saleProductForm.getValues().buyType, // 결제수단
-      merchant_uid: `mid_${new Date().getTime()}`, // 주문번호
-      amount: saleProductForm.getValues().amount,
-      name: saleProductDetailData.name, // 주문명
-    };
-
-    onPayment(reqData);
-    // createOrderSaleProduct.mutate(saleProductForm.getValues());
+    createOrderSaleProduct.mutate(saleProductForm.getValues());
   };
 
   // 수량 선택
@@ -117,13 +114,6 @@ export default function SaleProductDetailClient({ saleProductId }: Props) {
   useEffect(() => {
     saleProductForm.setValue('saleProduct', saleProductId);
   }, [saleProductForm, saleProductId]);
-
-  // payment 상태에 따라 db추가
-  useEffect(() => {
-    if (paymentStatus === PaymentStatus.Success) {
-      createOrderSaleProduct.mutate(saleProductForm.getValues());
-    }
-  }, [paymentStatus, createOrderSaleProduct, saleProductForm]);
 
   if (Object.keys(saleProductDetailData).length < 1) {
     return false;

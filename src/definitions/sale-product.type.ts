@@ -37,6 +37,7 @@ export type Tickets = {
 
 export interface SaleProductBuyFormData<T> {
   orderDate: Date | string;
+  amount: number; // 구매
   quantity: number; //상품수량
   saleProduct: T; //판매 상품 아이디
   buyType: string;

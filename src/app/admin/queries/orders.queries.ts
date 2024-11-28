@@ -1,4 +1,9 @@
-import { ErrorResponse, PageFilter, PaginationProp } from './queries.type';
+import {
+  ErrorResponse,
+  FunctionProps,
+  PageFilter,
+  PaginationProp,
+} from './queries.type';
 import {
   NameAndId,
   PaginationResponse,
@@ -11,11 +16,12 @@ import { toast } from 'sonner';
 
 const QUERY_KEY = 'admin-orders';
 
-export function useOrderSaleProductMutation() {
+export function useOrderSaleProductMutation({ onSuccess }: FunctionProps) {
   return useMutation({
     mutationFn: ordersService.createOrder,
     onSuccess: () => {
-      toast.success('상품 구매가 완료 되었습니다.');
+      onSuccess && onSuccess();
+      // toast.success('상품 구매가 완료 되었습니다.');
     },
     onError: (err: AxiosError<ErrorResponse>) => {
       if (err.response) {
