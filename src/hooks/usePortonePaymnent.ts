@@ -10,7 +10,22 @@ import axios from 'axios';
 import { useRef, useState } from 'react';
 import { toast } from 'sonner';
 
-const IAMPORT_API_URL = 'https://api.iamport.kr';
+// 아임포트 Access Token 발급
+const getAccessToken = async () => {
+  try {
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_PORT_ONE_API_URL}/users/getToken`,
+      {
+        imp_key: process.env.TEST_PORTONE_API_KEY,
+        imp_secret: process.env.TEST_PORTONE_SECRET_API,
+      }
+    );
+    return response.data.response.access_token;
+  } catch (error) {
+    console.error('아임포트 Access Token 발급 실패:', error);
+    throw new Error('아임포트 인증 실패');
+  }
+};
 
 export default function usePortonePayment() {
   const [paymentStatus, setPaymentStatus] = useState<PaymentStatus>(
@@ -78,9 +93,18 @@ export default function usePortonePayment() {
   // 환불 함수
   const handleRefundClick = async (refundData: RefundRequest) => {
     try {
+      // 1. Access Token 발급
+      const accessToken = await getAccessToken();
+
+      // 2. 환불 요청 API 호출
       const response = await axios.post(
-        `${IAMPORT_API_URL}/payments/cancel`,
-        refundData
+        `${process.env.NEXT_PUBLIC_PORT_ONE_API_URL}/payments/cancel`,
+        refundData,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`, // 인증 토큰 포함
+          },
+        }
       );
 
       // 3. 환불 결과 반환
