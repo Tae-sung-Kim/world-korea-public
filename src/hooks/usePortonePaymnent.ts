@@ -7,7 +7,7 @@ import {
 import ordersService from '@/services/orders.service';
 import userService from '@/services/user.service';
 import axios from 'axios';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 const IAMPORT_API_URL = 'https://api.iamport.kr';
@@ -17,11 +17,19 @@ export default function usePortonePayment() {
     PaymentStatus.Ready
   );
 
+  //결제 완료시 주문 id 세팅
+  const orderIdRef = useRef<string>('');
+
   // 결제 함수
-  const handlePaymentClick = async (reqData: RequestPayParams) => {
+  const handlePaymentClick = async (
+    reqData: RequestPayParams,
+    orderId: string
+  ) => {
     if (!window.IMP) return;
     setPaymentStatus(PaymentStatus.Ready);
     const userData = await userService.getCurrentUser();
+
+    orderIdRef.current = orderId;
 
     const { IMP } = window;
     // imp로 시작
@@ -51,7 +59,10 @@ export default function usePortonePayment() {
     const { success, imp_uid, error_msg } = response;
 
     if (success) {
-      await ordersService.createPayment({ orderId: '', paymentId: imp_uid });
+      await ordersService.createPayment({
+        orderId: orderIdRef.current,
+        paymentId: imp_uid,
+      });
       toast.success('결제 성공');
       alert('결제 성공!!');
       setPaymentStatus(PaymentStatus.Success);
@@ -60,6 +71,8 @@ export default function usePortonePayment() {
       alert('결제 실패!!');
       setPaymentStatus(PaymentStatus.Error);
     }
+
+    orderIdRef.current = '';
   };
 
   // 환불 함수

@@ -31,6 +31,7 @@ import Image from 'next/image';
 import { ChangeEvent, useEffect, useMemo } from 'react';
 import { ControllerRenderProps, useForm } from 'react-hook-form';
 import { FcInfo } from 'react-icons/fc';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 type Props = {
@@ -54,14 +55,20 @@ export default function SaleProductDetailClient({ saleProductId }: Props) {
   const { onPayment } = usePortonePayment();
 
   const createOrderSaleProduct = useOrderSaleProductMutation({
-    onSuccess: () => {
-      const reqData: RequestPayParams = {
-        pay_method: saleProductForm.getValues().buyType, // 결제수단
-        merchant_uid: `mid_${new Date().getTime()}`, // 주문번호
-        amount: saleProductForm.getValues().amount,
-        name: saleProductDetailData.name, // 주문명
-      };
-      onPayment(reqData);
+    onSuccess: (data) => {
+      if (data) {
+        const orderId = data._id;
+        const reqData: RequestPayParams = {
+          pay_method: saleProductForm.getValues().buyType, // 결제수단
+          merchant_uid: `mid_${new Date().getTime()}`, // 주문번호
+          amount: saleProductForm.getValues().amount,
+          name: saleProductDetailData.name, // 주문명
+        };
+        onPayment(reqData, orderId);
+      } else {
+        toast.error('다시 시도하여 주세요.');
+        return null;
+      }
     },
   });
 

@@ -122,8 +122,8 @@ export default function OrderList({ tableId }: Props) {
   // 환불하기
   const handleRefundClick = ({ imp_uid, amount }: RefundRequest) => {
     onRefund({
-      imp_uid: 'imp_920274477579',
-      amount: 1000,
+      imp_uid,
+      amount,
     });
   };
 
@@ -243,7 +243,7 @@ export default function OrderList({ tableId }: Props) {
                     size="icon"
                     onClick={() =>
                       handleRefundClick({
-                        imp_uid: 'imp_920274477579',
+                        imp_uid: d.paymentId,
                         amount: d.totalPrice,
                       })
                     }

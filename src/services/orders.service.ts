@@ -12,7 +12,7 @@ import qs from 'qs';
 class OrdersService {
   //상품 구매
   createOrder(data: SaleProductBuyFormData<string>) {
-    return http.post<SaleProductBuyFormData<string>>('/api/orders', data);
+    return http.post<SaleProductBuyDisplayData<string>>('/api/orders', data);
   }
 
   //구매 목록
@@ -25,10 +25,9 @@ class OrdersService {
   }
 
   createPayment({ orderId, paymentId }: PaymentRequest) {
-    return http.post<string>(
-      `/api/orders/${orderId}/confirm-payment`,
-      paymentId
-    );
+    return http.post<string>(`/api/orders/${orderId}/confirm-payment`, {
+      paymentId,
+    });
   }
 }
 

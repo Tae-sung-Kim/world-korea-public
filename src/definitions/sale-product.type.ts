@@ -53,4 +53,5 @@ export interface SaleProductBuyDisplayData<T>
   totalPrice: number;
   user: NameAndId;
   tickets: Tickets[];
+  paymentId: string;
 }

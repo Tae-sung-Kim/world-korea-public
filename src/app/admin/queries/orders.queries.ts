@@ -17,11 +17,13 @@ import { toast } from 'sonner';
 
 const QUERY_KEY = 'admin-orders';
 
-export function useOrderSaleProductMutation({ onSuccess }: FunctionProps) {
+export function useOrderSaleProductMutation({
+  onSuccess,
+}: FunctionProps<SaleProductBuyDisplayData<string>>) {
   return useMutation({
     mutationFn: ordersService.createOrder,
-    onSuccess: () => {
-      onSuccess && onSuccess();
+    onSuccess: (data) => {
+      onSuccess && onSuccess(data);
       // toast.success('상품 구매가 완료 되었습니다.');
     },
     onError: (err: AxiosError<ErrorResponse>) => {

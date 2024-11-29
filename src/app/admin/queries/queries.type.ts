@@ -1,5 +1,5 @@
-export type FunctionProps = {
-  onSuccess?: () => void;
+export type FunctionProps<T = string> = {
+  onSuccess?: (data?: T) => void;
   onError?: () => void;
   onSettled?: () => void;
 };
