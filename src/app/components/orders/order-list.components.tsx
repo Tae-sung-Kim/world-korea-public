@@ -1,6 +1,6 @@
 'use client';
 
-import SortIcons from '@/app/admin/components/sort-icons.comonent';
+import SortIcons from '@/app/admin/components/sort-icons.component';
 import { usePagination } from '@/app/admin/hooks/usePagination';
 import useSort, { SortOrder } from '@/app/admin/hooks/useSort';
 import QrCodeModal from '@/app/admin/modals/qr-code.modal';

@@ -1,6 +1,6 @@
 'use client';
 
-import SortIcons from '../components/sort-icons.comonent';
+import SortIcons from '../components/sort-icons.component';
 import { usePagination } from '../hooks/usePagination';
 import useSort, { SortOrder } from '../hooks/useSort';
 import {
