@@ -241,7 +241,7 @@ export interface RequestPayParams extends RequestPayAdditionalParams {
   confirm_url?: string;
   /**
    * ### 웹훅(Webhook) 수신 주소
-   * - 포트원 관리자 콘솔에 설정한 웹훅 주소대신 사용할 웹훅 주소를 결제시마다 설정할 수 있습니다.
+   * - 포트원 관리자 콘솔에 설정한 웹훅 주소를 결제시마다 설정할 수 있습니다.
    * - 해당 값 설정시 관리자 콘솔에 설정한 주소로는 웹훅발송이 되지 않는점 유의하시기 바랍니다.
    */
   notice_url?: string | string[];
@@ -407,8 +407,8 @@ export interface Iamport {
 }
 
 export interface RefundRequest {
-  imp_uid: string; // 아임포트 결제 고유 UID
-  amount: number; // 환불 금액 (부분 환불 시 필수)
+  orderId?: string;
+  paymentId: string; // 아임포트 결제 고유 UID
 }
 
 declare global {

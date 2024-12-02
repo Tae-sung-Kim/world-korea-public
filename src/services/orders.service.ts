@@ -29,6 +29,12 @@ class OrdersService {
       paymentId,
     });
   }
+
+  createRefund({ orderId, paymentId }: PaymentRequest) {
+    return http.post<string>(`/api/orders/${orderId}/refund`, {
+      paymentId,
+    });
+  }
 }
 
 const ordersService = new OrdersService();

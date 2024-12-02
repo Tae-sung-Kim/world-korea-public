@@ -6,28 +6,13 @@ import {
 } from '@/definitions/portone.type';
 import ordersService from '@/services/orders.service';
 import userService from '@/services/user.service';
-import axios from 'axios';
+import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 import { toast } from 'sonner';
 
-// 아임포트 Access Token 발급
-const getAccessToken = async () => {
-  try {
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_PORT_ONE_API_URL}/users/getToken`,
-      {
-        imp_key: process.env.TEST_PORTONE_API_KEY,
-        imp_secret: process.env.TEST_PORTONE_SECRET_API,
-      }
-    );
-    return response.data.response.access_token;
-  } catch (error) {
-    console.error('아임포트 Access Token 발급 실패:', error);
-    throw new Error('아임포트 인증 실패');
-  }
-};
-
 export default function usePortonePayment() {
+  const router = useRouter();
+
   const [paymentStatus, setPaymentStatus] = useState<PaymentStatus>(
     PaymentStatus.Ready
   );
@@ -81,6 +66,7 @@ export default function usePortonePayment() {
       toast.success('결제 성공');
       alert('결제 성공!!');
       setPaymentStatus(PaymentStatus.Success);
+      router.refresh();
     } else {
       toast.error(`결제 실패: ${error_msg}`);
       alert('결제 실패!!');
@@ -91,29 +77,39 @@ export default function usePortonePayment() {
   };
 
   // 환불 함수
-  const handleRefundClick = async (refundData: RefundRequest) => {
+  const handleRefundClick = async (
+    refundData: RefundRequest,
+    callbacks?: {
+      onSuccess?: () => void;
+      onFail?: (error: any) => void;
+    }
+  ) => {
     try {
-      // 1. Access Token 발급
-      const accessToken = await getAccessToken();
+      setPaymentStatus(PaymentStatus.Processing);
 
-      // 2. 환불 요청 API 호출
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_PORT_ONE_API_URL}/payments/cancel`,
-        refundData,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`, // 인증 토큰 포함
-          },
-        }
-      );
+      // 서버에 환불 요청
+      const response = await ordersService.createRefund(refundData);
+      setPaymentStatus(PaymentStatus.Refunded);
+      // 기본 성공 처리
+      toast.success('환불이 완료되었습니다.');
+      router.refresh();
 
-      // 3. 환불 결과 반환
-      return response.data;
-    } catch (error) {
-      console.error('환불 요청 실패:', error);
-      throw new Error('환불 처리 중 오류가 발생했습니다.');
+      // 성공 콜백이 있다면 실행
+      if (callbacks?.onSuccess) {
+        callbacks.onSuccess();
+      }
+    } catch (error: any) {
+      // 기본 에러 처리
+      setPaymentStatus(PaymentStatus.Failed);
+      toast.error(error.message || '환불 처리 중 오류가 발생했습니다.');
+
+      // 실패 콜백이 있다면 실행
+      if (callbacks?.onFail) {
+        callbacks.onFail(error);
+      }
     }
   };
+
   return {
     onPayment: handlePaymentClick,
     onRefund: handleRefundClick,
