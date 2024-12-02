@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useModalContext } from '@/contexts/modal.context';
+import { MdOutlineEdit } from 'react-icons/md';
 
 export default function ProfileDetail({
   onStep,
@@ -37,65 +38,120 @@ export default function ProfileDetail({
   };
 
   return (
-    <>
-      <h1 className="text-2xl font-semibold text-center p-4">회원 정보</h1>
+    <div className="min-h-screen bg-gray-50/30">
+      <div className="container px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto py-8">
+        <div className="bg-white rounded-lg shadow-sm p-6 sm:p-8">
+          <div className="flex justify-between items-center mb-8">
+            <h1 className="text-2xl font-semibold">회원 정보</h1>
+            <Button
+              onClick={handleModalOpen}
+              variant="outline"
+              className="hover:bg-gray-100"
+            >
+              비밀번호 변경
+            </Button>
+          </div>
 
-      <div className="container relative">
-        <div className="absolute right-0 -top-[40px]">
-          <Button onClick={handleModalOpen}>비밀번호 변경</Button>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label className="text-sm text-gray-500">아이디</Label>
+                <Input
+                  readOnly
+                  disabled
+                  value={currentUserData?.loginId ?? ''}
+                  className="bg-gray-50 font-medium"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-sm text-gray-500">업체명</Label>
+                <Input
+                  readOnly
+                  disabled
+                  value={currentUserData?.companyName ?? ''}
+                  className="bg-gray-50 font-medium"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-sm text-gray-500">업체 번호</Label>
+                <Input
+                  readOnly
+                  disabled
+                  value={currentUserData?.companyNo ?? ''}
+                  className="bg-gray-50 font-medium"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-sm text-gray-500">연락처</Label>
+                <Input
+                  readOnly
+                  disabled
+                  value={currentUserData?.contactNumber ?? ''}
+                  className="bg-gray-50 font-medium"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label className="text-sm text-gray-500">이름</Label>
+                <Input
+                  readOnly
+                  disabled
+                  value={currentUserData?.name ?? ''}
+                  className="bg-gray-50 font-medium"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-sm text-gray-500">휴대폰</Label>
+                <Input
+                  readOnly
+                  disabled
+                  value={currentUserData?.contactNumber ?? ''}
+                  className="bg-gray-50 font-medium"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-sm text-gray-500">주소</Label>
+                <Input
+                  readOnly
+                  disabled
+                  value={currentUserData?.address ?? ''}
+                  className="bg-gray-50 font-medium"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-sm text-gray-500">이메일</Label>
+                <Input
+                  readOnly
+                  disabled
+                  value={currentUserData?.email ?? ''}
+                  className="bg-gray-50 font-medium"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="flex justify-center mt-8">
+            <Button
+              onClick={handleUpdate}
+              disabled={!currentUserData}
+              className="relative inline-flex items-center px-8 py-3 overflow-hidden text-lg font-medium transition duration-300 ease-out rounded-lg group bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
+            >
+              <span className="relative flex items-center gap-2">
+                <MdOutlineEdit className="text-xl" />
+                정보 수정
+              </span>
+            </Button>
+          </div>
         </div>
       </div>
-      <div className="container space-y-8">
-        <div className="space-y-2">
-          <Label>아이디</Label>
-          <Input readOnly disabled value={currentUserData?.loginId ?? ''} />
-        </div>
-
-        <div className="space-y-2">
-          <Label>업체명</Label>
-          <Input readOnly disabled value={currentUserData?.companyName ?? ''} />
-        </div>
-
-        <div className="space-y-2">
-          <Label>업체 번호</Label>
-          <Input readOnly disabled value={currentUserData?.companyNo ?? ''} />
-        </div>
-        <div className="space-y-2">
-          <Label>주소</Label>
-          <Input readOnly disabled value={currentUserData?.address ?? ''} />
-        </div>
-        <div className="space-y-2">
-          <Label>연락처</Label>
-          <Input
-            readOnly
-            disabled
-            value={currentUserData?.contactNumber ?? ''}
-          />
-        </div>
-        <div className="space-y-2">
-          <Label>이름</Label>
-          <Input readOnly disabled value={currentUserData?.name ?? ''} />
-        </div>
-        <div className="space-y-2">
-          <Label>휴대폰</Label>
-          <Input
-            readOnly
-            disabled
-            value={currentUserData?.contactNumber ?? ''}
-          />
-        </div>
-        <div className="space-y-2">
-          <Label>이메일</Label>
-          <Input readOnly disabled value={currentUserData?.email ?? ''} />
-        </div>
-        <Button
-          className="ml-2"
-          disabled={!currentUserData}
-          onClick={handleUpdate}
-        >
-          수정하기
-        </Button>
-      </div>
-    </>
+    </div>
   );
 }

@@ -19,6 +19,7 @@ import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { MdOutlineCheck, MdOutlineClose } from 'react-icons/md';
 import { z } from 'zod';
 
 const formSchema = z.object({
@@ -105,126 +106,186 @@ export default function ProfileEdit({
   }, [currentUserData, form]);
 
   return (
-    <>
-      <h1 className="text-2xl font-semibold text-center p-4">회원 정보 수정</h1>
+    <div className="min-h-screen bg-gray-50/30">
+      <div className="container px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto py-8">
+        <div className="bg-white rounded-lg shadow-sm p-6 sm:p-8">
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(handleSubmit)}
+              className="space-y-8"
+            >
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-semibold">회원 정보 수정</h2>
+              </div>
 
-      <div className="container">
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(handleSubmit)}
-            className="space-y-8"
-          >
-            <FormField
-              control={form.control}
-              name="id"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>아이디</FormLabel>
-                  <FormControl>
-                    <Input readOnly disabled {...field} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="companyName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>업체명</FormLabel>
-                  <FormControl>
-                    <Input placeholder="업체명을 입력해 주세요." {...field} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="companyNo"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>업체 번호</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="업체 번호를 입력해 주세요."
-                      disabled
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="address"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>주소</FormLabel>
-                  <FormControl>
-                    <Input placeholder="주소를 입력해 주세요." {...field} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="contactNumber"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>연락처</FormLabel>
-                  <FormControl>
-                    <Input placeholder="연락처를 입력해 주세요." {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>이름</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="phoneNumber"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>휴대폰</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="휴대폰 번호를 입력해 주세요."
-                      {...field}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>이메일</FormLabel>
-                  <FormControl>
-                    <Input placeholder="이메일을 입력해 주세요." {...field} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <Button type="submit" className="ml-2" disabled={!currentUserData}>
-              수정 완료
-            </Button>
-          </form>
-        </Form>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="id"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm text-gray-500">
+                          아이디
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            disabled
+                            className="bg-gray-50 font-medium"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="companyName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm text-gray-500">
+                          업체명
+                        </FormLabel>
+                        <FormControl>
+                          <Input {...field} className="font-medium" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="companyNo"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm text-gray-500">
+                          업체 번호
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            disabled
+                            className="bg-gray-50 font-medium"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="contactNumber"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm text-gray-500">
+                          연락처
+                        </FormLabel>
+                        <FormControl>
+                          <Input {...field} className="font-medium" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <div className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm text-gray-500">
+                          이름
+                        </FormLabel>
+                        <FormControl>
+                          <Input {...field} className="font-medium" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="phoneNumber"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm text-gray-500">
+                          휴대폰
+                        </FormLabel>
+                        <FormControl>
+                          <Input {...field} className="font-medium" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="address"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm text-gray-500">
+                          주소
+                        </FormLabel>
+                        <FormControl>
+                          <Input {...field} className="font-medium" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm text-gray-500">
+                          이메일
+                        </FormLabel>
+                        <FormControl>
+                          <Input {...field} className="font-medium" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row justify-center gap-3 pt-6">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => onStep(ProfileStep.Detail)}
+                  className="w-full sm:w-32 font-medium hover:bg-gray-100"
+                >
+                  <span className="relative flex items-center gap-2">
+                    <MdOutlineClose className="text-xl" />
+                    취소
+                  </span>
+                </Button>
+                <Button
+                  type="submit"
+                  className="w-full sm:w-32 font-medium bg-blue-500 hover:bg-blue-600 text-white"
+                >
+                  <span className="relative flex items-center gap-2">
+                    <MdOutlineCheck className="text-xl" />
+                    저장
+                  </span>
+                </Button>
+              </div>
+            </form>
+          </Form>
+        </div>
       </div>
-    </>
+    </div>
   );
 }
