@@ -30,7 +30,7 @@ export default function HomePopupModal({ onCancel, data }: PopupProps) {
                   alt={data.title || '팝업 이미지'}
                   fill
                   priority
-                  sizes="(max-width: 768px) calc(100vw - 2rem), (max-width: 1200px) 520px, 600px"
+                  sizes="(max-width: 640px) 90vw, (max-width: 768px) 520px, 600px"
                   className="object-contain rounded-lg"
                 />
               </div>

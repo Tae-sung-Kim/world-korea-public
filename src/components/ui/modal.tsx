@@ -28,7 +28,7 @@ const ModalContainer = React.forwardRef<
             ref={ref}
             className={cn(
               'w-full mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-xl',
-              'max-w-[calc(100vw-2rem)] sm:max-w-[520px] md:max-w-[600px]',
+              'max-w-[90vw] sm:max-w-[520px] md:max-w-[600px]',
               'max-h-[calc(100dvh-2rem)] overflow-auto',
               className
             )}

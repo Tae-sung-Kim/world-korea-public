@@ -5,13 +5,13 @@ import BackgroundOverlay from '@/components/common/BackgroundOverlay';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="root-layout min-h-screen flex flex-col">
+    <div className="root-layout min-h-screen flex flex-col w-full">
       <Header />
-      <main className="flex-1 relative">
+      <main className="flex-1 relative w-full">
         <BackgroundOverlay />
         
         {/* 컨텐츠 */}
-        <div className="relative h-full max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative h-full w-full max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
           {children}
         </div>
       </main>
