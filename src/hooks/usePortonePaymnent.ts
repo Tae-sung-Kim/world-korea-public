@@ -64,12 +64,10 @@ export default function usePortonePayment() {
         paymentId: imp_uid,
       });
       toast.success('결제 성공');
-      alert('결제 성공!!');
       setPaymentStatus(PaymentStatus.Success);
       router.refresh();
     } else {
       toast.error(`결제 실패: ${error_msg}`);
-      alert('결제 실패!!');
       setPaymentStatus(PaymentStatus.Error);
     }
 
