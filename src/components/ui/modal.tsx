@@ -8,33 +8,37 @@ const ModalContainer = React.forwardRef<
   React.HTMLAttributes<HTMLDivElement> & { useOverlayOpacity?: boolean }
 >(({ className, children, ...props }, ref) => {
   return (
-    <>
-      {/* modal backgroundStyle */}
+    <div className="fixed inset-0 z-[100]">
+      {/* Overlay */}
       <div
         className={cn(
-          `top-0 w-full h-full fixed bg-black ${
-            props.useOverlayOpacity ? 'opacity-50' : 'opacity-0'
-          }`
+          'fixed inset-0 bg-black',
+          props.useOverlayOpacity ? 'opacity-50' : 'opacity-0'
         )}
-      ></div>
+      />
 
-      <div
-        className={cn(
-          'top-0 w-full h-full fixed z-10 p-10 flex justify-center grid content-center'
-        )}
+      {/* Modal Wrapper */}
+      <div 
+        className="fixed inset-0 z-10"
         onClick={props.onClick}
       >
-        <div
-          ref={ref}
-          className={cn(
-            'min-w-96 min-h-60 bg-gray-50 rounded-lg space-y-4 border-2',
-            className
-          )}
-        >
-          {children}
+        <div className="relative flex min-h-[100dvh] items-center justify-center p-4">
+          {/* Modal Content */}
+          <div
+            ref={ref}
+            className={cn(
+              'w-full mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-xl',
+              'max-w-[calc(100vw-2rem)] sm:max-w-[520px] md:max-w-[600px]',
+              'max-h-[calc(100dvh-2rem)] overflow-auto',
+              className
+            )}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {children}
+          </div>
         </div>
       </div>
-    </>
+    </div>
   );
 });
 
@@ -48,11 +52,16 @@ const ModalHeader = React.forwardRef<
     <div
       ref={ref}
       className={cn(
-        'border-b-2 border-soild border-indigo-600/50 p-4 min-h-14',
+        'sticky top-0 z-20',
+        'flex items-center px-4 py-3 sm:px-6',
+        'border-b border-gray-200 dark:border-gray-700',
+        'bg-white dark:bg-gray-800',
         className
       )}
     >
-      <div className="relative">{children}</div>
+      <div className="flex-1 text-base font-semibold">
+        {children}
+      </div>
     </div>
   );
 });
@@ -64,7 +73,14 @@ const ModalContent = React.forwardRef<
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, children, ...props }, ref) => {
   return (
-    <div ref={ref} className={cn('p-5', className)}>
+    <div
+      ref={ref}
+      className={cn(
+        'relative',
+        'p-4 sm:p-6',
+        className
+      )}
+    >
       {children}
     </div>
   );
@@ -80,7 +96,10 @@ const ModalFooter = React.forwardRef<
     <div
       ref={ref}
       className={cn(
-        'border-t-2 border-soild border-indigo-600/50 p-2 min-h-14',
+        'sticky bottom-0 z-20',
+        'flex flex-col-reverse sm:flex-row sm:justify-end gap-2 sm:gap-3',
+        'border-t border-gray-200 dark:border-gray-700',
+        'p-4 sm:p-6 bg-white dark:bg-gray-800',
         className
       )}
     >
