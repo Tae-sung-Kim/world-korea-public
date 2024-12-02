@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer className="h-56 bg-white flex items-center d">
+    <footer className="h-56 bg-white flex items-center">
       <div className="container w-[1000px] flex flex-col text-sm">
         <span className="font-bold text-gray-700 mb-2">월드코리아</span>
         <div className="text-gray-500 flex gap-2">

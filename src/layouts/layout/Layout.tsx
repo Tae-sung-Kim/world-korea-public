@@ -11,7 +11,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <div 
           className="absolute inset-0 bg-[url('/images/slide1.jpg')] bg-cover bg-center bg-fixed"
           style={{
-            backgroundImage: `linear-gradient(to bottom, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.85)), url('/images/slide1.jpg')`
+            backgroundImage: `linear-gradient(to bottom, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.5)), url('/images/slide1.jpg')`
           }}
         />
         
