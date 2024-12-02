@@ -100,109 +100,113 @@ export default function SaleProductListClient() {
       <div className="flex">
         <SaleProductSearch />
       </div>
-      <Table id="saleProductExportExcelTable">
-        <TableHeader>
-          <TableRow>
-            <TableHead className="min-w-[70px]">번호</TableHead>
-            <TableHead
-              className="cursor-pointer"
-              onClick={() => handleSortClick('name')}
-            >
-              <SortIcons
-                title="판매 상품명"
-                order={sortColumn === 'name' ? order : ''}
-              />
-            </TableHead>
-            <TableHead className="min-w-[100px]">상세 상품명</TableHead>
-            <TableHead className="min-w-[80px]">level</TableHead>
-            <TableHead className="min-w-[80px]">단체예약여부</TableHead>
-            <TableHead
-              className="min-w-[100px] text-right cursor-pointer"
-              onClick={() => handleSortClick('price')}
-            >
-              <SortIcons
-                title="판매가"
-                order={sortColumn === 'price' ? order : ''}
-              />
-            </TableHead>
-            <TableHead className="min-w-[100px] text-right">재고</TableHead>
-            <TableHead className="min-w-[70px] text-right"></TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {sortedData.map((data, idx) => {
-            return (
-              <TableRow
-                key={data._id}
-                className="cursor-pointer"
-                onClick={() => handleProductItemClick(data._id)}
+      <div className="overflow-x-auto">
+        <Table id="saleProductExportExcelTable" className="min-w-[800px]">
+          <TableHeader>
+            <TableRow>
+              <TableHead className="whitespace-nowrap min-w-[70px]">번호</TableHead>
+              <TableHead
+                className="whitespace-nowrap cursor-pointer"
+                onClick={() => handleSortClick('name')}
               >
-                <TableCell>{(pageNumber - 1) * pageSize + idx + 1}</TableCell>
-                <TableCell className="font-medium">{data.name}</TableCell>
-                <TableCell className="">
-                  {data.products.map((d) => {
-                    return (
-                      <div key={d._id}>
-                        {d.name}
-                        <Separator />
-                      </div>
-                    );
-                  })}
-                </TableCell>
-                <TableCell>
-                  {
-                    userCategoryList?.find(
-                      (f) => f.level === String(data.accessLevel)
-                    )?.name
-                  }
-                </TableCell>
-                <TableCell>{data.isReservable ? 'Y' : 'N'}</TableCell>
-                <TableCell className="text-right">
-                  {addComma(data.price)} 원
-                </TableCell>
-                <TableCell className="text-right">
-                  {data.products.map((d) => {
-                    return (
-                      <div key={d._id}>
-                        {d.name} : {addComma(d.pinCount ?? 0)} 개
-                        <Separator />
-                      </div>
-                    );
-                  })}
-                </TableCell>
-                <TableCell className="text-center">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="icon"
-                    onClick={(e: FormEvent<HTMLButtonElement>) =>
-                      handleDeleteProduct({
-                        id: data._id ?? '',
-                        title: data.name,
-                      })
+                <SortIcons
+                  title="판매 상품명"
+                  order={sortColumn === 'name' ? order : ''}
+                />
+              </TableHead>
+              <TableHead className="whitespace-nowrap min-w-[100px]">상세 상품명</TableHead>
+              <TableHead className="whitespace-nowrap min-w-[80px]">level</TableHead>
+              <TableHead className="whitespace-nowrap min-w-[80px]">단체예약여부</TableHead>
+              <TableHead
+                className="whitespace-nowrap min-w-[100px] text-right cursor-pointer"
+                onClick={() => handleSortClick('price')}
+              >
+                <SortIcons
+                  title="판매가"
+                  order={sortColumn === 'price' ? order : ''}
+                />
+              </TableHead>
+              <TableHead className="whitespace-nowrap min-w-[100px] text-right">재고</TableHead>
+              <TableHead className="whitespace-nowrap min-w-[70px] text-right"></TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {sortedData.map((data, idx) => {
+              return (
+                <TableRow
+                  key={data._id}
+                  className="cursor-pointer"
+                  onClick={() => handleProductItemClick(data._id)}
+                >
+                  <TableCell>{(pageNumber - 1) * pageSize + idx + 1}</TableCell>
+                  <TableCell className="font-medium">{data.name}</TableCell>
+                  <TableCell className="">
+                    {data.products.map((d) => {
+                      return (
+                        <div key={d._id}>
+                          {d.name}
+                          <Separator />
+                        </div>
+                      );
+                    })}
+                  </TableCell>
+                  <TableCell>
+                    {
+                      userCategoryList?.find(
+                        (f) => f.level === String(data.accessLevel)
+                      )?.name
                     }
-                  >
-                    <RiDeleteBin6Line />
-                  </Button>
-                </TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-        <TableFooter>
-          <TableRow>
-            <TableCell colSpan={7}>총 상품</TableCell>
-            <TableCell className="text-right">
-              {addComma(saleProductData.totalItems)} 개
-            </TableCell>
-          </TableRow>
-        </TableFooter>
-      </Table>
-      <Pagination
-        pageNumber={pageNumber}
-        pageSize={pageSize}
-        totalPages={saleProductData.totalPages}
-      />
+                  </TableCell>
+                  <TableCell>{data.isReservable ? 'Y' : 'N'}</TableCell>
+                  <TableCell className="text-right">
+                    {addComma(data.price)} 원
+                  </TableCell>
+                  <TableCell className="text-right">
+                    {data.products.map((d) => {
+                      return (
+                        <div key={d._id}>
+                          {d.name} : {addComma(d.pinCount ?? 0)} 개
+                          <Separator />
+                        </div>
+                      );
+                    })}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      onClick={(e: FormEvent<HTMLButtonElement>) =>
+                        handleDeleteProduct({
+                          id: data._id ?? '',
+                          title: data.name,
+                        })
+                      }
+                    >
+                      <RiDeleteBin6Line />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TableCell colSpan={7}>총 상품</TableCell>
+              <TableCell className="text-right">
+                {addComma(saleProductData.totalItems)} 개
+              </TableCell>
+            </TableRow>
+          </TableFooter>
+        </Table>
+      </div>
+      <div className="mt-4">
+        <Pagination
+          pageNumber={pageNumber}
+          pageSize={pageSize}
+          totalPages={saleProductData.totalPages}
+        />
+      </div>
     </>
   );
 }

@@ -39,12 +39,12 @@ export default function SaleProductSearch() {
   };
 
   return (
-    <div className="flex space-x-5 items-center m-5">
+    <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-5 items-start md:items-center m-5">
       <Label className="">상품명</Label>
       <Input
         value={value}
         name="name"
-        className="w-64"
+        className="w-full md:w-64"
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
       />

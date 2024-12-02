@@ -59,10 +59,7 @@ export default function SaleProductForm({
 }: Props) {
   const userCategoryList = useUserCategoryListQuery();
 
-  const [detailProducts, setDetailProducts] = useState<ProductDisplayData[]>(
-    []
-  );
-
+  const [detailProducts, setDetailProducts] = useState<ProductDisplayData[]>([]);
   //상품 등록 후 reset
   const handleResetForm = () => {
     onResetData && onResetData();
@@ -153,7 +150,7 @@ export default function SaleProductForm({
             )}
           />
 
-          <div className="grid grid-cols-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               control={saleProductForm.control}
               name="accessLevel"
@@ -209,7 +206,7 @@ export default function SaleProductForm({
             />
           </div>
 
-          <div className="grid grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <FormItem>
               <FormLabel>정가</FormLabel>
               <FormControl>
