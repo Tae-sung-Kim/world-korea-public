@@ -12,29 +12,37 @@ export default function ProductImage({ url }: Props) {
 
   if (!url) {
     return (
-      <div className="w-full h-full bg-gray-100 dark:bg-gray-800 animate-pulse rounded-lg" />
+      <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 animate-pulse rounded-t-xl" />
     );
   }
 
   return (
-    <div className="relative w-full h-full group">
+    <div className="relative w-full h-full overflow-hidden group">
+      {/* Background overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/5 to-transparent transition-opacity duration-300 rounded-t-xl" />
+      
+      {/* Main image */}
       <Image
         alt="상품 이미지"
         className={`
-          w-full h-full object-cover rounded-lg transition-all duration-700 ease-in-out
-          group-hover:scale-105 group-hover:brightness-110
+          w-full h-full object-cover rounded-t-xl
+          transition-all duration-500 ease-out
+          group-hover:scale-110
           ${isLoading ? 'blur-sm grayscale' : 'blur-0 grayscale-0'}
         `}
+        src={url}
         priority={true}
         width={800}
         height={800}
         quality={85}
-        src={String(url)}
         onLoadingComplete={() => setIsLoading(false)}
       />
-      {isLoading && (
-        <div className="absolute inset-0 bg-gray-100 dark:bg-gray-800 animate-pulse rounded-lg" />
-      )}
+
+      {/* Hover overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      
+      {/* Bottom shadow */}
+      <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-black/20 via-black/10 to-transparent" />
     </div>
   );
 }

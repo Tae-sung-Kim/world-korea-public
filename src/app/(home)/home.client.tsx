@@ -33,7 +33,7 @@ export default function HomeClient() {
 
   return (
     <div className="w-full">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6">
         {saleProductData.list.map((d, index) => {
           const { _id, name, price, products } = d;
           const images = products.map((d2) => d2.images).flat();
@@ -46,9 +46,9 @@ export default function HomeClient() {
             >
               <Link 
                 href={`/sale-products/${_id}`} 
-                className="block bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
+                className="block overflow-hidden rounded-xl shadow-sm hover:shadow-xl transition-all duration-300"
               >
-                <div className="relative aspect-square overflow-hidden">
+                <div className="aspect-square">
                   <ProductImage url={images[0]} />
                 </div>
                 <ProductInfo name={name} price={price} />
