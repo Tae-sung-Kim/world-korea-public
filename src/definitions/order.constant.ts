@@ -6,4 +6,5 @@ export const ORDER_STATUS_MESSAGE: Record<OrderStatus, string> = {
   [OrderStatus.Pending]: '결제 중',
   [OrderStatus.Completed]: '완료',
   [OrderStatus.Canceled]: '취소',
+  [OrderStatus.Refunded]: '결제 취소',
 };
