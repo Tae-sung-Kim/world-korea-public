@@ -8,7 +8,6 @@ import { useSaleProductListQuery } from '@/queries/product.queries';
 import Link from 'next/link';
 
 export default function HomeClient() {
-  //팝업 노출
   useNotifications();
 
   const { pageNumber, pageSize, filter } = usePagination({
@@ -22,40 +21,43 @@ export default function HomeClient() {
   });
 
   if (!Array.isArray(saleProductData?.list)) {
-    return null;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-pulse space-y-4">
+          <div className="h-4 w-32 bg-gray-200 dark:bg-gray-700 rounded"></div>
+          <div className="h-4 w-24 bg-gray-200 dark:bg-gray-700 rounded"></div>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="grid grid-cols-4 gap-8">
-      {saleProductData.list.map((d) => {
-        const { _id, name, price, products } = d;
+    <div className="container mx-auto px-4 py-8">
+      
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6 lg:gap-8">
+        {saleProductData.list.map((d, index) => {
+          const { _id, name, price, products } = d;
+          const images = products.map((d2) => d2.images).flat();
 
-        const images = products.map((d2) => d2.images).flat();
-
-        return (
-          <div key={_id} className="flex items-center justify-center py-12">
-            <div className="py-6 px-4 w-full bg-white shadow-2xl relative rounded hover:-translate-y-2 hover:transition-transform hover:ease-in">
-              <Link href={`/sale-products/${_id}`}>
-                <div
-                  className="aspect-[5/4] relative rounded"
-                  style={{
-                    marginTop: 'calc((2.5rem)* -1)',
-                  }}
-                >
-                  {/* <div className="absolute">
-                    <div className="animate-fade">재고량 : </div>
-                    <div className="animate-fade">사용량 : </div>
-                  </div> */}
+          return (
+            <div 
+              key={_id} 
+              className="group animate-fade-up"
+              style={{ animationDelay: `${index * 100}ms` }}
+            >
+              <Link 
+                href={`/sale-products/${_id}`} 
+                className="block bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
+              >
+                <div className="relative aspect-square overflow-hidden">
                   <ProductImage url={images[0]} />
                 </div>
-                <div className="mt-6">
-                  <ProductInfo name={name} price={price} />
-                </div>
+                <ProductInfo name={name} price={price} />
               </Link>
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
     </div>
   );
 }
