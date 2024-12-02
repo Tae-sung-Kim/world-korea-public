@@ -1,22 +1,17 @@
 import Footer from '@/layouts/footer/Footer';
 import Header from '@/layouts/header/Header';
 import { Toaster } from 'sonner';
+import BackgroundOverlay from '@/components/common/BackgroundOverlay';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="root-layout min-h-screen flex flex-col">
       <Header />
       <main className="flex-1 relative">
-        {/* 배경 이미지 오버레이 */}
-        <div 
-          className="absolute inset-0 bg-[url('/images/slide1.jpg')] bg-cover bg-center bg-fixed"
-          style={{
-            backgroundImage: `linear-gradient(to bottom, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.5)), url('/images/slide1.jpg')`
-          }}
-        />
+        <BackgroundOverlay />
         
         {/* 컨텐츠 */}
-        <div className="relative h-full">
+        <div className="relative h-full max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
           {children}
         </div>
       </main>
