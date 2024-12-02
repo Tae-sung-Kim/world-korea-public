@@ -10,7 +10,6 @@ import BackgroundOverlay from '@/components/common/BackgroundOverlay';
 
 export default function AccessPanel() {
   const { isLoggedIn, user } = useAuthContext();
-
   const isAdmin = user?.role === 'admin';
 
   const handleLogoutBtnClick = () => {
@@ -18,50 +17,65 @@ export default function AccessPanel() {
   };
 
   return (
-    <div className="relative flex items-center justify-center h-9">
+    <div className="relative flex items-center justify-center min-h-[3rem] bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200/80 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-gray-50/80">
       <BackgroundOverlay />
-      <div className="relative flex justify-end items-center space-x-4 w-full max-w-[1200px] px-4 sm:px-6 lg:px-8 text-gray-600">
+      <div className="relative flex justify-end items-center w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         {isLoggedIn ? (
-          <>
-            <Link
-              href="/my/profile"
-              className="text-sm hover:text-gray-800 hover:underline"
-            >
-              {user?.id}님 환영합니다.
-            </Link>
+          <div className="flex items-center gap-3 sm:gap-4">
+            <Button variant="ghost" size="sm" asChild className="h-9 px-3 hover:bg-gray-100/80 transition-colors">
+              <Link href="/my/profile" className="flex items-center">
+                <span className="hidden sm:inline text-gray-700 font-medium">
+                  {user?.id}님 환영합니다
+                </span>
+                <span className="sm:hidden text-gray-700 font-medium">{user?.id}</span>
+              </Link>
+            </Button>
             {isAdmin && (
               <>
-                <Separator orientation="vertical" className="bg-gray-500 h-3" />
-                <Link
-                  href="/admin/users"
-                  className="text-sm hover:text-gray-800 hover:underline"
+                <Separator orientation="vertical" className="h-4 bg-gray-200" />
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  asChild 
+                  className="h-9 px-3 hover:bg-gray-100/80 transition-colors"
                 >
-                  관리자 페이지
-                </Link>
+                  <Link href="/admin/users" className="text-gray-700 font-medium">
+                    관리자 페이지
+                  </Link>
+                </Button>
               </>
             )}
-            <Separator orientation="vertical" className="bg-gray-500 h-3" />
-            <button
-              className="text-sm hover:text-gray-800"
+            <Separator orientation="vertical" className="h-4 bg-gray-200" />
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={handleLogoutBtnClick}
+              className="h-9 px-3 text-gray-700 font-medium hover:bg-gray-100/80 transition-colors"
             >
               로그아웃
-            </button>
-          </>
+            </Button>
+          </div>
         ) : (
-          <>
-            <Link href="/login" className="text-sm hover:text-gray-800">
-              로그인
-            </Link>
-            <Separator orientation="vertical" className="bg-gray-500 h-3" />
-            <Link href="/register" className="text-sm hover:text-gray-800">
-              회원가입
-            </Link>
-          </>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              asChild 
+              className="h-9 px-3 text-gray-700 font-medium hover:bg-gray-100/80 transition-colors"
+            >
+              <Link href="/login">로그인</Link>
+            </Button>
+            <Separator orientation="vertical" className="h-4 bg-gray-200" />
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              asChild 
+              className="h-9 px-3 text-gray-700 font-medium hover:bg-gray-100/80 transition-colors"
+            >
+              <Link href="/register">회원가입</Link>
+            </Button>
+          </div>
         )}
-        {/* <Link href="/admin/users" className="text-sm">
-          회원목록
-        </Link> */}
       </div>
     </div>
   );
