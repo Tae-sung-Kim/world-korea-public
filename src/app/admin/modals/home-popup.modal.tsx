@@ -1,5 +1,8 @@
 import { Button } from '@/components/ui/button';
 import { NotificationDisplayData } from '@/definitions/notifications.type';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { IoEyeOffOutline } from 'react-icons/io5';
 import Cookies from 'js-cookie';
 import Image from 'next/image';
 
@@ -15,47 +18,52 @@ export default function HomePopupModal({ onCancel, data }: PopupProps) {
   };
 
   return (
-    <div className="flex flex-col">
-      <div className="relative">
-        <div className="p-4 sm:p-6">
-          <h2 className="text-lg sm:text-xl font-semibold mb-4">
-            {data.title}
-          </h2>
+    <Dialog open onOpenChange={onCancel}>
+      <DialogContent className="sm:max-w-[600px] p-0 gap-0">
+        <Card className="border-0 shadow-none">
+          <CardHeader className="p-6 pb-4 space-y-1 border-b bg-gray-50">
+            <CardTitle className="text-xl font-semibold text-gray-900 flex items-center gap-2">
+              <div className="w-1 h-6 bg-primary rounded-full" />
+              {data.title}
+            </CardTitle>
+          </CardHeader>
 
-          {data.image && typeof data.image === 'string' && (
-            <div className="relative w-full">
-              <div className="relative aspect-[4/3] w-full">
-                <Image
-                  src={data.image}
-                  alt={data.title || '팝업 이미지'}
-                  fill
-                  priority
-                  sizes="(max-width: 640px) 90vw, (max-width: 768px) 520px, 600px"
-                  className="object-contain rounded-lg"
-                />
+          <CardContent className="p-6">
+            {data.image && typeof data.image === 'string' && (
+              <div className="overflow-hidden rounded-lg">
+                <div className="relative aspect-[4/3] w-full">
+                  <Image
+                    src={data.image}
+                    alt={data.title || '팝업 이미지'}
+                    fill
+                    priority
+                    sizes="(max-width: 640px) 90vw, (max-width: 768px) 520px, 600px"
+                    className="object-contain"
+                  />
+                </div>
               </div>
-            </div>
-          )}
-        </div>
-      </div>
+            )}
+          </CardContent>
 
-      <div className="border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
-        <div className="p-4 sm:p-6 flex flex-col-reverse sm:flex-row justify-end gap-3">
-          <Button
-            variant="outline"
-            onClick={onCancel}
-            className="w-full sm:w-auto"
-          >
-            닫기
-          </Button>
-          <Button
-            onClick={() => noneShow24Hour(data._id)}
-            className="w-full sm:w-auto"
-          >
-            24시간 보지않기
-          </Button>
-        </div>
-      </div>
-    </div>
+          <CardFooter className="flex flex-col-reverse sm:flex-row justify-end gap-3 p-6 bg-gray-50 border-t">
+            <Button
+              variant="outline"
+              onClick={onCancel}
+              className="w-full sm:w-auto"
+            >
+              닫기
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => noneShow24Hour(data._id)}
+              className="w-full sm:w-auto gap-2"
+            >
+              <IoEyeOffOutline className="h-4 w-4" />
+              24시간 보지않기
+            </Button>
+          </CardFooter>
+        </Card>
+      </DialogContent>
+    </Dialog>
   );
 }
