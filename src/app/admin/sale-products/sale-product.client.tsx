@@ -96,109 +96,143 @@ export default function SaleProductListClient() {
   };
 
   return (
-    <>
-      <div className="flex">
+    <div className="h-[calc(100vh-80px)] flex flex-col max-w-[1920px] mx-auto">
+      <div className="flex mb-4">
         <SaleProductSearch />
       </div>
-      <div className="overflow-x-auto">
-        <Table id="saleProductExportExcelTable" className="min-w-[800px]">
-          <TableHeader>
-            <TableRow>
-              <TableHead className="whitespace-nowrap min-w-[70px]">번호</TableHead>
-              <TableHead
-                className="whitespace-nowrap cursor-pointer"
-                onClick={() => handleSortClick('name')}
-              >
-                <SortIcons
-                  title="판매 상품명"
-                  order={sortColumn === 'name' ? order : ''}
-                />
-              </TableHead>
-              <TableHead className="whitespace-nowrap min-w-[100px]">상세 상품명</TableHead>
-              <TableHead className="whitespace-nowrap min-w-[80px]">level</TableHead>
-              <TableHead className="whitespace-nowrap min-w-[80px]">단체예약여부</TableHead>
-              <TableHead
-                className="whitespace-nowrap min-w-[100px] text-right cursor-pointer"
-                onClick={() => handleSortClick('price')}
-              >
-                <SortIcons
-                  title="판매가"
-                  order={sortColumn === 'price' ? order : ''}
-                />
-              </TableHead>
-              <TableHead className="whitespace-nowrap min-w-[100px] text-right">재고</TableHead>
-              <TableHead className="whitespace-nowrap min-w-[70px] text-right"></TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {sortedData.map((data, idx) => {
-              return (
-                <TableRow
-                  key={data._id}
-                  className="cursor-pointer"
-                  onClick={() => handleProductItemClick(data._id)}
-                >
-                  <TableCell>{(pageNumber - 1) * pageSize + idx + 1}</TableCell>
-                  <TableCell className="font-medium">{data.name}</TableCell>
-                  <TableCell className="">
-                    {data.products.map((d) => {
-                      return (
-                        <div key={d._id}>
-                          {d.name}
-                          <Separator />
-                        </div>
-                      );
-                    })}
-                  </TableCell>
-                  <TableCell>
-                    {
-                      userCategoryList?.find(
-                        (f) => f.level === String(data.accessLevel)
-                      )?.name
-                    }
-                  </TableCell>
-                  <TableCell>{data.isReservable ? 'Y' : 'N'}</TableCell>
-                  <TableCell className="text-right">
-                    {addComma(data.price)} 원
-                  </TableCell>
-                  <TableCell className="text-right">
-                    {data.products.map((d) => {
-                      return (
-                        <div key={d._id}>
-                          {d.name} : {addComma(d.pinCount ?? 0)} 개
-                          <Separator />
-                        </div>
-                      );
-                    })}
-                  </TableCell>
-                  <TableCell className="text-center">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="icon"
-                      onClick={(e: FormEvent<HTMLButtonElement>) =>
-                        handleDeleteProduct({
-                          id: data._id ?? '',
-                          title: data.name,
-                        })
-                      }
-                    >
-                      <RiDeleteBin6Line />
-                    </Button>
-                  </TableCell>
+      <div className="flex-1 bg-white rounded-lg shadow-sm flex flex-col">
+        <div className="flex-1 relative">
+          <div className="absolute inset-0 overflow-auto">
+            <Table className="w-full">
+              <TableHeader className="bg-gray-50 sticky top-0 z-10">
+                <TableRow className="border-b border-gray-200">
+                  <TableHead className="h-12 text-sm font-semibold text-gray-900 w-[60px]">
+                    번호
+                  </TableHead>
+                  <TableHead
+                    className="h-12 text-sm font-semibold text-gray-900 w-[15%] cursor-pointer"
+                    onClick={() => handleSortClick('name')}
+                  >
+                    <SortIcons
+                      title="판매 상품명"
+                      order={sortColumn === 'name' ? order : ''}
+                    />
+                  </TableHead>
+                  <TableHead className="h-12 text-sm font-semibold text-gray-900 w-[25%]">
+                    상세 상품명
+                  </TableHead>
+                  <TableHead className="h-12 text-sm font-semibold text-gray-900 w-[10%] hidden md:table-cell">
+                    level
+                  </TableHead>
+                  <TableHead className="h-12 text-sm font-semibold text-gray-900 w-[10%] hidden md:table-cell">
+                    단체예약여부
+                  </TableHead>
+                  <TableHead
+                    className="h-12 text-sm font-semibold text-gray-900 w-[15%] text-right cursor-pointer"
+                    onClick={() => handleSortClick('price')}
+                  >
+                    <SortIcons
+                      title="판매가"
+                      order={sortColumn === 'price' ? order : ''}
+                    />
+                  </TableHead>
+                  <TableHead className="h-12 text-sm font-semibold text-gray-900 w-[20%] text-right hidden md:table-cell">
+                    재고
+                  </TableHead>
+                  <TableHead className="h-12 text-sm font-semibold text-gray-900 w-[60px] text-center"></TableHead>
                 </TableRow>
-              );
-            })}
-          </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TableCell colSpan={7}>총 상품</TableCell>
-              <TableCell className="text-right">
-                {addComma(saleProductData.totalItems)} 개
-              </TableCell>
-            </TableRow>
-          </TableFooter>
-        </Table>
+              </TableHeader>
+              <TableBody>
+                {sortedData.map((data, idx) => {
+                  return (
+                    <TableRow
+                      key={data._id}
+                      className="cursor-pointer hover:bg-gray-50 transition-colors"
+                      onClick={() => handleProductItemClick(data._id)}
+                    >
+                      <TableCell className="p-4 text-gray-700">
+                        {(pageNumber - 1) * pageSize + idx + 1}
+                      </TableCell>
+                      <TableCell className="p-4 font-medium text-gray-900">
+                        {data.name}
+                      </TableCell>
+                      <TableCell className="p-4 text-gray-700">
+                        {data.products.map((d) => (
+                          <div key={d._id} className="flex items-center">
+                            {d.name}
+                            <Separator
+                              orientation="vertical"
+                              className="mx-2 h-4"
+                            />
+                          </div>
+                        ))}
+                      </TableCell>
+                      <TableCell className="p-4 text-gray-700 hidden md:table-cell">
+                        {
+                          userCategoryList?.find(
+                            (f) => f.level === String(data.accessLevel)
+                          )?.name
+                        }
+                      </TableCell>
+                      <TableCell className="p-4 text-gray-700 hidden md:table-cell">
+                        <span
+                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                            data.isReservable
+                              ? 'bg-green-100 text-green-800'
+                              : 'bg-gray-100 text-gray-800'
+                          }`}
+                        >
+                          {data.isReservable ? 'Y' : 'N'}
+                        </span>
+                      </TableCell>
+                      <TableCell className="p-4 text-gray-700 text-right">
+                        {addComma(data.price)} 원
+                      </TableCell>
+                      <TableCell className="p-4 text-gray-700 text-right hidden md:table-cell">
+                        {data.products.map((d) => (
+                          <div
+                            key={d._id}
+                            className="flex items-center justify-end"
+                          >
+                            {d.name} : {addComma(d.pinCount ?? 0)} 개
+                            <Separator
+                              orientation="vertical"
+                              className="mx-2 h-4"
+                            />
+                          </div>
+                        ))}
+                      </TableCell>
+                      <TableCell className="p-4 text-center">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="icon"
+                          onClick={(e: FormEvent<HTMLButtonElement>) => {
+                            e.stopPropagation();
+                            handleDeleteProduct({
+                              id: data._id ?? '',
+                              title: data.name,
+                            });
+                          }}
+                        >
+                          <RiDeleteBin6Line className="h-4 w-4" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </div>
+        </div>
+        <div className="border-t border-gray-200">
+          <div className="flex items-center justify-between px-6 py-4 bg-gray-50">
+            <div className="text-sm font-medium text-gray-900">총 상품</div>
+            <div className="text-sm font-medium text-gray-900">
+              {addComma(saleProductData.totalItems)} 개
+            </div>
+          </div>
+        </div>
       </div>
       <div className="mt-4">
         <Pagination
@@ -207,6 +241,6 @@ export default function SaleProductListClient() {
           totalPages={saleProductData.totalPages}
         />
       </div>
-    </>
+    </div>
   );
 }

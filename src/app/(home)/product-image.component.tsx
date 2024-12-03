@@ -20,7 +20,7 @@ export default function ProductImage({ url }: Props) {
     <div className="relative w-full h-full overflow-hidden group">
       {/* Background overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/5 to-transparent transition-opacity duration-300 rounded-t-xl" />
-      
+
       {/* Main image */}
       <Image
         alt="상품 이미지"
@@ -35,12 +35,12 @@ export default function ProductImage({ url }: Props) {
         width={800}
         height={800}
         quality={85}
-        onLoadingComplete={() => setIsLoading(false)}
+        onLoad={() => setIsLoading(false)}
       />
 
       {/* Hover overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-      
+
       {/* Bottom shadow */}
       <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-black/20 via-black/10 to-transparent" />
     </div>

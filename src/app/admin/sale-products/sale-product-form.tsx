@@ -124,132 +124,141 @@ export default function SaleProductForm({
   };
 
   return (
-    <div className="space-y-8">
-      <Form {...saleProductForm}>
-        <form
-          onSubmit={saleProductForm.handleSubmit(handleSubmit)}
-          className="space-y-8"
-        >
-          {/* 상품명 undefined 확인 */}
-          <FormField
-            control={saleProductForm.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>상품명</FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    type="text"
-                    placeholder="상품명을 입력해 주세요."
-                    value={field.value ?? ''}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="h-[calc(100vh-80px)] flex flex-col max-w-[1920px] mx-auto">
+      <div className="flex-1 bg-white rounded-lg shadow-sm p-6">
+        <Form {...saleProductForm}>
+          <form
+            onSubmit={saleProductForm.handleSubmit(handleSubmit)}
+            className="space-y-6"
+          >
             <FormField
               control={saleProductForm.control}
-              name="accessLevel"
-              render={({ field }) => {
-                return (
-                  <FormItem>
-                    <FormLabel>Level</FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <SelectTrigger className="w-[180px]">
-                          <SelectValue placeholder="선택" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            {userCategoryList?.map((d) => {
-                              return (
-                                <SelectItem key={d._id} value={String(d.level)}>
-                                  {d.name}
-                                </SelectItem>
-                              );
-                            })}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                );
-              }}
-            />
-
-            <FormField
-              control={saleProductForm.control}
-              name="isReservable"
-              render={({ field }) => {
-                return (
-                  <FormItem>
-                    <div>
-                      <FormLabel>단체예약 가능</FormLabel>
-                    </div>
-                    <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                  </FormItem>
-                );
-              }}
-            />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <FormItem>
-              <FormLabel>정가</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="정가를 입력해 주세요."
-                  readOnly
-                  value={addComma(regularPrice ?? 0)}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-
-            <FormField
-              control={saleProductForm.control}
-              name="price"
+              name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>판매가</FormLabel>
+                  <FormLabel className="text-sm font-medium text-gray-900">상품명</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
-                      placeholder="판매가를 입력해 주세요."
-                      value={addComma(field.value)}
-                      onChange={(e) => handlePriceChange(e, { ...field })}
+                      type="text"
+                      placeholder="상품명을 입력해 주세요."
+                      value={field.value ?? ''}
+                      className="w-full"
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-          </div>
 
-          <div className="flex justify-center pt-4">
-            <Button type="submit">
-              상품 {detailProducts.length > 0 ? '수정' : '등록'}
-            </Button>
-          </div>
-        </form>
-      </Form>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <FormField
+                control={saleProductForm.control}
+                name="accessLevel"
+                render={({ field }) => {
+                  return (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium text-gray-900">Level</FormLabel>
+                      <FormControl>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value}
+                        >
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="선택" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              {userCategoryList?.map((d) => {
+                                return (
+                                  <SelectItem key={d._id} value={String(d.level)}>
+                                    {d.name}
+                                  </SelectItem>
+                                );
+                              })}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
+              />
 
-      {detailProducts.length > 0 && (
-        <SaleProductDetail products={detailProducts} />
-      )}
+              <FormField
+                control={saleProductForm.control}
+                name="isReservable"
+                render={({ field }) => {
+                  return (
+                    <FormItem>
+                      <div className="flex items-center space-x-2">
+                        <FormLabel className="text-sm font-medium text-gray-900">단체예약 가능</FormLabel>
+                        <FormControl>
+                          <Switch
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <FormItem>
+                <FormLabel className="text-sm font-medium text-gray-900">정가</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="정가를 입력해 주세요."
+                    readOnly
+                    value={addComma(regularPrice ?? 0)}
+                    className="w-full"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+
+              <FormField
+                control={saleProductForm.control}
+                name="price"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium text-gray-900">판매가</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="판매가를 입력해 주세요."
+                        value={addComma(field.value)}
+                        onChange={(e) => handlePriceChange(e, { ...field })}
+                        className="w-full"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="flex justify-end space-x-2 pt-6">
+              <Button 
+                type="submit"
+                className="bg-blue-600 text-white hover:bg-blue-700"
+              >
+                상품 {detailProducts.length > 0 ? '수정' : '등록'}
+              </Button>
+            </div>
+          </form>
+        </Form>
+
+        {detailProducts.length > 0 && (
+          <div className="mt-6">
+            <SaleProductDetail products={detailProducts} />
+          </div>
+        )}
+      </div>
     </div>
   );
 }

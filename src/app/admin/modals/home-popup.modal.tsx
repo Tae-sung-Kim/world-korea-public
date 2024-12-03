@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { NotificationDisplayData } from '@/definitions/notifications.type';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { IoEyeOffOutline } from 'react-icons/io5';
 import Cookies from 'js-cookie';
 import Image from 'next/image';
@@ -20,6 +20,10 @@ export default function HomePopupModal({ onCancel, data }: PopupProps) {
   return (
     <Dialog open onOpenChange={onCancel}>
       <DialogContent className="sm:max-w-[600px] p-0 gap-0">
+        <DialogTitle className="sr-only">{data.title}</DialogTitle>
+        <DialogDescription className="sr-only">
+          {data.title} 관련 팝업 창입니다.
+        </DialogDescription>
         <Card className="border-0 shadow-none">
           <CardHeader className="p-6 pb-4 space-y-1 border-b bg-gray-50">
             <CardTitle className="text-xl font-semibold text-gray-900 flex items-center gap-2">
