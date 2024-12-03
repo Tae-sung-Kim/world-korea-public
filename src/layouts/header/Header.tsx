@@ -6,7 +6,7 @@ export default function Header() {
   return (
     <header className="relative">
       <BackgroundOverlay />
-      <div className="relative max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         <AccessPanel />
         <MainNav />
       </div>

@@ -128,139 +128,161 @@ export default function UserCategoriesClient() {
   }, [userCategoriesForm, userCategoryList]);
 
   return (
-    <Form {...userCategoriesForm}>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[70px]">번호</TableHead>
-            <TableHead className="text-center">회원등급명</TableHead>
-            <TableHead className="w-[80px]">level</TableHead>
-            <TableHead className="w-[100px]"></TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          <>
-            {categoryList.fields.map((d: FieldUserCategory, idx: number) => {
-              return (
-                <TableRow key={d.id}>
-                  <TableCell>{idx + 1}</TableCell>
-                  <TableCell>
-                    <Controller
-                      name={`categories.${idx}.name`}
-                      control={userCategoriesForm.control}
-                      render={({ field, fieldState }) => {
-                        return (
-                          <>
-                            <Input
-                              {...field}
-                              type="text"
-                              placeholder="회원등급명을 입력해 주세요."
-                            />
+    <div className="h-[calc(100vh-80px)] flex flex-col max-w-[1920px] mx-auto">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-2xl font-bold tracking-tight text-gray-900">회원등급 관리</h2>
+        <Button
+          variant="outline"
+          size="sm"
+          className="hidden md:inline-flex items-center gap-2 bg-white hover:bg-gray-50"
+          onClick={handleRowAdd}
+        >
+          <FaPlus className="h-4 w-4 text-gray-600" />
+          <span className="text-sm font-medium text-gray-700">새 등급 추가</span>
+        </Button>
+        <Button
+          variant="outline"
+          size="icon"
+          className="md:hidden bg-white hover:bg-gray-50"
+          onClick={handleRowAdd}
+        >
+          <FaPlus className="h-4 w-4 text-gray-600" />
+        </Button>
+      </div>
 
-                            {fieldState.error && (
-                              <span className="text-red-500 text-sm">
-                                {fieldState.error.message}
-                              </span>
-                            )}
-                          </>
-                        );
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Controller
-                      name={`categories.${idx}.level`}
-                      control={userCategoriesForm.control}
-                      render={({ field, fieldState }) => {
-                        return (
-                          <>
-                            <Input {...field} type="text" placeholder="레벨" />
-                            {fieldState.error && (
-                              <span className="text-red-500 text-sm">
-                                {fieldState.error.message}
-                              </span>
-                            )}
-                          </>
-                        );
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex justify-center space-x-2">
-                      {d._id ? (
-                        <>
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            onClick={() => {
-                              userCategoriesForm.handleSubmit(() => {
-                                handleUserCategoryUpdate(d._id ?? '');
-                              })();
-                            }}
-                          >
-                            <BsPencilSquare />
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            onClick={() =>
-                              handleUserCategoryDelete({
-                                id: d._id ?? '',
-                                idx,
-                              })
-                            }
-                          >
-                            <RiDeleteBinFill />
-                          </Button>
-                        </>
-                      ) : (
-                        <>
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            type="button"
-                            onClick={async () => {
-                              const isValid = await userCategoriesForm.trigger([
-                                `categories.${idx}.name`,
-                                `categories.${idx}.level`,
-                              ]);
-                              if (isValid) {
-                                handleUserCategoryAdded(idx);
-                              }
-                            }}
-                          >
-                            <AiOutlineUserAdd />
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            onClick={() =>
-                              handleUserCategoryDelete({
-                                id: d._id ?? '',
-                                idx,
-                              })
-                            }
-                          >
-                            <RiDeleteBinFill />
-                          </Button>
-                        </>
-                      )}
-                    </div>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </>
-        </TableBody>
-      </Table>
-      <Button
-        variant="outline"
-        size="icon"
-        type="button"
-        onClick={handleRowAdd}
-      >
-        <FaPlus />
-      </Button>
-    </Form>
+      <div className="flex-1 bg-white rounded-lg shadow-sm">
+        <div className="relative h-full">
+          <div className="absolute inset-0 overflow-auto">
+            <Form {...userCategoriesForm}>
+              <Table>
+                <TableHeader className="bg-gray-50 sticky top-0 z-10">
+                  <TableRow className="border-b border-gray-200">
+                    <TableHead className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap w-[70px]">번호</TableHead>
+                    <TableHead className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap">회원등급명</TableHead>
+                    <TableHead className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap w-[80px] text-center">level</TableHead>
+                    <TableHead className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap w-[100px]"></TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {categoryList.fields.map((d: FieldUserCategory, idx: number) => (
+                    <TableRow key={d.id} className="hover:bg-gray-50 transition-colors">
+                      <TableCell className="p-4 text-sm text-gray-700">{idx + 1}</TableCell>
+                      <TableCell className="p-4">
+                        <Controller
+                          name={`categories.${idx}.name`}
+                          control={userCategoriesForm.control}
+                          render={({ field, fieldState }) => (
+                            <div className="space-y-2">
+                              <Input
+                                {...field}
+                                type="text"
+                                className="max-w-[300px] bg-white border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+                                placeholder="회원등급명을 입력해 주세요."
+                              />
+                              {fieldState.error && (
+                                <span className="text-red-500 text-xs block">
+                                  {fieldState.error.message}
+                                </span>
+                              )}
+                            </div>
+                          )}
+                        />
+                      </TableCell>
+                      <TableCell className="p-4">
+                        <Controller
+                          name={`categories.${idx}.level`}
+                          control={userCategoriesForm.control}
+                          render={({ field, fieldState }) => (
+                            <div className="space-y-2">
+                              <Input
+                                {...field}
+                                type="text"
+                                className="w-full bg-white border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+                                placeholder="레벨"
+                              />
+                              {fieldState.error && (
+                                <span className="text-red-500 text-xs block">
+                                  {fieldState.error.message}
+                                </span>
+                              )}
+                            </div>
+                          )}
+                        />
+                      </TableCell>
+                      <TableCell className="p-4">
+                        <div className="flex justify-end space-x-2">
+                          {d._id ? (
+                            <>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 hover:bg-gray-100"
+                                onClick={() => {
+                                  userCategoriesForm.handleSubmit(() => {
+                                    handleUserCategoryUpdate(d._id ?? '');
+                                  })();
+                                }}
+                              >
+                                <BsPencilSquare className="h-4 w-4 text-gray-600" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 hover:bg-red-100"
+                                onClick={() =>
+                                  handleUserCategoryDelete({
+                                    id: d._id ?? '',
+                                    idx,
+                                  })
+                                }
+                              >
+                                <RiDeleteBinFill className="h-4 w-4 text-red-600" />
+                              </Button>
+                            </>
+                          ) : (
+                            <>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 hover:bg-green-100"
+                                type="button"
+                                onClick={async () => {
+                                  const isValid = await userCategoriesForm.trigger([
+                                    `categories.${idx}.name`,
+                                    `categories.${idx}.level`,
+                                  ]);
+                                  if (isValid) {
+                                    handleUserCategoryAdded(idx);
+                                  }
+                                }}
+                              >
+                                <AiOutlineUserAdd className="h-4 w-4 text-green-600" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 hover:bg-red-100"
+                                onClick={() =>
+                                  handleUserCategoryDelete({
+                                    id: d._id ?? '',
+                                    idx,
+                                  })
+                                }
+                              >
+                                <RiDeleteBinFill className="h-4 w-4 text-red-600" />
+                              </Button>
+                            </>
+                          )}
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Form>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

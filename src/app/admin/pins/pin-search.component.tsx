@@ -39,8 +39,8 @@ export default function PinSearch() {
   };
 
   return (
-    <div className="flex space-x-5 items-center m-5">
-      <Label className="">상품명</Label>
+    <div className="flex items-center gap-4 p-4 bg-white rounded-lg shadow-sm flex-1">
+      <Label className="text-sm font-medium">상품명</Label>
       <Input
         value={value}
         name="name"
@@ -54,8 +54,9 @@ export default function PinSearch() {
         variant="secondary"
         size="icon"
         onClick={handleSearchClick}
+        className="ml-2"
       >
-        <FaSearch />
+        <FaSearch className="h-4 w-4 text-gray-500" />
       </Button>
     </div>
   );

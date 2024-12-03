@@ -128,150 +128,196 @@ export default function OrderList({ tableId }: Props) {
   };
 
   return (
-    <>
-      <Table id={tableId ?? 'exportExcelTableId'}>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="min-w-[50px]" data-exclude-excel>
-              번호
-            </TableHead>
-            <TableHead
-              className="cursor-pointer"
-              onClick={() => handleSortClick('saleProduct.name')}
-            >
-              <SortIcons
-                title="상품명"
-                order={sortColumn === 'saleProduct.name' ? order : ''}
-              />
-            </TableHead>
-            <TableHead className="min-w-[100px]">업체명</TableHead>
-            <TableHead className="min-w-[100px]">담당자명</TableHead>
-            <TableHead
-              className="cursor-pointer min-w-[100px] text-center"
-              onClick={() => handleSortClick('quantity')}
-            >
-              <SortIcons
-                title="구매수량"
-                order={sortColumn === 'quantity' ? order : ''}
-              />
-            </TableHead>
-            <TableHead
-              className="cursor-pointer min-w-[110px] text-right"
-              onClick={() => handleSortClick('totalPrice')}
-            >
-              <SortIcons
-                title="가격"
-                order={sortColumn === 'totalPrice' ? order : ''}
-              />
-            </TableHead>
-            <TableHead
-              className="cursor-pointer min-w-[130px] text-center"
-              onClick={() => handleSortClick('orderDate')}
-            >
-              <SortIcons
-                title="구매일"
-                order={sortColumn === 'orderDate' ? order : ''}
-              />
-            </TableHead>
-            <TableHead className="min-w-[100px] text-center">
-              방문예정일
-            </TableHead>
-            <TableHead className="min-w-[30px] text-center"></TableHead>
-            <TableHead className="min-w-[30px] text-center"></TableHead>
-            <TableHead className="min-w-[30px] text-center"></TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {sortedData.map((d, idx) => {
-            return (
-              <TableRow key={d._id}>
-                <TableCell data-exclude-excel>
-                  {ordersData.totalItems - (pageNumber - 1) * pageSize - idx}
-                </TableCell>
-                <TableCell
-                  className="cursor-pointer"
-                  onClick={() => handleOrderListClick(d.saleProduct._id)}
-                >
-                  {d.saleProduct.name}
-                </TableCell>
-                <TableCell>
-                  {/* {d.user && d.user.name} */}
-                  업체명으로
-                </TableCell>
-                <TableCell>
-                  {/* {d.user && d.user.name} */}
-                  업체 담당자명
-                </TableCell>
-                <TableCell className="text-right">
-                  {addComma(d.quantity ?? 0)}
-                </TableCell>
-                <TableCell className="text-right">
-                  {addComma(d.totalPrice ?? 0)}
-                </TableCell>
-                <TableCell className="text-right">
-                  {d.orderDate && new Date(d.orderDate).toLocaleDateString()}
-                </TableCell>
-                <TableCell className="text-right">
-                  방문예정일은(유효기간, 선택 날짜)
-                </TableCell>
-                <TableCell className="text-right">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() =>
-                      handleQrCodeClick({
-                        tickets: d.tickets ?? [],
-                        title: d.saleProduct.name,
-                      })
-                    }
+    <div className="h-[calc(100vh-80px)] flex flex-col max-w-[1600px] mx-auto">
+      <div className="flex-1 bg-white rounded-lg shadow-sm">
+        <div className="relative h-full flex flex-col">
+          <div className="flex-1 overflow-auto">
+            <div className="overflow-x-auto min-w-full">
+              <Table id={tableId ?? 'exportExcelTableId'} className="min-w-[1000px]">
+                <TableHeader className="bg-gray-50 sticky top-0 z-10">
+                  <TableRow className="border-b border-gray-200 h-12">
+                    <TableHead
+                      className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap w-[60px]"
+                      data-exclude-excel
+                    >
+                      번호
+                    </TableHead>
+                    <TableHead
+                      className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap cursor-pointer hover:text-gray-700"
+                      onClick={() => handleSortClick('saleProduct.name')}
+                    >
+                      <SortIcons
+                        title="상품명"
+                        order={sortColumn === 'saleProduct.name' ? order : ''}
+                      />
+                    </TableHead>
+                    <TableHead className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap hidden md:table-cell w-[120px]">
+                      업체명
+                    </TableHead>
+                    <TableHead className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap hidden md:table-cell w-[100px]">
+                      담당자명
+                    </TableHead>
+                    <TableHead
+                      className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap cursor-pointer hover:text-gray-700 text-center w-[80px]"
+                      onClick={() => handleSortClick('quantity')}
+                    >
+                      <SortIcons
+                        title="구매수량"
+                        order={sortColumn === 'quantity' ? order : ''}
+                      />
+                    </TableHead>
+                    <TableHead
+                      className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap cursor-pointer hover:text-gray-700 text-right hidden sm:table-cell w-[100px]"
+                      onClick={() => handleSortClick('totalPrice')}
+                    >
+                      <SortIcons
+                        title="가격"
+                        order={sortColumn === 'totalPrice' ? order : ''}
+                      />
+                    </TableHead>
+                    <TableHead
+                      className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap cursor-pointer hover:text-gray-700 text-center hidden lg:table-cell w-[100px]"
+                      onClick={() => handleSortClick('orderDate')}
+                    >
+                      <SortIcons
+                        title="구매일"
+                        order={sortColumn === 'orderDate' ? order : ''}
+                      />
+                    </TableHead>
+                    <TableHead className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap text-center hidden lg:table-cell w-[90px]">
+                      방문예정일
+                    </TableHead>
+                    <TableHead
+                      className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap text-center w-[180px]"
+                      colSpan={3}
+                    >
+                      액션
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {sortedData.map((d, idx) => (
+                    <TableRow
+                      key={d._id}
+                      className="hover:bg-gray-50 transition-colors h-14"
+                    >
+                      <TableCell
+                        className="px-4 py-3 text-gray-700 whitespace-nowrap"
+                        data-exclude-excel
+                      >
+                        {ordersData.totalItems -
+                          (pageNumber - 1) * pageSize -
+                          idx}
+                      </TableCell>
+                      <TableCell
+                        className="px-4 py-3 font-medium text-blue-600 hover:text-blue-800 cursor-pointer whitespace-nowrap"
+                        onClick={() => handleOrderListClick(d.saleProduct._id)}
+                      >
+                        {d.saleProduct.name}
+                      </TableCell>
+                      <TableCell className="px-4 py-3 text-gray-700 whitespace-nowrap hidden md:table-cell">
+                        {/* {d.user && d.user.name} */}
+                        업체명으로
+                      </TableCell>
+                      <TableCell className="px-4 py-3 text-gray-700 whitespace-nowrap hidden md:table-cell">
+                        {/* {d.user && d.user.name} */}
+                        업체 담당자명
+                      </TableCell>
+                      <TableCell className="px-4 py-3 text-gray-700 whitespace-nowrap text-center">
+                        {addComma(d.quantity ?? 0)}
+                      </TableCell>
+                      <TableCell className="px-4 py-3 text-gray-700 whitespace-nowrap text-right hidden sm:table-cell">
+                        {addComma(d.totalPrice ?? 0)}
+                      </TableCell>
+                      <TableCell className="px-4 py-3 text-gray-700 whitespace-nowrap text-center hidden lg:table-cell">
+                        {d.orderDate &&
+                          new Date(d.orderDate).toLocaleDateString('ko-KR', {
+                            year: '2-digit',
+                            month: '2-digit',
+                            day: '2-digit',
+                          })}
+                      </TableCell>
+                      <TableCell className="px-4 py-3 text-gray-700 whitespace-nowrap text-center hidden lg:table-cell">
+                        방문예정일은(유효기간, 선택 날짜)
+                      </TableCell>
+                      <TableCell className="p-2 text-center">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-7 w-7 text-gray-600 hover:text-gray-900"
+                          onClick={() =>
+                            handleQrCodeClick({
+                              tickets: d.tickets ?? [],
+                              title: d.saleProduct.name,
+                            })
+                          }
+                        >
+                          <LuQrCode className="h-4 w-4" />
+                        </Button>
+                      </TableCell>
+                      <TableCell className="p-2 text-center">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-7 w-7 text-gray-600 hover:text-gray-900"
+                          onClick={() => handleQrCodePrint(d.pins ?? [])}
+                        >
+                          <IoMdPrint className="h-4 w-4" />
+                        </Button>
+                      </TableCell>
+                      <TableCell className="p-2 text-center">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-7 w-7 text-red-500 hover:text-red-600"
+                          onClick={() =>
+                            handleRefundClick({
+                              orderId: d._id,
+                              paymentId: d.paymentId,
+                            })
+                          }
+                        >
+                          <RiRefundLine className="h-4 w-4" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </div>
+          <div className="sticky bottom-0 bg-white border-t border-gray-200 z-10">
+            <Table>
+              <TableFooter>
+                <TableRow>
+                  <TableCell
+                    colSpan={6}
+                    className="px-4 py-3 text-sm font-semibold text-gray-900 h-14"
                   >
-                    <LuQrCode />
-                  </Button>
-                </TableCell>
-                <TableCell className="text-right">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => handleQrCodePrint(d.pins ?? [])}
+                    총 구매
+                  </TableCell>
+                  <TableCell
+                    colSpan={5}
+                    className="px-4 py-3 text-sm font-semibold text-gray-900 text-right h-14"
                   >
-                    <IoMdPrint />
-                  </Button>
-                </TableCell>
-                <TableCell className="text-right">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() =>
-                      handleRefundClick({
-                        orderId: d._id,
-                        paymentId: d.paymentId,
-                      })
-                    }
-                  >
-                    <RiRefundLine />
-                  </Button>
-                </TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-        <TableFooter>
-          <TableRow>
-            <TableCell colSpan={10}>총 구매</TableCell>
-            <TableCell className="text-right">
-              {addComma(ordersData.totalItems)} 개
-            </TableCell>
-          </TableRow>
-        </TableFooter>
-      </Table>
+                    {addComma(ordersData.totalItems)} 개
+                  </TableCell>
+                </TableRow>
+              </TableFooter>
+            </Table>
+          </div>
+        </div>
+      </div>
 
-      <Pagination
-        pageNumber={pageNumber}
-        pageSize={pageSize}
-        totalPages={ordersData.totalPages}
-        pageRange={2}
-        minPages={5}
-      />
-    </>
+      <div className="mt-4 flex justify-center">
+        <Pagination
+          pageNumber={pageNumber}
+          pageSize={pageSize}
+          totalPages={ordersData.totalPages}
+          pageRange={2}
+          minPages={5}
+        />
+      </div>
+    </div>
   );
 }

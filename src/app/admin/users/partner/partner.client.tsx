@@ -23,58 +23,93 @@ export default function PartnerListClient() {
   };
 
   return (
-    <div className="container">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>분류</TableHead>
-            <TableHead>아이디</TableHead>
-            <TableHead>이름</TableHead>
-            <TableHead>업체No</TableHead>
-            <TableHead>업체명</TableHead>
-            <TableHead>이메일</TableHead>
-            <TableHead>연락처</TableHead>
-            <TableHead>등록일</TableHead>
-            <TableHead>승인</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {partnersData.map((user) => {
-            const {
-              _id,
-              userCategory,
-              loginId,
-              name,
-              companyNo,
-              companyName,
-              email,
-              contactNumber,
-              createdAt,
-              isApproved,
-            } = user;
-
-            return (
-              <TableRow
-                className="cursor-pointer"
-                key={_id}
-                onClick={handleListClick(user)}
-              >
-                <TableCell>{userCategory?.name}</TableCell>
-                <TableCell>{loginId}</TableCell>
-                <TableCell>{name}</TableCell>
-                <TableCell>{companyNo}</TableCell>
-                <TableCell>{companyName}</TableCell>
-                <TableCell>{email}</TableCell>
-                <TableCell>{contactNumber}</TableCell>
-                <TableCell>
-                  {createdAt && new Date(createdAt).toLocaleDateString()}
-                </TableCell>
-                <TableCell>{isApproved ? '승인' : '미승인'}</TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
+    <div className="h-[calc(100vh-80px)] flex flex-col max-w-[1920px] mx-auto">
+      <div className="flex-1 bg-white rounded-lg shadow-sm">
+        <div className="relative h-full">
+          <div className="absolute inset-0 overflow-auto">
+            <Table>
+              <TableHeader className="bg-gray-50 sticky top-0 z-10">
+                <TableRow className="border-b border-gray-200">
+                  <TableHead className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap">
+                    분류
+                  </TableHead>
+                  <TableHead className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap">
+                    상태
+                  </TableHead>
+                  <TableHead className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap">
+                    아이디
+                  </TableHead>
+                  <TableHead className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap">
+                    회원명
+                  </TableHead>
+                  <TableHead className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap">
+                    업체번호
+                  </TableHead>
+                  <TableHead className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap">
+                    업체명
+                  </TableHead>
+                  <TableHead className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap hidden md:table-cell">
+                    이메일
+                  </TableHead>
+                  <TableHead className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap hidden md:table-cell">
+                    연락처
+                  </TableHead>
+                  <TableHead className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap hidden md:table-cell">
+                    등록일
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {partnersData.map((user) => (
+                  <TableRow
+                    key={user._id}
+                    className="cursor-pointer hover:bg-gray-50 transition-colors"
+                    onClick={() => handleListClick(user)()}
+                  >
+                    <TableCell className="p-6 whitespace-nowrap">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        {user.userCategory?.name}
+                      </span>
+                    </TableCell>
+                    <TableCell className="p-6 whitespace-nowrap">
+                      <span
+                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                          user.isApproved
+                            ? 'bg-blue-100 text-blue-800'
+                            : 'bg-yellow-100 text-yellow-800'
+                        }`}
+                      >
+                        {user.isApproved ? '승인' : '미승인'}
+                      </span>
+                    </TableCell>
+                    <TableCell className="p-6 text-gray-700 whitespace-nowrap">
+                      {user.loginId}
+                    </TableCell>
+                    <TableCell className="p-6 font-medium text-gray-900 whitespace-nowrap">
+                      {user.name}
+                    </TableCell>
+                    <TableCell className="p-6 text-gray-700 whitespace-nowrap">
+                      {user.companyNo}
+                    </TableCell>
+                    <TableCell className="p-6 text-gray-700 whitespace-nowrap">
+                      {user.companyName}
+                    </TableCell>
+                    <TableCell className="p-6 text-gray-700 whitespace-nowrap hidden md:table-cell">
+                      {user.email}
+                    </TableCell>
+                    <TableCell className="p-6 text-gray-700 whitespace-nowrap hidden md:table-cell">
+                      {user.contactNumber}
+                    </TableCell>
+                    <TableCell className="p-6 text-gray-700 whitespace-nowrap hidden md:table-cell">
+                      {user.createdAt && new Date(user.createdAt).toLocaleDateString()}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

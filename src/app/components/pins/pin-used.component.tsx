@@ -4,6 +4,7 @@ import QrCodeScanButton from '@/app/admin/components/qr-code-scan-button.compone
 import QrCodeScanModal from '@/app/admin/modals/qr-code-scan.modal';
 import { useUsedPinListMutation } from '@/app/admin/queries';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   Form,
   FormControl,
@@ -108,40 +109,52 @@ export default function PinUsed() {
   };
 
   return (
-    <div className="space-y-8">
-      <div>
-        <QrCodeScanButton onResiveData={handleSetData} />
-      </div>
-      <Form {...pinForm}>
-        <form
-          onSubmit={pinForm.handleSubmit(handleSubmit)}
-          className="space-y-8"
-        >
-          <FormField
-            control={pinForm.control}
-            name="pinNumberList"
-            render={({ field }) => {
-              return (
-                <FormItem>
-                  <FormLabel className="text-2xl">핀번호 사용</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      {...field}
-                      className="h-[400px]"
-                      placeholder={`엑셀에서 복사한 핀 번호를 붙여넣기 해주세요.`}
-                    ></Textarea>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              );
-            }}
-          />
-
-          <div className="flex justify-center pt-4">
-            <Button>핀번호 사용</Button>
+    <div className="container mx-auto px-4 py-8">
+      <Card className="w-full max-w-4xl mx-auto">
+        <CardHeader>
+          <CardTitle className="text-2xl font-bold text-center">핀번호 사용 관리</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="flex justify-end">
+            <QrCodeScanButton onResiveData={handleSetData} />
           </div>
-        </form>
-      </Form>
+          <Form {...pinForm}>
+            <form
+              onSubmit={pinForm.handleSubmit(handleSubmit)}
+              className="space-y-6"
+            >
+              <FormField
+                control={pinForm.control}
+                name="pinNumberList"
+                render={({ field }) => {
+                  return (
+                    <FormItem>
+                      <FormLabel className="text-lg font-semibold">핀번호 입력</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          {...field}
+                          className="min-h-[300px] lg:min-h-[400px] font-mono"
+                          placeholder="엑셀에서 복사한 핀 번호를 붙여넣기 해주세요."
+                        />
+                      </FormControl>
+                      <FormMessage className="text-sm" />
+                    </FormItem>
+                  );
+                }}
+              />
+
+              <div className="flex justify-center pt-4">
+                <Button 
+                  size="lg"
+                  className="w-full sm:w-auto min-w-[200px] transition-all hover:scale-105"
+                >
+                  핀번호 사용하기
+                </Button>
+              </div>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
     </div>
   );
 }

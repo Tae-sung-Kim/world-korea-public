@@ -103,126 +103,128 @@ export default function SaleProductListClient() {
       <div className="flex-1 bg-white rounded-lg shadow-sm flex flex-col">
         <div className="flex-1 relative">
           <div className="absolute inset-0 overflow-auto">
-            <Table className="w-full">
-              <TableHeader className="bg-gray-50 sticky top-0 z-10">
-                <TableRow className="border-b border-gray-200">
-                  <TableHead className="h-12 text-sm font-semibold text-gray-900 w-[60px]">
-                    번호
-                  </TableHead>
-                  <TableHead
-                    className="h-12 text-sm font-semibold text-gray-900 w-[15%] cursor-pointer"
-                    onClick={() => handleSortClick('name')}
-                  >
-                    <SortIcons
-                      title="판매 상품명"
-                      order={sortColumn === 'name' ? order : ''}
-                    />
-                  </TableHead>
-                  <TableHead className="h-12 text-sm font-semibold text-gray-900 w-[25%]">
-                    상세 상품명
-                  </TableHead>
-                  <TableHead className="h-12 text-sm font-semibold text-gray-900 w-[10%] hidden md:table-cell">
-                    level
-                  </TableHead>
-                  <TableHead className="h-12 text-sm font-semibold text-gray-900 w-[10%] hidden md:table-cell">
-                    단체예약여부
-                  </TableHead>
-                  <TableHead
-                    className="h-12 text-sm font-semibold text-gray-900 w-[15%] text-right cursor-pointer"
-                    onClick={() => handleSortClick('price')}
-                  >
-                    <SortIcons
-                      title="판매가"
-                      order={sortColumn === 'price' ? order : ''}
-                    />
-                  </TableHead>
-                  <TableHead className="h-12 text-sm font-semibold text-gray-900 w-[20%] text-right hidden md:table-cell">
-                    재고
-                  </TableHead>
-                  <TableHead className="h-12 text-sm font-semibold text-gray-900 w-[60px] text-center"></TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {sortedData.map((data, idx) => {
-                  return (
-                    <TableRow
-                      key={data._id}
-                      className="cursor-pointer hover:bg-gray-50 transition-colors"
-                      onClick={() => handleProductItemClick(data._id)}
+            <div className="overflow-x-auto min-w-full">
+              <Table className="min-w-[1000px] w-full">
+                <TableHeader className="bg-gray-50 sticky top-0 z-10">
+                  <TableRow className="border-b border-gray-200">
+                    <TableHead className="h-12 text-sm font-semibold text-gray-900 w-[5%] text-center">
+                      번호
+                    </TableHead>
+                    <TableHead
+                      className="h-12 text-sm font-semibold text-gray-900 w-[18%] text-center cursor-pointer"
+                      onClick={() => handleSortClick('name')}
                     >
-                      <TableCell className="p-4 text-gray-700">
-                        {(pageNumber - 1) * pageSize + idx + 1}
-                      </TableCell>
-                      <TableCell className="p-4 font-medium text-gray-900">
-                        {data.name}
-                      </TableCell>
-                      <TableCell className="p-4 text-gray-700">
-                        {data.products.map((d) => (
-                          <div key={d._id} className="flex items-center">
-                            {d.name}
-                            <Separator
-                              orientation="vertical"
-                              className="mx-2 h-4"
-                            />
-                          </div>
-                        ))}
-                      </TableCell>
-                      <TableCell className="p-4 text-gray-700 hidden md:table-cell">
-                        {
-                          userCategoryList?.find(
-                            (f) => f.level === String(data.accessLevel)
-                          )?.name
-                        }
-                      </TableCell>
-                      <TableCell className="p-4 text-gray-700 hidden md:table-cell">
-                        <span
-                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                            data.isReservable
-                              ? 'bg-green-100 text-green-800'
-                              : 'bg-gray-100 text-gray-800'
-                          }`}
-                        >
-                          {data.isReservable ? 'Y' : 'N'}
-                        </span>
-                      </TableCell>
-                      <TableCell className="p-4 text-gray-700 text-right">
-                        {addComma(data.price)} 원
-                      </TableCell>
-                      <TableCell className="p-4 text-gray-700 text-right hidden md:table-cell">
-                        {data.products.map((d) => (
-                          <div
-                            key={d._id}
-                            className="flex items-center justify-end"
+                      <SortIcons
+                        title="판매 상품명"
+                        order={sortColumn === 'name' ? order : ''}
+                      />
+                    </TableHead>
+                    <TableHead className="h-12 text-sm font-semibold text-gray-900 w-[22%] text-center">
+                      상세 상품명
+                    </TableHead>
+                    <TableHead className="h-12 text-sm font-semibold text-gray-900 w-[12%] text-center hidden md:table-cell">
+                      level
+                    </TableHead>
+                    <TableHead className="h-12 text-sm font-semibold text-gray-900 w-[12%] text-center hidden md:table-cell">
+                      단체예약여부
+                    </TableHead>
+                    <TableHead
+                      className="h-12 text-sm font-semibold text-gray-900 w-[13%] text-center cursor-pointer"
+                      onClick={() => handleSortClick('price')}
+                    >
+                      <SortIcons
+                        title="판매가"
+                        order={sortColumn === 'price' ? order : ''}
+                      />
+                    </TableHead>
+                    <TableHead className="h-12 text-sm font-semibold text-gray-900 w-[13%] text-center hidden md:table-cell">
+                      재고
+                    </TableHead>
+                    <TableHead className="h-12 text-sm font-semibold text-gray-900 w-[5%] text-center"></TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {sortedData.map((data, idx) => {
+                    return (
+                      <TableRow
+                        key={data._id}
+                        className="cursor-pointer hover:bg-gray-50 transition-colors"
+                        onClick={() => handleProductItemClick(data._id)}
+                      >
+                        <TableCell className="p-4 text-gray-700">
+                          {(pageNumber - 1) * pageSize + idx + 1}
+                        </TableCell>
+                        <TableCell className="p-4 font-medium text-gray-900">
+                          {data.name}
+                        </TableCell>
+                        <TableCell className="p-4 text-gray-700">
+                          {data.products.map((d) => (
+                            <div key={d._id} className="flex items-center">
+                              {d.name}
+                              <Separator
+                                orientation="vertical"
+                                className="mx-2 h-4"
+                              />
+                            </div>
+                          ))}
+                        </TableCell>
+                        <TableCell className="p-4 text-gray-700 hidden md:table-cell">
+                          {
+                            userCategoryList?.find(
+                              (f) => f.level === String(data.accessLevel)
+                            )?.name
+                          }
+                        </TableCell>
+                        <TableCell className="p-4 text-gray-700 hidden md:table-cell">
+                          <span
+                            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                              data.isReservable
+                                ? 'bg-green-100 text-green-800'
+                                : 'bg-gray-100 text-gray-800'
+                            }`}
                           >
-                            {d.name} : {addComma(d.pinCount ?? 0)} 개
-                            <Separator
-                              orientation="vertical"
-                              className="mx-2 h-4"
-                            />
-                          </div>
-                        ))}
-                      </TableCell>
-                      <TableCell className="p-4 text-center">
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="icon"
-                          onClick={(e: FormEvent<HTMLButtonElement>) => {
-                            e.stopPropagation();
-                            handleDeleteProduct({
-                              id: data._id ?? '',
-                              title: data.name,
-                            });
-                          }}
-                        >
-                          <RiDeleteBin6Line className="h-4 w-4" />
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
+                            {data.isReservable ? 'Y' : 'N'}
+                          </span>
+                        </TableCell>
+                        <TableCell className="p-4 text-gray-700 text-right">
+                          {addComma(data.price)} 원
+                        </TableCell>
+                        <TableCell className="p-4 text-gray-700 text-right hidden md:table-cell">
+                          {data.products.map((d) => (
+                            <div
+                              key={d._id}
+                              className="flex items-center justify-end"
+                            >
+                              {d.name} : {addComma(d.pinCount ?? 0)} 개
+                              <Separator
+                                orientation="vertical"
+                                className="mx-2 h-4"
+                              />
+                            </div>
+                          ))}
+                        </TableCell>
+                        <TableCell className="p-4 text-center">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="hover:bg-destructive/10"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteProduct({
+                                id: data._id ?? '',
+                                title: data.name,
+                              });
+                            }}
+                          >
+                            <RiDeleteBin6Line className="w-4 h-4 text-destructive" />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </div>
           </div>
         </div>
         <div className="border-t border-gray-200">

@@ -66,14 +66,13 @@ export default function NotificationsForm() {
     notificationsForm.resetField('image');
   };
 
-  const handleSubmit = () => {
-    const { title, image } = notificationsForm.getValues();
+  const handleSubmit = (values: NotificationsFormValues) => {
     const formData = new FormData();
 
     // 제목 추가
-    formData.append('title', title);
-    if (image instanceof File) {
-      formData.append('image', image); // File만 추가
+    formData.append('title', values.title);
+    if (values.image instanceof File) {
+      formData.append('image', values.image); // File만 추가
     }
 
     // FormData를 전달
@@ -81,54 +80,61 @@ export default function NotificationsForm() {
   };
 
   return (
-    <div className="container">
-      <h1>팝업 등록</h1>
-
-      <div className="space-y-8">
-        <Form {...notificationsForm}>
-          <form
-            onSubmit={notificationsForm.handleSubmit(handleSubmit)}
-            className="space-y-8"
-          >
+    <div className="w-full max-w-4xl mx-auto p-4 md:p-6 lg:p-8">
+      <Form {...notificationsForm}>
+        <form
+          onSubmit={notificationsForm.handleSubmit(handleSubmit)}
+          className="space-y-8"
+        >
+          <div className="grid gap-6">
             <FormField
               control={notificationsForm.control}
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>팝업 제목</FormLabel>
+                  <FormLabel className="text-base font-semibold">
+                    팝업 제목
+                  </FormLabel>
                   <FormControl>
                     <Input
                       {...field}
                       type="text"
                       placeholder="제목을 입력해 주세요."
                       value={field.value ?? ''}
+                      className="w-full transition-all focus-visible:ring-2 focus-visible:ring-primary"
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-sm" />
                 </FormItem>
               )}
             />
 
-            <div>
+            <div className="space-y-4">
               {blobImage ? (
-                <div>
-                  <Label>이미지</Label>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    type="button"
-                    onClick={() => handleDeleteImage()}
-                  >
-                    <FaMinus />
-                  </Button>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-base font-semibold">이미지</Label>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      type="button"
+                      onClick={() => handleDeleteImage()}
+                      className="flex items-center gap-2 hover:bg-destructive/90 hover:text-destructive-foreground transition-colors"
+                    >
+                      <FaMinus className="h-4 w-4" />
+                      <span>삭제</span>
+                    </Button>
+                  </div>
 
                   {blobImage && (
-                    <Image
-                      src={blobImage}
-                      width={250}
-                      height={250}
-                      alt="등록 이미지"
-                    />
+                    <div className="relative w-full aspect-video max-w-2xl mx-auto rounded-lg overflow-hidden bg-secondary/20">
+                      <Image
+                        src={blobImage}
+                        fill
+                        className="object-contain"
+                        alt="등록 이미지"
+                      />
+                    </div>
                   )}
                 </div>
               ) : (
@@ -137,30 +143,48 @@ export default function NotificationsForm() {
                   name="image"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>이미지</FormLabel>
+                      <FormLabel className="text-base font-semibold">
+                        이미지
+                      </FormLabel>
                       <FormControl>
-                        <Input
-                          className="flex-initial"
-                          type="file"
-                          accept="image/*"
-                          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                            handleInputFileChange(e, { ...field })
-                          }
-                        />
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                          <Input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) =>
+                              handleInputFileChange(e, { ...field })
+                            }
+                            className="w-full h-full py-2 file:mr-4 file:py-2 file:px-4 
+                            file:rounded-lg file:border-0
+                            file:text-sm file:font-semibold
+                            file:bg-blue-600 file:text-white
+                            hover:file:bg-blue-700 cursor-pointer
+                            text-sm text-muted-foreground
+                            file:transition-colors file:duration-200"
+                          />
+                        </div>
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-sm" />
                     </FormItem>
                   )}
                 />
               )}
             </div>
+          </div>
 
-            <div className="flex justify-center pt-4">
-              <Button type="submit">등록</Button>
-            </div>
-          </form>
-        </Form>
-      </div>
+          <div className="flex justify-end pt-4">
+            <Button
+              type="submit"
+              size="lg"
+              disabled={createNotifications.isPending}
+              className="min-w-[120px] bg-blue-600 hover:bg-blue-700 text-white 
+                transition-colors duration-200 shadow-sm hover:shadow-md"
+            >
+              {createNotifications.isPending ? '처리중...' : '등록하기'}
+            </Button>
+          </div>
+        </form>
+      </Form>
     </div>
   );
 }
