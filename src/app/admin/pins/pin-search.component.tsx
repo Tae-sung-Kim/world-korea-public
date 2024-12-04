@@ -39,7 +39,7 @@ export default function PinSearch() {
   };
 
   return (
-    <div className="flex items-center gap-4 p-4 bg-white rounded-lg shadow-sm flex-1">
+    <div className="flex items-center gap-4 p-4 rounded-lg flex-1">
       <Label className="text-sm font-medium">상품명</Label>
       <Input
         value={value}

@@ -147,13 +147,13 @@ export default function PinList({ tableId }: Props) {
   };
 
   return (
-    <div className="bg-white p-4 rounded-lg shadow-sm">
-      <div className="relative">
-        <div className="max-h-[calc(100vh-300px)] overflow-y-auto">
-          <div className="overflow-x-auto">
+    <>
+      <div className="flex-1 bg-white rounded-lg shadow-sm">
+        <div className="relative h-full flex flex-col">
+          <div className="absolute inset-0 overflow-auto">
             <div className="min-w-[1024px]">
               <Table id={tableId}>
-                <TableHeader className="sticky top-0 bg-white border-b">
+                <TableHeader className="bg-gray-50 sticky top-0 z-10">
                   <TableRow className="border-b border-gray-200">
                     <TableHead
                       className="w-[50px] h-12 text-sm font-semibold text-gray-900"
@@ -168,7 +168,7 @@ export default function PinList({ tableId }: Props) {
                       번호
                     </TableHead>
                     <TableHead
-                      className="w-[200px] h-12 text-sm font-semibold text-gray-900"
+                      className="w-[200px] h-12 text-sm font-semibold text-gray-900 cursor-pointer"
                       onClick={() => handleSortClick('number')}
                     >
                       <SortIcons
@@ -177,7 +177,7 @@ export default function PinList({ tableId }: Props) {
                       />
                     </TableHead>
                     <TableHead
-                      className="h-12 text-sm font-semibold text-gray-900"
+                      className="h-12 text-sm font-semibold text-gray-900 cursor-pointer"
                       onClick={() => handleSortClick('product.name')}
                     >
                       <SortIcons
@@ -192,7 +192,7 @@ export default function PinList({ tableId }: Props) {
                       />
                     </TableHead>
                     <TableHead
-                      className="w-[110px] h-12 text-sm font-semibold text-gray-900 text-center"
+                      className="w-[110px] h-12 text-sm font-semibold text-gray-900 text-center cursor-pointer"
                       onClick={() => handleSortClick('endDate')}
                     >
                       <SortIcons
@@ -201,7 +201,7 @@ export default function PinList({ tableId }: Props) {
                       />
                     </TableHead>
                     <TableHead
-                      className="w-[110px] h-12 text-sm font-semibold text-gray-900 text-center"
+                      className="w-[110px] h-12 text-sm font-semibold text-gray-900 text-center cursor-pointer"
                       onClick={() => handleSortClick('createdAt')}
                     >
                       <SortIcons
@@ -210,7 +210,7 @@ export default function PinList({ tableId }: Props) {
                       />
                     </TableHead>
                     <TableHead
-                      className="w-[100px] h-12 text-sm font-semibold text-gray-900 text-center"
+                      className="w-[100px] h-12 text-sm font-semibold text-gray-900 text-center cursor-pointer"
                       onClick={() => handleSortClick('usedDate')}
                     >
                       <SortIcons
@@ -225,35 +225,39 @@ export default function PinList({ tableId }: Props) {
                   {sortedData.map((pin: Pin, idx: number) => {
                     const isUsed = pin.usedDate;
                     return (
-                      <TableRow key={pin._id} className="hover:bg-gray-50">
-                        <TableCell data-exclude-excel>
+                      <TableRow
+                        key={pin._id}
+                        className="hover:bg-gray-50 transition-colors"
+                      >
+                        <TableCell className="p-4" data-exclude-excel>
                           <Checkbox />
                         </TableCell>
-                        <TableCell data-exclude-excel>
+                        <TableCell className="p-4" data-exclude-excel>
                           {pinData.totalItems - (pageNumber - 1) * pageSize - idx}
                         </TableCell>
                         <TableCell
-                          className="font-medium cursor-pointer"
+                          className="p-4 font-medium text-gray-900 cursor-pointer"
                           onClick={() => handlePinNumberClick(pin.number)}
                         >
                           {splitFourChar(pin.number)}
                         </TableCell>
                         <TableCell
-                          className="cursor-pointer"
+                          className="p-4 text-gray-700 cursor-pointer"
                           onClick={() => handlePinListClick(pin.product?._id)}
                         >
                           {pin.product?.name}
                         </TableCell>
-                        <TableCell>업체명</TableCell>
-                        <TableCell className="text-right">
-                          {pin.endDate &&
-                            new Date(pin.endDate).toLocaleDateString()}
+                        <TableCell className="p-4 text-gray-700 text-center">
+                          업체명
                         </TableCell>
-                        <TableCell className="text-right">
+                        <TableCell className="p-4 text-gray-700 text-center">
+                          {pin.endDate && new Date(pin.endDate).toLocaleDateString()}
+                        </TableCell>
+                        <TableCell className="p-4 text-gray-700 text-center">
                           {pin.createdAt &&
                             new Date(pin.createdAt).toLocaleDateString()}
                         </TableCell>
-                        <TableCell className="text-center">
+                        <TableCell className="p-4 text-center">
                           <>
                             <Checkbox
                               onCheckedChange={() =>
@@ -268,7 +272,7 @@ export default function PinList({ tableId }: Props) {
                             <span className="hidden">{!!isUsed ? 'Y' : 'N'}</span>
                           </>
                         </TableCell>
-                        <TableCell className="text-center">
+                        <TableCell className="p-4 text-center">
                           <Button
                             variant="ghost"
                             size="icon"
@@ -290,13 +294,22 @@ export default function PinList({ tableId }: Props) {
               </Table>
             </div>
           </div>
-        </div>
-      </div>
-      <div className="border-t border-gray-200">
-        <div className="flex items-center justify-between px-6 py-4 bg-gray-50">
-          <div className="text-sm font-medium text-gray-900">총 핀</div>
-          <div className="text-sm font-medium text-gray-900">
-            {addComma(pinData.totalItems)} 개
+          <div className="mt-auto sticky bottom-0 bg-white border-t border-gray-200 shadow-[0_-4px_6px_-1px_rgb(0,0,0,0.1)]">
+            <div className="px-6 py-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <span className="text-sm font-semibold text-gray-900">
+                    총 핀번호
+                  </span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="text-lg font-bold text-primary">
+                    {addComma(pinData.totalItems)}
+                  </span>
+                  <span className="text-sm font-medium text-gray-600">개</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -309,6 +322,6 @@ export default function PinList({ tableId }: Props) {
           minPages={5}
         />
       </div>
-    </div>
+    </>
   );
 }
