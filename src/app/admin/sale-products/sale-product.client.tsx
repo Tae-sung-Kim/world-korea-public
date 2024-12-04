@@ -227,11 +227,20 @@ export default function SaleProductListClient() {
             </div>
           </div>
         </div>
-        <div className="border-t border-gray-200">
-          <div className="flex items-center justify-between px-6 py-4 bg-gray-50">
-            <div className="text-sm font-medium text-gray-900">총 상품</div>
-            <div className="text-sm font-medium text-gray-900">
-              {addComma(saleProductData.totalItems)} 개
+        <div className="mt-auto sticky bottom-0 bg-white border-t border-gray-200 shadow-[0_-4px_6px_-1px_rgb(0,0,0,0.1)]">
+          <div className="px-6 py-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <span className="text-sm font-semibold text-gray-900">
+                  총 상품
+                </span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="text-lg font-bold text-primary">
+                  {addComma(saleProductData.totalItems)}
+                </span>
+                <span className="text-sm font-medium text-gray-600">개</span>
+              </div>
             </div>
           </div>
         </div>

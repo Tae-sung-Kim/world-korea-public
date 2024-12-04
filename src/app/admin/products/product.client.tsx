@@ -16,7 +16,6 @@ import {
   TableBody,
   TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -107,7 +106,7 @@ export default function ProductListClient() {
         <ProductSearch />
       </div>
       <div className="flex-1 bg-white rounded-lg shadow-sm">
-        <div className="relative h-full">
+        <div className="relative h-full flex flex-col">
           <div className="absolute inset-0 overflow-auto">
             <Table>
               <TableHeader className="bg-gray-50 sticky top-0 z-10">
@@ -232,29 +231,24 @@ export default function ProductListClient() {
                   </TableRow>
                 ))}
               </TableBody>
-              <TableFooter className="bg-gray-50/80 border-t border-gray-200">
-                <TableRow>
-                  <TableCell colSpan={8} className="py-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-primary" />
-                        <span className="text-sm font-medium text-gray-900">
-                          총 상품
-                        </span>
-                      </div>
-                      <div className="flex items-center">
-                        <span className="text-sm font-semibold text-primary">
-                          {addComma(productData.totalItems)}
-                        </span>
-                        <span className="text-sm font-medium text-gray-600 ml-1">
-                          개
-                        </span>
-                      </div>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              </TableFooter>
             </Table>
+          </div>
+          <div className="mt-auto sticky bottom-0 bg-white border-t border-gray-200 shadow-[0_-4px_6px_-1px_rgb(0,0,0,0.1)]">
+            <div className="px-6 py-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <span className="text-sm font-semibold text-gray-900">
+                    총 상품
+                  </span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="text-lg font-bold text-primary">
+                    {addComma(productData.totalItems)}
+                  </span>
+                  <span className="text-sm font-medium text-gray-600">개</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

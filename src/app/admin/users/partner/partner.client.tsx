@@ -109,6 +109,23 @@ export default function PartnerListClient() {
             </Table>
           </div>
         </div>
+        <div className="mt-auto sticky bottom-0 bg-white border-t border-gray-200 shadow-[0_-4px_6px_-1px_rgb(0,0,0,0.1)]">
+          <div className="px-6 py-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <span className="text-sm font-semibold text-gray-900">
+                  총 파트너
+                </span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="text-lg font-bold text-primary">
+                  {partnersData.length}
+                </span>
+                <span className="text-sm font-medium text-gray-600">명</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

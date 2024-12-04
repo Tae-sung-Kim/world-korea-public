@@ -4,7 +4,7 @@ import QrCodeScanButton from '@/app/admin/components/qr-code-scan-button.compone
 import QrCodeScanModal from '@/app/admin/modals/qr-code-scan.modal';
 import { useUsedPinListMutation } from '@/app/admin/queries';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Form,
   FormControl,
@@ -112,7 +112,9 @@ export default function PinUsed() {
     <div className="container mx-auto px-4 py-8">
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">핀번호 사용 관리</CardTitle>
+          <CardTitle className="text-2xl font-bold text-center">
+            핀번호 사용 관리
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="flex justify-end">
@@ -129,7 +131,9 @@ export default function PinUsed() {
                 render={({ field }) => {
                   return (
                     <FormItem>
-                      <FormLabel className="text-lg font-semibold">핀번호 입력</FormLabel>
+                      <FormLabel className="text-lg font-semibold">
+                        핀번호 입력
+                      </FormLabel>
                       <FormControl>
                         <Textarea
                           {...field}
@@ -144,7 +148,7 @@ export default function PinUsed() {
               />
 
               <div className="flex justify-center pt-4">
-                <Button 
+                <Button
                   size="lg"
                   className="w-full sm:w-auto min-w-[200px] transition-all hover:scale-105"
                 >
