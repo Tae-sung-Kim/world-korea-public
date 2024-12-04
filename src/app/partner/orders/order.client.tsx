@@ -8,11 +8,11 @@ export default function OrderClient() {
   const tableIdRef = useRef('partnerOrderExportExcelTable');
 
   return (
-    <>
-      <div className="flex">
-        <ExportExcelButton tableId={tableIdRef.current} fileName="test" />
+    <div className="h-[calc(100vh-80px)] flex flex-col max-w-[1920px] mx-auto px-4">
+      <div className="flex items-center justify-end mb-4">
+        <ExportExcelButton tableId={tableIdRef.current} fileName="주문리스트" />
       </div>
       <OrderList tableId={tableIdRef.current} />
-    </>
+    </div>
   );
 }
