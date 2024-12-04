@@ -1,7 +1,7 @@
 'use client';
 
 import ExportExcelButton from '@/app/admin/components/export-excel-button.component';
-import OrderList from '@/app/components/orders/order-list.components';
+import OrderList from '@/app/components/orders/order-list.component';
 import { useRef } from 'react';
 
 export default function OrderClient() {

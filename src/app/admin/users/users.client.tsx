@@ -22,8 +22,8 @@ export default function UsersClient() {
 
   return (
     <div className="h-[calc(100vh-80px)] flex flex-col max-w-[1920px] mx-auto">
-      <div className="flex-1 bg-white rounded-lg shadow-sm">
-        <div className="relative h-full">
+      <div className="flex-1 bg-white rounded-lg shadow-sm flex flex-col">
+        <div className="relative flex-1">
           <div className="absolute inset-0 overflow-auto">
             <Table>
               <TableHeader className="bg-gray-50 sticky top-0 z-10">
@@ -124,7 +124,7 @@ export default function UsersClient() {
             </Table>
           </div>
         </div>
-        <div className="mt-auto sticky bottom-0 bg-white border-t border-gray-200 shadow-[0_-4px_6px_-1px_rgb(0,0,0,0.1)]">
+        <div className="bg-white border-t border-gray-200 shadow-[0_-4px_6px_-1px_rgb(0,0,0,0.1)]">
           <div className="px-6 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
