@@ -39,7 +39,7 @@ export async function PATCH(req: NextRequest, ctx: { params: { id: string } }) {
     }
 
     // 주문 상태 업데이트
-    await OrderModel.updateOne({ _id: orderId }, { $set: { status: null } });
+    await OrderModel.deleteOne({ _id: orderId });
 
     // PIN 상태 업데이트
     const pinIds = orderData.tickets.map((ticket) => ticket.pins).flat();
