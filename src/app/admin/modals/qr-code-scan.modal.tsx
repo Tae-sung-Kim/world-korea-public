@@ -66,15 +66,25 @@ export default function QrCodeScanModal({
   }, [handleScan, isProcessing]);
 
   return (
-    <div className="space-y-8">
-      <video
-        ref={videoRef}
-        style={{ width: '300px', height: '300px', objectFit: 'cover' }}
-        autoPlay
-        playsInline
-      />
-
-      <Button onClick={onCancel}>닫기</Button>
+    <div className="flex flex-col items-center space-y-4 p-2 sm:p-4 w-full">
+      <div className="relative w-full max-w-[90vw] sm:max-w-md aspect-square rounded-lg overflow-hidden shadow-lg bg-gray-900">
+        <video
+          ref={videoRef}
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 border-2 border-blue-400 opacity-50 animate-pulse"></div>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-36 h-36 sm:w-48 sm:h-48 border-2 border-white/50 rounded-lg"></div>
+        </div>
+      </div>
+      <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 mt-2 sm:mt-4 w-full sm:w-auto">
+        <Button
+          onClick={onCancel}
+          className="w-full sm:w-auto px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-200"
+        >
+          취소
+        </Button>
+      </div>
     </div>
   );
 }

@@ -5,8 +5,8 @@ import { Tickets } from '@/definitions';
 import { QRCodeCanvas } from 'qrcode.react';
 
 type Props = {
-  pinNumber?: string; // 단건 - 핀번호 사용 목록
-  tickets?: Tickets[]; // 다건 - 구매 목록
+  pinNumber?: string;
+  tickets?: Tickets[];
 };
 
 const Wrapper = ({
@@ -17,49 +17,57 @@ const Wrapper = ({
   children: React.ReactNode;
 }) => {
   return (
-    <>
-      {gridCols < 3 ? (
-        <div className="flex justify-center grid grid-cols-2">{children}</div>
-      ) : (
-        <div className="flex justify-center grid grid-cols-4">{children}</div>
-      )}
-    </>
+    <div className={`grid gap-4 w-full ${
+      gridCols < 3 
+        ? 'grid-cols-1 sm:grid-cols-2' 
+        : 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4'
+    }`}>
+      {children}
+    </div>
   );
 };
 
 export default function QrCodeModal({ pinNumber, tickets }: Props) {
-  //상품정보 조회해야 함
   return (
-    <>
+    <div className="p-3 bg-white rounded-lg shadow-lg">
       {Array.isArray(tickets) && tickets.length > 0 ? (
-        <ScrollArea>
-          <div className="space-y-8 max-h-[400px] min-h-52">
+        <ScrollArea className="w-full">
+          <div className="space-y-4 min-h-[180px] max-h-[60vh]">
             <Wrapper gridCols={tickets.length}>
-              {tickets.map((d) => {
-                return (
+              {tickets.map((d) => (
+                <div 
+                  key={d._id}
+                  className="flex flex-col items-center p-3 bg-gray-50 rounded-lg transition-transform hover:scale-105"
+                >
                   <QRCodeCanvas
-                    key={d._id}
                     value={window.location.origin + '/short/o/' + d.shortId}
-                    className="m-10"
+                    className="w-full max-w-[180px] h-auto"
                   />
-                );
-              })}
+                  <span className="mt-1.5 text-sm text-gray-600 break-all text-center">
+                    {d.shortId}
+                  </span>
+                </div>
+              ))}
             </Wrapper>
           </div>
         </ScrollArea>
       ) : (
         <>
           {pinNumber && (
-            <div className="space-y-8">
-              <div className="flex justify-center items-stretch">
-                <div className="py-8">
-                  <QRCodeCanvas value={pinNumber} />
-                </div>
+            <div className="flex flex-col items-center space-y-3">
+              <div className="p-4 bg-gray-50 rounded-lg transition-transform hover:scale-105">
+                <QRCodeCanvas 
+                  value={pinNumber}
+                  className="w-full max-w-[220px] h-auto"
+                />
               </div>
+              <span className="text-sm text-gray-600 break-all text-center">
+                {pinNumber}
+              </span>
             </div>
           )}
         </>
       )}
-    </>
+    </div>
   );
 }

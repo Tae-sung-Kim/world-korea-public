@@ -7,6 +7,8 @@ import {
   ModalFooter,
   ModalHeader,
 } from '@/components/ui/modal';
+import { cn } from '@/lib/utils';
+import { IoClose } from 'react-icons/io5';
 import {
   createContext,
   ReactNode,
@@ -214,13 +216,22 @@ function ModalProvider({ children }: { children: ReactNode }) {
                       {title}
                       {useCloseButton && (
                         <Button
-                          className="bg-red-400 rounded-full hover:bg-red-300 absolute top-0 right-0 h-7 w-7"
+                          className={cn(
+                            'absolute right-4 top-4',
+                            'p-2 h-8 w-8 rounded-full',
+                            'bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700',
+                            'text-blue-600/80 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300',
+                            'border border-gray-100 dark:border-gray-700',
+                            'shadow-sm',
+                            'transform transition-all duration-200 ease-in-out',
+                            'focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:ring-offset-2 dark:focus:ring-offset-gray-900'
+                          )}
                           onClick={() => {
                             onClose && onClose();
                             closeModal(id);
                           }}
                         >
-                          X
+                          <IoClose className="h-5 w-5" />
                         </Button>
                       )}
                     </ModalHeader>
@@ -239,17 +250,31 @@ function ModalProvider({ children }: { children: ReactNode }) {
                   )}
                   {showFooter && (
                     <ModalFooter>
-                      <div className="flex justify-center">
+                      <div className="flex justify-end gap-3 px-6 py-4">
                         {type === MODAL_TYPE.CONFIRM && (
                           <Button
-                            className="p-2 mx-5 bg-slate-400 hover:bg-slate-300 min-w-36"
+                            className={cn(
+                              'px-4 py-2 min-w-[120px]',
+                              'bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700',
+                              'text-gray-700 dark:text-gray-300',
+                              'transition-colors duration-200',
+                              'rounded-lg',
+                              'focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 dark:focus:ring-offset-gray-900'
+                            )}
                             onClick={onCancel}
                           >
                             {cancelName ?? '취소'}
                           </Button>
                         )}
                         <Button
-                          className="p-2 mx-5 bg-blue-400 hover:bg-blue-300 min-w-36"
+                          className={cn(
+                            'px-4 py-2 min-w-[120px]',
+                            'bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700',
+                            'text-white',
+                            'transition-colors duration-200',
+                            'rounded-lg',
+                            'focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 dark:focus:ring-offset-gray-900'
+                          )}
                           onClick={onOk}
                         >
                           {okName ?? '확인'}
@@ -268,22 +293,6 @@ function ModalProvider({ children }: { children: ReactNode }) {
     </ModalContext.Provider>
   );
 }
-
-// const ModalPortal = ({ children }: { children: ReactNode }) => {
-//   let ModalRootElement = document.getElementById('modal-root');
-//   console.log('ModalRootElement 확인', ModalRootElement);
-//   if (!ModalRootElement) {
-//     document.body.insertAdjacentHTML(
-//       'beforeend',
-//       '<div id="modal-root"></div>'
-//     );
-
-//     ModalRootElement = document.createElement('div');
-//     ModalRootElement.id = 'modal-root';
-//   }
-
-//   return ReactDOM.createPortal(children, ModalRootElement);
-// };
 
 const ModalPortal = ({ children }: { children: ReactNode }) => {
   const [modalRootElement, setModalRootElement] = useState<HTMLElement | null>(
