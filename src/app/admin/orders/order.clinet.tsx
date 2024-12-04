@@ -10,13 +10,17 @@ export default function OrderClient() {
   const tableIdRef = useRef('orderExportExcelTable');
 
   return (
-    <>
-      <div className="flex">
-        <OrderSearch />
-        <ExportExcelButton tableId={tableIdRef.current} fileName="test" />
-        <QrCodeScanButton onResiveData={() => {}} />
+    <div className="h-[calc(100vh-80px)] flex flex-col max-w-[1920px] mx-auto px-4">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex-1 max-w-xl">
+          <OrderSearch />
+        </div>
+        <div className="flex items-center gap-2">
+          <ExportExcelButton tableId={tableIdRef.current} fileName="주문리스트" />
+          <QrCodeScanButton onResiveData={() => {}} />
+        </div>
       </div>
       <OrderList tableId={tableIdRef.current} />
-    </>
+    </div>
   );
 }

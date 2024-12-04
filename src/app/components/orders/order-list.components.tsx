@@ -128,22 +128,22 @@ export default function OrderList({ tableId }: Props) {
   };
 
   return (
-    <div className="h-[calc(100vh-80px)] flex flex-col max-w-[1600px] mx-auto">
+    <>
       <div className="flex-1 bg-white rounded-lg shadow-sm">
         <div className="relative h-full flex flex-col">
-          <div className="flex-1 overflow-auto">
-            <div className="overflow-x-auto min-w-full">
-              <Table id={tableId ?? 'exportExcelTableId'} className="min-w-[1000px]">
+          <div className="absolute inset-0 overflow-auto">
+            <div className="min-w-[1024px] pb-16">
+              <Table id={tableId ?? 'exportExcelTableId'}>
                 <TableHeader className="bg-gray-50 sticky top-0 z-10">
-                  <TableRow className="border-b border-gray-200 h-12">
+                  <TableRow className="border-b border-gray-200">
                     <TableHead
-                      className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap w-[60px]"
+                      className="w-[50px] h-12 text-sm font-semibold text-gray-900"
                       data-exclude-excel
                     >
                       번호
                     </TableHead>
                     <TableHead
-                      className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap cursor-pointer hover:text-gray-700"
+                      className="w-[200px] h-12 text-sm font-semibold text-gray-900 cursor-pointer"
                       onClick={() => handleSortClick('saleProduct.name')}
                     >
                       <SortIcons
@@ -151,14 +151,14 @@ export default function OrderList({ tableId }: Props) {
                         order={sortColumn === 'saleProduct.name' ? order : ''}
                       />
                     </TableHead>
-                    <TableHead className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap hidden md:table-cell w-[120px]">
+                    <TableHead className="w-[110px] h-12 text-sm font-semibold text-gray-900 text-center">
                       업체명
                     </TableHead>
-                    <TableHead className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap hidden md:table-cell w-[100px]">
+                    <TableHead className="w-[110px] h-12 text-sm font-semibold text-gray-900 text-center">
                       담당자명
                     </TableHead>
                     <TableHead
-                      className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap cursor-pointer hover:text-gray-700 text-center w-[80px]"
+                      className="w-[100px] h-12 text-sm font-semibold text-gray-900 text-center cursor-pointer"
                       onClick={() => handleSortClick('quantity')}
                     >
                       <SortIcons
@@ -167,7 +167,7 @@ export default function OrderList({ tableId }: Props) {
                       />
                     </TableHead>
                     <TableHead
-                      className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap cursor-pointer hover:text-gray-700 text-right hidden sm:table-cell w-[100px]"
+                      className="w-[110px] h-12 text-sm font-semibold text-gray-900 text-right cursor-pointer"
                       onClick={() => handleSortClick('totalPrice')}
                     >
                       <SortIcons
@@ -176,7 +176,7 @@ export default function OrderList({ tableId }: Props) {
                       />
                     </TableHead>
                     <TableHead
-                      className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap cursor-pointer hover:text-gray-700 text-center hidden lg:table-cell w-[100px]"
+                      className="w-[110px] h-12 text-sm font-semibold text-gray-900 text-center cursor-pointer"
                       onClick={() => handleSortClick('orderDate')}
                     >
                       <SortIcons
@@ -184,52 +184,45 @@ export default function OrderList({ tableId }: Props) {
                         order={sortColumn === 'orderDate' ? order : ''}
                       />
                     </TableHead>
-                    <TableHead className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap text-center hidden lg:table-cell w-[90px]">
+                    <TableHead className="w-[110px] h-12 text-sm font-semibold text-gray-900 text-center">
                       방문예정일
                     </TableHead>
                     <TableHead
-                      className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap text-center w-[180px]"
+                      className="w-[150px] h-12 text-sm font-semibold text-gray-900 text-center"
                       colSpan={3}
-                    >
-                      액션
-                    </TableHead>
+                    ></TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {sortedData.map((d, idx) => (
                     <TableRow
                       key={d._id}
-                      className="hover:bg-gray-50 transition-colors h-14"
+                      className="hover:bg-gray-50 transition-colors"
                     >
-                      <TableCell
-                        className="px-4 py-3 text-gray-700 whitespace-nowrap"
-                        data-exclude-excel
-                      >
+                      <TableCell className="p-4" data-exclude-excel>
                         {ordersData.totalItems -
                           (pageNumber - 1) * pageSize -
                           idx}
                       </TableCell>
                       <TableCell
-                        className="px-4 py-3 font-medium text-blue-600 hover:text-blue-800 cursor-pointer whitespace-nowrap"
+                        className="p-4 font-medium text-blue-600 hover:text-blue-800 cursor-pointer"
                         onClick={() => handleOrderListClick(d.saleProduct._id)}
                       >
                         {d.saleProduct.name}
                       </TableCell>
-                      <TableCell className="px-4 py-3 text-gray-700 whitespace-nowrap hidden md:table-cell">
-                        {/* {d.user && d.user.name} */}
+                      <TableCell className="p-4 text-gray-700 text-center">
                         업체명으로
                       </TableCell>
-                      <TableCell className="px-4 py-3 text-gray-700 whitespace-nowrap hidden md:table-cell">
-                        {/* {d.user && d.user.name} */}
+                      <TableCell className="p-4 text-gray-700 text-center">
                         업체 담당자명
                       </TableCell>
-                      <TableCell className="px-4 py-3 text-gray-700 whitespace-nowrap text-center">
+                      <TableCell className="p-4 text-gray-700 text-center">
                         {addComma(d.quantity ?? 0)}
                       </TableCell>
-                      <TableCell className="px-4 py-3 text-gray-700 whitespace-nowrap text-right hidden sm:table-cell">
+                      <TableCell className="p-4 text-gray-700 text-right">
                         {addComma(d.totalPrice ?? 0)}
                       </TableCell>
-                      <TableCell className="px-4 py-3 text-gray-700 whitespace-nowrap text-center hidden lg:table-cell">
+                      <TableCell className="p-4 text-gray-700 text-center">
                         {d.orderDate &&
                           new Date(d.orderDate).toLocaleDateString('ko-KR', {
                             year: '2-digit',
@@ -237,7 +230,7 @@ export default function OrderList({ tableId }: Props) {
                             day: '2-digit',
                           })}
                       </TableCell>
-                      <TableCell className="px-4 py-3 text-gray-700 whitespace-nowrap text-center hidden lg:table-cell">
+                      <TableCell className="p-4 text-gray-700 text-center">
                         방문예정일은(유효기간, 선택 날짜)
                       </TableCell>
                       <TableCell className="p-2 text-center">
@@ -286,30 +279,27 @@ export default function OrderList({ tableId }: Props) {
               </Table>
             </div>
           </div>
-          <div className="sticky bottom-0 bg-white border-t border-gray-200 z-10">
-            <Table>
-              <TableFooter>
-                <TableRow>
-                  <TableCell
-                    colSpan={6}
-                    className="px-4 py-3 text-sm font-semibold text-gray-900 h-14"
-                  >
+          <div className="mt-auto sticky bottom-0 bg-white border-t border-gray-200 shadow-[0_-4px_6px_-1px_rgb(0,0,0,0.1)] z-10">
+            <div className="px-6 py-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <span className="text-sm font-semibold text-gray-900">
                     총 구매
-                  </TableCell>
-                  <TableCell
-                    colSpan={5}
-                    className="px-4 py-3 text-sm font-semibold text-gray-900 text-right h-14"
-                  >
-                    {addComma(ordersData.totalItems)} 개
-                  </TableCell>
-                </TableRow>
-              </TableFooter>
-            </Table>
+                  </span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="text-lg font-bold text-primary">
+                    {addComma(ordersData.totalItems)}
+                  </span>
+                  <span className="text-sm font-medium text-gray-600">개</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="mt-4 flex justify-center">
+      <div className="mt-4">
         <Pagination
           pageNumber={pageNumber}
           pageSize={pageSize}
@@ -318,6 +308,6 @@ export default function OrderList({ tableId }: Props) {
           minPages={5}
         />
       </div>
-    </div>
+    </>
   );
 }

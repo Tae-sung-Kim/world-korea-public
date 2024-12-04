@@ -151,7 +151,7 @@ export default function PinList({ tableId }: Props) {
       <div className="flex-1 bg-white rounded-lg shadow-sm">
         <div className="relative h-full flex flex-col">
           <div className="absolute inset-0 overflow-auto">
-            <div className="min-w-[1024px]">
+            <div className="min-w-[1024px] pb-16">
               <Table id={tableId}>
                 <TableHeader className="bg-gray-50 sticky top-0 z-10">
                   <TableRow className="border-b border-gray-200">
@@ -294,7 +294,7 @@ export default function PinList({ tableId }: Props) {
               </Table>
             </div>
           </div>
-          <div className="mt-auto sticky bottom-0 bg-white border-t border-gray-200 shadow-[0_-4px_6px_-1px_rgb(0,0,0,0.1)]">
+          <div className="mt-auto sticky bottom-0 bg-white border-t border-gray-200 shadow-[0_-4px_6px_-1px_rgb(0,0,0,0.1)] z-10">
             <div className="px-6 py-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
