@@ -67,6 +67,9 @@ export default function usePortonePayment() {
       setPaymentStatus(PaymentStatus.Success);
       router.refresh();
     } else {
+      await ordersService.patchCancel({
+        orderId: orderIdRef.current,
+      });
       toast.error(`결제 실패: ${error_msg}`);
       setPaymentStatus(PaymentStatus.Error);
     }

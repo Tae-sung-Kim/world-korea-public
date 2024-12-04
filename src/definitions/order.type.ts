@@ -24,6 +24,6 @@ export enum PaymentStatus {
 
 export type PaymentRequest = {
   orderId?: string;
-  paymentId: string | null | undefined;
+  paymentId?: string | null | undefined;
   amount?: number;
 };

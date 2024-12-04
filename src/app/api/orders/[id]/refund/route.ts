@@ -4,8 +4,8 @@ import { requiredIsMe } from '../../../utils/auth.util';
 import connectMongo from '@/app/api/libs/database';
 import { createResponse } from '@/app/api/utils/http.util';
 import { HTTP_STATUS, OrderStatus } from '@/definitions';
-import { NextRequest } from 'next/server';
 import axios from 'axios';
+import { NextRequest } from 'next/server';
 
 // 포트원 액세스 토큰 발급
 async function getPortoneAccessToken() {
@@ -42,7 +42,9 @@ async function requestRefund(accessToken: string, paymentId: string) {
     return response.data.response;
   } catch (error: any) {
     console.error('환불 요청 실패:', error.response?.data || error);
-    throw new Error(error.response?.data?.message || '환불 요청 중 오류가 발생했습니다.');
+    throw new Error(
+      error.response?.data?.message || '환불 요청 중 오류가 발생했습니다.'
+    );
   }
 }
 
@@ -107,9 +109,9 @@ export async function POST(req: NextRequest, ctx: { params: { id: string } }) {
         { _id: pinNumber },
         {
           $set: {
-            isUsed: false,
             orderStatus: OrderStatus.Unpaid,
             updatedAt: new Date(),
+            order: null,
           },
         },
         {
