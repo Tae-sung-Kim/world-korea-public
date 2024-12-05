@@ -130,9 +130,6 @@ export default function UserCategoriesClient() {
   return (
     <div className="h-full flex flex-col max-w-[1920px] mx-auto p-4">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-2xl font-bold tracking-tight text-gray-900">
-          회원등급 관리
-        </h2>
         <Button
           variant="outline"
           size="sm"
@@ -156,7 +153,7 @@ export default function UserCategoriesClient() {
 
       <div className="flex-1 bg-white rounded-lg shadow-sm overflow-hidden">
         <div className="h-full">
-          <div className="overflow-auto">
+          <div className="overflow-auto pt-8">
             <Form {...userCategoriesForm}>
               <Table>
                 <TableHeader className="bg-gray-50 sticky top-0 z-10">

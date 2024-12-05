@@ -91,19 +91,26 @@ export default function PinRegisterClient() {
 
   return (
     <div className="container mx-auto p-4 max-w-4xl">
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-2xl font-semibold mb-6 text-center">핀 번호 등록</h2>
+      <div className="bg-white rounded-lg shadow-md p-6 border-t border-gray-100">
         <Form {...pinForm}>
-          <form onSubmit={pinForm.handleSubmit(handleSubmit)} className="space-y-6">
+          <form
+            onSubmit={pinForm.handleSubmit(handleSubmit)}
+            className="space-y-6"
+          >
             <div className="grid gap-6 md:grid-cols-2">
               <FormField
                 control={pinForm.control}
                 name="productId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium">상품 선택</FormLabel>
+                    <FormLabel className="text-sm font-medium">
+                      상품 선택
+                    </FormLabel>
                     <FormControl>
-                      <Select onValueChange={field.onChange} value={field.value}>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
                         <SelectTrigger className="w-full">
                           <SelectValue placeholder="상품을 선택해주세요" />
                         </SelectTrigger>
@@ -129,7 +136,9 @@ export default function PinRegisterClient() {
               name="pinList"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">핀번호 등록</FormLabel>
+                  <FormLabel className="text-sm font-medium">
+                    핀번호 등록
+                  </FormLabel>
                   <FormControl>
                     <Textarea
                       {...field}
@@ -143,18 +152,15 @@ export default function PinRegisterClient() {
             />
 
             <div className="flex justify-end space-x-4 pt-6">
-              <Button 
-                type="button" 
+              <Button
+                type="button"
                 variant="outline"
                 onClick={handleResetFormData}
                 className="w-32"
               >
                 초기화
               </Button>
-              <Button 
-                type="submit" 
-                className="w-32"
-              >
+              <Button type="submit" className="w-32">
                 등록하기
               </Button>
             </div>

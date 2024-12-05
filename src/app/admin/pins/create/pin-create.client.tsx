@@ -105,12 +105,16 @@ export default function PinCreateClient() {
     <div className="container mx-auto py-8 px-4">
       <Card className="max-w-2xl mx-auto">
         <CardHeader>
-          <CardTitle>핀 번호 생성</CardTitle>
-          <CardDescription>새로운 핀 번호를 생성하기 위한 정보를 입력해주세요.</CardDescription>
+          <CardDescription>
+            새로운 핀 번호를 생성하기 위한 정보를 입력해주세요.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...pinForm}>
-            <form onSubmit={pinForm.handleSubmit(handleSubmit)} className="space-y-6">
+            <form
+              onSubmit={pinForm.handleSubmit(handleSubmit)}
+              className="space-y-6"
+            >
               <div className="grid gap-6 sm:grid-cols-2">
                 <FormField
                   control={pinForm.control}
@@ -119,7 +123,10 @@ export default function PinCreateClient() {
                     <FormItem>
                       <FormLabel>상품</FormLabel>
                       <FormControl>
-                        <Select onValueChange={field.onChange} value={field.value}>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value}
+                        >
                           <SelectTrigger className="w-full">
                             <SelectValue placeholder="선택" />
                           </SelectTrigger>

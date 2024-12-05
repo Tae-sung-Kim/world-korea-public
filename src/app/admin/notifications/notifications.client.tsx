@@ -24,7 +24,6 @@ export default function NotificationsListClient() {
     <div className="h-[calc(100vh-80px)] flex flex-col max-w-[1920px] mx-auto">
       <div className="flex-1 bg-white rounded-lg shadow-sm flex flex-col">
         <div className="flex-1 overflow-auto p-8">
-          <h1 className="text-3xl font-bold mb-6">알림 관리</h1>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {Array.isArray(notificationList) &&
               notificationList.map((d, idx) => (

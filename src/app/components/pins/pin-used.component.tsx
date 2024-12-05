@@ -1,10 +1,9 @@
 'use client';
 
 import QrCodeScanButton from '@/app/admin/components/qr-code-scan-button.component';
-import QrCodeScanModal from '@/app/admin/modals/qr-code-scan.modal';
 import { useUsedPinListMutation } from '@/app/admin/queries';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import {
   Form,
   FormControl,
@@ -29,8 +28,6 @@ const PinFormSchema = z.object({
 type PinFormValues = z.infer<typeof PinFormSchema>;
 
 export default function PinUsed() {
-  const { openModal } = useModalContext();
-
   const handleResetFormData = () => {
     pinForm.reset();
   };
@@ -99,12 +96,7 @@ export default function PinUsed() {
   return (
     <div className="container mx-auto px-4 py-8">
       <Card className="w-full max-w-4xl mx-auto">
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">
-            핀번호 사용 관리
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-6 pt-8">
           <div className="flex justify-end">
             <QrCodeScanButton onResiveData={handleSetData} />
           </div>

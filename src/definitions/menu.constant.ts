@@ -37,6 +37,10 @@ export const ADMIN_MENU: MenuSection[] = [
         label: '구매 목록',
         href: '/admin/orders',
       },
+      {
+        label: '단체예약 목록',
+        href: '/admin/group-reservations',
+      },
     ],
   },
   {

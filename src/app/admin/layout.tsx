@@ -1,6 +1,7 @@
 'use client';
 
 import AdminProtectedRoute from '@/app/admin/admin-protected-route.component';
+import Breadcrumb from '@/components/ui/breadcrumb';
 import Loading from '@/app/components/loading.component';
 import { ADMIN_MENU } from '@/definitions/menu.constant';
 import { MenuKey } from '@/definitions/menu.type';
@@ -87,6 +88,7 @@ export default function AdminLayout({
             {/* Main Content */}
             <div className="flex-1 p-8 min-w-[760px]">
               <div className="bg-white rounded-lg shadow-sm p-6">
+                <Breadcrumb type="admin" />
                 {children}
               </div>
             </div>
