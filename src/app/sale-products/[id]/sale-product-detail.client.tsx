@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { RequestPayParams } from '@/definitions/portone.type';
 import usePortonePayment from '@/hooks/usePortonePaymnent';
 import { useDetailSaleProductQuery } from '@/queries/product.queries';
@@ -31,9 +32,8 @@ import Image from 'next/image';
 import { ChangeEvent, useEffect, useMemo } from 'react';
 import { ControllerRenderProps, useForm } from 'react-hook-form';
 import { FcInfo } from 'react-icons/fc';
-import { toast, Toaster } from 'sonner';
+import { toast } from 'sonner';
 import { z } from 'zod';
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 type Props = {
   saleProductId: string;
@@ -130,8 +130,10 @@ export default function SaleProductDetailClient({ saleProductId }: Props) {
 
   return (
     <Form {...saleProductForm}>
-      <form onSubmit={saleProductForm.handleSubmit(handleSubmit)} className="container mx-auto px-4 py-8">
-        <Toaster position="bottom-center" expand={true} richColors />
+      <form
+        onSubmit={saleProductForm.handleSubmit(handleSubmit)}
+        className="container mx-auto px-4 py-8"
+      >
         <div className="flex flex-col lg:flex-row gap-8">
           {/* 이미지 섹션 */}
           <div className="w-full lg:w-1/2 bg-white rounded-lg p-6 shadow-sm">
@@ -178,10 +180,12 @@ export default function SaleProductDetailClient({ saleProductId }: Props) {
                       </div>
                     ))}
                   </div>
-                  <ScrollBar orientation="horizontal" className="bg-secondary" />
+                  <ScrollBar
+                    orientation="horizontal"
+                    className="bg-secondary"
+                  />
                 </ScrollArea>
               </div>
-
             </div>
           </div>
 
@@ -191,7 +195,7 @@ export default function SaleProductDetailClient({ saleProductId }: Props) {
               <h1 className="text-2xl lg:text-3xl font-bold text-center mb-6">
                 {saleProductDetailData.name}
               </h1>
-              
+
               <div className="space-y-6">
                 <div className="flex justify-between items-center">
                   <span className="text-lg text-muted-foreground">가격</span>
@@ -213,7 +217,8 @@ export default function SaleProductDetailClient({ saleProductId }: Props) {
                         selected={field.value}
                         onSelect={field.onChange}
                         disabled={(date) =>
-                          format(date, 'yyyMMdd') < format(new Date(), 'yyyyMMdd')
+                          format(date, 'yyyMMdd') <
+                          format(new Date(), 'yyyyMMdd')
                         }
                         className="rounded-md border shadow-sm"
                         classNames={{
@@ -330,13 +335,11 @@ export default function SaleProductDetailClient({ saleProductId }: Props) {
               <h3 className="text-lg font-medium">운영 시간</h3>
               <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
                 <li>
-                  운영시간 및 입장가능시간은 변동될 수 있으니 꼭 당일
-                  현장으로 확인바랍니다.
+                  운영시간 및 입장가능시간은 변동될 수 있으니 꼭 당일 현장으로
+                  확인바랍니다.
                 </li>
                 {Array.isArray(productList) &&
-                  productList.map((d) => (
-                    <li key={d._id}>{d.description1}</li>
-                  ))}
+                  productList.map((d) => <li key={d._id}>{d.description1}</li>)}
               </ul>
             </div>
 
@@ -347,9 +350,7 @@ export default function SaleProductDetailClient({ saleProductId }: Props) {
                   구매하신 티켓은 환불 및 취소가 불가합니다. 신중하게 구매해
                   주세요.
                 </li>
-                <li>
-                  You cannot refund or cancel the ticket you purchased.
-                </li>
+                <li>You cannot refund or cancel the ticket you purchased.</li>
                 <li>Please make a careful purchase</li>
               </ul>
             </div>
@@ -363,8 +364,8 @@ export default function SaleProductDetailClient({ saleProductId }: Props) {
               {productList.map((d) => {
                 const { images, name, description2, description3 } = d;
                 return (
-                  <div 
-                    className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all" 
+                  <div
+                    className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all"
                     key={d._id}
                   >
                     {/* 상품 이미지 */}
@@ -390,8 +391,8 @@ export default function SaleProductDetailClient({ saleProductId }: Props) {
                       {images.length > 1 && (
                         <div className="grid grid-cols-3 gap-2">
                           {images.slice(1).map((img) => (
-                            <div 
-                              key={String(img)} 
+                            <div
+                              key={String(img)}
                               className="aspect-square rounded-md overflow-hidden"
                             >
                               <Image

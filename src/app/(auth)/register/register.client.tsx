@@ -83,140 +83,213 @@ export default function Register() {
   };
 
   return (
-    <>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
-          <h1 className="text-2xl font-semibold">회원가입</h1>
-          <FormField
-            control={form.control}
-            name="id"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>아이디</FormLabel>
-                <FormControl>
-                  <Input placeholder="" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>비밀번호</FormLabel>
-                <FormControl>
-                  <Input placeholder="" type="password" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="confirmPassword"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>비밀번호 확인</FormLabel>
-                <FormControl>
-                  <Input placeholder="" type="password" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-2xl w-full space-y-8 bg-white/90 backdrop-blur-sm p-8 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-gray-100">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-gray-900">회원가입</h1>
+          <p className="mt-2 text-sm text-gray-600">
+            월드코리아의 파트너가 되어주세요
+          </p>
+        </div>
 
-          <FormField
-            control={form.control}
-            name="companyName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>업체명</FormLabel>
-                <FormControl>
-                  <Input placeholder="" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="mt-8 space-y-8">
+            {/* 계정 정보 섹션 */}
+            <div className="space-y-6 bg-gray-50/50 p-6 rounded-lg border border-gray-100">
+              <h2 className="text-xl font-semibold text-gray-900 pb-2 border-b border-gray-200">계정 정보</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <FormField
+                  control={form.control}
+                  name="id"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium text-gray-700">아이디</FormLabel>
+                      <FormControl>
+                        <Input
+                          className="appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+                          placeholder="아이디를 입력해주세요"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-sm" />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium text-gray-700">비밀번호</FormLabel>
+                      <FormControl>
+                        <Input
+                          className="appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+                          placeholder="비밀번호를 입력해주세요"
+                          type="password"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-sm" />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="confirmPassword"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium text-gray-700">비밀번호 확인</FormLabel>
+                      <FormControl>
+                        <Input
+                          className="appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+                          placeholder="비밀번호를 다시 입력해주세요"
+                          type="password"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-sm" />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
 
-          <FormField
-            control={form.control}
-            name="address"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>주소</FormLabel>
-                <FormControl>
-                  <Input placeholder="" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            {/* 업체 정보 섹션 */}
+            <div className="space-y-6 bg-gray-50/50 p-6 rounded-lg border border-gray-100">
+              <h2 className="text-xl font-semibold text-gray-900 pb-2 border-b border-gray-200">업체 정보</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <FormField
+                  control={form.control}
+                  name="companyName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium text-gray-700">업체명</FormLabel>
+                      <FormControl>
+                        <Input
+                          className="appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+                          placeholder="업체명을 입력해주세요"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-sm" />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="contactNumber"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium text-gray-700">업체 연락처</FormLabel>
+                      <FormControl>
+                        <Input
+                          className="appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+                          placeholder="업체 연락처를 입력해주세요"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-sm" />
+                    </FormItem>
+                  )}
+                />
+                <div className="md:col-span-2">
+                  <FormField
+                    control={form.control}
+                    name="address"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-medium text-gray-700">주소</FormLabel>
+                        <FormControl>
+                          <Input
+                            className="appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+                            placeholder="업체 주소를 입력해주세요"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage className="text-sm" />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+            </div>
 
-          <FormField
-            control={form.control}
-            name="contactNumber"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>연락처</FormLabel>
-                <FormControl>
-                  <Input placeholder="" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            {/* 담당자 정보 섹션 */}
+            <div className="space-y-6 bg-gray-50/50 p-6 rounded-lg border border-gray-100">
+              <h2 className="text-xl font-semibold text-gray-900 pb-2 border-b border-gray-200">담당자 정보</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium text-gray-700">이름</FormLabel>
+                      <FormControl>
+                        <Input
+                          className="appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+                          placeholder="담당자 이름을 입력해주세요"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-sm" />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="phoneNumber"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium text-gray-700">휴대폰</FormLabel>
+                      <FormControl>
+                        <Input
+                          className="appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+                          placeholder="휴대폰 번호를 입력해주세요"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-sm" />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium text-gray-700">이메일</FormLabel>
+                      <FormControl>
+                        <Input
+                          className="appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+                          placeholder="이메일 주소를 입력해주세요"
+                          type="email"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-sm" />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
 
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>이름</FormLabel>
-                <FormControl>
-                  <Input placeholder="" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="phoneNumber"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>휴대폰</FormLabel>
-                <FormControl>
-                  <Input placeholder="" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>이메일</FormLabel>
-                <FormControl>
-                  <Input placeholder="" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <Link className="block text-sm underline" href={'/login'}>
-            이미 계정이 있으신가요?
-          </Link>
-          <Button type="submit">회원가입</Button>
-        </form>
-      </Form>
-    </>
+            <div className="flex items-center justify-between pt-6">
+              <Link
+                className="text-sm text-primary hover:text-primary/80 transition-colors"
+                href={'/login'}
+              >
+                이미 계정이 있으신가요?
+              </Link>
+              <Button
+                type="submit"
+                className="flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors"
+              >
+                회원가입
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </div>
+    </div>
   );
 }
