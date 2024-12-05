@@ -34,11 +34,6 @@ export default function SaleProductCreateClient() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-2">
-        <h1 className="text-2xl font-bold text-gray-900">상품목록</h1>
-        <p className="text-sm text-gray-500">판매할 상품을 선택해주세요.</p>
-      </div>
-
       <div className="rounded-lg border border-gray-200 bg-white shadow-sm">
         <div className="p-6 space-y-6">
           <div className="min-h-[200px] max-h-[calc(100vh-400px)] overflow-y-auto rounded-md border border-gray-100">
