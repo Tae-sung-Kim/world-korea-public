@@ -3,13 +3,13 @@
 import { usePagination } from '../admin/hooks/usePagination';
 import ProductImage from './product-image.component';
 import ProductInfo from './product-info.component';
+import { Button } from '@/components/ui/button';
+import { useAuthContext } from '@/contexts/auth.context';
 import useNotifications from '@/hooks/useNotifications';
 import { useSaleProductListQuery } from '@/queries/product.queries';
 import Link from 'next/link';
-import { useAuthContext } from '@/contexts/auth.context';
 import { FaTicketAlt, FaShieldAlt } from 'react-icons/fa';
 import { RiMoneyDollarCircleFill } from 'react-icons/ri';
-import { Button } from '@/components/ui/button';
 
 export default function HomeClient() {
   useNotifications();
@@ -87,9 +87,7 @@ export default function HomeClient() {
                   variant="secondary"
                   className="rounded-full font-semibold text-lg hover:scale-105 transition-transform bg-white/90 hover:bg-white text-purple-500/90 hover:text-purple-500"
                 >
-                  <Link href="/login">
-                    지금 예매하기
-                  </Link>
+                  <Link href="/login">지금 예매하기</Link>
                 </Button>
               </div>
             </div>
@@ -106,7 +104,7 @@ export default function HomeClient() {
               <FaTicketAlt className="w-8 h-8 text-purple-400 group-hover:text-purple-500 transition-colors duration-300" />
             </div>
             <h3 className="text-xl font-semibold text-gray-800">빠른 예매</h3>
-            <p className="text-gray-500">
+            <p className="text-gray-900">
               클릭 한 번으로 간편하게 예매하고 즐거운 시간을 보내세요
             </p>
           </div>
@@ -118,7 +116,7 @@ export default function HomeClient() {
               <RiMoneyDollarCircleFill className="w-8 h-8 text-purple-400 group-hover:text-purple-500 transition-colors duration-300" />
             </div>
             <h3 className="text-xl font-semibold text-gray-800">특별 할인</h3>
-            <p className="text-gray-500">
+            <p className="text-gray-900">
               월드코리아만의 특별한 가격으로 더 많은 즐거움을 누리세요
             </p>
           </div>
@@ -130,7 +128,7 @@ export default function HomeClient() {
               <FaShieldAlt className="w-8 h-8 text-purple-400 group-hover:text-purple-500 transition-colors duration-300" />
             </div>
             <h3 className="text-xl font-semibold text-gray-800">안전한 거래</h3>
-            <p className="text-gray-500">
+            <p className="text-gray-900">
               공식 인증된 티켓으로 안전하고 믿을 수 있는 거래를 보장합니다
             </p>
           </div>
