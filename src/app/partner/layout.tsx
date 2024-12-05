@@ -2,13 +2,22 @@
 
 import AdminProtectedRoute from '@/app/admin/admin-protected-route.component';
 import Loading from '@/app/components/loading.component';
-import { Separator } from '@/components/ui/separator';
+import { PARTNER_MENU } from '@/definitions/menu.constant';
 import Layout from '@/layouts/layout/Layout';
 import Link from 'next/link';
-import { BiPurchaseTag } from 'react-icons/bi';
+import React from 'react';
+import { IconType } from 'react-icons';
+import { TbTicket } from 'react-icons/tb';
 import { TiSortNumericallyOutline } from 'react-icons/ti';
 
-export default function AdminLayout({
+type PartnerMenuKey = 'purchase' | 'pin';
+
+const MENU_ICONS: Record<PartnerMenuKey, IconType> = {
+  purchase: TbTicket,
+  pin: TiSortNumericallyOutline,
+} as const;
+
+export default function PartnerLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -17,67 +26,65 @@ export default function AdminLayout({
     <Layout>
       <AdminProtectedRoute>
         <Loading />
-        <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
-          <div className="flex min-h-screen overflow-x-auto">
-            <aside className="w-32 md:w-60 bg-white border-r border-gray-200 overflow-y-auto shrink-0">
-              <div className="flex flex-col flex-grow pt-2 md:pt-5 pb-2 md:pb-4">
-                <div className="flex items-center justify-center px-1 md:px-4 mb-3 md:mb-8">
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 overflow-auto">
+          <div className="flex min-w-[1024px]">
+            {/* Sidebar */}
+            <div className="w-[180px] lg:w-64 bg-white shadow-lg shrink-0 sticky top-0 h-screen">
+              <div className="h-full flex flex-col">
+                <div className="p-2 lg:p-4 border-b border-gray-200">
                   <div className="text-center">
-                    <h2 className="text-lg md:text-2xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
-                      <span className="block md:hidden">파트너</span>
-                      <span className="hidden md:block">파트너 페이지</span>
+                    <h2 className="text-xl font-bold text-gray-800">
+                      파트너 메뉴
                     </h2>
-                    <div className="h-0.5 md:h-1 w-16 md:w-24 mx-auto bg-gradient-to-r from-gray-700 to-gray-400 rounded-full mt-1"></div>
+                    <div className="h-1 w-16 bg-gradient-to-r from-blue-500 to-indigo-500 mx-auto mt-2 rounded-full"></div>
                   </div>
                 </div>
-                <nav className="flex-1 px-1 md:px-3 space-y-1">
-                  <ul>
-                    <li className="p-2 md:p-5 my-2 md:my-4">
-                      <span className="flex items-center gap-1 md:gap-2 text-base md:text-lg font-bold text-gray-800 mb-2 md:mb-3">
-                        <BiPurchaseTag className="w-4 md:w-5 h-4 md:h-5" />
-                        구매 관리
-                      </span>
-                      <ul className="mt-2 space-y-2 border-l-2 border-gray-100 pl-4">
-                        <li className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
-                          <Link
-                            href="/partner/orders"
-                            className="block hover:translate-x-1 transition-transform"
-                          >
-                            구매 목록
-                          </Link>
-                        </li>
-                      </ul>
-                    </li>
-                    <Separator className="my-2" />
-                    <li className="p-2 md:p-5 my-2 md:my-4">
-                      <span className="flex items-center gap-1 md:gap-2 text-base md:text-lg font-bold text-gray-800 mb-2 md:mb-3">
-                        <TiSortNumericallyOutline className="w-4 md:w-5 h-4 md:h-5" />
-                        핀번호 관리
-                      </span>
-                      <ul className="mt-2 space-y-2 border-l-2 border-gray-100 pl-4">
-                        <li className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
-                          <Link
-                            href="/partner/pins"
-                            className="block hover:translate-x-1 transition-transform"
-                          >
-                            핀번호 목록
-                          </Link>
-                        </li>
-                        <li className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
-                          <Link
-                            href="/partner/pins/used"
-                            className="block hover:translate-x-1 transition-transform"
-                          >
-                            핀번호 사용
-                          </Link>
-                        </li>
-                      </ul>
-                    </li>
+                <nav className="flex-1 overflow-y-auto py-2 lg:py-4">
+                  <ul className="space-y-1 px-1 lg:px-3">
+                    {PARTNER_MENU.map((section) => (
+                      <li key={section.label}>
+                        <div className="mb-2 lg:mb-4">
+                          <span className="flex items-center px-2 py-2 text-gray-800 rounded-lg bg-gray-50 shadow-sm">
+                            {section.key in MENU_ICONS && (
+                              <span className="mr-1.5 lg:mr-3">
+                                {React.createElement(
+                                  MENU_ICONS[section.key as PartnerMenuKey],
+                                  {
+                                    className: 'w-5 h-5 text-indigo-600',
+                                  }
+                                )}
+                              </span>
+                            )}
+                            <span className="font-semibold text-sm lg:text-base">
+                              {section.label}
+                            </span>
+                          </span>
+                          <ul className="mt-1 lg:mt-2 space-y-0.5 lg:space-y-1">
+                            {section.items.map((item) => (
+                              <li key={item.label}>
+                                <Link
+                                  href={item.href}
+                                  className="block px-4 lg:px-8 py-1.5 lg:py-2 text-xs lg:text-sm text-gray-600 hover:bg-gray-50 hover:text-indigo-600 rounded-md transition-colors duration-150"
+                                >
+                                  {item.label}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </li>
+                    ))}
                   </ul>
                 </nav>
               </div>
-            </aside>
-            <main className="flex-1 p-4 md:p-8">{children}</main>
+            </div>
+
+            {/* Main Content */}
+            <div className="flex-1 p-8 min-w-[760px]">
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                {children}
+              </div>
+            </div>
           </div>
         </div>
       </AdminProtectedRoute>
