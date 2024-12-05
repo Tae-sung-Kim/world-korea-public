@@ -9,27 +9,22 @@ const ModalContainer = React.forwardRef<
 >(({ className, children, ...props }, ref) => {
   return (
     <div className="fixed inset-0 z-[100]">
-      {/* Overlay */}
       <div
         className={cn(
-          'fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300',
+          'fixed inset-0 bg-black/60 backdrop-blur-sm transition-all duration-200',
           props.useOverlayOpacity ? 'opacity-100' : 'opacity-0'
         )}
       />
-
-      {/* Modal Wrapper */}
       <div className="fixed inset-0 z-10" onClick={props.onClick}>
-        <div className="relative flex min-h-[100dvh] items-center justify-center p-4">
-          {/* Modal Content */}
+        <div className="flex min-h-[100dvh] items-center justify-center p-3 sm:p-4">
           <div
             ref={ref}
             className={cn(
-              'w-full mx-auto bg-white dark:bg-gray-900 rounded-xl',
-              'shadow-[0_0_15px_rgba(0,0,0,0.1)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]',
-              'transform transition-all duration-300 ease-out',
-              'max-w-[90vw] sm:max-w-[520px] md:max-w-[600px]',
-              'max-h-[calc(100dvh-2rem)] overflow-auto',
-              'scale-100 opacity-100',
+              'w-full max-w-[95vw] sm:max-w-[520px] md:max-w-[600px] lg:max-w-[720px]',
+              'bg-gray-100 dark:bg-gray-800 rounded-md sm:rounded-lg',
+              'shadow-lg dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]',
+              'max-h-[calc(100dvh-1.5rem)] sm:max-h-[calc(100dvh-2rem)] overflow-auto',
+              'transform transition-all duration-200',
               className
             )}
             onClick={(e) => e.stopPropagation()}
@@ -53,15 +48,15 @@ const ModalHeader = React.forwardRef<
       ref={ref}
       className={cn(
         'sticky top-0 z-20',
-        'flex items-center px-5 py-4 sm:px-6',
-        'border-b border-gray-100 dark:border-gray-800',
+        'flex items-center justify-between',
+        'px-3 py-2.5 sm:px-4 sm:py-3',
+        'border-b border-gray-200/75 dark:border-gray-700/75',
         'bg-white dark:bg-gray-900',
+        'shadow-[0_1px_3px_rgba(0,0,0,0.05)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.2)]',
         className
       )}
     >
-      <div className="flex-1 text-lg font-semibold text-gray-900 dark:text-white">
-        {children}
-      </div>
+      {children}
     </div>
   );
 });
@@ -71,13 +66,13 @@ ModalHeader.displayName = 'ModalHeader';
 const ModalContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
->(({ className, children, ...props }, ref) => {
+>(({ className, children }, ref) => {
   return (
     <div
       ref={ref}
       className={cn(
-        'relative',
-        'px-5 py-4 sm:p-6',
+        'px-3 py-3 sm:px-4 sm:py-4',
+        'bg-gray-100 dark:bg-gray-800',
         'text-gray-600 dark:text-gray-300',
         className
       )}
@@ -92,16 +87,17 @@ ModalContent.displayName = 'ModalContent';
 const ModalFooter = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
->(({ className, children, ...props }, ref) => {
+>(({ className, children }, ref) => {
   return (
     <div
       ref={ref}
       className={cn(
         'sticky bottom-0 z-20',
-        'flex flex-col-reverse sm:flex-row sm:justify-end gap-2 sm:gap-3',
-        'px-5 py-4 sm:px-6',
-        'border-t border-gray-100 dark:border-gray-800',
+        'flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2',
+        'px-3 py-2.5 sm:px-4 sm:py-3',
+        'border-t border-gray-200/75 dark:border-gray-700/75',
         'bg-white dark:bg-gray-900',
+        'shadow-[0_-2px_4px_rgba(0,0,0,0.05)] dark:shadow-[0_-2px_4px_rgba(0,0,0,0.2)]',
         className
       )}
     >
