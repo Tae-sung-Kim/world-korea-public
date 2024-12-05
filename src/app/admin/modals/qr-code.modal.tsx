@@ -9,7 +9,7 @@ type Props = {
   tickets?: Tickets[];
 };
 
-const Wrapper = ({
+const QrCodeWrapper = ({
   gridCols = 3,
   children,
 }: {
@@ -17,11 +17,13 @@ const Wrapper = ({
   children: React.ReactNode;
 }) => {
   return (
-    <div className={`grid gap-4 w-full ${
-      gridCols < 3 
-        ? 'grid-cols-1 sm:grid-cols-2' 
-        : 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4'
-    }`}>
+    <div
+      className={`grid gap-4 w-full ${
+        gridCols < 3
+          ? 'grid-cols-1 sm:grid-cols-2'
+          : 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4'
+      }`}
+    >
       {children}
     </div>
   );
@@ -33,9 +35,9 @@ export default function QrCodeModal({ pinNumber, tickets }: Props) {
       {Array.isArray(tickets) && tickets.length > 0 ? (
         <ScrollArea className="w-full">
           <div className="space-y-4 min-h-[180px] max-h-[60vh]">
-            <Wrapper gridCols={tickets.length}>
+            <QrCodeWrapper gridCols={tickets.length}>
               {tickets.map((d) => (
-                <div 
+                <div
                   key={d._id}
                   className="flex flex-col items-center p-3 bg-gray-50 rounded-lg transition-transform hover:scale-105"
                 >
@@ -48,7 +50,7 @@ export default function QrCodeModal({ pinNumber, tickets }: Props) {
                   </span>
                 </div>
               ))}
-            </Wrapper>
+            </QrCodeWrapper>
           </div>
         </ScrollArea>
       ) : (
@@ -56,7 +58,7 @@ export default function QrCodeModal({ pinNumber, tickets }: Props) {
           {pinNumber && (
             <div className="flex flex-col items-center space-y-3">
               <div className="p-4 bg-gray-50 rounded-lg transition-transform hover:scale-105">
-                <QRCodeCanvas 
+                <QRCodeCanvas
                   value={pinNumber}
                   className="w-full max-w-[220px] h-auto"
                 />
