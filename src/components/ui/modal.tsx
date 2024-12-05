@@ -20,10 +20,10 @@ const ModalContainer = React.forwardRef<
           <div
             ref={ref}
             className={cn(
-              'w-full max-w-[95vw] sm:max-w-[520px] md:max-w-[600px] lg:max-w-[720px]',
+              'w-auto min-w-[280px] max-w-[95vw]',
               'bg-gray-100 dark:bg-gray-800 rounded-md sm:rounded-lg',
               'shadow-lg dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]',
-              'max-h-[calc(100dvh-1.5rem)] sm:max-h-[calc(100dvh-2rem)] overflow-auto',
+              'max-h-[calc(100dvh-1.5rem)] sm:max-h-[calc(100dvh-2rem)] overflow-hidden',
               'transform transition-all duration-200',
               className
             )}

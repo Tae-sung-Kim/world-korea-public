@@ -109,12 +109,12 @@ export default function OrderList({ tableId }: Props) {
   };
 
   //qrcode 프린트 - 현재는 해당되는 상품에 포함되는 모든 QR코드
-  const handleQrCodePrint = async (pinList: string[]) => {
+  const handleQrCodePrint = async (tickets: Tickets[]) => {
     return await openModal({
-      title: 'QR CORD PRINT',
+      title: 'QR 코드 프린트',
       showFooter: false,
       Component: ({ onCancel }) => {
-        return <QrCodePrintModal pinList={pinList} onCancel={onCancel} />;
+        return <QrCodePrintModal tickets={tickets} onCancel={onCancel} />;
       },
     });
   };
@@ -253,7 +253,7 @@ export default function OrderList({ tableId }: Props) {
                           variant="ghost"
                           size="icon"
                           className="h-7 w-7 text-gray-600 hover:text-gray-900"
-                          onClick={() => handleQrCodePrint(d.pins ?? [])}
+                          onClick={() => handleQrCodePrint(d.tickets ?? [])}
                         >
                           <IoMdPrint className="h-4 w-4" />
                         </Button>
