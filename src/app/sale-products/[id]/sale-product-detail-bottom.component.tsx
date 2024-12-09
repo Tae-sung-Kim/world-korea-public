@@ -1,108 +1,53 @@
-import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { ProductDisplayData } from '@/definitions';
 import Image from 'next/image';
 
-export default function SaleProductDeaitlBottom({
+export default function SaleProductDetailBottom({
   productList,
 }: {
   productList: ProductDisplayData[];
 }) {
   return (
-    <>
+    <div className="space-y-6 lg:space-y-8">
       {Array.isArray(productList) && (
-        <div className="container mx-auto py-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {productList.map((d) => {
-              const { images, name, description2, description3 } = d;
-              return (
-                <Card
-                  key={d._id}
-                  className="group hover:shadow-xl transition-all duration-500 rounded-xl border border-gray-100/80 bg-white/50 backdrop-blur-md hover:bg-white/70"
-                >
-                  {/* Main Product Image */}
-                  <CardHeader className="p-0">
-                    <AspectRatio
-                      ratio={4 / 3}
-                      className="relative overflow-hidden rounded-t-xl bg-gradient-to-b from-gray-50/30 to-gray-50/10"
-                    >
-                      {images[0] && (
-                        <Image
-                          className="object-contain w-full h-full transition-transform duration-300 group-hover:scale-105"
-                          alt={`${name} 대표 이미지`}
-                          fill
-                          sizes="(max-width: 768px) 100vw, 50vw"
-                          src={String(images[0])}
-                          priority
-                        />
-                      )}
-                      <div className="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-md p-4 rounded-xl shadow-sm transition-all duration-300 group-hover:bg-white/95">
-                        <h2 className="text-xl font-bold text-gray-800 tracking-tight">
-                          {name}
-                        </h2>
-                      </div>
-                    </AspectRatio>
-                  </CardHeader>
-
-                  <CardContent className="p-6 space-y-6">
-                    {/* Additional Images Gallery */}
-                    {images.length > 1 && (
-                      <ScrollArea className="w-full whitespace-nowrap rounded-xl bg-gray-50/30 p-2">
-                        <div className="flex space-x-4 pb-1">
-                          {images.slice(1).map((img) => (
-                            <div
-                              key={String(img)}
-                              className="shrink-0 w-[180px] rounded-xl overflow-hidden bg-white/70 shadow-sm hover:shadow-md transition-all duration-300"
-                            >
-                              <AspectRatio ratio={4 / 3} className="relative">
-                                <Image
-                                  className="object-contain transition-all duration-300 hover:scale-110"
-                                  alt="상품 추가 이미지"
-                                  fill
-                                  sizes="180px"
-                                  src={String(img)}
-                                />
-                              </AspectRatio>
-                            </div>
-                          ))}
-                        </div>
-                      </ScrollArea>
-                    )}
-
-                    {/* Product Details */}
-                    <div className="space-y-6">
-                      <div className="prose max-w-none">
-                        <div className="space-y-4">
-                          <div className="border-l-4 border-primary/60 pl-4 rounded-sm bg-gradient-to-r from-primary/5 to-transparent">
-                            <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                              상품 설명
-                            </h3>
-                            <p className="text-gray-600 leading-relaxed">
-                              {description2}
-                            </p>
-                          </div>
-                          {description3 && (
-                            <div className="border-l-4 border-primary/60 pl-4 mt-6 rounded-sm bg-gradient-to-r from-primary/5 to-transparent">
-                              <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                                추가 정보
-                              </h3>
-                              <p className="text-gray-600 leading-relaxed">
-                                {description3}
-                              </p>
-                            </div>
-                          )}
-                        </div>
-                      </div>
+        <div className="backdrop-blur-md bg-white/70 rounded-xl p-6 lg:p-8 shadow-lg transition-all duration-300">
+          <h2 className="text-lg lg:text-xl font-semibold mb-6">상품 상세</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+            {productList.map((d) => (
+              <Card
+                key={d._id}
+                className="bg-white/90 border-none shadow-md hover:shadow-lg transition-all duration-300"
+              >
+                <CardHeader className="p-4">
+                  <div className="relative aspect-video w-full overflow-hidden rounded-lg">
+                    <Image
+                      src={d.images[0]}
+                      alt={d.name}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                </CardHeader>
+                <CardContent className="p-4 pt-0 space-y-4">
+                  <div className="space-y-2">
+                    <h3 className="text-base lg:text-lg font-medium line-clamp-1">
+                      {d.name}
+                    </h3>
+                  </div>
+                  <ScrollArea className="h-24">
+                    <div className="space-y-2 text-sm lg:text-base text-muted-foreground">
+                      <p>{d.description2}</p>
+                      {d.description3 && <p>{d.description3}</p>}
                     </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
+                  </ScrollArea>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }

@@ -110,158 +110,152 @@ export default function SaleProductDetailForm({
     <Form {...saleProductForm}>
       <form
         onSubmit={saleProductForm.handleSubmit(handleSubmit)}
-        className="container mx-auto px-4 py-8"
+        className="w-full lg:w-1/2"
       >
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* 상품 정보 섹션 */}
-          <div className="w-full lg:w-1/2 space-y-6">
-            <div className="bg-white rounded-lg p-6 shadow-sm">
-              <h1 className="text-2xl lg:text-3xl font-bold text-center mb-6">
-                {saleProductDetailData.name}
-              </h1>
+        <div className="backdrop-blur-md bg-white/70 rounded-xl p-6 lg:p-8 shadow-lg">
+          <h1 className="text-2xl lg:text-3xl font-bold text-center mb-6">
+            {saleProductDetailData.name}
+          </h1>
 
-              <div className="space-y-6">
-                <div className="flex justify-between items-center">
-                  <span className="text-lg text-muted-foreground">가격</span>
-                  <span className="text-2xl font-semibold">{`₩ ${addComma(
-                    saleProductDetailData.price ?? 0
-                  )}`}</span>
-                </div>
-
-                <Separator className="my-4" />
-
-                <FormField
-                  control={saleProductForm.control}
-                  name="orderDate"
-                  render={({ field }) => (
-                    <FormItem className="space-y-4">
-                      <FormLabel className="text-lg font-medium">
-                        날짜 선택
-                      </FormLabel>
-                      <Calendar
-                        mode="single"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        disabled={(date) =>
-                          format(date, 'yyyyMMdd') <
-                          format(purchaseDate, 'yyyyMMdd')
-                        }
-                        className="rounded-lg border shadow-md p-4 bg-white"
-                        classNames={{
-                          months:
-                            'flex w-full flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0 flex-1',
-                          month: 'space-y-4 w-full flex flex-col',
-                          caption:
-                            'flex justify-center pt-1 relative items-center text-lg font-medium',
-                          nav_button: 'absolute hover:opacity-75',
-                          nav_button_previous: 'left-1',
-                          nav_button_next: 'right-1',
-                          table: 'w-full border-collapse space-y-1',
-                          head_row: 'flex justify-between',
-                          head_cell:
-                            'text-muted-foreground font-medium text-sm w-10 text-center',
-                          row: 'flex w-full justify-between mt-2',
-                          cell: 'text-center relative w-10 h-10',
-                          day: 'h-10 w-10 p-0 font-normal hover:bg-accent hover:text-accent-foreground rounded-full transition-colors focus:bg-primary focus:text-primary-foreground',
-                          day_selected:
-                            'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground',
-                          day_today: 'bg-accent/50 text-accent-foreground',
-                          day_outside: 'text-muted-foreground opacity-50',
-                          day_disabled: 'text-muted-foreground opacity-50',
-                          day_range_middle: 'rounded-none',
-                          day_hidden: 'invisible',
-                        }}
-                      />
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <FormField
-                    control={saleProductForm.control}
-                    name="quantity"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>수량</FormLabel>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            type="number"
-                            min="0"
-                            value={field.value || ''}
-                            placeholder="수량을 입력하세요"
-                            onChange={(e) => handleCountChange(e, { ...field })}
-                            className="text-lg"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={saleProductForm.control}
-                    name="amount"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>총 금액</FormLabel>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            value={addComma(field.value)}
-                            type="text"
-                            readOnly
-                            disabled
-                            className="text-lg font-semibold bg-muted"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                <FormField
-                  control={saleProductForm.control}
-                  name="buyType"
-                  render={({ field }) => (
-                    <FormItem className="space-y-4">
-                      <FormLabel className="text-lg">결제 방법</FormLabel>
-                      <FormControl>
-                        <RadioGroup
-                          onValueChange={field.onChange}
-                          defaultValue={'card'}
-                          className="flex gap-6"
-                        >
-                          <FormItem className="flex items-center space-x-3 space-y-0">
-                            <FormControl>
-                              <RadioGroupItem value="card" />
-                            </FormControl>
-                            <FormLabel className="font-normal text-base">
-                              신용카드
-                            </FormLabel>
-                          </FormItem>
-                          <FormItem className="flex items-center space-x-3 space-y-0">
-                            <FormControl>
-                              <RadioGroupItem value="trans" />
-                            </FormControl>
-                            <FormLabel className="font-normal text-base">
-                              계좌이체
-                            </FormLabel>
-                          </FormItem>
-                        </RadioGroup>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <Button type="submit" className="w-full text-lg py-6">
-                  구매하기
-                </Button>
-              </div>
+          <div className="space-y-6">
+            <div className="flex justify-between items-center">
+              <span className="text-lg text-muted-foreground">가격</span>
+              <span className="text-2xl font-semibold">
+                {`₩ ${addComma(saleProductDetailData.price ?? 0)}`}
+              </span>
             </div>
+
+            <Separator className="my-4" />
+
+            <FormField
+              control={saleProductForm.control}
+              name="orderDate"
+              render={({ field }) => (
+                <FormItem className="space-y-4">
+                  <FormLabel className="text-lg font-medium">
+                    날짜 선택
+                  </FormLabel>
+                  <Calendar
+                    mode="single"
+                    selected={field.value}
+                    onSelect={field.onChange}
+                    disabled={(date) =>
+                      format(date, 'yyyyMMdd') <
+                      format(purchaseDate, 'yyyyMMdd')
+                    }
+                    className="rounded-lg border shadow-md p-4 bg-white"
+                    classNames={{
+                      months:
+                        'flex w-full flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0 flex-1',
+                      month: 'space-y-4 w-full flex flex-col',
+                      caption:
+                        'flex justify-center pt-1 relative items-center text-lg font-medium',
+                      nav_button: 'absolute hover:opacity-75',
+                      nav_button_previous: 'left-1',
+                      nav_button_next: 'right-1',
+                      table: 'w-full border-collapse space-y-1',
+                      head_row: 'flex justify-between',
+                      head_cell:
+                        'text-muted-foreground font-medium text-sm w-10 text-center',
+                      row: 'flex w-full justify-between mt-2',
+                      cell: 'text-center relative w-10 h-10',
+                      day: 'h-10 w-10 p-0 font-normal hover:bg-accent hover:text-accent-foreground rounded-full transition-colors focus:bg-primary focus:text-primary-foreground',
+                      day_selected:
+                        'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground',
+                      day_today: 'bg-accent/50 text-accent-foreground',
+                      day_outside: 'text-muted-foreground opacity-50',
+                      day_disabled: 'text-muted-foreground opacity-50',
+                      day_range_middle: 'rounded-none',
+                      day_hidden: 'invisible',
+                    }}
+                  />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={saleProductForm.control}
+                name="quantity"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>수량</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        type="number"
+                        min="0"
+                        value={field.value || ''}
+                        placeholder="수량을 입력하세요"
+                        onChange={(e) => handleCountChange(e, { ...field })}
+                        className="bg-white/90"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={saleProductForm.control}
+                name="amount"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>총 금액</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        value={addComma(field.value)}
+                        type="text"
+                        readOnly
+                        disabled
+                        className="bg-muted/90 font-semibold"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <FormField
+              control={saleProductForm.control}
+              name="buyType"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-lg">결제 방법</FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={'card'}
+                      className="flex gap-6"
+                    >
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="card" />
+                        </FormControl>
+                        <FormLabel className="font-normal">신용카드</FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="trans" />
+                        </FormControl>
+                        <FormLabel className="font-normal">계좌이체</FormLabel>
+                      </FormItem>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <Button
+              type="submit"
+              className="w-full h-14 text-lg bg-primary/90 hover:bg-primary"
+            >
+              구매하기
+            </Button>
           </div>
         </div>
       </form>

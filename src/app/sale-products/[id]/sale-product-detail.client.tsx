@@ -1,8 +1,8 @@
 'use client';
 
-import SaleProductDeaitlBottom from './sale-product-detail-bottom.component';
+import SaleProductDetailBottom from './sale-product-detail-bottom.component';
 import SaleProductDetailForm from './sale-product-detail-form.component';
-import SaleProductDeaitlImage from './sale-product-detail-image.component';
+import SaleProductDetailImage from './sale-product-detail-image.component';
 import SaleProductDetailInfo from './sale-product-detail-info.component';
 import { useDetailSaleProductQuery } from '@/queries/product.queries';
 import { useMemo } from 'react';
@@ -30,21 +30,24 @@ export default function SaleProductDetailClient({ saleProductId }: Props) {
   }
 
   return (
-    <>
-      {/* 이미지 섹션 */}
-      <SaleProductDeaitlImage images={images} />
+    <div className="w-full max-w-7xl mx-auto">
+      <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
+        {/* 이미지 섹션 */}
+        <SaleProductDetailImage images={images} />
 
-      {/* 상품 Form 섹션 */}
-      <SaleProductDetailForm
-        saleProductId={saleProductId}
-        saleProductDetailData={saleProductDetailData}
-      />
+        {/* 상품 Form 섹션 */}
+        <SaleProductDetailForm
+          saleProductId={saleProductId}
+          saleProductDetailData={saleProductDetailData}
+        />
+      </div>
+      <div className="mt-6 lg:mt-8 space-y-6 lg:space-y-8">
+        {/* 이용 안내 섹션 */}
+        <SaleProductDetailInfo productList={productList} />
 
-      {/* 이용 안내 섹션 */}
-      <SaleProductDetailInfo productList={productList} />
-
-      {/* 상품 상세 정보 섹션 */}
-      <SaleProductDeaitlBottom productList={productList} />
-    </>
+        {/* 상품 상세 정보 섹션 */}
+        <SaleProductDetailBottom productList={productList} />
+      </div>
+    </div>
   );
 }
