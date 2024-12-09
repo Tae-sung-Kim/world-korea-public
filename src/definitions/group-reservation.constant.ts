@@ -22,3 +22,26 @@ export const ESTIMATED_ARRIVAL_TIME = [
   { value: 'seoulSkyEntrance', label: '서울스카이 입구' },
   { value: 'etc', label: '기타', memo: '' },
 ];
+
+export const GROUP_RESERVATION_ICONS = [
+  {
+    alt: '롯데월드 어드벤처',
+    url: 'https://adventure.lotteworld.com/kor/group-program/introduce/contentsid/331/index.do',
+    src: '/images/group-reservation/lotteworld_adv.png',
+  },
+  {
+    alt: '서울 스카이',
+    url: ' https://seoulsky.lotteworld.com/ko/watch/groupDirection.do',
+    src: '/images/group-reservation/seoul_sky.png',
+  },
+  {
+    alt: '롯데월드 아쿠아리움',
+    url: ' https://www.lotteworld.com/contents/contents.asp?cmsCd=CM0875',
+    src: '/images/group-reservation/lotteworld_aqa.png',
+  },
+  {
+    alt: '롯데월드 어드벤처 부산',
+    url: ' https://adventurebusan.lotteworld.com/kor/group-program/introduce/contentsid/461/index.do',
+    src: '/images/group-reservation/lotteworld_adv_busan.png',
+  },
+];

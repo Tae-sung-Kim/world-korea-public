@@ -9,6 +9,7 @@ export type GroupReservationItemProduct = {
 export type GroupReservtionForm = {
   companyName: string; // 회사명
   contactPersonInfo: string; // 예약 담당자명 및 연락처
+  appointmentDate: Date | string; // 방문 일자
   guideContactInfo: string; // 인솔자명 연락처
   numberOfPeopel: string; // 인원수
   nationality: string; // 국적

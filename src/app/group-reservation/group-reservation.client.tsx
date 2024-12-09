@@ -7,7 +7,7 @@ import GroupReservationTop from './group-reservation-top.component';
 
 export default function GroupReservationClient() {
   return (
-    <div className="m-10 space-y-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 space-y-8 md:space-y-12">
       <GroupReservationTop />
       <GroupReservationInfo />
       <GroupReservationForm />
