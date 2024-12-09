@@ -17,64 +17,61 @@ export default function AccessPanel() {
   };
 
   return (
-    <div className="relative flex items-center justify-center min-h-[3rem] bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200/80 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-gray-50/80">
+    <div className="relative flex items-center justify-center min-h-[3.5rem] bg-gradient-to-r from-slate-50 via-white to-slate-50 border-b border-slate-200/80 shadow-sm backdrop-blur-md supports-[backdrop-filter]:bg-white/90">
       <BackgroundOverlay />
       <div className="relative flex justify-end items-center w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         {isLoggedIn ? (
-          <div className="flex items-center gap-3 sm:gap-4">
-            <Button variant="ghost" size="sm" asChild className="h-9 px-3 hover:bg-gray-100/80 transition-colors">
+          <div className="flex items-center gap-4">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              asChild 
+              className="h-9 px-4 rounded-full hover:bg-slate-100/90 hover:scale-105 transition-all duration-200"
+            >
               <Link href="/my/profile" className="flex items-center">
-                <span className="hidden sm:inline text-gray-700 font-medium">
-                  {user?.id}님 환영합니다
+                <span className="hidden sm:inline text-slate-700 text-sm font-normal tracking-tight">
+                  {user?.id}
+                  <span className="text-slate-400 ml-1 text-xs">님 환영합니다</span>
                 </span>
-                <span className="sm:hidden text-gray-700 font-medium">{user?.id}</span>
+                <span className="sm:hidden text-slate-700 text-sm font-normal">{user?.id}</span>
               </Link>
             </Button>
             {isAdmin && (
               <>
-                <Separator orientation="vertical" className="h-4 bg-gray-200" />
+                <Separator orientation="vertical" className="h-5 bg-slate-200/80" />
                 <Button 
                   variant="ghost" 
                   size="sm" 
                   asChild 
-                  className="h-9 px-3 hover:bg-gray-100/80 transition-colors"
+                  className="h-9 px-4 rounded-full hover:bg-slate-100/90 hover:scale-105 transition-all duration-200"
                 >
-                  <Link href="/admin/users" className="text-gray-700 font-medium">
+                  <Link href="/admin/users" className="text-slate-600 text-sm font-normal tracking-tight">
                     관리자 페이지
                   </Link>
                 </Button>
               </>
             )}
-            <Separator orientation="vertical" className="h-4 bg-gray-200" />
+            <Separator orientation="vertical" className="h-5 bg-slate-200/80" />
             <Button
               variant="ghost"
               size="sm"
               onClick={handleLogoutBtnClick}
-              className="h-9 px-3 text-gray-700 font-medium hover:bg-gray-100/80 transition-colors"
+              className="h-9 px-4 rounded-full text-slate-600 text-sm font-normal tracking-tight hover:bg-slate-100/90 hover:scale-105 transition-all duration-200"
             >
               로그아웃
             </Button>
           </div>
         ) : (
-          <div className="flex items-center gap-2 sm:gap-3">
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              asChild 
-              className="h-9 px-3 text-gray-700 font-medium hover:bg-gray-100/80 transition-colors"
-            >
-              <Link href="/login">로그인</Link>
-            </Button>
-            <Separator orientation="vertical" className="h-4 bg-gray-200" />
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              asChild 
-              className="h-9 px-3 text-gray-700 font-medium hover:bg-gray-100/80 transition-colors"
-            >
-              <Link href="/register">회원가입</Link>
-            </Button>
-          </div>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            asChild 
+            className="h-9 px-4 rounded-full hover:bg-slate-100/90 hover:scale-105 transition-all duration-200"
+          >
+            <Link href="/auth/login" className="text-slate-600 text-sm font-normal tracking-tight">
+              로그인
+            </Link>
+          </Button>
         )}
       </div>
     </div>
