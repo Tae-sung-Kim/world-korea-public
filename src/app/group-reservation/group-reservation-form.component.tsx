@@ -2,6 +2,7 @@
 
 import useReservableSaleProductQuery from '../admin/queries/sale-product.queries';
 import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   Form,
@@ -13,6 +14,11 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { GroupReservtionForm } from '@/definitions';
 import {
@@ -21,14 +27,17 @@ import {
   MEAL_COUPON,
   PAYMENT_TYPE,
 } from '@/definitions/group-reservation.constant';
+import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { format } from 'date-fns';
 import { useForm } from 'react-hook-form';
+import { BsCalendarDate } from 'react-icons/bs';
 import { z } from 'zod';
 
 const GroupReservationFormSchema = z.object({
   companyName: z.string().min(0, '업체명은 필수 입니다.'),
   contactPersonInfo: z.string(), // 예약 담당자명 및 연락처
-  appointmentDate: z.date().or(z.string()), //방문 일자
+  appointmentDate: z.date().nullable(), //방문 일자
   guideContactInfo: z.string().min(0, '인솔자(가이드)정보는 필수 입니다.'), // 인솔자명 연락처
   numberOfPeopel: z.string().min(0, '인원수는 필수 입니다.'),
   nationality: z.string().min(0, '국적은 필수 입니다.'),
@@ -126,18 +135,43 @@ export default function GroupReservationForm() {
                   <FormLabel className="text-base font-medium">
                     방문 일자
                   </FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="(롯데월드 패키지는 모두 당일 이용이 기본이며, 추가 옵션은 별도 일자에 이용하실 경우 기재해주시면 됩니다. )"
-                      {...field}
-                      value={
-                        typeof field.value === 'string'
-                          ? field.value
-                          : field.value.toString()
-                      }
-                      className="bg-white"
-                    />
-                  </FormControl>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant={'outline'}
+                          className={cn(
+                            'w-full pl-3 text-left font-normal bg-white',
+                            !field.value && 'text-muted-foreground'
+                          )}
+                        >
+                          {field.value ? (
+                            format(field.value, 'PPP')
+                          ) : (
+                            <span>날짜를 선택해주세요</span>
+                          )}
+                          <BsCalendarDate className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={
+                          field.value ? new Date(field.value) : undefined
+                        }
+                        onSelect={field.onChange}
+                        disabled={(date) =>
+                          date < new Date() || date < new Date('1900-01-01')
+                        }
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  <FormDescription>
+                    롯데월드 패키지는 모두 당일 이용이 기본이며, 추가 옵션은
+                    별도 일자에 이용하실 경우 기재해주시면 됩니다.
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -411,8 +445,13 @@ export default function GroupReservationForm() {
               )}
             />
           </div>
-          <div className="flex justify-center pt-6">
-            <Button className="px-8 py-2">예약 신청</Button>
+          <div className="flex justify-center pt-8">
+            <Button 
+              size="lg"
+              className="px-12 py-6 text-lg font-semibold bg-gradient-to-r from-purple-500 to-purple-700 text-white hover:from-purple-600 hover:to-purple-800 transition-all duration-300 shadow-lg hover:shadow-xl rounded-xl"
+            >
+              예약 신청하기
+            </Button>
           </div>
         </form>
       </Form>
