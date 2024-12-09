@@ -37,7 +37,7 @@ export default function HomeClient() {
   }
 
   const ProductGrid = () => (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4">
       {saleProductData.list.map((d, index) => {
         const { _id, name, price, products } = d;
         const images = products.map((d2) => d2.images).flat();
@@ -45,17 +45,19 @@ export default function HomeClient() {
         return (
           <div
             key={_id}
-            className="group animate-fade-up"
+            className="group animate-fade-up backdrop-blur-sm bg-white/5"
             style={{ animationDelay: `${index * 100}ms` }}
           >
             <Link
               href={`/sale-products/${_id}`}
-              className="block overflow-hidden rounded-xl shadow-sm hover:shadow-xl transition-all duration-300"
+              className="block overflow-hidden rounded-2xl bg-white/10 hover:bg-white/20 transition-all duration-300 transform hover:-translate-y-1"
             >
-              <div className="aspect-square">
-                <ProductImage url={images[0]} />
+              <div className="relative">
+                <div className="aspect-square w-[95%] mx-auto mt-3 overflow-hidden rounded-xl">
+                  <ProductImage url={images[0]} />
+                </div>
+                <ProductInfo name={name} price={price} />
               </div>
-              <ProductInfo name={name} price={price} />
             </Link>
           </div>
         );
