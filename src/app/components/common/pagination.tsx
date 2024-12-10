@@ -15,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import cn from 'classnames';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import qs from 'qs';
 
@@ -76,17 +77,19 @@ export default function Paginations({
     router.push(pathName + '?' + params);
   };
   return (
-    <div className="flex m-5">
-      <Pagination>
+    <div className="flex items-center justify-between gap-4 py-4">
+      <Pagination className="rounded-lg bg-white shadow-sm">
         <PaginationContent>
           <PaginationItem>
             <PaginationPrevious
               href="#"
-              style={{
-                pointerEvents: pageNumber <= 1 ? 'none' : 'auto',
-              }}
+              className={cn(
+                'hover:bg-gray-100 transition-colors',
+                pageNumber <= 1 &&
+                  'opacity-50 cursor-not-allowed hover:bg-transparent'
+              )}
               onClick={() => {
-                handleMovePage(pageNumber - 1);
+                if (pageNumber > 1) handleMovePage(pageNumber - 1);
               }}
             />
           </PaginationItem>
@@ -96,6 +99,11 @@ export default function Paginations({
                 <PaginationLink
                   href="#"
                   onClick={() => handleMovePage(d)}
+                  className={cn(
+                    'hover:bg-gray-100 transition-colors',
+                    pageNumber === d &&
+                      'bg-primary text-primary-foreground hover:bg-primary/90'
+                  )}
                   isActive={pageNumber === d}
                 >
                   {d}
@@ -107,32 +115,36 @@ export default function Paginations({
           <PaginationItem>
             <PaginationNext
               href="#"
-              style={{
-                pointerEvents: pageNumber >= totalPages ? 'none' : 'auto',
-              }}
+              className={cn(
+                'hover:bg-gray-100 transition-colors',
+                pageNumber >= totalPages &&
+                  'opacity-50 cursor-not-allowed hover:bg-transparent'
+              )}
               onClick={() => {
-                handleMovePage(pageNumber + 1);
+                if (pageNumber < totalPages) handleMovePage(pageNumber + 1);
               }}
             />
           </PaginationItem>
         </PaginationContent>
       </Pagination>
-      <Select onValueChange={handlePageSizeChange} value={String(pageSize)}>
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="선택" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            {PAGE_SIZE_LIST.map((d) => {
-              return (
-                <SelectItem key={d} value={String(d)}>
-                  {d} 개
-                </SelectItem>
-              );
-            })}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
+      <div className="flex items-center gap-2">
+        <Select onValueChange={handlePageSizeChange} value={String(pageSize)}>
+          <SelectTrigger className="w-[100px] bg-white">
+            <SelectValue placeholder="선택" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              {PAGE_SIZE_LIST.map((d) => {
+                return (
+                  <SelectItem key={d} value={String(d)}>
+                    {d}개
+                  </SelectItem>
+                );
+              })}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </div>
     </div>
   );
 }
