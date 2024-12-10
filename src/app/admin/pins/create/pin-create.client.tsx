@@ -40,9 +40,9 @@ import {
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CalendarIcon } from '@radix-ui/react-icons';
-import { format } from 'date-fns';
+import { addDays, format } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import { ChangeEvent, useEffect } from 'react';
+import { ChangeEvent, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -72,11 +72,13 @@ type PinFormValues = z.infer<typeof PinFormSchema>;
 export default function PinCreateClient() {
   const productData = useProductListQuery({});
 
+  const pinEndDate = useMemo(() => addDays(new Date(), 1), []);
+
   const pinForm = useForm<PinFormValues>({
     resolver: zodResolver(PinFormSchema),
     defaultValues: {
       pinPrefixFour: '',
-      endDate: new Date(),
+      endDate: pinEndDate,
       pinCount: 1,
     },
   });
@@ -102,33 +104,34 @@ export default function PinCreateClient() {
   }, [productData, pinForm]);
 
   return (
-    <div className="container mx-auto py-8 px-4">
-      <Card className="max-w-2xl mx-auto">
-        <CardHeader>
-          <CardDescription>
+    <div className="container mx-auto py-10 px-4">
+      <Card className="max-w-2xl mx-auto shadow-sm">
+        <CardHeader className="space-y-1">
+          <CardTitle className="text-2xl font-bold">핀 번호 생성</CardTitle>
+          <CardDescription className="text-sm text-muted-foreground">
             새로운 핀 번호를 생성하기 위한 정보를 입력해주세요.
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-6">
           <Form {...pinForm}>
             <form
               onSubmit={pinForm.handleSubmit(handleSubmit)}
-              className="space-y-6"
+              className="space-y-8"
             >
               <div className="grid gap-6 sm:grid-cols-2">
                 <FormField
                   control={pinForm.control}
                   name="productId"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>상품</FormLabel>
+                    <FormItem className="flex flex-col space-y-1.5">
+                      <FormLabel className="font-semibold">상품</FormLabel>
                       <FormControl>
                         <Select
                           onValueChange={field.onChange}
                           value={field.value}
                         >
                           <SelectTrigger className="w-full">
-                            <SelectValue placeholder="선택" />
+                            <SelectValue placeholder="상품을 선택하세요" />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectGroup>
@@ -150,8 +153,8 @@ export default function PinCreateClient() {
                   control={pinForm.control}
                   name="pinPrefixFour"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>핀 번호</FormLabel>
+                    <FormItem className="flex flex-col space-y-1.5">
+                      <FormLabel className="font-semibold">핀 번호</FormLabel>
                       <FormControl>
                         <div className="flex justify-center">
                           <InputOTP
@@ -181,8 +184,8 @@ export default function PinCreateClient() {
                   control={pinForm.control}
                   name="endDate"
                   render={({ field }) => (
-                    <FormItem className="flex flex-col">
-                      <FormLabel>종료일</FormLabel>
+                    <FormItem className="flex flex-col space-y-1.5">
+                      <FormLabel className="font-semibold">종료일</FormLabel>
                       <Popover>
                         <PopoverTrigger asChild>
                           <FormControl>
@@ -196,7 +199,7 @@ export default function PinCreateClient() {
                               {field.value ? (
                                 format(field.value, 'PPP', { locale: ko })
                               ) : (
-                                <span>날짜를 선택하세요.</span>
+                                <span>날짜를 선택하세요</span>
                               )}
                               <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                             </Button>
@@ -209,7 +212,7 @@ export default function PinCreateClient() {
                             onSelect={field.onChange}
                             disabled={(date) =>
                               format(date, 'yyyMMdd') <
-                              format(new Date(), 'yyyyMMdd')
+                              format(pinEndDate, 'yyyyMMdd')
                             }
                             initialFocus
                             locale={ko}
@@ -225,8 +228,8 @@ export default function PinCreateClient() {
                   control={pinForm.control}
                   name="pinCount"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>생성 갯수</FormLabel>
+                    <FormItem className="flex flex-col space-y-1.5">
+                      <FormLabel className="font-semibold">생성 갯수</FormLabel>
                       <FormControl>
                         <Input
                           type="number"
