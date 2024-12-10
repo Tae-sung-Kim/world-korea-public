@@ -30,8 +30,8 @@ export default function SaleProductDetailClient({ saleProductId }: Props) {
   }
 
   return (
-    <div className="w-full max-w-7xl mx-auto">
-      <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
+    <div className="w-full max-w-7xl mx-auto space-y-8">
+      <div className="flex flex-col lg:flex-row gap-8">
         {/* 이미지 섹션 */}
         <SaleProductDetailImage images={images} />
 
@@ -41,13 +41,11 @@ export default function SaleProductDetailClient({ saleProductId }: Props) {
           saleProductDetailData={saleProductDetailData}
         />
       </div>
-      <div className="mt-6 lg:mt-8 space-y-6 lg:space-y-8">
-        {/* 이용 안내 섹션 */}
-        <SaleProductDetailInfo productList={productList} />
+      {/* 이용 안내 섹션 */}
+      <SaleProductDetailInfo productList={productList} />
 
-        {/* 상품 상세 정보 섹션 */}
-        <SaleProductDetailBottom productList={productList} />
-      </div>
+      {/* 상품 상세 정보 섹션 */}
+      <SaleProductDetailBottom productList={productList} />
     </div>
   );
 }

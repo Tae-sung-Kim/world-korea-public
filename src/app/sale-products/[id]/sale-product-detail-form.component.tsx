@@ -112,7 +112,7 @@ export default function SaleProductDetailForm({
         onSubmit={saleProductForm.handleSubmit(handleSubmit)}
         className="w-full lg:w-1/2"
       >
-        <div className="backdrop-blur-md bg-white/70 rounded-xl p-6 lg:p-8 shadow-lg">
+        <div className="backdrop-blur-md bg-white/60 rounded-xl p-6 lg:p-8 shadow-lg">
           <h1 className="text-2xl lg:text-3xl font-bold text-center mb-6">
             {saleProductDetailData.name}
           </h1>

@@ -20,7 +20,7 @@ export default function ProductInfo({ name, price }: Props) {
           <p className="text-xs sm:text-sm text-gray-600 font-medium">
             판매가
           </p>
-          <p className="text-base sm:text-lg lg:text-xl font-bold bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+          <p className="text-base sm:text-lg lg:text-xl font-bold text-slate-700">
             ₩{addComma(price)}
           </p>
         </div>

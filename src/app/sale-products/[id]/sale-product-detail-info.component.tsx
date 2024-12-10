@@ -1,3 +1,5 @@
+'use client';
+
 import { ProductDisplayData } from '@/definitions';
 import { FcInfo } from 'react-icons/fc';
 
@@ -7,16 +9,18 @@ type InfoSectionProps = {
   textColor?: string;
 };
 
-const InfoSection = ({ title, children, textColor = 'text-gray-600' }: InfoSectionProps) => (
-  <div className="bg-white/80 rounded-2xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all duration-300">
+const InfoSection = ({
+  title,
+  children,
+  textColor = 'text-gray-600',
+}: InfoSectionProps) => (
+  <section className="bg-white rounded-2xl p-6 shadow-lg border border-slate-200 hover:shadow-xl transition-all duration-300">
     <h3 className="text-base lg:text-lg font-semibold text-gray-800 mb-4 flex items-center">
       <span className="w-1.5 h-5 bg-blue-500 rounded-full mr-2.5" />
       {title}
     </h3>
-    <ul className={`space-y-3 ${textColor}`}>
-      {children}
-    </ul>
-  </div>
+    <ul className={`space-y-3.5 ${textColor}`}>{children}</ul>
+  </section>
 );
 
 const CAUTION_MESSAGES = [
@@ -29,17 +33,17 @@ type SaleProductDetailInfoProps = {
   productList: ProductDisplayData[];
 };
 
-export default function SaleProductDetailInfo({ productList }: SaleProductDetailInfoProps) {
+export default function SaleProductDetailInfo({
+  productList,
+}: SaleProductDetailInfoProps) {
   return (
-    <div className="backdrop-blur-md bg-gradient-to-br from-white/90 to-white/50 rounded-3xl p-8 lg:p-10 shadow-lg">
-      <div className="flex items-center gap-3 mb-8">
-        <div className="bg-blue-50 p-2.5 rounded-xl">
-          <FcInfo className="w-6 h-6 lg:w-7 lg:h-7" />
-        </div>
+    <article className="bg-white/60 rounded-3xl p-8 lg:p-10 shadow-lg border border-slate-200">
+      <header className="flex items-center gap-3 mb-8">
+        <FcInfo className="w-6 h-6 lg:w-7 lg:h-7" />
         <h2 className="text-xl lg:text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
           이용 안내
         </h2>
-      </div>
+      </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
         <InfoSection title="운영 시간">
@@ -67,6 +71,6 @@ export default function SaleProductDetailInfo({ productList }: SaleProductDetail
           ))}
         </InfoSection>
       </div>
-    </div>
+    </article>
   );
 }
