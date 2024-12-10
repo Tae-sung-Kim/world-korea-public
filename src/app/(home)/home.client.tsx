@@ -1,8 +1,7 @@
 'use client';
 
 import { usePagination } from '../admin/hooks/usePagination';
-import ProductImage from './product-image.component';
-import ProductInfo from './product-info.component';
+import SaleProductList from './components/sale-product-list.component';
 import { Button } from '@/components/ui/button';
 import { useAuthContext } from '@/contexts/auth.context';
 import useNotifications from '@/hooks/useNotifications';
@@ -35,35 +34,6 @@ export default function HomeClient() {
       </div>
     );
   }
-
-  const ProductGrid = () => (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4">
-      {saleProductData.list.map((d, index) => {
-        const { _id, name, price, products } = d;
-        const images = products.map((d2) => d2.images).flat();
-
-        return (
-          <div
-            key={_id}
-            className="group animate-fade-up backdrop-blur-sm bg-white/5"
-            style={{ animationDelay: `${index * 100}ms` }}
-          >
-            <Link
-              href={`/sale-products/${_id}`}
-              className="block overflow-hidden rounded-2xl bg-white/10 hover:bg-white/20 transition-all duration-300 transform hover:-translate-y-1"
-            >
-              <div className="relative">
-                <div className="aspect-square w-[95%] mx-auto mt-3 overflow-hidden rounded-xl">
-                  <ProductImage url={images[0]} />
-                </div>
-                <ProductInfo name={name} price={price} />
-              </div>
-            </Link>
-          </div>
-        );
-      })}
-    </div>
-  );
 
   // 로그인하지 않은 경우
   if (!isLoggedIn) {
@@ -135,11 +105,6 @@ export default function HomeClient() {
             </p>
           </div>
         </div>
-
-        {/* 상품 목록 섹션 */}
-        <div className="space-y-8">
-          <ProductGrid />
-        </div>
       </div>
     );
   }
@@ -147,7 +112,7 @@ export default function HomeClient() {
   // 로그인한 경우
   return (
     <div className="w-full">
-      <ProductGrid />
+      <SaleProductList products={saleProductData.list} />
     </div>
   );
 }
