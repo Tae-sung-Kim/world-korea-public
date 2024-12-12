@@ -113,10 +113,16 @@ export async function POST(req: NextRequest) {
 
     const { imp_uid, merchant_uid, status } = body;
 
+    // ready 상태는 무시 (프론트엔드에서 처리)
+    if (status === 'ready') {
+      console.log('[포트원 웹훅] ready 상태는 프론트엔드에서 처리');
+      return createResponse(HTTP_STATUS.OK, 'ready 상태는 프론트엔드에서 처리');
+    }
+
     if (!imp_uid || !merchant_uid || !status) {
       console.error(
         '[포트원 웹훅] 필수 파라미터 누락:',
-        JSON.stringify(body, null, 2)
+        JSON.stringify({ imp_uid, merchant_uid, status }, null, 2)
       );
       return createResponse(
         HTTP_STATUS.BAD_REQUEST,
