@@ -6,17 +6,49 @@ import { createResponse } from '@/app/api/utils/http.util';
 import { HTTP_STATUS, OrderStatus } from '@/definitions';
 import { NextRequest, NextResponse } from 'next/server';
 
+// 포트원 웹훅 요청 검증
+const validatePortoneWebhook = async (req: NextRequest) => {
+  // 포트원 API 시크릿 키 확인
+  const portoneApiKey = process.env.PORTONE_API_SECRET;
+  if (!portoneApiKey) {
+    console.error('PORTONE_API_SECRET is not set');
+    return false;
+  }
+
+  // 포트원 웹훅 헤더 검증
+  const signature = req.headers.get('x-portone-signature');
+  if (!signature) {
+    console.error('Missing Portone signature header');
+    return false;
+  }
+
+  // TODO: 포트원 웹훅 서명 검증 로직 추가
+  // 실제 프로덕션에서는 포트원에서 제공하는 방식으로 서명을 검증해야 함
+
+  return true;
+};
+
 /**
  * 주문 상세 반환
  */
 export async function POST(req: NextRequest, ctx: { params: { id: string } }) {
   try {
     const orderId = ctx.params.id;
-    const { paymentId }: { paymentId: string } = await req.json();
+    const { paymentId, isWebhook }: { paymentId: string; isWebhook?: boolean } =
+      await req.json();
 
     await connectMongo();
 
-    if (!(await requiredIsMe())) {
+    // 웹훅 요청 검증 또는 일반 인증 체크
+    if (isWebhook) {
+      if (!(await validatePortoneWebhook(req))) {
+        console.error('Invalid webhook request');
+        return createResponse(
+          HTTP_STATUS.UNAUTHORIZED,
+          '유효하지 않은 웹훅 요청'
+        );
+      }
+    } else if (!(await requiredIsMe())) {
       return createResponse(HTTP_STATUS.UNAUTHORIZED);
     }
 

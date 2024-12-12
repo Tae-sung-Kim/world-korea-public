@@ -122,24 +122,13 @@ export async function POST(req: NextRequest) {
 
       case 'paid':
         // 입금 완료 처리
-        console.log('[포트원 웹훅] 입금 완료 처리 시작:', {
-          orderId: order._id,
-          imp_uid,
-          merchant_uid,
-          status,
+        console.log('[포트원 웹훅] 결제 완료 처리 시작');
+        await callOrderAPI(order._id, 'confirm-payment', 'POST', {
+          paymentId: imp_uid,
+          isWebhook: true,
         });
-        try {
-          await callOrderAPI(order._id, 'confirm-payment', 'POST', {
-            paymentId: imp_uid,
-            merchantId: merchant_uid,
-            status: 'paid',
-          });
-          console.log('[포트원 웹훅] 입금 완료 처리 성공');
-          return createResponse(HTTP_STATUS.OK, '결제 완료 처리됨');
-        } catch (error) {
-          console.error('[포트원 웹훅] 입금 완료 처리 실패:', error);
-          throw error;
-        }
+        console.log('[포트원 웹훅] 결제 완료 처리 완료');
+        return createResponse(HTTP_STATUS.OK, '결제 완료');
 
       case 'cancelled':
         console.log('[포트원 웹훅] 결제 취소 처리 시작:', {
