@@ -1,3 +1,4 @@
+import connectMongo from '@/app/api/libs/database';
 import OrderModel from '@/app/api/models/order.model';
 import { createResponse } from '@/app/api/utils/http.util';
 import { HTTP_STATUS, OrderStatus } from '@/definitions';
@@ -64,10 +65,6 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     console.log('[포트원 웹훅] 요청 body:', JSON.stringify(body, null, 2));
-    console.log('[포트원 웹훅] 환경변수 확인:', {
-      NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
-      hasInternalToken: !!process.env.INTERNAL_API_TOKEN,
-    });
 
     const { imp_uid, merchant_uid, status } = body;
 
@@ -81,6 +78,14 @@ export async function POST(req: NextRequest) {
         '필수 파라미터가 누락되었습니다.'
       );
     }
+
+    // MongoDB 연결
+    await connectMongo();
+
+    console.log('[포트원 웹훅] 환경변수 확인:', {
+      NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
+      hasInternalToken: !!process.env.INTERNAL_API_TOKEN,
+    });
 
     console.log('[포트원 웹훅] 주문 조회 시작:', { merchant_uid });
     // merchant_uid로 주문 조회
