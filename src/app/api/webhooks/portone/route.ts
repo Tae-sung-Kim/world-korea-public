@@ -124,17 +124,9 @@ export async function POST(req: NextRequest) {
     });
 
     switch (status) {
-      case 'ready':
-        // 가상계좌는 프론트엔드에서 이미 처리했으므로 성공으로 응답
-        console.log(
-          '[포트원 웹훅] 가상계좌 발급 완료 - 프론트엔드에서 이미 처리됨'
-        );
-        return createResponse(HTTP_STATUS.OK, '성공');
-
       case 'paid':
         // 입금 완료 처리
         console.log('[포트원 웹훅] 결제 완료 처리 시작');
-        // 주문 상태 로깅 추가
         console.log('[포트원 웹훅] 현재 주문 상태:', {
           orderId: order._id,
           status: order.status,
@@ -154,43 +146,10 @@ export async function POST(req: NextRequest) {
         console.log('[포트원 웹훅] 결제 완료 처리 완료');
         return createResponse(HTTP_STATUS.OK, '결제 완료');
 
-      case 'cancelled':
-        console.log('[포트원 웹훅] 결제 취소 처리 시작:', {
-          orderId: order._id,
-          imp_uid,
-          merchant_uid,
-          status,
-        });
-        try {
-          await callOrderAPI(order._id, 'cancel', 'PATCH');
-          console.log('[포트원 웹훅] 결제 취소 처리 성공');
-        } catch (error) {
-          console.error('[포트원 웹훅] 결제 취소 처리 실패:', error);
-          throw error;
-        }
-        break;
-
-      case 'failed':
-        console.log('[포트원 웹훅] 결제 실패 처리 시작:', {
-          orderId: order._id,
-          imp_uid,
-          merchant_uid,
-          status,
-        });
-        try {
-          await callOrderAPI(order._id, 'cancel', 'PATCH');
-          console.log('[포트원 웹훅] 결제 실패 처리 성공');
-        } catch (error) {
-          console.error('[포트원 웹훅] 결제 실패 처리 실패:', error);
-          throw error;
-        }
-        break;
-
       default:
-        console.log('알 수 없는 결제 상태:', status);
+        console.log('[포트원 웹훅] 처리하지 않는 상태:', status);
+        return createResponse(HTTP_STATUS.OK, '처리하지 않는 상태');
     }
-
-    return createResponse(HTTP_STATUS.OK);
   } catch (error) {
     console.error('웹훅 처리 중 오류:', error);
     return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
