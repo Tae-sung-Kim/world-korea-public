@@ -21,7 +21,6 @@ async function callOrderAPI(
 ) {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const internalToken = process.env.INTERNAL_API_TOKEN;
-  const portoneSignature = req.headers.get('x-portone-signature'); // 웹훅 요청의 signature 가져오기
 
   if (!baseUrl || !internalToken) {
     throw new Error(
@@ -37,11 +36,11 @@ async function callOrderAPI(
     body: JSON.stringify(body),
   });
 
+  // 내부 API 호출에는 INTERNAL_API_TOKEN만 사용
   const response = await fetch(url, {
     method,
     headers: {
       'Content-Type': 'application/json',
-      'x-portone-signature': portoneSignature || '', // 웹훅의 signature 그대로 전달
       Authorization: `Bearer ${internalToken}`,
     },
     ...(body && { body: JSON.stringify(body) }),
@@ -65,8 +64,38 @@ async function callOrderAPI(
   return response.json();
 }
 
+// 포트원 웹훅 요청 검증
+const validatePortoneWebhook = async (req: NextRequest) => {
+  // 포트원 API 시크릿 키 확인
+  const portoneApiKey = process.env.PORTONE_API_SECRET;
+  if (!portoneApiKey) {
+    console.error('PORTONE_API_SECRET is not set');
+    return false;
+  }
+
+  // 포트원 웹훅 헤더 검증
+  const signature = req.headers.get('x-portone-signature');
+  if (!signature) {
+    console.error('Missing Portone signature header');
+    return false;
+  }
+
+  // TODO: 포트원 웹훅 서명 검증 로직 추가
+  // 실제 프로덕션에서는 포트원에서 제공하는 방식으로 서명을 검증해야 함
+
+  return true;
+};
+
 export async function POST(req: NextRequest) {
   try {
+    // 포트원 웹훅 검증
+    if (!(await validatePortoneWebhook(req))) {
+      return createResponse(
+        HTTP_STATUS.UNAUTHORIZED,
+        '유효하지 않은 웹훅 요청'
+      );
+    }
+
     const body = await req.json();
     console.log('[포트원 웹훅] 요청 body:', JSON.stringify(body, null, 2));
 
