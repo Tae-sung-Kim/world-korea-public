@@ -5,7 +5,7 @@ import {
   PaginationProp,
 } from './queries.type';
 import {
-  NameAndId,
+  UserInfo,
   PaginationResponse,
   PaymentRequest,
   SaleProductBuyDisplayData,
@@ -38,7 +38,7 @@ export function useOrderSaleProductMutation({
 export function useOrderListQuery(
   paginationParam?: PaginationProp<PageFilter>
 ) {
-  const fallback: PaginationResponse<SaleProductBuyDisplayData<NameAndId>> = {
+  const fallback: PaginationResponse<SaleProductBuyDisplayData<UserInfo>> = {
     pageNumber: -1,
     pageSize: -1,
     list: [],

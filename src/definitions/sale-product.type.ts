@@ -1,9 +1,10 @@
 import { SaleProductDB } from '@/app/api/models/sale-product.model';
 import { Product } from '@/definitions';
 
-export type NameAndId = {
+export type UserInfo = {
   name: string;
   _id: string;
+  companyName?: string;
 };
 
 export type SaleProduct = SaleProductDB & {
@@ -51,7 +52,7 @@ export interface SaleProductBuyDisplayData<T>
   updatedAt: Date | string;
   status: string;
   totalPrice: number;
-  user: NameAndId;
+  user: UserInfo;
   tickets: Tickets[];
   paymentId: string;
 }

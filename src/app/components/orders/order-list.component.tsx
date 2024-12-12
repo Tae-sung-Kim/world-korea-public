@@ -18,7 +18,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useModalContext } from '@/contexts/modal.context';
-import { NameAndId, SaleProductBuyDisplayData, Tickets } from '@/definitions';
+import { UserInfo, SaleProductBuyDisplayData, Tickets } from '@/definitions';
 import { RefundRequest } from '@/definitions/portone.type';
 import usePortonePayment from '@/hooks/usePortonePaymnent';
 import { addComma } from '@/utils/number';
@@ -68,7 +68,7 @@ export default function OrderList({ tableId }: Props) {
   );
   const [order, setOrder] = useState<SortOrder>('');
 
-  const sortedData = useSort<SaleProductBuyDisplayData<NameAndId>>({
+  const sortedData = useSort<SaleProductBuyDisplayData<UserInfo>>({
     data,
     sortColumn,
     order,
@@ -212,10 +212,10 @@ export default function OrderList({ tableId }: Props) {
                         {d.saleProduct.name}
                       </TableCell>
                       <TableCell className="p-4 text-gray-700 text-center">
-                        업체명으로
+                        {d.user.name}
                       </TableCell>
                       <TableCell className="p-4 text-gray-700 text-center">
-                        업체 담당자명
+                        {d.user.companyName}
                       </TableCell>
                       <TableCell className="p-4 text-gray-700 text-center">
                         {addComma(d.quantity ?? 0)}

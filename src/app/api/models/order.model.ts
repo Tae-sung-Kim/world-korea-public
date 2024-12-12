@@ -126,7 +126,7 @@ schema.static(
         .limit(pageSize)
         .populate({
           path: 'user',
-          select: '_id name',
+          select: '_id name companyName',
         })
         .populate({
           path: 'saleProduct',
