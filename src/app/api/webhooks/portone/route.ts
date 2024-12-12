@@ -38,10 +38,23 @@ async function callOrderAPI(
 
 export async function POST(req: NextRequest) {
   try {
-    const { imp_uid, merchant_uid, status } = await req.json();
+    const body = await req.json();
+    console.log('[포트원 웹훅] 요청 body:', JSON.stringify(body, null, 2));
 
-    console.log('포트원 웹훅 수신:', { imp_uid, merchant_uid, status });
+    const { imp_uid, merchant_uid, status } = body;
 
+    if (!imp_uid || !merchant_uid || !status) {
+      console.error(
+        '[포트원 웹훅] 필수 파라미터 누락:',
+        JSON.stringify(body, null, 2)
+      );
+      return createResponse(
+        HTTP_STATUS.BAD_REQUEST,
+        '필수 파라미터가 누락되었습니다.'
+      );
+    }
+
+    console.log('[포트원 웹훅] 주문 조회 시작:', { merchant_uid });
     // merchant_uid로 주문 조회
     const order = await OrderModel.findOne({
       $or: [
@@ -51,9 +64,14 @@ export async function POST(req: NextRequest) {
     });
 
     if (!order) {
-      console.error('주문을 찾을 수 없음:', merchant_uid);
+      console.error('[포트원 웹훅] 주문을 찾을 수 없음:', merchant_uid);
       return createResponse(HTTP_STATUS.NOT_FOUND, '주문을 찾을 수 없습니다.');
     }
+
+    console.log('[포트원 웹훅] 주문 찾음:', {
+      orderId: order._id,
+      status: order.status,
+    });
 
     switch (status) {
       case 'ready':
