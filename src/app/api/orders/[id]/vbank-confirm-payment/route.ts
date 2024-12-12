@@ -26,10 +26,11 @@ export async function POST(req: NextRequest, ctx: { params: { id: string } }) {
       return createResponse(HTTP_STATUS.NOT_FOUND);
     }
 
-    if (orderData.status !== OrderStatus.Pending) {
+    // 상태 체크 수정: Unpaid나 Pending 상태일 때만 처리 가능
+    if (![OrderStatus.Unpaid, OrderStatus.Pending].includes(orderData.status)) {
       return createResponse(
         HTTP_STATUS.BAD_REQUEST,
-        '결제대기 상태가 아닙니다.'
+        '처리할 수 없는 주문 상태입니다.'
       );
     }
 
