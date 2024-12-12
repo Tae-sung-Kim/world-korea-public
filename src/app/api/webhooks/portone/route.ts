@@ -90,13 +90,28 @@ export async function POST(req: NextRequest) {
     });
 
     console.log('[포트원 웹훅] 주문 조회 시작:', { merchant_uid });
-    // merchant_uid로 주문 조회
-    const order = await OrderModel.findOne({
-      merchantId: merchant_uid,
-    });
+    
+    // 최대 3번 재시도, 1초 간격
+    let retryCount = 0;
+    let order = null;
+    
+    while (retryCount < 3) {
+      order = await OrderModel.findOne({
+        merchantId: merchant_uid,
+      });
+
+      if (order) break;
+
+      console.log(`[포트원 웹훅] 주문 조회 재시도 (${retryCount + 1}/3)`);
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      retryCount++;
+    }
 
     if (!order) {
-      console.error('[포트원 웹훅] 주문을 찾을 수 없음:', { merchant_uid });
+      console.error('[포트원 웹훅] 주문을 찾을 수 없음:', { 
+        merchant_uid,
+        retryCount,
+      });
       return createResponse(HTTP_STATUS.NOT_FOUND, '주문을 찾을 수 없습니다.');
     }
 
@@ -105,6 +120,7 @@ export async function POST(req: NextRequest) {
       currentStatus: order.status,
       merchantId: merchant_uid,
       requestStatus: status,
+      retryCount,
     });
 
     switch (status) {
