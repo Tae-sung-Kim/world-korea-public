@@ -39,7 +39,7 @@ async function callOrderAPI(
     method,
     headers: {
       'Content-Type': 'application/json',
-      'x-portone-signature': process.env.PORTONE_API_SECRET || '',  // 웹훅 검증을 위한 시그니처 추가
+      'x-portone-signature': process.env.PORTONE_API_SECRET || '', // 웹훅 검증을 위한 시그니처 추가
       Authorization: `Bearer ${process.env.INTERNAL_API_TOKEN}`,
     },
     ...(body && { body: JSON.stringify(body) }),
@@ -68,15 +68,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     console.log('[포트원 웹훅] 요청 body:', JSON.stringify(body, null, 2));
 
-    const {
-      imp_uid,
-      merchant_uid,
-      status,
-      vbank_num,
-      vbank_date,
-      vbank_name,
-      vbank_holder,
-    } = body;
+    const { imp_uid, merchant_uid, status } = body;
 
     if (!imp_uid || !merchant_uid || !status) {
       console.error(
@@ -117,30 +109,11 @@ export async function POST(req: NextRequest) {
 
     switch (status) {
       case 'ready':
-        console.log('[포트원 웹훅] 가상계좌 발급 완료 처리 시작');
-        // 주문 상태 로깅 추가
-        console.log('[포트원 웹훅] 현재 주문 상태:', {
-          orderId: order._id,
-          status: order.status,
-          expectedStatus: [OrderStatus.Unpaid, OrderStatus.Pending],
-        });
-
-        // 상태 체크 수정: Unpaid나 Pending 상태일 때만 처리
-        if (![OrderStatus.Unpaid, OrderStatus.Pending].includes(order.status)) {
-          console.log('[포트원 웹훅] 처리할 수 없는 주문 상태:', order.status);
-          return createResponse(HTTP_STATUS.OK, '처리할 수 없는 주문 상태');
-        }
-
-        await callOrderAPI(order._id, 'vbank-confirm-payment', 'POST', {
-          paymentId: imp_uid,
-          vbank_num: vbank_num,
-          vbank_date: vbank_date,
-          vbank_name: vbank_name,
-          vbank_holder: vbank_holder,
-          isWebhook: true,
-        });
-        console.log('[포트원 웹훅] 가상계좌 발급 완료 처리 완료');
-        return createResponse(HTTP_STATUS.OK, '가상계좌 발급 완료');
+        // 가상계좌는 프론트엔드에서 이미 처리했으므로 성공으로 응답
+        console.log(
+          '[포트원 웹훅] 가상계좌 발급 완료 - 프론트엔드에서 이미 처리됨'
+        );
+        return createResponse(HTTP_STATUS.OK, '성공');
 
       case 'paid':
         // 입금 완료 처리
@@ -152,7 +125,7 @@ export async function POST(req: NextRequest) {
           expectedStatus: OrderStatus.VbankReady,
         });
 
-        // 상태 체크 수정: VbankReady 상태인 경우에만 처리
+        // VbankReady 상태인 경우에만 처리
         if (order.status !== OrderStatus.VbankReady) {
           console.log('[포트원 웹훅] 처리할 수 없는 주문 상태:', order.status);
           return createResponse(HTTP_STATUS.OK, '처리할 수 없는 주문 상태');
