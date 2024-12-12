@@ -3,6 +3,7 @@ import OrderModel from '@/app/api/models/order.model';
 import { createResponse } from '@/app/api/utils/http.util';
 import { HTTP_STATUS, OrderStatus } from '@/definitions';
 import { NextRequest } from 'next/server';
+import crypto from 'crypto';
 
 /**
  * 포트원 웹훅 처리
@@ -65,7 +66,7 @@ async function callOrderAPI(
 }
 
 // 포트원 웹훅 요청 검증
-const validatePortoneWebhook = async (req: NextRequest) => {
+const validatePortoneWebhook = async (bodyText: string, headers: Headers) => {
   // 포트원 API 시크릿 키 확인
   const portoneApiKey = process.env.PORTONE_SECRET_API;
   if (!portoneApiKey) {
@@ -80,37 +81,51 @@ const validatePortoneWebhook = async (req: NextRequest) => {
   }
 
   // 포트원 웹훅 헤더 검증
-  const signature = req.headers.get('x-portone-signature');
+  const signature = headers.get('x-portone-signature');
   if (!signature) {
     console.error('Missing Portone signature header');
     return false;
   }
 
-  // TODO: 포트원 웹훅 서명 검증 로직 추가
-  // 실제 프로덕션에서는 포트원에서 제공하는 방식으로 서명을 검증해야 함
-  // 참고: https://developers.portone.io/docs/ko/api/webhook
-  console.log('[포트원 웹훅] 서명 검증:', { signature });
+  try {
+    // HMAC SHA256 해시 생성
+    const hmac = crypto.createHmac('sha256', portoneApiKey);
+    hmac.update(bodyText);
+    const hash = hmac.digest('hex');
 
-  return true;
+    console.log('[포트원 웹훅] 서명 검증:', { 
+      receivedSignature: signature,
+      calculatedHash: hash,
+      matched: signature === hash 
+    });
+
+    // 서명 일치 여부 확인
+    return signature === hash;
+  } catch (error) {
+    console.error('[포트원 웹훅] 서명 검증 중 오류:', error);
+    return false;
+  }
 };
 
 export async function POST(req: NextRequest) {
   try {
+    console.log('[포트원 웹훅] 요청 헤더:', {
+      headers: Object.fromEntries(req.headers.entries()),
+    });
+
+    // body를 먼저 읽어서 저장
+    const bodyText = await req.text();
+    console.log('[포트원 웹훅] 요청 body:', bodyText);
+
     // 포트원 웹훅 검증
-    if (!(await validatePortoneWebhook(req))) {
+    if (!(await validatePortoneWebhook(bodyText, req.headers))) {
       return createResponse(
         HTTP_STATUS.UNAUTHORIZED,
         '유효하지 않은 웹훅 요청'
       );
     }
 
-    console.log('[포트원 웹훅] 요청 헤더:', {
-      headers: Object.fromEntries(req.headers.entries()),
-    });
-
-    const body = await req.json();
-    console.log('[포트원 웹훅] 요청 body:', JSON.stringify(body, null, 2));
-
+    const body = JSON.parse(bodyText);
     const { imp_uid, merchant_uid, status } = body;
 
     // ready 상태는 무시 (프론트엔드에서 처리)
