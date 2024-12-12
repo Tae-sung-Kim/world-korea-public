@@ -42,7 +42,7 @@ export default function usePortonePayment(props: PortoneProps = {}) {
 
     const { IMP } = window;
     // imp로 시작
-    IMP.init(String(process.env.NEXT_PUBLIC_TEST_PORTONE_CUSTOMER_ID)); // 가맹점 식별코드
+    IMP.init(String(process.env.NEXT_PUBLIC_PORTONE_CUSTOMER_ID)); // 가맹점 식별코드
 
     const now = new Date();
     const dueDate = new Date(now.getTime() + 3 * 60 * 1000); // 1분으로 변경

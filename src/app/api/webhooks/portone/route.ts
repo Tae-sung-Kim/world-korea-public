@@ -73,6 +73,12 @@ const validatePortoneWebhook = async (req: NextRequest) => {
     return false;
   }
 
+  // 개발 환경에서는 signature 검증 스킵
+  if (process.env.NODE_ENV === 'development') {
+    console.log('[포트원 웹훅] 개발 환경에서는 signature 검증 스킵');
+    return true;
+  }
+
   // 포트원 웹훅 헤더 검증
   const signature = req.headers.get('x-portone-signature');
   if (!signature) {
