@@ -75,6 +75,13 @@ export default function usePortonePayment(props: PortoneProps = {}) {
       try {
         if (pay_method === 'vbank') {
           // 가상계좌 발급 성공 처리
+
+          // 일반 결제 성공 처리
+          await ordersService.createVbankPayment({
+            orderId: orderIdRef.current,
+            merchantId: merchant_uid,
+          });
+
           onVankSuccess &&
             onVankSuccess({
               amount: res.paid_amount ?? 0,
@@ -90,8 +97,8 @@ export default function usePortonePayment(props: PortoneProps = {}) {
           await ordersService.createPayment({
             orderId: orderIdRef.current,
             paymentId: imp_uid,
-            merchantId: merchant_uid,
           });
+
           toast.success('결제가 완료되었습니다.');
           setPaymentStatus(PaymentStatus.Success);
         }

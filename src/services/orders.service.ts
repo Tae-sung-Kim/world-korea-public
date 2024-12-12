@@ -31,6 +31,13 @@ class OrdersService {
     });
   }
 
+  // 가상 계좌 결제
+  createVbankPayment({ orderId, merchantId }: PaymentRequest) {
+    return http.post<string>(`/api/orders/${orderId}/vbank-confirm-payment`, {
+      merchantId,
+    });
+  }
+
   // 환불
   createRefund({ orderId, paymentId }: PaymentRequest) {
     return http.post<string>(`/api/orders/${orderId}/refund`, {
