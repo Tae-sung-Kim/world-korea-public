@@ -16,10 +16,12 @@ async function callOrderAPI(
   orderId: string,
   endpoint: string,
   method: string,
+  req: NextRequest,
   body?: object
 ) {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const internalToken = process.env.INTERNAL_API_TOKEN;
+  const portoneSignature = req.headers.get('x-portone-signature'); // 웹훅 요청의 signature 가져오기
 
   if (!baseUrl || !internalToken) {
     throw new Error(
@@ -39,8 +41,8 @@ async function callOrderAPI(
     method,
     headers: {
       'Content-Type': 'application/json',
-      'x-portone-signature': process.env.PORTONE_API_SECRET || '', // 웹훅 검증을 위한 시그니처 추가
-      Authorization: `Bearer ${process.env.INTERNAL_API_TOKEN}`,
+      'x-portone-signature': portoneSignature || '', // 웹훅의 signature 그대로 전달
+      Authorization: `Bearer ${internalToken}`,
     },
     ...(body && { body: JSON.stringify(body) }),
   });
@@ -60,7 +62,7 @@ async function callOrderAPI(
     endpoint,
   });
 
-  return response;
+  return response.json();
 }
 
 export async function POST(req: NextRequest) {
@@ -90,11 +92,11 @@ export async function POST(req: NextRequest) {
     });
 
     console.log('[포트원 웹훅] 주문 조회 시작:', { merchant_uid });
-    
+
     // 최대 3번 재시도, 1초 간격
     let retryCount = 0;
     let order = null;
-    
+
     while (retryCount < 3) {
       order = await OrderModel.findOne({
         merchantId: merchant_uid,
@@ -103,12 +105,12 @@ export async function POST(req: NextRequest) {
       if (order) break;
 
       console.log(`[포트원 웹훅] 주문 조회 재시도 (${retryCount + 1}/3)`);
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       retryCount++;
     }
 
     if (!order) {
-      console.error('[포트원 웹훅] 주문을 찾을 수 없음:', { 
+      console.error('[포트원 웹훅] 주문을 찾을 수 없음:', {
         merchant_uid,
         retryCount,
       });
@@ -139,7 +141,7 @@ export async function POST(req: NextRequest) {
           return createResponse(HTTP_STATUS.OK, '처리할 수 없는 주문 상태');
         }
 
-        await callOrderAPI(order._id, 'confirm-payment', 'POST', {
+        await callOrderAPI(order._id, 'confirm-payment', 'POST', req, {
           paymentId: imp_uid,
           isWebhook: true,
         });
