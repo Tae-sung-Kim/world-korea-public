@@ -3,6 +3,7 @@ import { OrderDB } from '@/app/api/models/order.model';
 export enum OrderStatus {
   Unpaid = 'unpaid',
   Pending = 'pending',
+  VbankReady = 'vbank_ready',
   Completed = 'completed',
   Canceled = 'canceled',
   Refunded = 'refunded',

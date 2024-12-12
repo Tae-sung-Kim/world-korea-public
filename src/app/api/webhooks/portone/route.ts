@@ -59,15 +59,21 @@ export async function POST(req: NextRequest) {
       case 'ready':
         // 가상계좌 발급 완료
         console.log('가상계좌 발급 완료:', order._id);
-        break;
+        await callOrderAPI(order._id, 'confirm-payment', 'POST', {
+          paymentId: imp_uid,
+          merchantId: merchant_uid,
+          status: 'ready',
+        });
+        return createResponse(HTTP_STATUS.OK, '가상계좌 발급 완료');
 
       case 'paid':
         // 입금 완료 처리
         await callOrderAPI(order._id, 'confirm-payment', 'POST', {
           paymentId: imp_uid,
+          merchantId: merchant_uid,
+          status: 'paid',
         });
-        console.log('입금 완료 처리 성공:', order._id);
-        break;
+        return createResponse(HTTP_STATUS.OK, '결제 완료 처리됨');
 
       case 'cancelled':
         console.log('결제 취소됨:', order._id);

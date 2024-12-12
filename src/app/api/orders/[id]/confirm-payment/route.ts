@@ -12,7 +12,12 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function POST(req: NextRequest, ctx: { params: { id: string } }) {
   try {
     const orderId = ctx.params.id;
-    const { paymentId }: { paymentId: string } = await req.json();
+    const {
+      paymentId,
+      status,
+      merchantId,
+    }: { paymentId: string; status: string; merchantId: string } =
+      await req.json();
 
     await connectMongo();
 
@@ -32,6 +37,21 @@ export async function POST(req: NextRequest, ctx: { params: { id: string } }) {
       return createResponse(HTTP_STATUS.NOT_FOUND);
     }
 
+    // 가상계좌의 경우 ready 상태도 허용
+    if (status === 'ready') {
+      await OrderModel.updateOne(
+        { _id: orderId },
+        {
+          $set: {
+            paymentId,
+            merchantId,
+            status: OrderStatus.VbankReady,
+          },
+        }
+      );
+      return createResponse(HTTP_STATUS.OK);
+    }
+
     if (orderData.status === OrderStatus.Completed) {
       return createResponse(
         HTTP_STATUS.BAD_REQUEST,
@@ -39,7 +59,10 @@ export async function POST(req: NextRequest, ctx: { params: { id: string } }) {
       );
     }
 
-    if (orderData.status !== OrderStatus.Pending) {
+    if (
+      orderData.status !== OrderStatus.Pending &&
+      orderData.status !== OrderStatus.VbankReady
+    ) {
       return createResponse(
         HTTP_STATUS.BAD_REQUEST,
         '결제대기 상태가 아닙니다.'
