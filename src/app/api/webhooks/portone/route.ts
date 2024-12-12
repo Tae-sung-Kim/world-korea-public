@@ -17,29 +17,57 @@ async function callOrderAPI(
   method: string,
   body?: object
 ) {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/orders/${orderId}/${endpoint}`,
-    {
+  const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/orders/${orderId}/${endpoint}`;
+  console.log('[포트원 웹훅] API 호출 시작:', {
+    url,
+    method,
+    body,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${process.env.INTERNAL_API_TOKEN}`,
+    },
+  });
+
+  try {
+    const response = await fetch(url, {
       method,
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${process.env.INTERNAL_API_TOKEN}`,
       },
       ...(body && { body: JSON.stringify(body) }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('[포트원 웹훅] API 호출 실패:', {
+        status: response.status,
+        statusText: response.statusText,
+        errorText,
+      });
+      throw new Error(`API 호출 실패: ${endpoint} - ${errorText}`);
     }
-  );
 
-  if (!response.ok) {
-    throw new Error(`API 호출 실패: ${endpoint}`);
+    console.log('[포트원 웹훅] API 호출 성공:', {
+      status: response.status,
+      endpoint,
+    });
+
+    return response;
+  } catch (error) {
+    console.error('[포트원 웹훅] API 호출 중 에러:', error);
+    throw error;
   }
-
-  return response;
 }
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     console.log('[포트원 웹훅] 요청 body:', JSON.stringify(body, null, 2));
+    console.log('[포트원 웹훅] 환경변수 확인:', {
+      NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
+      hasInternalToken: !!process.env.INTERNAL_API_TOKEN,
+    });
 
     const { imp_uid, merchant_uid, status } = body;
 
@@ -77,22 +105,12 @@ export async function POST(req: NextRequest) {
     switch (status) {
       case 'ready':
         // 가상계좌 발급 완료
-        console.log('[포트원 웹훅] 가상계좌 발급 완료 처리 시작:', {
-          orderId: order._id,
-          imp_uid,
-          merchant_uid,
-          status,
+        console.log('[포트원 웹훅] 가상계좌 발급 완료 처리 시작');
+        await callOrderAPI(order._id, 'vbank-confirm-payment', 'POST', {
+          merchantId: merchant_uid,
         });
-        try {
-          await callOrderAPI(order._id, 'vbank-confirm-payment', 'POST', {
-            merchantId: merchant_uid,
-          });
-          console.log('[포트원 웹훅] 가상계좌 발급 완료 처리 성공');
-          return createResponse(HTTP_STATUS.OK, '가상계좌 발급 완료');
-        } catch (error) {
-          console.error('[포트원 웹훅] 가상계좌 발급 완료 처리 실패:', error);
-          throw error;
-        }
+        console.log('[포트원 웹훅] 가상계좌 발급 완료 처리 완료');
+        return createResponse(HTTP_STATUS.OK, '가상계좌 발급 완료');
 
       case 'paid':
         // 입금 완료 처리
