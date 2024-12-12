@@ -43,7 +43,12 @@ export async function POST(req: NextRequest) {
     console.log('포트원 웹훅 수신:', { imp_uid, merchant_uid, status });
 
     // merchant_uid로 주문 조회
-    const order = await OrderModel.findOne({ merchantId: merchant_uid });
+    const order = await OrderModel.findOne({
+      $or: [
+        { merchantId: merchant_uid }, // 기존 필드명으로 찾기
+        { merchant_uid: merchant_uid }, // 포트원에서 보내는 필드명으로도 찾기
+      ],
+    });
 
     if (!order) {
       console.error('주문을 찾을 수 없음:', merchant_uid);
