@@ -85,10 +85,7 @@ export async function POST(req: NextRequest) {
     console.log('[포트원 웹훅] 주문 조회 시작:', { merchant_uid });
     // merchant_uid로 주문 조회
     const order = await OrderModel.findOne({
-      $or: [
-        { merchantId: merchant_uid },
-        { _id: merchant_uid }, // merchant_uid가 orderId일 수도 있음
-      ],
+      merchantId: merchant_uid
     });
 
     if (!order) {
