@@ -1,6 +1,6 @@
 import OrderModel from '@/app/api/models/order.model';
 import { createResponse } from '@/app/api/utils/http.util';
-import { HTTP_STATUS } from '@/definitions';
+import { HTTP_STATUS, OrderStatus } from '@/definitions';
 import { NextRequest } from 'next/server';
 
 /**
@@ -85,7 +85,7 @@ export async function POST(req: NextRequest) {
     console.log('[포트원 웹훅] 주문 조회 시작:', { merchant_uid });
     // merchant_uid로 주문 조회
     const order = await OrderModel.findOne({
-      merchantId: merchant_uid
+      merchantId: merchant_uid,
     });
 
     if (!order) {
@@ -104,6 +104,11 @@ export async function POST(req: NextRequest) {
       case 'ready':
         // 가상계좌 발급 완료
         console.log('[포트원 웹훅] 가상계좌 발급 완료 처리 시작');
+        // 이미 VbankReady 상태면 중복 웹훅이므로 무시
+        if (order.status === OrderStatus.VbankReady) {
+          console.log('[포트원 웹훅] 이미 가상계좌가 발급된 주문입니다.');
+          return createResponse(HTTP_STATUS.OK, '이미 처리된 웹훅');
+        }
         await callOrderAPI(order._id, 'vbank-confirm-payment', 'POST', {
           merchantId: merchant_uid,
         });
