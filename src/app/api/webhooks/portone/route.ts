@@ -97,12 +97,12 @@ const validatePortoneWebhook = async (req: NextRequest) => {
 export async function POST(req: NextRequest) {
   try {
     // 포트원 웹훅 검증
-    // if (!(await validatePortoneWebhook(req))) {
-    //   return createResponse(
-    //     HTTP_STATUS.UNAUTHORIZED,
-    //     '유효하지 않은 웹훅 요청'
-    //   );
-    // }
+    if (!(await validatePortoneWebhook(req))) {
+      return createResponse(
+        HTTP_STATUS.UNAUTHORIZED,
+        '유효하지 않은 웹훅 요청'
+      );
+    }
 
     console.log('[포트원 웹훅] 요청 헤더:', {
       headers: Object.fromEntries(req.headers.entries()),
