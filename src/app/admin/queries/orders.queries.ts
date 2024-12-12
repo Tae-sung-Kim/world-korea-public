@@ -24,7 +24,6 @@ export function useOrderSaleProductMutation({
     mutationFn: ordersService.createOrder,
     onSuccess: (data) => {
       onSuccess && onSuccess(data);
-      // toast.success('상품 구매가 완료 되었습니다.');
     },
     onError: (err: AxiosError<ErrorResponse>) => {
       if (err.response) {

@@ -1,4 +1,4 @@
-import { PaymentStatus } from '@/definitions';
+import { PaymentStatus, VBankResponse } from '@/definitions';
 import {
   RefundRequest,
   RequestPayParams,
@@ -6,11 +6,18 @@ import {
 } from '@/definitions/portone.type';
 import ordersService from '@/services/orders.service';
 import userService from '@/services/user.service';
+import { addDays, format } from 'date-fns';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 import { toast } from 'sonner';
 
-export default function usePortonePayment() {
+type PortoneProps = {
+  onVankSuccess?: (res: VBankResponse) => void;
+};
+
+export default function usePortonePayment(props: PortoneProps = {}) {
+  const { onVankSuccess = () => {} } = props;
+
   const router = useRouter();
 
   const [paymentStatus, setPaymentStatus] = useState<PaymentStatus>(
@@ -27,7 +34,9 @@ export default function usePortonePayment() {
   ) => {
     if (!window.IMP) return;
     setPaymentStatus(PaymentStatus.Ready);
-    const userData = await userService.getCurrentUser();
+
+    const { name, phoneNumber, email, address } =
+      await userService.getCurrentUser();
 
     orderIdRef.current = orderId;
 
@@ -35,18 +44,22 @@ export default function usePortonePayment() {
     // imp로 시작
     IMP.init(String(process.env.NEXT_PUBLIC_TEST_PORTONE_CUSTOMER_ID)); // 가맹점 식별코드
 
+    const now = new Date();
+    const dueDate = new Date(now.getTime() + 3 * 60 * 1000); // 1분으로 변경
+    // const vbank_due =  format(addDays(new Date(), 1), 'yyyyMMddHHmm'); // 1일
+    const vbank_due =
+      reqData.pay_method === 'vbank'
+        ? format(dueDate, 'yyyyMMddHHmm')
+        : undefined; // 3시간
+
     /* 2. 결제 데이터 정의하기 */
     const data: RequestPayParams = {
-      pg: 'html5_inicis', // PG사 : https://developers.portone.io/docs/ko/tip/pg-2 참고
-      // pay_method: 'card', // 결제수단
-      // merchant_uid: `mid_${new Date().getTime()}`, // 주문번호
-      // amount: 1000, // 결제금액
-      // name: '아임포트 결제 데이터 분석', // 주문명
-      buyer_name: userData.name, // 구매자 이름
-      buyer_tel: userData.phoneNumber, // 구매자 전화번호
-      buyer_email: userData.email, // 구매자 이메일
-      buyer_addr: userData.address, // 구매자 주소
-      // buyer_postcode:userData. '06018', // 구매자 우편번호
+      pg: 'html5_inicis', // PG 설정
+      buyer_name: name, // 구매자 이름
+      buyer_tel: phoneNumber, // 구매자 전화번호
+      buyer_email: email, // 구매자 이메일
+      buyer_addr: address, // 구매자 주소
+      vbank_due, // 가상계좌 입금기한 (3일)
       ...reqData,
     };
 
@@ -55,17 +68,45 @@ export default function usePortonePayment() {
   };
 
   /* 3. 콜백 함수 정의하기 */
-  const callback = async (response: RequestPayResponse) => {
-    const { success, imp_uid, error_msg } = response;
+  const callback = async (res: RequestPayResponse) => {
+    const { success, imp_uid, error_msg, pay_method, merchant_uid } = res;
+
+    console.log(res);
 
     if (success) {
-      await ordersService.createPayment({
-        orderId: orderIdRef.current,
-        paymentId: imp_uid,
-      });
-      toast.success('결제 성공');
-      setPaymentStatus(PaymentStatus.Success);
-      router.refresh();
+      try {
+        if (pay_method === 'vbank') {
+          // 가상계좌 발급 성공 처리
+          onVankSuccess &&
+            onVankSuccess({
+              amount: res.paid_amount ?? 0,
+              vbankName: res.vbank_name,
+              vbankCode: res.vbank_num,
+              vbankHolder: res.vbank_holder ?? '',
+              vbankNum: res.vbank_num,
+              vbankDate: res.vbank_date,
+              buyerName: res.buyer_name,
+            });
+          // toast.success(
+          //   '가상계좌가 발급되었습니다. 입금 기한 내에 입금해주세요.'
+          // );
+        } else {
+          // 일반 결제 성공 처리
+          await ordersService.createPayment({
+            orderId: orderIdRef.current,
+            paymentId: imp_uid,
+            merchantId: merchant_uid,
+          });
+          toast.success('결제가 완료되었습니다.');
+          setPaymentStatus(PaymentStatus.Success);
+        }
+      } catch (error) {
+        await ordersService.patchCancel({
+          orderId: orderIdRef.current,
+        });
+        toast.error('결제 실패');
+        setPaymentStatus(PaymentStatus.Error);
+      }
     } else {
       await ordersService.patchCancel({
         orderId: orderIdRef.current,
@@ -74,6 +115,7 @@ export default function usePortonePayment() {
       setPaymentStatus(PaymentStatus.Error);
     }
 
+    router.refresh();
     orderIdRef.current = '';
   };
 

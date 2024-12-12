@@ -30,6 +30,7 @@ export interface OrderDB extends Document {
   shortId: string; // shortId
   status: OrderStatus;
   paymentId: string;
+  merchantId: string;
   orderDate: Date;
   createdAt: Date;
   updatedAt: Date;
@@ -87,6 +88,7 @@ const schema = new Schema<OrderDB, OrderSchemaModel, OrderMethods>({
     ref: 'User',
   },
   paymentId: { type: String },
+  merchantId: { type: String },
   orderDate: { type: Date },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },

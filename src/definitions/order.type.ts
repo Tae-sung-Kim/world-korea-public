@@ -26,4 +26,15 @@ export type PaymentRequest = {
   orderId?: string;
   paymentId?: string | null | undefined;
   amount?: number;
+  merchantId?: string;
+};
+
+export type VBankResponse = {
+  vbankName?: string;
+  vbankCode?: string;
+  vbankHolder?: string;
+  vbankNum?: string;
+  vbankDate?: string;
+  amount?: number;
+  buyerName?: string;
 };

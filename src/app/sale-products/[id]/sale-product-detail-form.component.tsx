@@ -13,7 +13,12 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { ProductDisplayData, SaleProductFormData } from '@/definitions';
+import { MODAL_TYPE, useModalContext } from '@/contexts/modal.context';
+import {
+  ProductDisplayData,
+  SaleProductFormData,
+  VBankResponse,
+} from '@/definitions';
 import { RequestPayParams } from '@/definitions/portone.type';
 import usePortonePayment from '@/hooks/usePortonePaymnent';
 import { addComma } from '@/utils/number';
@@ -33,7 +38,7 @@ const SaleProductBuyFormSchema = z.object({
     .number()
     .min(1, '수량을 선택해 주세요.')
     .max(99, '최대 수량은 99개입니다.'),
-  buyType: z.enum(['card', 'trans']),
+  buyType: z.enum(['card', 'vbank']),
 });
 
 type SaleProductBuyFormValues = z.infer<typeof SaleProductBuyFormSchema>;
@@ -47,7 +52,25 @@ export default function SaleProductDetailForm({
   saleProductId,
   saleProductDetailData,
 }: SaleProductDetailFormProps) {
-  const { onPayment } = usePortonePayment();
+  const { openModal } = useModalContext();
+
+  const { onPayment } = usePortonePayment({
+    onVankSuccess: (res: VBankResponse) => {
+      openModal({
+        type: MODAL_TYPE.ALERT,
+        title: '가상계좌가 발급되었습니다. 입금 기한 내에 입금해주세요.',
+        content: (
+          <div>
+            <p>은행: {res.vbankName}</p>
+            <p>계좌번호: {res.vbankCode}</p>
+            <p>금액: {addComma(res.amount ?? 0)}원</p>
+            <p>기한: {res.vbankDate}</p>
+            <p>구매자: {res.buyerName}</p>
+          </div>
+        ),
+      });
+    },
+  });
   const purchaseDate = useMemo(() => addDays(new Date(), 1), []);
 
   const createOrderSaleProduct = useOrderSaleProductMutation({
@@ -224,12 +247,12 @@ export default function SaleProductDetailForm({
               name="buyType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-lg">결제 방법</FormLabel>
+                  <FormLabel>결제 수단</FormLabel>
                   <FormControl>
                     <RadioGroup
                       onValueChange={field.onChange}
-                      defaultValue={'card'}
-                      className="flex gap-6"
+                      defaultValue={field.value}
+                      className="flex flex-col space-y-1"
                     >
                       <FormItem className="flex items-center space-x-3 space-y-0">
                         <FormControl>
@@ -239,9 +262,11 @@ export default function SaleProductDetailForm({
                       </FormItem>
                       <FormItem className="flex items-center space-x-3 space-y-0">
                         <FormControl>
-                          <RadioGroupItem value="trans" />
+                          <RadioGroupItem value="vbank" />
                         </FormControl>
-                        <FormLabel className="font-normal">계좌이체</FormLabel>
+                        <FormLabel className="font-normal">
+                          가상계좌 (무통장입금)
+                        </FormLabel>
                       </FormItem>
                     </RadioGroup>
                   </FormControl>
@@ -252,9 +277,13 @@ export default function SaleProductDetailForm({
 
             <Button
               type="submit"
-              className="w-full h-14 text-lg bg-primary/90 hover:bg-primary"
+              className="w-full"
+              disabled={saleProductForm.formState.isSubmitting}
             >
-              구매하기
+              {saleProductForm.watch('buyType') === 'vbank'
+                ? '가상계좌 발급받기'
+                : '결제하기'}{' '}
+              ({addComma(saleProductForm.watch('amount'))}원)
             </Button>
           </div>
         </div>
