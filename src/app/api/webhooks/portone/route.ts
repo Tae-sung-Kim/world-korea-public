@@ -18,47 +18,49 @@ async function callOrderAPI(
   method: string,
   body?: object
 ) {
-  const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/orders/${orderId}/${endpoint}`;
-  console.log('[포트원 웹훅] API 호출 시작:', {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const internalToken = process.env.INTERNAL_API_TOKEN;
+
+  if (!baseUrl || !internalToken) {
+    throw new Error(
+      'Required environment variables are missing: ' +
+        JSON.stringify({ baseUrl: !!baseUrl, internalToken: !!internalToken })
+    );
+  }
+
+  const url = `${baseUrl}/api/orders/${orderId}/${endpoint}`;
+  console.log(`[포트원 웹훅] API 호출 시작: ${endpoint}`, {
     url,
     method,
-    body,
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${process.env.INTERNAL_API_TOKEN}`,
-    },
+    body: JSON.stringify(body),
   });
 
-  try {
-    const response = await fetch(url, {
-      method,
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${process.env.INTERNAL_API_TOKEN}`,
-      },
-      ...(body && { body: JSON.stringify(body) }),
-    });
+  const response = await fetch(url, {
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+      'x-portone-signature': process.env.PORTONE_API_SECRET || '',  // 웹훅 검증을 위한 시그니처 추가
+      Authorization: `Bearer ${process.env.INTERNAL_API_TOKEN}`,
+    },
+    ...(body && { body: JSON.stringify(body) }),
+  });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('[포트원 웹훅] API 호출 실패:', {
-        status: response.status,
-        statusText: response.statusText,
-        errorText,
-      });
-      throw new Error(`API 호출 실패: ${endpoint} - ${errorText}`);
-    }
-
-    console.log('[포트원 웹훅] API 호출 성공:', {
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error('[포트원 웹훅] API 호출 실패:', {
       status: response.status,
-      endpoint,
+      statusText: response.statusText,
+      errorText,
     });
-
-    return response;
-  } catch (error) {
-    console.error('[포트원 웹훅] API 호출 중 에러:', error);
-    throw error;
+    throw new Error(`API 호출 실패: ${endpoint} - ${errorText}`);
   }
+
+  console.log('[포트원 웹훅] API 호출 성공:', {
+    status: response.status,
+    endpoint,
+  });
+
+  return response;
 }
 
 export async function POST(req: NextRequest) {
