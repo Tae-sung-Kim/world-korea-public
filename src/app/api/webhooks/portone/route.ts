@@ -182,6 +182,17 @@ export async function POST(req: NextRequest) {
           return createResponse(HTTP_STATUS.OK, '처리할 수 없는 주문 상태');
         }
 
+        // 가상계좌인 경우 vbank-confirm-payment 엔드포인트 호출
+        if (order.status === 'vbank_ready') {
+          await callOrderAPI(order._id, 'vbank-confirm-payment', 'POST', req, {
+            paymentId: imp_uid,
+            isWebhook: true,
+          });
+          console.log('[포트원 웹훅] 가상계좌 결제 완료 처리 완료');
+          return createResponse(HTTP_STATUS.OK, '가상계좌 결제 완료');
+        }
+
+        // 일반 결제의 경우 confirm-payment 엔드포인트 호출
         await callOrderAPI(order._id, 'confirm-payment', 'POST', req, {
           paymentId: imp_uid,
           isWebhook: true,
