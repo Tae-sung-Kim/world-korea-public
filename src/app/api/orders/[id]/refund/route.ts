@@ -13,8 +13,8 @@ async function getPortoneAccessToken() {
     const response = await axios.post(
       `${process.env.PORT_ONE_API_URL}/users/getToken`,
       {
-        imp_key: process.env.TEST_PORTONE_API_KEY,
-        imp_secret: process.env.TEST_PORTONE_SECRET_API,
+        imp_key: process.env.PORTONE_API_KEY,
+        imp_secret: process.env.PORTONE_SECRET_API,
       }
     );
     return response.data.response.access_token;

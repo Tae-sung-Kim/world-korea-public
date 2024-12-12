@@ -67,9 +67,9 @@ async function callOrderAPI(
 // 포트원 웹훅 요청 검증
 const validatePortoneWebhook = async (req: NextRequest) => {
   // 포트원 API 시크릿 키 확인
-  const portoneApiKey = process.env.PORTONE_API_SECRET;
+  const portoneApiKey = process.env.PORTONE_SECRET_API;
   if (!portoneApiKey) {
-    console.error('PORTONE_API_SECRET is not set');
+    console.error('PORTONE_SECRET_API is not set');
     return false;
   }
 
@@ -82,6 +82,8 @@ const validatePortoneWebhook = async (req: NextRequest) => {
 
   // TODO: 포트원 웹훅 서명 검증 로직 추가
   // 실제 프로덕션에서는 포트원에서 제공하는 방식으로 서명을 검증해야 함
+  // 참고: https://developers.portone.io/docs/ko/api/webhook
+  console.log('[포트원 웹훅] 서명 검증:', { signature });
 
   return true;
 };
