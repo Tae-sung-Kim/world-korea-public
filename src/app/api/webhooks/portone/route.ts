@@ -66,7 +66,15 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     console.log('[포트원 웹훅] 요청 body:', JSON.stringify(body, null, 2));
 
-    const { imp_uid, merchant_uid, status } = body;
+    const {
+      imp_uid,
+      merchant_uid,
+      status,
+      vbank_num,
+      vbank_date,
+      vbank_name,
+      vbank_holder,
+    } = body;
 
     if (!imp_uid || !merchant_uid || !status) {
       console.error(
@@ -107,7 +115,6 @@ export async function POST(req: NextRequest) {
 
     switch (status) {
       case 'ready':
-        // 가상계좌 발급 완료
         console.log('[포트원 웹훅] 가상계좌 발급 완료 처리 시작');
         // 이미 VbankReady 상태면 중복 웹훅이므로 무시
         if (order.status === OrderStatus.VbankReady) {
@@ -115,7 +122,12 @@ export async function POST(req: NextRequest) {
           return createResponse(HTTP_STATUS.OK, '이미 처리된 웹훅');
         }
         await callOrderAPI(order._id, 'vbank-confirm-payment', 'POST', {
-          merchantId: merchant_uid,
+          paymentId: imp_uid,
+          vbank_num: vbank_num,
+          vbank_date: vbank_date,
+          vbank_name: vbank_name,
+          vbank_holder: vbank_holder,
+          isWebhook: true,
         });
         console.log('[포트원 웹훅] 가상계좌 발급 완료 처리 완료');
         return createResponse(HTTP_STATUS.OK, '가상계좌 발급 완료');
