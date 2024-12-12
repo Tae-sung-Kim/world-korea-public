@@ -53,10 +53,12 @@ export async function POST(req: NextRequest, ctx: { params: { id: string } }) {
       );
     }
 
-    if (orderData.status !== OrderStatus.Pending) {
+    // 결제 가능한 상태 체크
+    const allowedStatuses = [OrderStatus.Pending, OrderStatus.VbankReady];
+    if (!allowedStatuses.includes(orderData.status)) {
       return createResponse(
         HTTP_STATUS.BAD_REQUEST,
-        '결제대기 상태가 아닙니다.'
+        '결제 가능한 상태가 아닙니다.'
       );
     }
 

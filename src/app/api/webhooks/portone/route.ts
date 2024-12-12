@@ -174,32 +174,7 @@ export async function POST(req: NextRequest) {
 
     switch (status) {
       case 'paid':
-        // 입금 완료 처리
-        console.log('[포트원 웹훅] 결제 완료 처리 시작');
-        console.log('[포트원 웹훅] 현재 주문 상태:', {
-          orderId: order._id,
-          status: order.status,
-          expectedStatus: OrderStatus.VbankReady,
-        });
-
-        // VbankReady 상태인 경우에만 처리
-        if (order.status !== OrderStatus.VbankReady) {
-          console.log('[포트원 웹훅] 처리할 수 없는 주문 상태:', order.status);
-          return createResponse(HTTP_STATUS.OK, '처리할 수 없는 주문 상태');
-        }
-
-        // 가상계좌인 경우 vbank-confirm-payment 엔드포인트 호출
-        if (order.status === 'vbank_ready') {
-          await callOrderAPI(order._id, 'vbank-confirm-payment', 'POST', req, {
-            paymentId: imp_uid,
-            merchantId: merchant_uid,
-            isWebhook: true,
-          });
-          console.log('[포트원 웹훅] 가상계좌 결제 완료 처리 완료');
-          return createResponse(HTTP_STATUS.OK, '가상계좌 결제 완료');
-        }
-
-        // 일반 결제의 경우 confirm-payment 엔드포인트 호출
+        // 결제 완료 처리 (일반 결제와 가상계좌 모두)
         await callOrderAPI(order._id, 'confirm-payment', 'POST', req, {
           paymentId: imp_uid,
           isWebhook: true,
