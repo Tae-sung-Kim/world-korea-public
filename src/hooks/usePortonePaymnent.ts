@@ -71,8 +71,6 @@ export default function usePortonePayment(props: PortoneProps = {}) {
   const callback = async (res: RequestPayResponse) => {
     const { success, imp_uid, error_msg, pay_method, merchant_uid } = res;
 
-    console.log(res);
-
     if (success) {
       try {
         if (pay_method === 'vbank') {
@@ -87,9 +85,6 @@ export default function usePortonePayment(props: PortoneProps = {}) {
               vbankDate: res.vbank_date,
               buyerName: res.buyer_name,
             });
-          // toast.success(
-          //   '가상계좌가 발급되었습니다. 입금 기한 내에 입금해주세요.'
-          // );
         } else {
           // 일반 결제 성공 처리
           await ordersService.createPayment({

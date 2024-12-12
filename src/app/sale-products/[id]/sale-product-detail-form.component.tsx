@@ -1,5 +1,6 @@
 'use client';
 
+import VbankPaymentModal from './vbank-payment.modal';
 import { useOrderSaleProductMutation } from '@/app/admin/queries';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -55,19 +56,12 @@ export default function SaleProductDetailForm({
   const { openModal } = useModalContext();
 
   const { onPayment } = usePortonePayment({
-    onVankSuccess: (res: VBankResponse) => {
-      openModal({
-        type: MODAL_TYPE.ALERT,
-        title: '가상계좌가 발급되었습니다. 입금 기한 내에 입금해주세요.',
-        content: (
-          <div>
-            <p>은행: {res.vbankName}</p>
-            <p>계좌번호: {res.vbankCode}</p>
-            <p>금액: {addComma(res.amount ?? 0)}원</p>
-            <p>기한: {res.vbankDate}</p>
-            <p>구매자: {res.buyerName}</p>
-          </div>
-        ),
+    onVankSuccess: async (res: VBankResponse) => {
+      return await openModal({
+        title: '가상계좌(무통장입급) 안내',
+        Component: () => {
+          return <VbankPaymentModal vbank={res} />;
+        },
       });
     },
   });
