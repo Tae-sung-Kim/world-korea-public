@@ -71,38 +71,80 @@ export async function POST(req: NextRequest) {
     console.log('[포트원 웹훅] 주문 찾음:', {
       orderId: order._id,
       status: order.status,
+      merchantId: order.merchantId,
     });
 
     switch (status) {
       case 'ready':
         // 가상계좌 발급 완료
-        console.log('가상계좌 발급 완료:', order._id);
-        await callOrderAPI(order._id, 'confirm-payment', 'POST', {
-          paymentId: imp_uid,
-          merchantId: merchant_uid,
-          status: 'ready',
+        console.log('[포트원 웹훅] 가상계좌 발급 완료 처리 시작:', {
+          orderId: order._id,
+          imp_uid,
+          merchant_uid,
+          status,
         });
-        return createResponse(HTTP_STATUS.OK, '가상계좌 발급 완료');
+        try {
+          await callOrderAPI(order._id, 'vbank-confirm-payment', 'POST', {
+            merchantId: merchant_uid,
+          });
+          console.log('[포트원 웹훅] 가상계좌 발급 완료 처리 성공');
+          return createResponse(HTTP_STATUS.OK, '가상계좌 발급 완료');
+        } catch (error) {
+          console.error('[포트원 웹훅] 가상계좌 발급 완료 처리 실패:', error);
+          throw error;
+        }
 
       case 'paid':
         // 입금 완료 처리
-        await callOrderAPI(order._id, 'confirm-payment', 'POST', {
-          paymentId: imp_uid,
-          merchantId: merchant_uid,
-          status: 'paid',
+        console.log('[포트원 웹훅] 입금 완료 처리 시작:', {
+          orderId: order._id,
+          imp_uid,
+          merchant_uid,
+          status,
         });
-        return createResponse(HTTP_STATUS.OK, '결제 완료 처리됨');
+        try {
+          await callOrderAPI(order._id, 'confirm-payment', 'POST', {
+            paymentId: imp_uid,
+            merchantId: merchant_uid,
+            status: 'paid',
+          });
+          console.log('[포트원 웹훅] 입금 완료 처리 성공');
+          return createResponse(HTTP_STATUS.OK, '결제 완료 처리됨');
+        } catch (error) {
+          console.error('[포트원 웹훅] 입금 완료 처리 실패:', error);
+          throw error;
+        }
 
       case 'cancelled':
-        console.log('결제 취소됨:', order._id);
-        await callOrderAPI(order._id, 'cancel', 'PATCH');
-        console.log('결제 취소 처리 성공:', order._id);
+        console.log('[포트원 웹훅] 결제 취소 처리 시작:', {
+          orderId: order._id,
+          imp_uid,
+          merchant_uid,
+          status,
+        });
+        try {
+          await callOrderAPI(order._id, 'cancel', 'PATCH');
+          console.log('[포트원 웹훅] 결제 취소 처리 성공');
+        } catch (error) {
+          console.error('[포트원 웹훅] 결제 취소 처리 실패:', error);
+          throw error;
+        }
         break;
 
       case 'failed':
-        console.log('결제 실패:', order._id);
-        await callOrderAPI(order._id, 'cancel', 'PATCH');
-        console.log('결제 실패 처리 성공:', order._id);
+        console.log('[포트원 웹훅] 결제 실패 처리 시작:', {
+          orderId: order._id,
+          imp_uid,
+          merchant_uid,
+          status,
+        });
+        try {
+          await callOrderAPI(order._id, 'cancel', 'PATCH');
+          console.log('[포트원 웹훅] 결제 실패 처리 성공');
+        } catch (error) {
+          console.error('[포트원 웹훅] 결제 실패 처리 실패:', error);
+          throw error;
+        }
         break;
 
       default:
