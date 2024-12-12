@@ -22,6 +22,7 @@ import { NameAndId, SaleProductBuyDisplayData, Tickets } from '@/definitions';
 import { RefundRequest } from '@/definitions/portone.type';
 import usePortonePayment from '@/hooks/usePortonePaymnent';
 import { addComma } from '@/utils/number';
+import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { IoMdPrint } from 'react-icons/io';
@@ -224,11 +225,7 @@ export default function OrderList({ tableId }: Props) {
                       </TableCell>
                       <TableCell className="p-4 text-gray-700 text-center">
                         {d.orderDate &&
-                          new Date(d.orderDate).toLocaleDateString('ko-KR', {
-                            year: '2-digit',
-                            month: '2-digit',
-                            day: '2-digit',
-                          })}
+                          format(new Date(d.orderDate), 'yy.MM.dd HH:mm')}
                       </TableCell>
                       <TableCell className="p-4 text-gray-700 text-center">
                         방문예정일은(유효기간, 선택 날짜)
