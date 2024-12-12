@@ -186,6 +186,7 @@ export async function POST(req: NextRequest) {
         if (order.status === 'vbank_ready') {
           await callOrderAPI(order._id, 'vbank-confirm-payment', 'POST', req, {
             paymentId: imp_uid,
+            merchantId: merchant_uid,
             isWebhook: true,
           });
           console.log('[포트원 웹훅] 가상계좌 결제 완료 처리 완료');
