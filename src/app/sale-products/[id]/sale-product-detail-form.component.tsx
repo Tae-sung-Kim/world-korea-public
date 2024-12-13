@@ -32,6 +32,7 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 
 const SaleProductBuyFormSchema = z.object({
+  visitDate: z.date(),
   orderDate: z.date(),
   saleProduct: z.string(),
   amount: z.number().min(1, '금액을 입력해 주세요.'),
@@ -88,9 +89,10 @@ export default function SaleProductDetailForm({
   const saleProductForm = useForm<SaleProductBuyFormValues>({
     resolver: zodResolver(SaleProductBuyFormSchema),
     defaultValues: {
-      orderDate: purchaseDate,
+      visitDate: purchaseDate,
       quantity: 0,
       buyType: 'card',
+      orderDate: new Date(),
     },
   });
 
@@ -146,7 +148,7 @@ export default function SaleProductDetailForm({
 
             <FormField
               control={saleProductForm.control}
-              name="orderDate"
+              name="visitDate"
               render={({ field }) => (
                 <FormItem className="space-y-4">
                   <FormLabel className="text-lg font-medium">
@@ -276,7 +278,7 @@ export default function SaleProductDetailForm({
             >
               {saleProductForm.watch('buyType') === 'vbank'
                 ? '가상계좌 발급받기'
-                : '결제하기'}{' '}
+                : '결제하기'}
               ({addComma(saleProductForm.watch('amount'))}원)
             </Button>
           </div>

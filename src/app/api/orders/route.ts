@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
       return createResponse(HTTP_STATUS.UNAUTHORIZED);
     }
 
-    const { saleProduct, quantity } = await req.json();
+    const { saleProduct, quantity, visitDate } = await req.json();
 
     // 개수 만큼 핀 있는지 확인
     // 1. 판매상품 검색
@@ -151,6 +151,7 @@ export async function POST(req: NextRequest) {
       user: userData._id,
       orderDate: Date.now(),
       status: OrderStatus.Pending,
+      visitDate,
     });
 
     // 4. 상품
