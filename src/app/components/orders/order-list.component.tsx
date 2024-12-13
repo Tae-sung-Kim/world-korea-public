@@ -198,6 +198,9 @@ export default function OrderList({ tableId }: Props) {
                     <TableHead className="w-[110px] h-12 text-sm font-semibold text-gray-900 text-center">
                       결제 방법
                     </TableHead>
+                    <TableHead className="w-[110px] h-12 text-sm font-semibold text-gray-900 text-center">
+                      결제 상태
+                    </TableHead>
                     <TableHead className="w-[150px] h-12 text-sm font-semibold text-gray-900 text-center"></TableHead>
                   </TableRow>
                 </TableHeader>
@@ -241,10 +244,11 @@ export default function OrderList({ tableId }: Props) {
                       <TableCell className="p-4 text-gray-700 text-center">
                         {ORDER_PAY_TYPE_MESSAGE[d.payType]}
                       </TableCell>
+                      <TableCell className="p-4 text-gray-700 text-center">
+                        {ORDER_STATUS_MESSAGE[d.status]}
+                      </TableCell>
                       <TableCell className="p-2 text-center">
-                        {OrderStatus.Refunded === d.status ? (
-                          <>{ORDER_STATUS_MESSAGE[d.status]} </>
-                        ) : (
+                        {OrderStatus.Completed === d.status && (
                           <>
                             <Button
                               variant="ghost"

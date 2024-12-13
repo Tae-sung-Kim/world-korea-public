@@ -1,6 +1,6 @@
 import { SaleProductDB } from '@/app/api/models/sale-product.model';
 import { Product } from '@/definitions';
-import { OrderPayType } from './order.type';
+import { OrderPayType, OrderStatus } from './order.type';
 
 export type UserInfo = {
   name: string;
@@ -53,7 +53,7 @@ export interface SaleProductBuyDisplayData<T>
   pins: string[];
   createdAt: Date | string;
   updatedAt: Date | string;
-  status: string;
+  status: OrderStatus;
   totalPrice: number;
   user: UserInfo;
   tickets: Tickets[];
