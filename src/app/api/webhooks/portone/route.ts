@@ -144,6 +144,9 @@ export async function POST(req: NextRequest) {
         merchant_uid,
       });
 
+      // MongoDB 연결 추가
+      await connectMongo();
+
       const order = await OrderModel.findOne({ merchantId: merchant_uid });
       if (!order) {
         console.error('[포트원 웹훅] 주문을 찾을 수 없음:', { merchant_uid });
@@ -157,7 +160,7 @@ export async function POST(req: NextRequest) {
       if (order.status === OrderStatus.VbankReady) {
         try {
           // MongoDB 세션 시작
-          const session = await OrderModel.startSession();
+          const session = await (await connectMongo()).startSession();
 
           await session.withTransaction(async () => {
             // 주문 상태를 취소로 변경
@@ -204,7 +207,6 @@ export async function POST(req: NextRequest) {
           });
 
           await session.endSession();
-
           console.log('[포트원 웹훅] 가상계좌 기한 만료 처리 완료:', {
             orderId: order._id,
             orderStatus: OrderStatus.Canceled,
