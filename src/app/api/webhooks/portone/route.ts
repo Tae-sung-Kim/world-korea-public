@@ -1,9 +1,11 @@
 import connectMongo from '@/app/api/libs/database';
 import OrderModel from '@/app/api/models/order.model';
+import PinModel from '@/app/api/models/pin.model';
+// PinModel import 추가
 import { createResponse } from '@/app/api/utils/http.util';
 import { HTTP_STATUS, OrderStatus } from '@/definitions';
-import { NextRequest } from 'next/server';
 import crypto from 'crypto';
+import { NextRequest } from 'next/server';
 
 /**
  * 포트원 웹훅 처리
@@ -93,10 +95,10 @@ const validatePortoneWebhook = async (bodyText: string, headers: Headers) => {
     hmac.update(bodyText);
     const hash = hmac.digest('hex');
 
-    console.log('[포트원 웹훅] 서명 검증:', { 
+    console.log('[포트원 웹훅] 서명 검증:', {
       receivedSignature: signature,
       calculatedHash: hash,
-      matched: signature === hash 
+      matched: signature === hash,
     });
 
     // 서명 일치 여부 확인
@@ -132,6 +134,56 @@ export async function POST(req: NextRequest) {
     if (status === 'ready') {
       console.log('[포트원 웹훅] ready 상태는 프론트엔드에서 처리');
       return createResponse(HTTP_STATUS.OK, 'ready 상태는 프론트엔드에서 처리');
+    }
+
+    // vbank_due 상태 처리 추가
+    if (status === 'vbank_due') {
+      console.log('[포트원 웹훅] 가상계좌 기한 만료 처리 시작:', {
+        merchant_uid,
+      });
+
+      const order = await OrderModel.findOne({ merchantId: merchant_uid });
+      if (!order) {
+        console.error('[포트원 웹훅] 주문을 찾을 수 없음:', { merchant_uid });
+        return createResponse(
+          HTTP_STATUS.NOT_FOUND,
+          '주문을 찾을 수 없습니다.'
+        );
+      }
+
+      // VbankReady 상태인 경우에만 처리
+      if (order.status === OrderStatus.VbankReady) {
+        // 주문 상태를 취소로 변경
+        await OrderModel.updateOne(
+          { _id: order._id },
+          { $set: { status: OrderStatus.Canceled } }
+        );
+
+        // PIN 상태 업데이트
+        const pinIds = order.tickets.map((ticket) => ticket.pins).flat();
+        for (let pinNumber of pinIds) {
+          await PinModel.updateOne(
+            { _id: pinNumber },
+            {
+              $set: {
+                orderStatus: OrderStatus.Unpaid,
+                updatedAt: new Date(),
+                order: null,
+              },
+            },
+            {
+              runValidators: true,
+            }
+          );
+        }
+
+        console.log('[포트원 웹훅] 가상계좌 기한 만료 처리 완료:', {
+          orderId: order._id,
+        });
+        return createResponse(HTTP_STATUS.OK, '가상계좌 기한 만료 처리 완료');
+      }
+
+      return createResponse(HTTP_STATUS.OK, '처리가 필요하지 않은 주문 상태');
     }
 
     if (!imp_uid || !merchant_uid || !status) {
