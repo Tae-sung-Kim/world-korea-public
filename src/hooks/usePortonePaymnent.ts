@@ -61,9 +61,14 @@ export default function usePortonePayment(props: PortoneProps = {}) {
       buyer_email: email, // 구매자 이메일
       buyer_addr: address, // 구매자 주소
       vbank_due, // 가상계좌 입금기한
-      notice_url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/webhooks/portone`, // 웹훅 URL 명시적 설정
+      notice_url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/webhooks/portone`, // 웹훅 URL
       ...reqData,
     };
+
+    console.log('[포트원] 가상계좌 결제 요청:', {
+      ...data,
+      vbank_due_date: dueDate.toISOString(),
+    });
 
     /* 4. 결제 창 호출하기 */
     IMP.request_pay(data, callback);
