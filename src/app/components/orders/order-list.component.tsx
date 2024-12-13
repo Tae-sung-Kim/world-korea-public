@@ -228,7 +228,8 @@ export default function OrderList({ tableId }: Props) {
                           format(new Date(d.orderDate), 'yy.MM.dd HH:mm')}
                       </TableCell>
                       <TableCell className="p-4 text-gray-700 text-center">
-                        방문예정일은(유효기간, 선택 날짜)
+                        {d.visitDate &&
+                          format(new Date(d.visitDate), 'yy.MM.dd')}
                       </TableCell>
                       <TableCell className="p-2 text-center">
                         <Button
