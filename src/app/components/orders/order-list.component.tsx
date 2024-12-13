@@ -17,7 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { useModalContext } from '@/contexts/modal.context';
+import { MODAL_TYPE, useModalContext } from '@/contexts/modal.context';
 import {
   UserInfo,
   SaleProductBuyDisplayData,
@@ -25,8 +25,8 @@ import {
   OrderStatus,
   ORDER_STATUS_MESSAGE,
   ORDER_PAY_TYPE_MESSAGE,
+  RefundRequest,
 } from '@/definitions';
-import { RefundRequest } from '@/definitions/portone.type';
 import usePortonePayment from '@/hooks/usePortonePaymnent';
 import { addComma } from '@/utils/number';
 import { format } from 'date-fns';
@@ -45,6 +45,11 @@ type QrCodeProps = {
   title?: string;
   tickets: Tickets[];
 };
+
+interface ExtendedRefundRequest extends RefundRequest {
+  title: string;
+  orderDate: Date | string;
+}
 
 export default function OrderList({ tableId }: Props) {
   const { openModal } = useModalContext();
@@ -128,10 +133,34 @@ export default function OrderList({ tableId }: Props) {
   };
 
   // 환불하기
-  const handleRefundClick = ({ orderId, paymentId }: RefundRequest) => {
-    onRefund({
-      orderId,
-      paymentId,
+  const handleRefundClick = ({
+    orderId,
+    paymentId,
+    title,
+    orderDate,
+  }: ExtendedRefundRequest) => {
+    openModal({
+      type: MODAL_TYPE.CONFIRM,
+      title: title,
+      content: (
+        <div className="space-y-4 py-2">
+          <p className="text-gray-700">이 상품을 환불 하시겠습니까?</p>
+          <div className="rounded-md bg-gray-50 p-3">
+            <div className="flex items-center gap-2 text-sm">
+              <span className="text-gray-500">구매일</span>
+              <span className="font-medium">
+                {format(new Date(orderDate), 'yyyy-MM-dd')}
+              </span>
+            </div>
+          </div>
+        </div>
+      ),
+      onOk: () => {
+        onRefund({
+          orderId,
+          paymentId,
+        });
+      },
     });
   };
 
@@ -277,6 +306,8 @@ export default function OrderList({ tableId }: Props) {
                               className="h-7 w-7 text-red-500 hover:text-red-600"
                               onClick={() =>
                                 handleRefundClick({
+                                  title: d.saleProduct.name,
+                                  orderDate: d.orderDate,
                                   orderId: d._id,
                                   paymentId: d.paymentId,
                                 })
