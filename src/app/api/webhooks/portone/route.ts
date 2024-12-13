@@ -132,6 +132,13 @@ export async function POST(req: NextRequest) {
     const body = JSON.parse(bodyText);
     const { imp_uid, merchant_uid, status } = body;
 
+    console.log('[포트원 웹훅] 수신된 웹훅 데이터:', {
+      imp_uid,
+      merchant_uid,
+      status,
+      body,
+    });
+
     // ready 상태는 무시 (프론트엔드에서 처리)
     if (status === 'ready') {
       console.log('[포트원 웹훅] ready 상태는 프론트엔드에서 처리');
@@ -139,9 +146,10 @@ export async function POST(req: NextRequest) {
     }
 
     // vbank_due 상태 처리 추가
-    if (status === 'vbank_due') {
-      console.log('[포트원 웹훅] 가상계좌 기한 만료 처리 시작:', {
+    if (status === 'vbank_due' || status === 'cancelled') {
+      console.log('[포트원 웹훅] 가상계좌 기한 만료 또는 취소 처리 시작:', {
         merchant_uid,
+        status,
       });
 
       // MongoDB 연결 추가
@@ -207,17 +215,23 @@ export async function POST(req: NextRequest) {
           });
 
           await session.endSession();
-          console.log('[포트원 웹훅] 가상계좌 기한 만료 처리 완료:', {
+          console.log('[포트원 웹훅] 가상계좌 기한 만료 또는 취소 처리 완료:', {
             orderId: order._id,
             orderStatus: OrderStatus.Canceled,
             pinStatus: OrderStatus.Unpaid,
           });
-          return createResponse(HTTP_STATUS.OK, '가상계좌 기한 만료 처리 완료');
+          return createResponse(
+            HTTP_STATUS.OK,
+            '가상계좌 기한 만료 또는 취소 처리 완료'
+          );
         } catch (error) {
-          console.error('[포트원 웹훅] 가상계좌 만료 처리 중 오류:', error);
+          console.error(
+            '[포트원 웹훅] 가상계좌 만료 또는 취소 처리 중 오류:',
+            error
+          );
           return createResponse(
             HTTP_STATUS.INTERNAL_SERVER_ERROR,
-            '가상계좌 만료 처리 중 오류가 발생했습니다.'
+            '가상계좌 만료 또는 취소 처리 중 오류가 발생했습니다.'
           );
         }
       }

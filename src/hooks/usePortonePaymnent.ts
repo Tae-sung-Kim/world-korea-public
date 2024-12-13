@@ -46,12 +46,12 @@ export default function usePortonePayment(props: PortoneProps = {}) {
     IMP.init(String(process.env.NEXT_PUBLIC_PORTONE_CUSTOMER_ID)); // 가맹점 식별코드
 
     const now = new Date();
-    const dueDate = new Date(now.getTime() + 3 * 60 * 1000); // 1분으로 변경
-    // const vbank_due =  format(addDays(new Date(), 1), 'yyyyMMddHHmm'); // 1일
+    // 테스트를 위해 5분으로 설정
+    const dueDate = new Date(now.getTime() + 5 * 60 * 1000);
     const vbank_due =
       reqData.pay_method === 'vbank'
         ? format(dueDate, 'yyyyMMddHHmm')
-        : undefined; // 3시간
+        : undefined;
 
     /* 2. 결제 데이터 정의하기 */
     const data: RequestPayParams = {
@@ -60,7 +60,8 @@ export default function usePortonePayment(props: PortoneProps = {}) {
       buyer_tel: phoneNumber, // 구매자 전화번호
       buyer_email: email, // 구매자 이메일
       buyer_addr: address, // 구매자 주소
-      vbank_due, // 가상계좌 입금기한 (3일)
+      vbank_due, // 가상계좌 입금기한
+      notice_url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/webhooks/portone`, // 웹훅 URL 명시적 설정
       ...reqData,
     };
 
