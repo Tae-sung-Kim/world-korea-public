@@ -18,7 +18,14 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useModalContext } from '@/contexts/modal.context';
-import { UserInfo, SaleProductBuyDisplayData, Tickets } from '@/definitions';
+import {
+  UserInfo,
+  SaleProductBuyDisplayData,
+  Tickets,
+  OrderStatus,
+  ORDER_STATUS_MESSAGE,
+  ORDER_PAY_TYPE_MESSAGE,
+} from '@/definitions';
 import { RefundRequest } from '@/definitions/portone.type';
 import usePortonePayment from '@/hooks/usePortonePaymnent';
 import { addComma } from '@/utils/number';
@@ -188,10 +195,10 @@ export default function OrderList({ tableId }: Props) {
                     <TableHead className="w-[110px] h-12 text-sm font-semibold text-gray-900 text-center">
                       방문예정일
                     </TableHead>
-                    <TableHead
-                      className="w-[150px] h-12 text-sm font-semibold text-gray-900 text-center"
-                      colSpan={3}
-                    ></TableHead>
+                    <TableHead className="w-[110px] h-12 text-sm font-semibold text-gray-900 text-center">
+                      결제 방법
+                    </TableHead>
+                    <TableHead className="w-[150px] h-12 text-sm font-semibold text-gray-900 text-center"></TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -231,45 +238,50 @@ export default function OrderList({ tableId }: Props) {
                         {d.visitDate &&
                           format(new Date(d.visitDate), 'yy.MM.dd')}
                       </TableCell>
-                      <TableCell className="p-2 text-center">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-7 w-7 text-gray-600 hover:text-gray-900"
-                          onClick={() =>
-                            handleQrCodeClick({
-                              tickets: d.tickets ?? [],
-                              title: d.saleProduct.name,
-                            })
-                          }
-                        >
-                          <LuQrCode className="h-4 w-4" />
-                        </Button>
+                      <TableCell className="p-4 text-gray-700 text-center">
+                        {ORDER_PAY_TYPE_MESSAGE[d.payType]}
                       </TableCell>
                       <TableCell className="p-2 text-center">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-7 w-7 text-gray-600 hover:text-gray-900"
-                          onClick={() => handleQrCodePrint(d.tickets ?? [])}
-                        >
-                          <IoMdPrint className="h-4 w-4" />
-                        </Button>
-                      </TableCell>
-                      <TableCell className="p-2 text-center">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-7 w-7 text-red-500 hover:text-red-600"
-                          onClick={() =>
-                            handleRefundClick({
-                              orderId: d._id,
-                              paymentId: d.paymentId,
-                            })
-                          }
-                        >
-                          <RiRefundLine className="h-4 w-4" />
-                        </Button>
+                        {OrderStatus.Refunded === d.status ? (
+                          <>{ORDER_STATUS_MESSAGE[d.status]} </>
+                        ) : (
+                          <>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-7 w-7 text-gray-600 hover:text-gray-900"
+                              onClick={() =>
+                                handleQrCodeClick({
+                                  tickets: d.tickets ?? [],
+                                  title: d.saleProduct.name,
+                                })
+                              }
+                            >
+                              <LuQrCode className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-7 w-7 text-gray-600 hover:text-gray-900"
+                              onClick={() => handleQrCodePrint(d.tickets ?? [])}
+                            >
+                              <IoMdPrint className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-7 w-7 text-red-500 hover:text-red-600"
+                              onClick={() =>
+                                handleRefundClick({
+                                  orderId: d._id,
+                                  paymentId: d.paymentId,
+                                })
+                              }
+                            >
+                              <RiRefundLine className="h-4 w-4" />
+                            </Button>
+                          </>
+                        )}
                       </TableCell>
                     </TableRow>
                   ))}

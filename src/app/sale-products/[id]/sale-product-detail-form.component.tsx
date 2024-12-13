@@ -14,13 +14,14 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { MODAL_TYPE, useModalContext } from '@/contexts/modal.context';
+import { useModalContext } from '@/contexts/modal.context';
 import {
   ProductDisplayData,
   SaleProductFormData,
   VBankResponse,
+  OrderPayType,
+  RequestPayParams,
 } from '@/definitions';
-import { RequestPayParams } from '@/definitions/portone.type';
 import usePortonePayment from '@/hooks/usePortonePaymnent';
 import { addComma } from '@/utils/number';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -40,7 +41,7 @@ const SaleProductBuyFormSchema = z.object({
     .number()
     .min(1, '수량을 선택해 주세요.')
     .max(99, '최대 수량은 99개입니다.'),
-  buyType: z.enum(['card', 'vbank']),
+  payType: z.nativeEnum(OrderPayType),
 });
 
 type SaleProductBuyFormValues = z.infer<typeof SaleProductBuyFormSchema>;
@@ -59,7 +60,7 @@ export default function SaleProductDetailForm({
   const { onPayment } = usePortonePayment({
     onVankSuccess: async (res: VBankResponse) => {
       return await openModal({
-        title: '가상계좌(무통장입급) 안내',
+        title: '가상계좌(무통장입금) 안내',
         Component: () => {
           return <VbankPaymentModal vbank={res} />;
         },
@@ -73,7 +74,7 @@ export default function SaleProductDetailForm({
       if (data) {
         const orderId = data._id;
         const reqData: RequestPayParams = {
-          pay_method: saleProductForm.getValues().buyType, // 결제수단
+          pay_method: saleProductForm.getValues().payType, // 결제수단
           merchant_uid: `mid_${purchaseDate.getTime()}`, // 주문번호
           amount: saleProductForm.getValues().amount,
           name: saleProductDetailData.name, // 주문명
@@ -91,7 +92,7 @@ export default function SaleProductDetailForm({
     defaultValues: {
       visitDate: purchaseDate,
       quantity: 0,
-      buyType: 'card',
+      payType: OrderPayType.Card,
       orderDate: new Date(),
     },
   });
@@ -240,7 +241,7 @@ export default function SaleProductDetailForm({
 
             <FormField
               control={saleProductForm.control}
-              name="buyType"
+              name="payType"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>결제 수단</FormLabel>
@@ -252,13 +253,13 @@ export default function SaleProductDetailForm({
                     >
                       <FormItem className="flex items-center space-x-3 space-y-0">
                         <FormControl>
-                          <RadioGroupItem value="card" />
+                          <RadioGroupItem value={OrderPayType.Card} />
                         </FormControl>
                         <FormLabel className="font-normal">신용카드</FormLabel>
                       </FormItem>
                       <FormItem className="flex items-center space-x-3 space-y-0">
                         <FormControl>
-                          <RadioGroupItem value="vbank" />
+                          <RadioGroupItem value={OrderPayType.Vbank} />
                         </FormControl>
                         <FormLabel className="font-normal">
                           가상계좌 (무통장입금)
@@ -276,7 +277,7 @@ export default function SaleProductDetailForm({
               className="w-full"
               disabled={saleProductForm.formState.isSubmitting}
             >
-              {saleProductForm.watch('buyType') === 'vbank'
+              {saleProductForm.watch('payType') === OrderPayType.Vbank
                 ? '가상계좌 발급받기'
                 : '결제하기'}
               ({addComma(saleProductForm.watch('amount'))}원)

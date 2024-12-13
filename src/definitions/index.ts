@@ -14,3 +14,4 @@ export * from './response.type';
 export * from './order.constant';
 export * from './order.type';
 export * from './pin.type';
+export * from './portone.type';

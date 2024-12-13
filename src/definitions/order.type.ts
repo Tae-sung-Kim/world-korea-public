@@ -9,6 +9,11 @@ export enum OrderStatus {
   Refunded = 'refunded',
 }
 
+export enum OrderPayType {
+  Card = 'card',
+  Vbank = 'vbank',
+}
+
 export type Order = OrderDB & {
   _id: string;
 };

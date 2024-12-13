@@ -1,5 +1,3 @@
-import { Product } from './product.type';
-
 //단체 예약
 export type GroupReservationItemProduct = {
   productId: string;

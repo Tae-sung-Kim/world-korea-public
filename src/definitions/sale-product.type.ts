@@ -1,5 +1,6 @@
 import { SaleProductDB } from '@/app/api/models/sale-product.model';
 import { Product } from '@/definitions';
+import { OrderPayType } from './order.type';
 
 export type UserInfo = {
   name: string;
@@ -43,7 +44,7 @@ export interface SaleProductBuyFormData<T> {
   amount: number; // 구매
   quantity: number; //상품수량
   saleProduct: T; //판매 상품 아이디
-  buyType: string;
+  payType: OrderPayType;
 }
 
 export interface SaleProductBuyDisplayData<T>
