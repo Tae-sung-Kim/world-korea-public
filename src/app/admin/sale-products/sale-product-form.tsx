@@ -59,7 +59,9 @@ export default function SaleProductForm({
 }: Props) {
   const userCategoryList = useUserCategoryListQuery();
 
-  const [detailProducts, setDetailProducts] = useState<ProductDisplayData[]>([]);
+  const [detailProducts, setDetailProducts] = useState<ProductDisplayData[]>(
+    []
+  );
   //상품 등록 후 reset
   const handleResetForm = () => {
     onResetData && onResetData();
@@ -108,9 +110,7 @@ export default function SaleProductForm({
     const products: string[] = selectProductData?.map((d) => d._id ?? '') ?? [];
 
     saleProductForm.setValue('products', products);
-    const formValues = saleProductForm.getValues();
-
-    saleProductCreateMutation.mutate(formValues);
+    saleProductCreateMutation.mutate(saleProductForm.getValues());
   };
 
   //가격 입력
@@ -136,7 +136,9 @@ export default function SaleProductForm({
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium text-gray-900">상품명</FormLabel>
+                  <FormLabel className="text-sm font-medium text-gray-900">
+                    상품명
+                  </FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -158,7 +160,9 @@ export default function SaleProductForm({
                 render={({ field }) => {
                   return (
                     <FormItem>
-                      <FormLabel className="text-sm font-medium text-gray-900">Level</FormLabel>
+                      <FormLabel className="text-sm font-medium text-gray-900">
+                        Level
+                      </FormLabel>
                       <FormControl>
                         <Select
                           onValueChange={field.onChange}
@@ -171,7 +175,10 @@ export default function SaleProductForm({
                             <SelectGroup>
                               {userCategoryList?.map((d) => {
                                 return (
-                                  <SelectItem key={d._id} value={String(d.level)}>
+                                  <SelectItem
+                                    key={d._id}
+                                    value={String(d.level)}
+                                  >
                                     {d.name}
                                   </SelectItem>
                                 );
@@ -193,7 +200,9 @@ export default function SaleProductForm({
                   return (
                     <FormItem>
                       <div className="flex items-center space-x-2">
-                        <FormLabel className="text-sm font-medium text-gray-900">단체예약 가능</FormLabel>
+                        <FormLabel className="text-sm font-medium text-gray-900">
+                          단체예약 가능
+                        </FormLabel>
                         <FormControl>
                           <Switch
                             checked={field.value}
@@ -209,7 +218,9 @@ export default function SaleProductForm({
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormItem>
-                <FormLabel className="text-sm font-medium text-gray-900">정가</FormLabel>
+                <FormLabel className="text-sm font-medium text-gray-900">
+                  정가
+                </FormLabel>
                 <FormControl>
                   <Input
                     placeholder="정가를 입력해 주세요."
@@ -226,7 +237,9 @@ export default function SaleProductForm({
                 name="price"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium text-gray-900">판매가</FormLabel>
+                    <FormLabel className="text-sm font-medium text-gray-900">
+                      판매가
+                    </FormLabel>
                     <FormControl>
                       <Input
                         {...field}
@@ -243,7 +256,7 @@ export default function SaleProductForm({
             </div>
 
             <div className="flex justify-end space-x-2 pt-6">
-              <Button 
+              <Button
                 type="submit"
                 className="bg-blue-600 text-white hover:bg-blue-700"
               >

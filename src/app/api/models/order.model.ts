@@ -32,6 +32,8 @@ export interface OrderDB extends Document {
   payType: string;
   paymentId: string;
   merchantId: string;
+  vbankName: string;
+  vbankNum: string;
   orderDate: Date;
   createdAt: Date;
   updatedAt: Date;
@@ -92,6 +94,8 @@ const schema = new Schema<OrderDB, OrderSchemaModel, OrderMethods>({
   payType: { type: String },
   paymentId: { type: String },
   merchantId: { type: String },
+  vbankName: { type: String },
+  vbankNum: { type: String },
   orderDate: { type: Date },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },

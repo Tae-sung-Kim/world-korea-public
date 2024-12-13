@@ -24,7 +24,7 @@ interface VbankPaymentModalProps {
 export default function VbankPaymentModal({ vbank }: VbankPaymentModalProps) {
   const handleCopyAccount = async () => {
     try {
-      await navigator.clipboard.writeText(vbank.vbankCode || '');
+      await navigator.clipboard.writeText(vbank.vbankNum || '');
       toast.success('계좌번호가 복사되었습니다.');
     } catch (err) {
       toast.error('계좌번호 복사에 실패했습니다.');
@@ -57,7 +57,7 @@ export default function VbankPaymentModal({ vbank }: VbankPaymentModalProps) {
               <span className="text-sm text-gray-600">계좌번호</span>
             </div>
             <div className="flex items-center space-x-2">
-              <span className="font-medium">{vbank.vbankCode}</span>
+              <span className="font-medium">{vbank.vbankNum}</span>
               <Button
                 variant="ghost"
                 size="sm"

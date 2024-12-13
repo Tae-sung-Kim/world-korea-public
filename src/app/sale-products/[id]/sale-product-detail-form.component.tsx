@@ -66,11 +66,14 @@ export default function SaleProductDetailForm({
         },
       });
     },
+    onPaymentSuccess: () => {
+      saleProductForm.reset();
+    },
   });
   const purchaseDate = useMemo(() => addDays(new Date(), 1), []);
 
   const createOrderSaleProduct = useOrderSaleProductMutation({
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       if (data) {
         const orderId = data._id;
         const reqData: RequestPayParams = {
@@ -79,7 +82,7 @@ export default function SaleProductDetailForm({
           amount: saleProductForm.getValues().amount,
           name: saleProductDetailData.name, // 주문명
         };
-        onPayment(reqData, orderId);
+        await onPayment(reqData, orderId);
       } else {
         toast.error('다시 시도하여 주세요.');
         return null;

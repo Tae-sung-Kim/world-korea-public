@@ -1,6 +1,6 @@
+import { OrderPayType, OrderStatus } from './order.type';
 import { SaleProductDB } from '@/app/api/models/sale-product.model';
 import { Product } from '@/definitions';
-import { OrderPayType, OrderStatus } from './order.type';
 
 export type UserInfo = {
   name: string;
@@ -27,7 +27,6 @@ export interface SaleProductFormData<T> {
   products: T[];
   accessLevel: string;
   isReservable: boolean;
-  visitDate: Date | string;
   createdAt?: Date | string;
   updatedAt?: Date | string;
 }
@@ -58,4 +57,7 @@ export interface SaleProductBuyDisplayData<T>
   user: UserInfo;
   tickets: Tickets[];
   paymentId: string;
+  vbankName: string;
+  vbankNum: string;
+  merchantId: string;
 }

@@ -10,7 +10,12 @@ import { NextRequest } from 'next/server';
 export async function POST(req: NextRequest, ctx: { params: { id: string } }) {
   try {
     const orderId = ctx.params.id;
-    const { merchantId }: { merchantId: string } = await req.json();
+    const {
+      merchantId,
+      vbankName,
+      vbankNum,
+    }: { merchantId: string; vbankName: string; vbankNum: string } =
+      await req.json();
 
     await connectMongo();
 
@@ -40,6 +45,8 @@ export async function POST(req: NextRequest, ctx: { params: { id: string } }) {
         $set: {
           merchantId,
           status: OrderStatus.VbankReady,
+          vbankName,
+          vbankNum,
         },
       }
     );

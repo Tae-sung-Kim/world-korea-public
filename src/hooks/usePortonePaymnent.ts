@@ -13,10 +13,11 @@ import { toast } from 'sonner';
 
 type PortoneProps = {
   onVankSuccess?: (res: VBankResponse) => void;
+  onPaymentSuccess?: () => void;
 };
 
 export default function usePortonePayment(props: PortoneProps = {}) {
-  const { onVankSuccess = () => {} } = props;
+  const { onVankSuccess, onPaymentSuccess } = props;
 
   const router = useRouter();
 
@@ -80,15 +81,16 @@ export default function usePortonePayment(props: PortoneProps = {}) {
           await ordersService.createVbankPayment({
             orderId: orderIdRef.current,
             merchantId: merchant_uid,
+            vbankName: res.vbank_name,
+            vbankNum: res.vbank_num,
           });
 
           onVankSuccess &&
             onVankSuccess({
               amount: res.paid_amount ?? 0,
               vbankName: res.vbank_name,
-              vbankCode: res.vbank_num,
-              vbankHolder: res.vbank_holder ?? '',
               vbankNum: res.vbank_num,
+              vbankHolder: res.vbank_holder ?? '',
               vbankDate: res.vbank_date,
               buyerName: res.buyer_name,
             });
@@ -102,6 +104,7 @@ export default function usePortonePayment(props: PortoneProps = {}) {
           toast.success('결제가 완료되었습니다.');
           setPaymentStatus(PaymentStatus.Success);
         }
+        onPaymentSuccess && onPaymentSuccess();
       } catch (error) {
         await ordersService.patchCancel({
           orderId: orderIdRef.current,

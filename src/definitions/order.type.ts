@@ -33,11 +33,12 @@ export type PaymentRequest = {
   paymentId?: string | null | undefined;
   amount?: number;
   merchantId?: string;
+  vbankName?: string;
+  vbankNum?: string;
 };
 
 export type VBankResponse = {
   vbankName?: string;
-  vbankCode?: string;
   vbankHolder?: string;
   vbankNum?: string;
   vbankDate?: string;

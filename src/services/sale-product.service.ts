@@ -2,7 +2,6 @@ import { PageFilter, PaginationProp } from '@/app/admin/queries/queries.type';
 import {
   PackageDetailName,
   PaginationResponse,
-  ProductFormData,
   ProductDisplayData,
   SaleProductFormData,
 } from '@/definitions';
