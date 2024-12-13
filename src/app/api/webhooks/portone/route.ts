@@ -146,7 +146,11 @@ export async function POST(req: NextRequest) {
     }
 
     // vbank_due 상태 처리 추가
-    if (status === 'vbank_due' || status === 'cancelled' || (status === 'failed' && body.pay_method === 'vbank')) {
+    if (
+      status === 'vbank_due' ||
+      status === 'cancelled' ||
+      (status === 'failed' && body.pay_method === 'vbank')
+    ) {
       console.log('[포트원 웹훅] 가상계좌 기한 만료 또는 취소 처리 시작:', {
         merchant_uid,
         status,

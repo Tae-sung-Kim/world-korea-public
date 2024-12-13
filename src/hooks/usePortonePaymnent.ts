@@ -55,21 +55,14 @@ export default function usePortonePayment(props: PortoneProps = {}) {
 
     /* 2. 결제 데이터 정의하기 */
     const data: RequestPayParams = {
-      pg: 'html5_inicis.INIpayTest', // PG 테스트 모드 설정
+      pg: 'html5_inicis', // PG 설정
       buyer_name: name, // 구매자 이름
       buyer_tel: phoneNumber, // 구매자 전화번호
       buyer_email: email, // 구매자 이메일
       buyer_addr: address, // 구매자 주소
       vbank_due, // 가상계좌 입금기한
-      notice_url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/webhooks/portone`, // 웹훅 URL
       ...reqData,
-      amount: 9900,
     };
-
-    console.log('[포트원] 가상계좌 결제 요청:', {
-      ...data,
-      vbank_due_date: dueDate.toISOString(),
-    });
 
     /* 4. 결제 창 호출하기 */
     IMP.request_pay(data, callback);
