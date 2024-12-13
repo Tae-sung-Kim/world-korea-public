@@ -153,34 +153,69 @@ export async function POST(req: NextRequest) {
 
       // VbankReady 상태인 경우에만 처리
       if (order.status === OrderStatus.VbankReady) {
-        // 주문 상태를 취소로 변경
-        await OrderModel.updateOne(
-          { _id: order._id },
-          { $set: { status: OrderStatus.Canceled } }
-        );
+        try {
+          // MongoDB 세션 시작
+          const session = await OrderModel.startSession();
 
-        // PIN 상태 업데이트
-        const pinIds = order.tickets.map((ticket) => ticket.pins).flat();
-        for (let pinNumber of pinIds) {
-          await PinModel.updateOne(
-            { _id: pinNumber },
-            {
-              $set: {
-                orderStatus: OrderStatus.Unpaid,
-                updatedAt: new Date(),
-                order: null,
+          await session.withTransaction(async () => {
+            // 주문 상태를 취소로 변경
+            await OrderModel.updateOne(
+              { _id: order._id },
+              {
+                $set: {
+                  status: OrderStatus.Canceled,
+                  updatedAt: new Date(),
+                },
               },
-            },
-            {
-              runValidators: true,
+              { session }
+            );
+
+            // PIN 상태 업데이트 - Unpaid로 변경하여 재사용 가능하도록 함
+            const pinIds = order.tickets.map((ticket) => ticket.pins).flat();
+            for (const pinNumber of pinIds) {
+              await PinModel.updateOne(
+                { _id: pinNumber },
+                {
+                  $set: {
+                    orderStatus: OrderStatus.Unpaid,
+                    updatedAt: new Date(),
+                    order: null,
+                  },
+                },
+                {
+                  runValidators: true,
+                  session,
+                }
+              );
+              console.log('[포트원 웹훅] PIN 상태 업데이트:', {
+                orderId: order._id,
+                pinId: pinNumber,
+                status: OrderStatus.Unpaid,
+              });
             }
+
+            console.log('[포트원 웹훅] 모든 PIN 상태 업데이트 완료:', {
+              orderId: order._id,
+              pinCount: pinIds.length,
+              status: OrderStatus.Unpaid,
+            });
+          });
+
+          await session.endSession();
+
+          console.log('[포트원 웹훅] 가상계좌 기한 만료 처리 완료:', {
+            orderId: order._id,
+            orderStatus: OrderStatus.Canceled,
+            pinStatus: OrderStatus.Unpaid,
+          });
+          return createResponse(HTTP_STATUS.OK, '가상계좌 기한 만료 처리 완료');
+        } catch (error) {
+          console.error('[포트원 웹훅] 가상계좌 만료 처리 중 오류:', error);
+          return createResponse(
+            HTTP_STATUS.INTERNAL_SERVER_ERROR,
+            '가상계좌 만료 처리 중 오류가 발생했습니다.'
           );
         }
-
-        console.log('[포트원 웹훅] 가상계좌 기한 만료 처리 완료:', {
-          orderId: order._id,
-        });
-        return createResponse(HTTP_STATUS.OK, '가상계좌 기한 만료 처리 완료');
       }
 
       return createResponse(HTTP_STATUS.OK, '처리가 필요하지 않은 주문 상태');
