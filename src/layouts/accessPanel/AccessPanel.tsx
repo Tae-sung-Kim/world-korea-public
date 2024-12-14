@@ -19,53 +19,68 @@ export default function AccessPanel() {
     <div className="flex items-center">
       {isLoggedIn ? (
         <div className="flex items-center gap-4">
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            asChild 
+          <Button
+            variant="ghost"
+            size="sm"
+            asChild
             className="h-9 px-4 rounded-full hover:bg-slate-100/90 hover:scale-105 transition-all duration-200"
           >
             <Link href="/my/profile" className="flex items-center">
               <span className="hidden sm:inline text-slate-700 text-sm font-normal tracking-tight">
                 {user?.id}
-                <span className="text-slate-400 ml-1 text-xs">님 환영합니다</span>
+                <span className="text-slate-400 ml-1 text-xs">
+                  님 환영합니다
+                </span>
               </span>
-              <span className="sm:hidden text-slate-700 text-sm font-normal">{user?.id}</span>
+              <span className="sm:hidden text-slate-700 text-sm font-normal">
+                {user?.id}
+              </span>
             </Link>
           </Button>
           {isAdmin && (
             <>
-              <Separator orientation="vertical" className="h-5 bg-slate-200/80" />
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                asChild 
+              <Separator
+                orientation="vertical"
+                className="h-5 bg-slate-200/80"
+              />
+              <Button
+                variant="ghost"
+                size="sm"
+                asChild
                 className="h-9 px-4 rounded-full hover:bg-slate-100/90 hover:scale-105 transition-all duration-200"
               >
-                <Link href="/admin/users" className="text-slate-600 text-sm font-normal tracking-tight">
+                <Link
+                  href="/admin/users"
+                  className="text-slate-600 text-sm font-normal tracking-tight"
+                >
                   관리자 페이지
                 </Link>
               </Button>
             </>
           )}
-          <Button 
-            variant="ghost" 
+          <Button
+            variant="ghost"
             size="sm"
             onClick={handleLogoutBtnClick}
             className="h-9 px-4 rounded-full hover:bg-slate-100/90 hover:scale-105 transition-all duration-200"
           >
-            <span className="text-slate-600 text-sm font-normal tracking-tight">로그아웃</span>
+            <span className="text-slate-600 text-sm font-normal tracking-tight">
+              로그아웃
+            </span>
           </Button>
         </div>
       ) : (
         <div className="flex items-center gap-4">
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            asChild 
+          <Button
+            variant="ghost"
+            size="sm"
+            asChild
             className="h-9 px-4 rounded-full hover:bg-slate-100/90 hover:scale-105 transition-all duration-200"
           >
-            <Link href="/auth/login" className="text-slate-600 text-sm font-normal tracking-tight">
+            <Link
+              href="/login"
+              className="text-slate-600 text-sm font-normal tracking-tight"
+            >
               로그인
             </Link>
           </Button>
