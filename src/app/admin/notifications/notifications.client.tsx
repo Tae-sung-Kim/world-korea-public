@@ -9,11 +9,14 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { NotificationDisplayData } from '@/definitions/notifications.type';
 import Image from 'next/image';
+import { useState } from 'react';
 import { RiDeleteBin6Line } from 'react-icons/ri';
+import NotificationsImage from './notifications-image.component';
 
 export default function NotificationsListClient() {
   const notificationList =
     useGetNotificationListQuery() as NotificationDisplayData<string>[];
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const deleteNotificationMutation = useDeleteNotificationMutation();
 
@@ -44,8 +47,11 @@ export default function NotificationsListClient() {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <h3 className="font-semibold text-lg">{d.title}</h3>
-                    {d.image && typeof d.image === 'string' && (
-                      <div className="relative aspect-video w-full overflow-hidden rounded-lg">
+                    {d.image && (
+                      <div
+                        className="relative aspect-video w-full overflow-hidden rounded-lg cursor-pointer"
+                        onClick={() => setSelectedImage(d.image)}
+                      >
                         <Image
                           src={d.image}
                           fill
@@ -65,6 +71,11 @@ export default function NotificationsListClient() {
       <div className="mt-4">
         <TotalCountBottom title="총 팝업" count={notificationList?.length} />
       </div>
+
+      <NotificationsImage
+        imageUrl={selectedImage}
+        onClose={() => setSelectedImage(null)}
+      />
     </div>
   );
 }

@@ -13,9 +13,9 @@ export default function MainNav() {
                 <Image
                   src="/images/main_logo_invert.png"
                   width={250}
-                  height={64}
+                  height={40}
                   alt="World Korea Logo"
-                  className="w-[250px] h-auto"
+                  className="w-[250px] h-[40px]"
                 />
               </Link>
             </h1>

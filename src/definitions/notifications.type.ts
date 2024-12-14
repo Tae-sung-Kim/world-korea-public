@@ -1,6 +1,6 @@
 export interface NotificationForm<T> {
   title: string;
-  image: T[];
+  image: T;
 }
 
 export interface NotificationDisplayData<T> extends NotificationForm<T> {
