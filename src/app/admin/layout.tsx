@@ -1,8 +1,8 @@
 'use client';
 
 import AdminProtectedRoute from '@/app/admin/admin-protected-route.component';
-import Breadcrumb from '@/components/ui/breadcrumb';
 import Loading from '@/app/components/loading.component';
+import Breadcrumb from '@/components/ui/breadcrumb';
 import { ADMIN_MENU } from '@/definitions/menu.constant';
 import { MenuKey } from '@/definitions/menu.type';
 import Layout from '@/layouts/layout/Layout';
@@ -13,6 +13,7 @@ import { AiOutlineNotification, AiOutlineProduct } from 'react-icons/ai';
 import { BiPurchaseTag } from 'react-icons/bi';
 import { TbTicket, TbUser } from 'react-icons/tb';
 import { TiSortNumericallyOutline } from 'react-icons/ti';
+import { usePathname } from 'next/navigation';
 
 const MENU_ICONS: Record<MenuKey, IconType> = {
   product: AiOutlineProduct,
@@ -28,6 +29,8 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
+
   return (
     <Layout>
       <AdminProtectedRoute>
@@ -61,16 +64,18 @@ export default function AdminLayout({
                                 )}
                               </span>
                             )}
-                            <span className="font-semibold text-sm lg:text-base">
-                              {section.label}
-                            </span>
+                            <span className="font-medium">{section.label}</span>
                           </span>
-                          <ul className="mt-1 lg:mt-2 space-y-0.5 lg:space-y-1">
+                          <ul className="mt-1 space-y-1">
                             {section.items.map((item) => (
                               <li key={item.label}>
                                 <Link
                                   href={item.href}
-                                  className="block px-4 lg:px-8 py-1.5 lg:py-2 text-xs lg:text-sm text-gray-600 hover:bg-gray-50 hover:text-indigo-600 rounded-md transition-colors duration-150"
+                                  className={`flex items-center px-4 py-2 text-sm rounded-lg hover:bg-gray-100 transition-colors ${
+                                    pathname === item.href
+                                      ? 'bg-indigo-50 text-indigo-600 font-medium'
+                                      : 'text-gray-700'
+                                  }`}
                                 >
                                   {item.label}
                                 </Link>

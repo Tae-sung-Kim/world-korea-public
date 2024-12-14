@@ -29,6 +29,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { MODAL_TYPE, useModalContext } from '@/contexts/modal.context';
 import { PRODUCT_STATUS, PRODUCT_STATUS_MESSAGE } from '@/definitions';
 import productService from '@/services/product.service';
 import { bytesToMB, fileToBlob } from '@/utils/file';
@@ -75,6 +76,7 @@ const ProductFormSchema = z.object({
       .or(z.string())
   ), // 상품 이미지
   regularPrice: priceShcema(), // 정가
+  // taxFreeRegularPrice: priceShcema(), // 면세 정가
   salePrice: priceShcema(), // 할인가
   price: priceShcema(true), // 판매가
   description1: descriptionShcema(),
@@ -97,6 +99,8 @@ type Props = {
 };
 
 export default function ProductDetail({ productId, disabled = false }: Props) {
+  const { openModal } = useModalContext();
+
   const userCategoryList = useUserCategoryListQuery();
 
   const [productImageList, setProductImageList] = useState<ProductImage[]>([]);
@@ -133,6 +137,7 @@ export default function ProductDetail({ productId, disabled = false }: Props) {
               price: addComma(res.price),
               regularPrice: addComma(res.regularPrice),
               salePrice: addComma(res.salePrice),
+              // taxFreeRegularPrice: addComma(res.taxFreeRegularPrice), // 작업해야 함
             };
           })
       : {
@@ -141,6 +146,7 @@ export default function ProductDetail({ productId, disabled = false }: Props) {
           status: PRODUCT_STATUS.AVAILABLE, // 상품 상태
           images: [{ file: undefined }], // 상품 이미지
           regularPrice: '0', // 정가
+          // taxFreeRegularPrice: '0', // 면세 정가
           salePrice: '0', // 할인가
           price: '0', // 판매가
           description1: '',
@@ -175,7 +181,14 @@ export default function ProductDetail({ productId, disabled = false }: Props) {
           }
         });
       } else {
-        if (['price', 'regularPrice', 'salePrice'].includes(key)) {
+        if (
+          [
+            'price',
+            'regularPrice',
+            'salePrice',
+            'taxFreeRegularPrice',
+          ].includes(key)
+        ) {
           data.append(key, String(removeComma(values)));
         } else {
           data.append(key, values);
@@ -221,6 +234,15 @@ export default function ProductDetail({ productId, disabled = false }: Props) {
 
   //이미지 삭제 버튼
   const handleDeleteImage = (idx: number) => {
+    if (productImages.fields.length <= 1) {
+      openModal({
+        type: MODAL_TYPE.ALERT,
+        showHeader: false,
+        content: '상품 이미지는 최소 1개 이상입니다.',
+      });
+      return;
+    }
+
     productImages.remove(idx);
     setProductImageList((prevBlob) =>
       prevBlob.filter((_, dIdx) => dIdx !== idx)
@@ -446,7 +468,7 @@ export default function ProductDetail({ productId, disabled = false }: Props) {
                 return (
                   <FormItem>
                     <FormLabel className="text-sm font-medium text-gray-700">
-                      정가
+                      정가(과세)
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -463,6 +485,30 @@ export default function ProductDetail({ productId, disabled = false }: Props) {
                 );
               }}
             />
+            {/* <FormField
+              control={productForm.control}
+              name="taxFreeRegularPrice"
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium text-gray-700">
+                      정가(면세)
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="정가를 입력해 주세요."
+                        value={addComma(field.value)}
+                        disabled={disabled}
+                        onChange={(e) => handlePriceChange(e, { ...field })}
+                        className="w-full text-right"
+                      />
+                    </FormControl>
+                    <FormMessage className="text-sm text-red-500" />
+                  </FormItem>
+                );
+              }}
+            /> */}
             <FormField
               control={productForm.control}
               name="salePrice"
