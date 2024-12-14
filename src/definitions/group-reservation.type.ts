@@ -1,3 +1,11 @@
+export type GroupReservation = {
+  _id: string;
+  phoneNumber: string;
+  customData: Record<string, unknown>;
+  usedAt: Date;
+  createdAt: Date;
+}
+
 //단체 예약
 export type GroupReservationItemProduct = {
   productId: string;
