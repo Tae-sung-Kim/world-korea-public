@@ -7,13 +7,13 @@ import { ADMIN_MENU } from '@/definitions/menu.constant';
 import { MenuKey } from '@/definitions/menu.type';
 import Layout from '@/layouts/layout/Layout';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import React from 'react';
 import { IconType } from 'react-icons';
 import { AiOutlineNotification, AiOutlineProduct } from 'react-icons/ai';
 import { BiPurchaseTag } from 'react-icons/bi';
 import { TbTicket, TbUser } from 'react-icons/tb';
 import { TiSortNumericallyOutline } from 'react-icons/ti';
-import { usePathname } from 'next/navigation';
 
 const MENU_ICONS: Record<MenuKey, IconType> = {
   product: AiOutlineProduct,
@@ -35,8 +35,8 @@ export default function AdminLayout({
     <Layout>
       <AdminProtectedRoute>
         <Loading />
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 overflow-auto">
-          <div className="flex min-w-[1024px]">
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+          <div className="flex min-w-[1024px] min-h-screen">
             {/* Sidebar */}
             <div className="w-[180px] lg:w-64 bg-white shadow-lg shrink-0 sticky top-0 h-screen">
               <div className="h-full flex flex-col">
@@ -48,8 +48,8 @@ export default function AdminLayout({
                     <div className="h-1 w-16 bg-gradient-to-r from-blue-500 to-indigo-500 mx-auto mt-2 rounded-full"></div>
                   </div>
                 </div>
-                <nav className="flex-1 overflow-y-auto py-2 lg:py-4">
-                  <ul className="space-y-1 px-1 lg:px-3">
+                <nav className="flex-1 py-2 lg:py-4">
+                  <ul className="space-y-1 px-1 lg:px-3 h-[calc(100vh-120px)] overflow-y-auto">
                     {ADMIN_MENU.map((section, index) => (
                       <li key={section.label}>
                         <div className="mb-2 lg:mb-4">
