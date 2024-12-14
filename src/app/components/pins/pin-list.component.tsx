@@ -1,5 +1,6 @@
 'use client';
 
+import TotalCountBottom from '../total-count-bottom.component';
 import SortIcons from '@/app/admin/components/sort-icons.component';
 import { usePagination } from '@/app/admin/hooks/usePagination';
 import useSort, { SortOrder } from '@/app/admin/hooks/useSort';
@@ -233,7 +234,9 @@ export default function PinList({ tableId }: Props) {
                           <Checkbox />
                         </TableCell>
                         <TableCell className="p-4" data-exclude-excel>
-                          {pinData.totalItems - (pageNumber - 1) * pageSize - idx}
+                          {pinData.totalItems -
+                            (pageNumber - 1) * pageSize -
+                            idx}
                         </TableCell>
                         <TableCell
                           className="p-4 font-medium text-gray-900 cursor-pointer"
@@ -251,7 +254,8 @@ export default function PinList({ tableId }: Props) {
                           업체명
                         </TableCell>
                         <TableCell className="p-4 text-gray-700 text-center">
-                          {pin.endDate && new Date(pin.endDate).toLocaleDateString()}
+                          {pin.endDate &&
+                            new Date(pin.endDate).toLocaleDateString()}
                         </TableCell>
                         <TableCell className="p-4 text-gray-700 text-center">
                           {pin.createdAt &&
@@ -269,7 +273,9 @@ export default function PinList({ tableId }: Props) {
                               }
                               checked={!!isUsed}
                             />
-                            <span className="hidden">{!!isUsed ? 'Y' : 'N'}</span>
+                            <span className="hidden">
+                              {!!isUsed ? 'Y' : 'N'}
+                            </span>
                           </>
                         </TableCell>
                         <TableCell className="p-4 text-center">
@@ -294,30 +300,16 @@ export default function PinList({ tableId }: Props) {
               </Table>
             </div>
           </div>
-          <div className="mt-auto sticky bottom-0 bg-white border-t border-gray-200 shadow-[0_-4px_6px_-1px_rgb(0,0,0,0.1)] z-10">
-            <div className="px-6 py-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <span className="text-sm font-semibold text-gray-900">
-                    총 핀번호
-                  </span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <span className="text-lg font-bold text-primary">
-                    {addComma(pinData.totalItems)}
-                  </span>
-                  <span className="text-sm font-medium text-gray-600">개</span>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
       <div className="mt-4">
+        <TotalCountBottom title="총 핀번호" count={pinData.totalItems} />
+
         <Pagination
           pageNumber={pageNumber}
           pageSize={pageSize}
           totalPages={pinData.totalPages}
+          totalItems={pinData.totalItems}
           pageRange={2}
           minPages={5}
         />

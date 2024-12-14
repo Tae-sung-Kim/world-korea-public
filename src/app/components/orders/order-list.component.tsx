@@ -1,5 +1,6 @@
 'use client';
 
+import TotalCountBottom from '../total-count-bottom.component';
 import SortIcons from '@/app/admin/components/sort-icons.component';
 import { usePagination } from '@/app/admin/hooks/usePagination';
 import useSort, { SortOrder } from '@/app/admin/hooks/useSort';
@@ -169,7 +170,7 @@ export default function OrderList({ tableId }: Props) {
       <div className="flex-1 bg-white rounded-lg shadow-sm">
         <div className="relative h-full flex flex-col">
           <div className="absolute inset-0 overflow-auto">
-            <div className="min-w-[1024px] pb-16">
+            <div className="min-w-[1024px]">
               <Table id={tableId ?? 'exportExcelTableId'}>
                 <TableHeader className="bg-gray-50 sticky top-0 z-10">
                   <TableRow className="border-b border-gray-200">
@@ -334,31 +335,16 @@ export default function OrderList({ tableId }: Props) {
               </Table>
             </div>
           </div>
-          <div className="mt-auto sticky bottom-0 bg-white border-t border-gray-200 shadow-[0_-4px_6px_-1px_rgb(0,0,0,0.1)] z-10">
-            <div className="px-6 py-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <span className="text-sm font-semibold text-gray-900">
-                    총 구매
-                  </span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <span className="text-lg font-bold text-primary">
-                    {addComma(ordersData.totalItems)}
-                  </span>
-                  <span className="text-sm font-medium text-gray-600">개</span>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 
       <div className="mt-4">
+        <TotalCountBottom count={ordersData.totalItems} />
         <Pagination
           pageNumber={pageNumber}
           pageSize={pageSize}
           totalPages={ordersData.totalPages}
+          totalItems={ordersData.totalItems}
           pageRange={2}
           minPages={5}
         />

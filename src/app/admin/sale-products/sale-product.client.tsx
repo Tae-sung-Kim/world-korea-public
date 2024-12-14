@@ -7,6 +7,7 @@ import { useDeleteProductMutation, useUserCategoryListQuery } from '../queries';
 import { useSaleProductListQuery } from '../queries/sale-product.queries';
 import SaleProductSearch from './sale-product-search.component';
 import Pagination from '@/app/components/common/pagination';
+import TotalCountBottom from '@/app/components/total-count-bottom.component';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import {
@@ -227,29 +228,18 @@ export default function SaleProductListClient() {
             </div>
           </div>
         </div>
-        <div className="mt-auto sticky bottom-0 bg-white border-t border-gray-200 shadow-[0_-4px_6px_-1px_rgb(0,0,0,0.1)]">
-          <div className="px-6 py-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <span className="text-sm font-semibold text-gray-900">
-                  총 상품
-                </span>
-              </div>
-              <div className="flex items-center gap-1">
-                <span className="text-lg font-bold text-primary">
-                  {addComma(saleProductData.totalItems)}
-                </span>
-                <span className="text-sm font-medium text-gray-600">개</span>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
       <div className="mt-4">
+        <TotalCountBottom
+          title="총 판매 상품"
+          count={saleProductData.totalItems}
+        />
+
         <Pagination
           pageNumber={pageNumber}
           pageSize={pageSize}
           totalPages={saleProductData.totalPages}
+          totalItems={saleProductData.totalItems}
         />
       </div>
     </div>

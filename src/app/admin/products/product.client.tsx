@@ -10,6 +10,7 @@ import {
 } from '../queries';
 import ProductSearch from './product-search.component';
 import Pagination from '@/app/components/common/pagination';
+import TotalCountBottom from '@/app/components/total-count-bottom.component';
 import { Button } from '@/components/ui/button';
 import {
   Table,
@@ -233,30 +234,18 @@ export default function ProductListClient() {
               </TableBody>
             </Table>
           </div>
-          <div className="mt-auto sticky bottom-0 bg-white border-t border-gray-200 shadow-[0_-4px_6px_-1px_rgb(0,0,0,0.1)]">
-            <div className="px-6 py-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <span className="text-sm font-semibold text-gray-900">
-                    총 상품
-                  </span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <span className="text-lg font-bold text-primary">
-                    {addComma(productData.totalItems)}
-                  </span>
-                  <span className="text-sm font-medium text-gray-600">개</span>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
-      <Pagination
-        pageNumber={pageNumber}
-        pageSize={pageSize}
-        totalPages={productData.totalPages}
-      />
+
+      <div className="mt-4">
+        <TotalCountBottom title="총 상품" count={productData.totalItems} />
+        <Pagination
+          pageNumber={pageNumber}
+          pageSize={pageSize}
+          totalPages={productData.totalPages}
+          totalItems={productData.totalItems}
+        />
+      </div>
     </div>
   );
 }

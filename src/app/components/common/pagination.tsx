@@ -25,6 +25,7 @@ export type Pagination = {
   pageNumber: number;
   pageSize: number;
   totalPages: number;
+  totalItems?: number;
   pageRange?: number;
   minPages?: number;
 };
@@ -33,6 +34,7 @@ export default function Paginations({
   pageNumber = 1,
   pageSize = 10,
   totalPages = 1,
+  totalItems = 0,
   pageRange = 2,
   minPages = 3,
 }: Pagination) {
@@ -76,31 +78,78 @@ export default function Paginations({
 
     router.push(pathName + '?' + params);
   };
+
   return (
-    <div className="flex items-center justify-between gap-4 py-4">
-      <Pagination className="rounded-lg bg-white shadow-sm">
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious
-              href="#"
-              className={cn(
-                'hover:bg-gray-100 transition-colors',
-                pageNumber <= 1 &&
-                  'opacity-50 cursor-not-allowed hover:bg-transparent'
-              )}
-              onClick={() => {
-                if (pageNumber > 1) handleMovePage(pageNumber - 1);
-              }}
-            />
-          </PaginationItem>
-          {pageNumbers.map((d) => {
-            return (
+    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-4">
+      <div className="text-sm text-muted-foreground bg-gray-50 px-4 py-2 rounded-md">
+        전체 <span className="font-semibold text-primary">{totalItems}</span>개
+        중{' '}
+        <span className="font-semibold text-primary">
+          {(pageNumber - 1) * pageSize + 1}-
+          {Math.min(pageNumber * pageSize, totalItems)}
+        </span>
+      </div>
+      <div className="flex items-center gap-4">
+        <Pagination className="rounded-lg bg-white shadow-sm border border-gray-100 pl-1 pr-2 py-1">
+          <PaginationContent className="gap-1">
+            <PaginationItem>
+              <PaginationLink
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (pageNumber > 1) handleMovePage(1);
+                }}
+                className={cn(
+                  'hover:bg-gray-50 transition-colors rounded-md cursor-pointer',
+                  pageNumber <= 1 &&
+                    'opacity-50 cursor-not-allowed hover:bg-transparent',
+                  'font-medium text-sm px-3'
+                )}
+              >
+                처음
+              </PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationPrevious
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (pageNumber > 1) handleMovePage(pageNumber - 1);
+                }}
+                className={cn(
+                  'hover:bg-gray-50 transition-colors rounded-md cursor-pointer',
+                  pageNumber <= 1 &&
+                    'opacity-50 cursor-not-allowed hover:bg-transparent'
+                )}
+              />
+            </PaginationItem>
+
+            {startPage > 1 && (
+              <>
+                <PaginationItem>
+                  <PaginationLink
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleMovePage(1);
+                    }}
+                    className="hover:bg-gray-50 transition-colors rounded-md font-medium cursor-pointer"
+                  >
+                    1
+                  </PaginationLink>
+                </PaginationItem>
+                {startPage > 2 && (
+                  <PaginationEllipsis className="text-gray-400" />
+                )}
+              </>
+            )}
+
+            {pageNumbers.map((d) => (
               <PaginationItem key={`paginations-${d}`}>
                 <PaginationLink
-                  href="#"
-                  onClick={() => handleMovePage(d)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleMovePage(d);
+                  }}
                   className={cn(
-                    'hover:bg-gray-100 transition-colors',
+                    'hover:bg-gray-50 transition-colors rounded-md min-w-[2.5rem] font-medium cursor-pointer',
                     pageNumber === d &&
                       'bg-primary text-primary-foreground hover:bg-primary/90'
                   )}
@@ -109,41 +158,78 @@ export default function Paginations({
                   {d}
                 </PaginationLink>
               </PaginationItem>
-            );
-          })}
+            ))}
 
-          <PaginationItem>
-            <PaginationNext
-              href="#"
-              className={cn(
-                'hover:bg-gray-100 transition-colors',
-                pageNumber >= totalPages &&
-                  'opacity-50 cursor-not-allowed hover:bg-transparent'
-              )}
-              onClick={() => {
-                if (pageNumber < totalPages) handleMovePage(pageNumber + 1);
-              }}
-            />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
-      <div className="flex items-center gap-2">
-        <Select onValueChange={handlePageSizeChange} value={String(pageSize)}>
-          <SelectTrigger className="w-[100px] bg-white">
-            <SelectValue placeholder="선택" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              {PAGE_SIZE_LIST.map((d) => {
-                return (
-                  <SelectItem key={d} value={String(d)}>
-                    {d}개
+            {endPage < totalPages && (
+              <>
+                {endPage < totalPages - 1 && (
+                  <PaginationEllipsis className="text-gray-400" />
+                )}
+                <PaginationItem>
+                  <PaginationLink
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleMovePage(totalPages);
+                    }}
+                    className="hover:bg-gray-50 transition-colors rounded-md font-medium cursor-pointer"
+                  >
+                    {totalPages}
+                  </PaginationLink>
+                </PaginationItem>
+              </>
+            )}
+
+            <PaginationItem>
+              <PaginationNext
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (pageNumber < totalPages) handleMovePage(pageNumber + 1);
+                }}
+                className={cn(
+                  'hover:bg-gray-50 transition-colors rounded-md cursor-pointer',
+                  pageNumber >= totalPages &&
+                    'opacity-50 cursor-not-allowed hover:bg-transparent'
+                )}
+              />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (pageNumber < totalPages) handleMovePage(totalPages);
+                }}
+                className={cn(
+                  'hover:bg-gray-50 transition-colors rounded-md cursor-pointer',
+                  pageNumber >= totalPages &&
+                    'opacity-50 cursor-not-allowed hover:bg-transparent',
+                  'font-medium text-sm px-3'
+                )}
+              >
+                마지막
+              </PaginationLink>
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+        <div className="flex items-center gap-2">
+          <Select onValueChange={handlePageSizeChange} value={String(pageSize)}>
+            <SelectTrigger className="w-[140px] bg-white border border-gray-100 shadow-sm hover:bg-gray-50 transition-colors">
+              <SelectValue placeholder="페이지 크기" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {PAGE_SIZE_LIST.map((d) => (
+                  <SelectItem
+                    key={d}
+                    value={String(d)}
+                    className="hover:bg-gray-50 transition-colors"
+                  >
+                    {d}개씩 보기
                   </SelectItem>
-                );
-              })}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
     </div>
   );

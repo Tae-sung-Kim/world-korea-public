@@ -1,6 +1,7 @@
 'use client';
 
 import { useUserListQuery } from '../queries';
+import TotalCountBottom from '@/app/components/total-count-bottom.component';
 import {
   Table,
   TableBody,
@@ -141,6 +142,9 @@ export default function UsersClient() {
             </div>
           </div>
         </div>
+      </div>
+      <div className="mt-4">
+        <TotalCountBottom title="총 회원" unit="명" count={userList.length} />
       </div>
     </div>
   );

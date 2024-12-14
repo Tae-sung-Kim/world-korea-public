@@ -4,6 +4,7 @@ import {
   useDeleteNotificationMutation,
   useGetNotificationListQuery,
 } from '../queries';
+import TotalCountBottom from '@/app/components/total-count-bottom.component';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { NotificationDisplayData } from '@/definitions/notifications.type';
@@ -59,21 +60,10 @@ export default function NotificationsListClient() {
               ))}
           </div>
         </div>
-        <div className="bg-white border-t border-gray-200 shadow-[0_-4px_6px_-1px_rgb(0,0,0,0.1)]">
-          <div className="px-6 py-4">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-semibold text-gray-900">
-                총 알림
-              </span>
-              <div className="flex items-center gap-1">
-                <span className="text-lg font-bold text-primary">
-                  {notificationList?.length ?? 0}
-                </span>
-                <span className="text-sm font-medium text-gray-600">개</span>
-              </div>
-            </div>
-          </div>
-        </div>
+      </div>
+
+      <div className="mt-4">
+        <TotalCountBottom title="총 팝업" count={notificationList?.length} />
       </div>
     </div>
   );
