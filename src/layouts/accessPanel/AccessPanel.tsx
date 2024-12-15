@@ -58,6 +58,7 @@ export default function AccessPanel() {
               </Button>
             </>
           )}
+          <Separator orientation="vertical" className="h-5 bg-slate-200/80" />
           <Button
             variant="ghost"
             size="sm"
