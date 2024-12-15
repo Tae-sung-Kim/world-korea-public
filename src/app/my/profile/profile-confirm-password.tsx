@@ -39,7 +39,7 @@ export default function ProfileConfirmPassword({
 
   // 비밀번호 확인 버튼 후 상세보기로 이동해야 함
   return (
-    <div className="min-h-screen bg-gray-50/30">
+    <div className="min-h-screen">
       <div className="container px-4 sm:px-6 lg:px-8 max-w-md mx-auto py-8">
         <div className="bg-white rounded-lg shadow-sm p-6 sm:p-8">
           <Form {...form}>

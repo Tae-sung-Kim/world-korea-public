@@ -38,7 +38,7 @@ export default function ProfileDetail({
   };
 
   return (
-    <div className="min-h-screen bg-gray-50/30">
+    <div className="min-h-screen">
       <div className="container px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto py-8">
         <div className="bg-white rounded-lg shadow-sm p-6 sm:p-8">
           <div className="flex justify-between items-center mb-8">

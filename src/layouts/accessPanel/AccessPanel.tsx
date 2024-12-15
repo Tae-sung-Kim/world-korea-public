@@ -28,7 +28,7 @@ export default function AccessPanel() {
             <Link href="/my/profile" className="flex items-center">
               <span className="hidden sm:inline text-slate-700 text-sm font-normal tracking-tight">
                 {user?.id}
-                <span className="text-slate-400 ml-1 text-xs">
+                <span className="ml-1 text-xs bg-gradient-to-r from-slate-600 to-slate-400 text-transparent bg-clip-text font-medium">
                   님 환영합니다
                 </span>
               </span>

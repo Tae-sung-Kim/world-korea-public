@@ -35,7 +35,7 @@ export default function AdminLayout({
     <Layout>
       <AdminProtectedRoute>
         <Loading />
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+        <div className="min-h-screen bg-gradient-to-br to-gray-100">
           <div className="flex min-w-[1024px] min-h-screen">
             {/* Sidebar */}
             <div className="w-[180px] lg:w-64 bg-white shadow-lg shrink-0 sticky top-0 h-screen">
