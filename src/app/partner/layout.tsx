@@ -1,16 +1,16 @@
 'use client';
 
 import AdminProtectedRoute from '@/app/admin/admin-protected-route.component';
+import Loading from '@/app/components/common/loading.component';
 import Breadcrumb from '@/components/ui/breadcrumb';
-import Loading from '@/app/components/loading.component';
 import { PARTNER_MENU } from '@/definitions/menu.constant';
 import Layout from '@/layouts/layout/Layout';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import React from 'react';
 import { IconType } from 'react-icons';
 import { TbTicket } from 'react-icons/tb';
 import { TiSortNumericallyOutline } from 'react-icons/ti';
-import { usePathname } from 'next/navigation';
 
 type PartnerMenuKey = 'purchase' | 'pin';
 

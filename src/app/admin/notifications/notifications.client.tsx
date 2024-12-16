@@ -4,14 +4,14 @@ import {
   useDeleteNotificationMutation,
   useGetNotificationListQuery,
 } from '../queries';
-import TotalCountBottom from '@/app/components/total-count-bottom.component';
+import NotificationsImage from './notifications-image.component';
+import TotalCountBottom from '@/app/components/common/total-count-bottom.component';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { NotificationDisplayData } from '@/definitions/notifications.type';
 import Image from 'next/image';
 import { useState } from 'react';
 import { RiDeleteBin6Line } from 'react-icons/ri';
-import NotificationsImage from './notifications-image.component';
 
 export default function NotificationsListClient() {
   const notificationList =

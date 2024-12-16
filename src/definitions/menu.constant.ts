@@ -99,6 +99,7 @@ export const ADMIN_MENU: MenuSection[] = [
   },
 ];
 
+// 파트너사
 export const PARTNER_MENU: MenuSection[] = [
   {
     key: 'purchase',
@@ -121,6 +122,20 @@ export const PARTNER_MENU: MenuSection[] = [
       {
         label: '핀번호 사용',
         href: '/partner/pins/used',
+      },
+    ],
+  },
+];
+
+// 일반 회원
+export const USER_MENU: MenuSection[] = [
+  {
+    key: 'purchase',
+    label: '구매 관리',
+    items: [
+      {
+        label: '구매 목록',
+        href: '/partner/orders',
       },
     ],
   },

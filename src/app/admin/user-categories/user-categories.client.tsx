@@ -6,7 +6,7 @@ import {
   useUpdateUserCategoryMutation,
   useUserCategoryListQuery,
 } from '../queries';
-import TotalCountBottom from '@/app/components/total-count-bottom.component';
+import TotalCountBottom from '@/app/components/common/total-count-bottom.component';
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';

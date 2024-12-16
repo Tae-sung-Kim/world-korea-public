@@ -1,7 +1,7 @@
 'use client';
 
 import AdminProtectedRoute from '@/app/admin/admin-protected-route.component';
-import Loading from '@/app/components/loading.component';
+import Loading from '@/app/components/common/loading.component';
 import Breadcrumb from '@/components/ui/breadcrumb';
 import { ADMIN_MENU } from '@/definitions/menu.constant';
 import { MenuKey } from '@/definitions/menu.type';

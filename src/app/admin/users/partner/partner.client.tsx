@@ -1,7 +1,7 @@
 'use client';
 
 import { usePartnerListQuery } from '../../queries';
-import TotalCountBottom from '@/app/components/total-count-bottom.component';
+import TotalCountBottom from '@/app/components/common/total-count-bottom.component';
 import {
   Table,
   TableBody,

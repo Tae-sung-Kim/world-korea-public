@@ -1,6 +1,6 @@
 'use client';
 
-import TotalCountBottom from '../total-count-bottom.component';
+import TotalCountBottom from '../common/total-count-bottom.component';
 import SortIcons from '@/app/admin/components/sort-icons.component';
 import { usePagination } from '@/app/admin/hooks/usePagination';
 import useSort, { SortOrder } from '@/app/admin/hooks/useSort';
