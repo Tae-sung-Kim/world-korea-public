@@ -409,6 +409,8 @@ export interface Iamport {
 export interface RefundRequest {
   orderId?: string;
   paymentId: string; // 아임포트 결제 고유 UID
+  amount?: number;
+  payType: string;
 }
 
 declare global {

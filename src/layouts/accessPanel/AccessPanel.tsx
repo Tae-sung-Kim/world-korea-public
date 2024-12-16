@@ -9,7 +9,9 @@ import 'next/navigation';
 
 export default function AccessPanel() {
   const { isLoggedIn, user } = useAuthContext();
-  const isAdmin = user?.role === 'admin';
+  const { isAdmin, name } = user ?? {};
+
+  console.log(user);
 
   const handleLogoutBtnClick = () => {
     signOut();
@@ -27,13 +29,13 @@ export default function AccessPanel() {
           >
             <Link href="/my/profile" className="flex items-center">
               <span className="hidden sm:inline text-slate-700 text-sm font-normal tracking-tight">
-                {user?.id}
+                {name}
                 <span className="ml-1 text-xs bg-gradient-to-r from-slate-600 to-slate-400 text-transparent bg-clip-text font-medium">
                   님 환영합니다
                 </span>
               </span>
               <span className="sm:hidden text-slate-700 text-sm font-normal">
-                {user?.id}
+                {name}
               </span>
             </Link>
           </Button>

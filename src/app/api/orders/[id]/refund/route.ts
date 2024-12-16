@@ -3,7 +3,7 @@ import PinModel from '../../../models/pin.model';
 import { requiredIsMe } from '../../../utils/auth.util';
 import connectMongo from '@/app/api/libs/database';
 import { createResponse } from '@/app/api/utils/http.util';
-import { HTTP_STATUS, OrderStatus } from '@/definitions';
+import { HTTP_STATUS, OrderPayType, OrderStatus } from '@/definitions';
 import axios from 'axios';
 import { NextRequest } from 'next/server';
 
@@ -54,7 +54,8 @@ async function requestRefund(accessToken: string, paymentId: string) {
 export async function POST(req: NextRequest, ctx: { params: { id: string } }) {
   try {
     const orderId = ctx.params.id;
-    const { paymentId }: { paymentId: string } = await req.json();
+    const { paymentId, payType }: { paymentId: string; payType: string } =
+      await req.json();
 
     await connectMongo();
 
@@ -92,9 +93,11 @@ export async function POST(req: NextRequest, ctx: { params: { id: string } }) {
       return createResponse(HTTP_STATUS.BAD_REQUEST, '티켓이 없습니다.');
     }
 
-    // 포트원 환불 처리
-    const accessToken = await getPortoneAccessToken();
-    await requestRefund(accessToken, paymentId);
+    if (payType !== OrderPayType.Vbank) {
+      // 포트원 환불 처리
+      const accessToken = await getPortoneAccessToken();
+      await requestRefund(accessToken, paymentId);
+    }
 
     // 주문 상태 업데이트
     await OrderModel.updateOne(

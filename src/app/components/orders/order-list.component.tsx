@@ -27,6 +27,7 @@ import {
   ORDER_STATUS_MESSAGE,
   ORDER_PAY_TYPE_MESSAGE,
   RefundRequest,
+  OrderPayType,
 } from '@/definitions';
 import usePortonePayment from '@/hooks/usePortonePaymnent';
 import { addComma } from '@/utils/number';
@@ -50,6 +51,7 @@ type QrCodeProps = {
 interface ExtendedRefundRequest extends RefundRequest {
   title: string;
   orderDate: Date | string;
+  payType: OrderPayType;
 }
 
 export default function OrderList({ tableId }: Props) {
@@ -139,6 +141,7 @@ export default function OrderList({ tableId }: Props) {
     paymentId,
     title,
     orderDate,
+    payType,
   }: ExtendedRefundRequest) => {
     openModal({
       type: MODAL_TYPE.CONFIRM,
@@ -160,6 +163,7 @@ export default function OrderList({ tableId }: Props) {
         onRefund({
           orderId,
           paymentId,
+          payType,
         });
       },
     });
@@ -252,10 +256,10 @@ export default function OrderList({ tableId }: Props) {
                         {d.saleProduct.name}
                       </TableCell>
                       <TableCell className="p-4 text-gray-700 text-center">
-                        {d.user.name}
+                        {d.user.companyName}
                       </TableCell>
                       <TableCell className="p-4 text-gray-700 text-center">
-                        {d.user.companyName}
+                        {d.user.name}
                       </TableCell>
                       <TableCell className="p-4 text-gray-700 text-center">
                         {addComma(d.quantity ?? 0)}
@@ -311,6 +315,7 @@ export default function OrderList({ tableId }: Props) {
                                   orderDate: d.orderDate,
                                   orderId: d._id,
                                   paymentId: d.paymentId,
+                                  payType: d.payType,
                                 })
                               }
                             >

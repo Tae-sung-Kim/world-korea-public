@@ -136,7 +136,7 @@ export default function usePortonePayment(props: PortoneProps = {}) {
       setPaymentStatus(PaymentStatus.Processing);
 
       // 서버에 환불 요청
-      const response = await ordersService.createRefund(refundData);
+      await ordersService.createRefund(refundData);
       setPaymentStatus(PaymentStatus.Refunded);
       // 기본 성공 처리
       toast.success('환불이 완료되었습니다.');

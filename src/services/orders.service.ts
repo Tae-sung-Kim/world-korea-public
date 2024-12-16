@@ -46,9 +46,10 @@ class OrdersService {
   }
 
   // 환불
-  createRefund({ orderId, paymentId }: PaymentRequest) {
+  createRefund({ orderId, paymentId, payType }: PaymentRequest) {
     return http.post<string>(`/api/orders/${orderId}/refund`, {
       paymentId,
+      payType,
     });
   }
 

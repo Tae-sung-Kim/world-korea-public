@@ -35,6 +35,7 @@ export type PaymentRequest = {
   merchantId?: string;
   vbankName?: string;
   vbankNum?: string;
+  payType?: string;
 };
 
 export type VBankResponse = {

@@ -67,7 +67,8 @@ export default function SaleProductDetailForm({
       });
     },
     onPaymentSuccess: () => {
-      saleProductForm.reset();
+      window.location.reload();
+      // saleProductForm.reset();
     },
   });
   const purchaseDate = useMemo(() => addDays(new Date(), 1), []);
