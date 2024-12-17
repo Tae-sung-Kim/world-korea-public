@@ -1,10 +1,11 @@
 export type GroupReservation = {
   _id: string;
+  name: string;
   phoneNumber: string;
   customData: Record<string, unknown>;
   usedAt: Date;
   createdAt: Date;
-}
+};
 
 //단체 예약
 export type GroupReservationItemProduct = {
@@ -20,7 +21,7 @@ export type GroupReservtionForm = {
   numberOfPeopel: string; // 인원수
   nationality: string; // 국적
   productId: string; // 이용상품
-  additionalOptions: string; // 추가 옵션
+  additionalOptions: string[]; // 추가 옵션
   mealCoupon: string; // 밀 쿠폰
   paymentType: string; // 결제 방법
   estimatedArrivalTime: string; //예상 도착시간 및 미팅장소

@@ -1,4 +1,12 @@
 // 단체예약
+
+import {
+  PAGE_NUMBER_DEFAULT,
+  PAGE_SIZE_DEFAULT,
+  PaginationParams,
+  PaginationResponse,
+  GroupReservation,
+} from '@/definitions';
 import {
   model,
   models,
@@ -8,18 +16,12 @@ import {
   SortOrder,
   Document,
 } from 'mongoose';
-import {
-  PAGE_NUMBER_DEFAULT,
-  PAGE_SIZE_DEFAULT,
-  PaginationParams,
-  PaginationResponse,
-  GroupReservation
-} from '@/definitions';
 
 export interface GroupReservationDB {
   customData: Record<string, unknown>;
   usedAt: Date;
   phoneNumber: string;
+  name: string;
   createdAt?: Date;
 }
 
@@ -38,10 +40,10 @@ interface GroupReservationMethods {}
 
 interface GroupReservationSchemaModel
   extends Model<GroupReservationDB, {}, GroupReservationMethods> {
-    getGroupReservationList(
-      paginationParams: PaginationParams & { level: string }
-    ): PaginationResponse<Promise<GroupReservation[]>>;
-  }
+  getGroupReservationList(
+    paginationParams: PaginationParams & { level: string }
+  ): PaginationResponse<Promise<GroupReservation[]>>;
+}
 
 const schema = new Schema<
   GroupReservationDB,
@@ -49,10 +51,11 @@ const schema = new Schema<
   GroupReservationMethods
 >({
   customData: {
-    type: Object, 
-    default: {}
+    type: Object,
+    default: {},
   },
   usedAt: { type: Date },
+  name: { type: String },
   phoneNumber: { type: String },
   createdAt: { type: Date, default: Date.now },
 });
@@ -84,7 +87,7 @@ schema.static(
     // 데이터 가져오기
     let list = (
       await this.find(filter).sort(sort).skip(skip).limit(pageSize)
-    ).map((d) => d.toObject())
+    ).map((d) => d.toObject());
 
     // 전체 페이지 수 계산
     const totalPages = Math.ceil(totalItems / pageSize);
@@ -113,6 +116,9 @@ schema.static(
 
 const GroupReservationModel =
   (models.GroupReservation as GroupReservationSchemaModel) ||
-  model<GroupReservationDB, GroupReservationSchemaModel>('GroupReservation', schema);
+  model<GroupReservationDB, GroupReservationSchemaModel>(
+    'GroupReservation',
+    schema
+  );
 
 export default GroupReservationModel;
