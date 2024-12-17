@@ -130,12 +130,22 @@ export const PARTNER_MENU: MenuSection[] = [
 // 일반 회원
 export const USER_MENU: MenuSection[] = [
   {
+    key: 'my',
+    label: '내 정보',
+    items: [
+      {
+        label: '내 정보',
+        href: '/my/profile',
+      },
+    ],
+  },
+  {
     key: 'purchase',
     label: '구매 관리',
     items: [
       {
         label: '구매 목록',
-        href: '/partner/orders',
+        href: '/my/orders',
       },
     ],
   },

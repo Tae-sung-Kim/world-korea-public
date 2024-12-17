@@ -5,13 +5,10 @@ import { Separator } from '@/components/ui/separator';
 import { useAuthContext } from '@/contexts/auth.context';
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
-import 'next/navigation';
 
 export default function AccessPanel() {
   const { isLoggedIn, user } = useAuthContext();
   const { isAdmin, name } = user ?? {};
-
-  console.log(user);
 
   const handleLogoutBtnClick = () => {
     signOut();
