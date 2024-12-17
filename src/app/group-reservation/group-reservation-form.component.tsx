@@ -30,6 +30,7 @@ import {
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
+import { ko } from 'date-fns/locale';
 import { useForm } from 'react-hook-form';
 import { BsCalendarDate } from 'react-icons/bs';
 import { z } from 'zod';
@@ -146,7 +147,7 @@ export default function GroupReservationForm() {
                           )}
                         >
                           {field.value ? (
-                            format(field.value, 'PPP')
+                            format(field.value, 'PPP', { locale: ko })
                           ) : (
                             <span>날짜를 선택해주세요</span>
                           )}
@@ -157,6 +158,7 @@ export default function GroupReservationForm() {
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
                         mode="single"
+                        locale={ko}
                         selected={
                           field.value ? new Date(field.value) : undefined
                         }
@@ -446,7 +448,7 @@ export default function GroupReservationForm() {
             />
           </div>
           <div className="flex justify-center pt-8">
-            <Button 
+            <Button
               size="lg"
               className="px-12 py-6 text-lg font-semibold bg-gradient-to-r from-purple-500 to-purple-700 text-white hover:from-purple-600 hover:to-purple-800 transition-all duration-300 shadow-lg hover:shadow-xl rounded-xl"
             >

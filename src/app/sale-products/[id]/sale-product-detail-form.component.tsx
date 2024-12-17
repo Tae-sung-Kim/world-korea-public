@@ -27,6 +27,7 @@ import { addComma } from '@/utils/number';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Separator } from '@radix-ui/react-separator';
 import { format, addDays } from 'date-fns';
+import { ko } from 'date-fns/locale';
 import { ChangeEvent, useEffect, useMemo } from 'react';
 import { ControllerRenderProps, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -167,6 +168,7 @@ export default function SaleProductDetailForm({
                       format(date, 'yyyyMMdd') <
                       format(purchaseDate, 'yyyyMMdd')
                     }
+                    locale={ko}
                     className="rounded-lg border shadow-md p-4 bg-white"
                     classNames={{
                       months:
