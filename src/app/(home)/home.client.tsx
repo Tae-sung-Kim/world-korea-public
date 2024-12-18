@@ -5,7 +5,7 @@ import SaleProductList from './components/sale-product-list.component';
 import { Button } from '@/components/ui/button';
 import { useAuthContext } from '@/contexts/auth.context';
 import useNotifications from '@/hooks/useNotifications';
-import { useSaleProductListQuery } from '@/queries/product.queries';
+import { useSaleProductListQuery } from '@/queries';
 import Link from 'next/link';
 import { FaTicketAlt, FaShieldAlt } from 'react-icons/fa';
 import { RiMoneyDollarCircleFill } from 'react-icons/ri';

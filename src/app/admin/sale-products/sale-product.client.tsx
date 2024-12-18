@@ -3,8 +3,11 @@
 import SortIcons from '../components/sort-icons.component';
 import { usePagination } from '../hooks/usePagination';
 import useSort, { SortOrder } from '../hooks/useSort';
-import { useDeleteProductMutation, useUserCategoryListQuery } from '../queries';
-import { useSaleProductListQuery } from '../queries/sale-product.queries';
+import {
+  useDeleteProductMutation,
+  useSaleProductListQuery,
+  useUserCategoryListQuery,
+} from '../queries';
 import SaleProductSearch from './sale-product-search.component';
 import Pagination from '@/app/components/common/pagination';
 import TotalCountBottom from '@/app/components/common/total-count-bottom.component';
@@ -24,7 +27,7 @@ import { MODAL_TYPE, useModalContext } from '@/contexts/modal.context';
 import { PackageDetailName, SaleProductFormData } from '@/definitions';
 import { addComma } from '@/utils/number';
 import { useRouter } from 'next/navigation';
-import { FormEvent, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 
 export default function SaleProductListClient() {

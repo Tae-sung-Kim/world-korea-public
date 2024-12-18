@@ -5,7 +5,12 @@ import http from '@/services';
 class GroupReservationService {
   // 단체 예약 생성
   createGroupReservation(data: GroupReservtionForm) {
-    return http.post<GroupReservtionForm>(`/api/group-reservations`, data);
+    const usedAt = data.appointmentDate;
+
+    return http.post(`/api/group-reservations`, {
+      customData: data,
+      usedAt,
+    });
   }
 }
 

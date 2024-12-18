@@ -7,7 +7,6 @@ import {
 } from '@/definitions';
 import saleProductService from '@/services/sale-product.service';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { toast } from 'sonner';
 
 const QUERY_KEY = 'sale-product';
 

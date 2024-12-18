@@ -28,6 +28,7 @@ import {
   PAYMENT_TYPE,
 } from '@/definitions/group-reservation.constant';
 import { cn } from '@/lib/utils';
+import { useCreateGroupReservationMutation } from '@/queries';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
@@ -38,20 +39,24 @@ import { z } from 'zod';
 const GroupReservationFormSchema = z.object({
   companyName: z.string().min(1, '업체명은 필수 입니다.'),
   contactPersonInfo: z.string(), // 예약 담당자명 및 연락처
-  appointmentDate: z.date().or(z.string()).optional(), //방문 일자
+  appointmentDate: z.date().or(z.string()).optional(), // 방문 일자
   guideContactInfo: z.string().min(1, '인솔자(가이드)정보는 필수 입니다.'), // 인솔자명 연락처
   numberOfPeopel: z.string().min(1, '인원수는 필수 입니다.'),
   nationality: z.string().min(1, '국적은 필수 입니다.'),
   productId: z.string().min(1, '상품은 필수 입니다.'),
   mealCoupon: z.string(),
-  paymentType: z.string().min(1, '결제 방법은 필수 입니다.'), //결제 방법 체크해야함
+  paymentType: z.string().min(1, '결제 방법은 필수 입니다.'), // 결제 방법 체크해야함
   estimatedArrivalTime: z.string(),
   vehicleAndTransportType: z.string(),
   additionalOptions: z.array(z.string()),
 });
 
 export default function GroupReservationForm() {
+  // 예약 가능 상품
   const reservableSaleProduct = useReservableSaleProductQuery();
+
+  // 단체 예약 req
+  const createGroupReservationMutation = useCreateGroupReservationMutation({});
 
   const groupReservationForm = useForm<GroupReservtionForm>({
     resolver: zodResolver(GroupReservationFormSchema),
@@ -84,10 +89,8 @@ export default function GroupReservationForm() {
     }
   };
 
-  console.log(groupReservationForm.getValues());
-
   const handleSubmit = () => {
-    console.log('예약 요청');
+    createGroupReservationMutation.mutate(groupReservationForm.getValues());
   };
 
   return (
@@ -161,7 +164,7 @@ export default function GroupReservationForm() {
                         )}
                       >
                         {field.value ? (
-                          format(field.value, 'PPP', { locale: ko })
+                          format(new Date(field.value), 'PPP', { locale: ko })
                         ) : (
                           <span>날짜를 선택해주세요</span>
                         )}
@@ -174,10 +177,17 @@ export default function GroupReservationForm() {
                       mode="single"
                       locale={ko}
                       selected={field.value ? new Date(field.value) : undefined}
-                      onSelect={field.onChange}
-                      disabled={(date) =>
-                        date < new Date() || date < new Date('1900-01-01')
-                      }
+                      onSelect={(date) => {
+                        if (date) {
+                          // 선택된 날짜의 자정(00:00:00)으로 설정
+                          const selectedDate = new Date(date);
+                          selectedDate.setHours(0, 0, 0, 0);
+                          field.onChange(selectedDate.toISOString());
+                        } else {
+                          field.onChange(date);
+                        }
+                      }}
+                      disabled={(date) => date < new Date()}
                       initialFocus
                     />
                   </PopoverContent>
