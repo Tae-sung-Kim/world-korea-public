@@ -13,7 +13,7 @@ export type GroupReservationItemProduct = {
   productName: string;
 };
 
-export type GroupReservtionForm = {
+export type GroupReservationForm = {
   companyName: string; // 회사명
   contactPersonInfo: string; // 예약 담당자명 및 연락처
   appointmentDate: Date | string; // 방문 일자

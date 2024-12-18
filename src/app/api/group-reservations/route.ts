@@ -1,7 +1,9 @@
+import { getQueryParams } from '../utils/api.utils';
+import { getCurrentUser } from '../utils/auth.util';
 import connectMongo from '@/app/api/libs/database';
 import GroupReservationModel from '@/app/api/models/group-reservation.model';
 import { createResponse } from '@/app/api/utils/http.util';
-import { HTTP_STATUS } from '@/definitions';
+import { HTTP_STATUS, USER_CATEGORY_LEVEL_ADMIN } from '@/definitions';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
@@ -11,9 +13,17 @@ export async function GET(req: NextRequest, res: NextResponse) {
   try {
     await connectMongo();
 
-    const list = await GroupReservationModel.find({});
+    const { pageNumber, pageSize } = getQueryParams(req);
 
-    return NextResponse.json(list);
+    // const list = await GroupReservationModel.find({});
+
+    const paginationResponse =
+      await GroupReservationModel.getGroupReservationList({
+        pageNumber,
+        pageSize,
+      });
+
+    return NextResponse.json(paginationResponse);
   } catch (error) {
     return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
   }

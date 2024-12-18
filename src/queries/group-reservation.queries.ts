@@ -1,6 +1,11 @@
-import { FunctionProps } from '@/app/admin/queries/queries.type';
+import {
+  FunctionProps,
+  PageFilter,
+  PaginationProp,
+} from '@/app/admin/queries/queries.type';
+import { GroupReservation, PaginationResponse } from '@/definitions';
 import groupReservationService from '@/services/group-reservation.service';
-import { useMutation } from '@tanstack/react-query';
+import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 const QUERY_KEY = 'group-reservation';
@@ -24,4 +29,35 @@ export function useCreateGroupReservationMutation({
     },
     onSettled,
   });
+}
+
+export function useGroupReservationListQuery(
+  paginationParam?: PaginationProp<PageFilter>
+) {
+  const fallback: PaginationResponse<GroupReservation> = {
+    pageNumber: -1,
+    pageSize: -1,
+    list: [],
+    totalItems: -1,
+    totalPages: -1,
+    hasPreviousPage: false,
+    hasNextPage: false,
+    previousPage: -1,
+    nextPage: -1,
+    startIndex: -1,
+    endIndex: -1,
+  };
+
+  const { data = fallback } = useQuery({
+    queryKey: [QUERY_KEY, Object.values(paginationParam ?? {})],
+    queryFn: () => {
+      return groupReservationService.getGroupReservationList(
+        paginationParam ?? {}
+      );
+    },
+
+    placeholderData: keepPreviousData,
+  });
+
+  return data;
 }

@@ -41,7 +41,7 @@ interface GroupReservationMethods {}
 interface GroupReservationSchemaModel
   extends Model<GroupReservationDB, {}, GroupReservationMethods> {
   getGroupReservationList(
-    paginationParams: PaginationParams & { level: string }
+    paginationParams: PaginationParams // & { level: string }
   ): PaginationResponse<Promise<GroupReservation[]>>;
 }
 
@@ -65,21 +65,21 @@ schema.static(
   async function getGroupReservationList({
     pageNumber = PAGE_NUMBER_DEFAULT,
     pageSize = PAGE_SIZE_DEFAULT,
-    filter: filterQuery = null,
-    level = 1,
+    // filter: filterQuery = null,
+    // level = 1,
   }) {
     const skip = (pageNumber - 1) * pageSize;
     const filter: Record<string, any> = {
-      accessLevel: { $lte: level },
+      // accessLevel: { $lte: level },
     };
     const sort = { createdAt: -1 as SortOrder }; // 최신순 정렬
 
-    if (filterQuery) {
-      Object.keys(filterQuery).forEach((key) => {
-        const value = filterQuery[key];
-        filter[key] = { $regex: value, $options: 'i' }; // 정규식 검색 적용
-      });
-    }
+    // if (filterQuery) {
+    //   Object.keys(filterQuery).forEach((key) => {
+    //     const value = filterQuery[key];
+    //     filter[key] = { $regex: value, $options: 'i' }; // 정규식 검색 적용
+    //   });
+    // }
 
     // 총 개수 가져오기
     const totalItems = await this.countDocuments(filter);

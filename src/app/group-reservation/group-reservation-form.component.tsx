@@ -20,7 +20,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { GroupReservtionForm } from '@/definitions';
+import { GroupReservationForm } from '@/definitions';
 import {
   ADDITIONAL_OPTIONS,
   ESTIMATED_ARRIVAL_TIME,
@@ -51,14 +51,14 @@ const GroupReservationFormSchema = z.object({
   additionalOptions: z.array(z.string()),
 });
 
-export default function GroupReservationForm() {
+export default function GroupReservationFormClient() {
   // 예약 가능 상품
   const reservableSaleProduct = useReservableSaleProductQuery();
 
   // 단체 예약 req
   const createGroupReservationMutation = useCreateGroupReservationMutation({});
 
-  const groupReservationForm = useForm<GroupReservtionForm>({
+  const groupReservationForm = useForm<GroupReservationForm>({
     resolver: zodResolver(GroupReservationFormSchema),
     defaultValues: {
       companyName: '',
