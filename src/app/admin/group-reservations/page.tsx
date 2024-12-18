@@ -1,5 +1,5 @@
-import GroupReservationListClient from './group-reservation-list.client';
+import GroupReservationClient from './group-reservation.client';
 
 export default function GroupReservationPage() {
-  return <GroupReservationListClient />;
+  return <GroupReservationClient />;
 }

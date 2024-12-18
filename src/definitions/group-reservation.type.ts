@@ -21,6 +21,7 @@ export type GroupReservationForm = {
   numberOfPeopel: string; // 인원수
   nationality: string; // 국적
   productId: string; // 이용상품
+  productName: string;
   additionalOptions: string[]; // 추가 옵션
   mealCoupon: string; // 밀 쿠폰
   paymentType: string; // 결제 방법

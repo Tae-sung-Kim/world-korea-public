@@ -32,7 +32,7 @@ class SaleProductService {
 
   // 단체 예약 가능 상품 list
   getReservationSaleProductList() {
-    return http.get<SaleProductFormData<ProductDisplayData>>(
+    return http.get<SaleProductFormData<ProductDisplayData[]>>(
       `/api/sale-products/reservable`
     );
   }

@@ -44,6 +44,7 @@ const GroupReservationFormSchema = z.object({
   numberOfPeopel: z.string().min(1, '인원수는 필수 입니다.'),
   nationality: z.string().min(1, '국적은 필수 입니다.'),
   productId: z.string().min(1, '상품은 필수 입니다.'),
+  productName: z.string(),
   mealCoupon: z.string(),
   paymentType: z.string().min(1, '결제 방법은 필수 입니다.'), // 결제 방법 체크해야함
   estimatedArrivalTime: z.string(),
@@ -68,6 +69,7 @@ export default function GroupReservationFormClient() {
       numberOfPeopel: '',
       nationality: '',
       productId: '',
+      productName: '',
       additionalOptions: [],
       mealCoupon: '',
       paymentType: '',
@@ -89,7 +91,21 @@ export default function GroupReservationFormClient() {
     }
   };
 
+  // 이용상품
+  const handleProductChange = (value: string, field: ControllerRenderProps) => {
+    field.onChange(value);
+
+    const productName = Array.isArray(reservableSaleProduct)
+      ? reservableSaleProduct.find((f) => f._id === value)?.name
+      : '';
+
+    groupReservationForm.setValue('productName', productName ?? '');
+  };
+
   const handleSubmit = () => {
+    console.log(groupReservationForm.getValues());
+
+    return;
     createGroupReservationMutation.mutate(groupReservationForm.getValues());
   };
 
@@ -263,7 +279,9 @@ export default function GroupReservationFormClient() {
                 </FormLabel>
                 <FormControl>
                   <RadioGroup
-                    onValueChange={field.onChange}
+                    onValueChange={(value) =>
+                      handleProductChange(value, { ...field })
+                    }
                     defaultValue={field.value}
                     className="grid grid-cols-1 md:grid-cols-3 gap-4"
                   >
