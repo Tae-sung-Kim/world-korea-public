@@ -39,13 +39,13 @@ export default function ProfileConfirmPassword({
 
   // 비밀번호 확인 버튼 후 상세보기로 이동해야 함
   return (
-    <div className="min-h-screen">
-      <div className="container px-4 sm:px-6 lg:px-8 max-w-md mx-auto py-8">
-        <div className="bg-white rounded-lg shadow-sm p-6 sm:p-8">
+    <div>
+      <div className="px-4">
+        <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+            <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4 sm:space-y-6">
               <div className="text-center space-y-2">
-                <h2 className="text-2xl font-semibold">비밀번호 확인</h2>
+                <h2 className="text-xl sm:text-2xl font-semibold">비밀번호 확인</h2>
                 <p className="text-sm text-gray-500">
                   회원정보 수정을 위해 비밀번호를 입력해주세요.
                 </p>
@@ -63,7 +63,7 @@ export default function ProfileConfirmPassword({
                           <Input
                             type="password"
                             placeholder="비밀번호를 입력해주세요"
-                            className="font-medium"
+                            className="font-medium w-full"
                             {...field}
                           />
                         </div>
@@ -73,12 +73,12 @@ export default function ProfileConfirmPassword({
                   )}
                 />
 
-                <div className="flex justify-center pt-6">
+                <div className="flex justify-center pt-4 sm:pt-6">
                   <Button
                     type="submit"
                     className="w-full sm:w-32 font-medium bg-blue-500 hover:bg-blue-600 text-white"
                   >
-                    <span className="relative flex items-center gap-2">
+                    <span className="relative flex items-center justify-center gap-2">
                       <MdOutlineCheck className="text-xl" />
                       확인
                     </span>

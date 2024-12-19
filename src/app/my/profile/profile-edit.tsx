@@ -106,19 +106,19 @@ export default function ProfileEdit({
   }, [currentUserData, form]);
 
   return (
-    <div className="min-h-screen">
-      <div className="container px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto py-8">
-        <div className="bg-white rounded-lg shadow-sm p-6 sm:p-8">
+    <div>
+      <div className="px-4">
+        <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(handleSubmit)}
-              className="space-y-8"
+              className="space-y-6 sm:space-y-8"
             >
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-semibold">회원 정보 수정</h2>
+              <div className="flex justify-between items-center mb-4 sm:mb-6">
+                <h2 className="text-xl sm:text-2xl font-semibold">회원 정보 수정</h2>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                 <div className="space-y-4">
                   <FormField
                     control={form.control}
@@ -260,14 +260,14 @@ export default function ProfileEdit({
                 </div>
               </div>
 
-              <div className="flex flex-col sm:flex-row justify-center gap-3 pt-6">
+              <div className="flex flex-col sm:flex-row justify-center gap-3 pt-4 sm:pt-6">
                 <Button
                   type="button"
                   variant="outline"
                   onClick={() => onStep(ProfileStep.Detail)}
                   className="w-full sm:w-32 font-medium hover:bg-gray-100"
                 >
-                  <span className="relative flex items-center gap-2">
+                  <span className="relative flex items-center justify-center gap-2">
                     <MdOutlineClose className="text-xl" />
                     취소
                   </span>
@@ -276,7 +276,7 @@ export default function ProfileEdit({
                   type="submit"
                   className="w-full sm:w-32 font-medium bg-blue-500 hover:bg-blue-600 text-white"
                 >
-                  <span className="relative flex items-center gap-2">
+                  <span className="relative flex items-center justify-center gap-2">
                     <MdOutlineCheck className="text-xl" />
                     저장
                   </span>
