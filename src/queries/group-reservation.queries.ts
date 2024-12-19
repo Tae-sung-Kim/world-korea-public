@@ -10,6 +10,7 @@ import { toast } from 'sonner';
 
 const QUERY_KEY = 'group-reservation';
 
+// 단체 예약 생성
 export function useCreateGroupReservationMutation({
   onSuccess,
   onError,
@@ -31,6 +32,7 @@ export function useCreateGroupReservationMutation({
   });
 }
 
+// 단체 예약 리스트
 export function useGroupReservationListQuery(
   paginationParam?: PaginationProp<PageFilter>
 ) {
@@ -62,6 +64,7 @@ export function useGroupReservationListQuery(
   return data;
 }
 
+// 단체예약 상세
 export function useGroupReservationDetailsQuery(id: string) {
   const fallback: Partial<GroupReservation> = {};
 
@@ -71,4 +74,26 @@ export function useGroupReservationDetailsQuery(id: string) {
   });
 
   return data;
+}
+
+// 단체 예약 수정
+export function useUpdateGroupReservationMutation({
+  onSuccess,
+  onError,
+  onSettled,
+}: FunctionProps) {
+  return useMutation({
+    mutationFn: groupReservationService.updateGroupReservation,
+    onSuccess: () => {
+      onSuccess && onSuccess();
+      toast.success('단체 예약 정보가 수정되었습니다.');
+    },
+    onError: () => {
+      onError && onError();
+      toast.error(
+        '단체 예약 수정중 오류가 발생했습니다.<br/>잠시 후 다시 시도해주세요.'
+      );
+    },
+    onSettled,
+  });
 }

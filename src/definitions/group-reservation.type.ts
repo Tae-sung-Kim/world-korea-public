@@ -7,7 +7,7 @@ export type GroupReservation = {
   createdAt: Date;
 };
 
-//단체 예약
+// 단체 예약
 export type GroupReservationItemProduct = {
   productId: string;
   productName: string;
@@ -31,6 +31,7 @@ export type GroupReservationForm = {
   estimatedArrivalTime: {
     type: string;
     memo?: string;
-  }; //예상 도착시간 및 미팅장소
-  vehicleAndTransportType: string; //차량번호 혹은 교통수단
+  }; // 예상 도착시간 및 미팅장소
+  vehicleAndTransportType: string; // 차량번호 혹은 교통수단
+  memo?: string; // 비고
 };

@@ -19,6 +19,22 @@ class GroupReservationService {
     });
   }
 
+  // 단체 예약 수정
+  updateGroupReservation({
+    id,
+    data,
+  }: {
+    id: string;
+    data: GroupReservationForm;
+  }) {
+    const usedAt = data.appointmentDate;
+
+    return http.patch(`/api/group-reservations/${id}`, {
+      customData: data,
+      usedAt,
+    });
+  }
+
   // 단체 예약 목록
   getGroupReservationList(pageParams?: PaginationProp<PageFilter>) {
     const params = qs.stringify(pageParams ?? {});
@@ -27,6 +43,7 @@ class GroupReservationService {
     );
   }
 
+  // 단체 예약 상세
   getGroupReservationDetails(id: string) {
     return http.get<GroupReservation>(`/api/group-reservations/${id}`);
   }

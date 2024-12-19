@@ -5,7 +5,7 @@ import {
   useUserCategoryListQuery,
   useUpdateUserMutation,
 } from '../../queries';
-import DetailTitle from '@/app/components/common/detail-title.compoent';
+import DetailTitle from '@/app/components/common/detail-title.component';
 import { Button } from '@/components/ui/button';
 import {
   Form,

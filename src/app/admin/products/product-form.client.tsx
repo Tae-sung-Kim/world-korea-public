@@ -1,6 +1,6 @@
 'use client';
 
-import DetailTitle from '@/app/components/common/detail-title.compoent';
+import DetailTitle from '@/app/components/common/detail-title.component';
 import ProductDetail from '@/app/components/products/product-detail.component';
 
 export default function ProductFormClient({

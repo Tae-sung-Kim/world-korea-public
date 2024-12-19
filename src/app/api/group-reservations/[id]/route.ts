@@ -14,7 +14,9 @@ export async function GET(req: NextRequest, ctx: { params: { id: string } }) {
 
     await connectMongo();
 
-    const groupReservationData = await GroupReservationModel.findById(groupReservationId);
+    const groupReservationData = await GroupReservationModel.findById(
+      groupReservationId
+    );
 
     return NextResponse.json(groupReservationData);
   } catch (error) {
@@ -22,11 +24,11 @@ export async function GET(req: NextRequest, ctx: { params: { id: string } }) {
   }
 }
 
-
 /**
  * 그룹예약 수정
  */
-export async function PUT(req: NextRequest, ctx: { params: { id: string } }) {
+// export async function PUT(req: NextRequest, ctx: { params: { id: string } }) {
+export async function PATCH(req: NextRequest, ctx: { params: { id: string } }) {
   try {
     const id = ctx.params.id;
     const { customData, usedAt } = await req.json();

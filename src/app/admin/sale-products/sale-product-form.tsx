@@ -3,7 +3,7 @@
 import { priceShcema } from '../products/product.schema';
 import { useUserCategoryListQuery } from '../queries';
 import { useCreateSaleProductMutation } from '../queries/sale-product.queries';
-import DetailTitle from '@/app/components/common/detail-title.compoent';
+import DetailTitle from '@/app/components/common/detail-title.component';
 import SaleProductDetail from '@/app/components/sale-products/sale-product-detail.component';
 import { Button } from '@/components/ui/button';
 import {
