@@ -39,24 +39,29 @@ export default function ProductSearch() {
   };
 
   return (
-    <div className="flex space-x-5 items-center m-5">
-      <Label className="">상품명</Label>
-      <Input
-        value={value}
-        name="name"
-        className="w-64"
-        onChange={handleInputChange}
-        onKeyDown={handleKeyDown}
-      />
-
-      <Button
-        type="button"
-        variant="secondary"
-        size="icon"
-        onClick={handleSearchClick}
-      >
-        <FaSearch />
-      </Button>
+    <div className="w-full bg-white rounded-lg shadow-sm">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full">
+          <Label className="min-w-20 text-sm font-medium text-gray-900">상품명</Label>
+          <div className="flex-1 w-full sm:w-auto">
+            <Input
+              value={value}
+              name="name"
+              className="w-full sm:w-[300px]"
+              placeholder="상품명을 입력하세요"
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+            />
+          </div>
+          <Button 
+            onClick={handleSearchClick}
+            className="w-full sm:w-auto bg-primary hover:bg-primary/90"
+          >
+            <FaSearch className="mr-2 h-4 w-4" />
+            검색
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }
