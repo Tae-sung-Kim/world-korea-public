@@ -1,11 +1,13 @@
 import GroupReservationDetailClient from './group-reservation-detail.client';
 
-export default function GroupReservationDetailPage({
-  params,
-}: {
+interface GroupReservationDetailPageProps {
   params: {
     id: string;
   };
-}) {
-  return <GroupReservationDetailClient groupReservationId={params.id} />;
+}
+
+export default function GroupReservationDetailPage({
+  params,
+}: GroupReservationDetailPageProps) {
+  return <GroupReservationDetailClient id={params.id} />;
 }

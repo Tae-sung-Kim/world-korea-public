@@ -17,15 +17,15 @@ export default function AdminLayout({
       <AdminProtectedRoute>
         <Loading />
         <div className="min-h-screen bg-gradient-to-br to-gray-100">
-          <div className="flex min-w-[1024px] min-h-screen">
+          <div className="flex min-h-screen">
             {/* Sidebar */}
             <div className="w-[180px] lg:w-64 bg-white shadow-lg shrink-0 sticky top-0 h-screen">
               <MenuNavigation />
             </div>
 
             {/* Main Content */}
-            <div className="flex-1 p-8 min-w-[760px]">
-              <div className="bg-white rounded-lg shadow-sm p-6">
+            <div className="flex-1 p-4 sm:p-6 lg:p-8 overflow-x-auto">
+              <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
                 <Breadcrumb type="admin" />
                 {children}
               </div>
