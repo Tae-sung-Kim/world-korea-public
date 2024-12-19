@@ -45,11 +45,19 @@ const GroupReservationFormSchema = z.object({
   nationality: z.string().min(1, '국적은 필수 입니다.'),
   productId: z.string().min(1, '상품은 필수 입니다.'),
   productName: z.string(),
+  additionalOptions: z.array(z.string()), // 추가옵션
   mealCoupon: z.string(),
-  paymentType: z.string().min(1, '결제 방법은 필수 입니다.'), // 결제 방법 체크해야함
-  estimatedArrivalTime: z.string(),
+  paymentType: z.object({
+    // 결제 방법
+    type: z.string().min(1, '결제 방법은 필수 입니다.'),
+    memo: z.string().optional(),
+  }),
+  estimatedArrivalTime: z.object({
+    // 예상 도착 시간
+    type: z.string().optional(),
+    memo: z.string().optional(),
+  }),
   vehicleAndTransportType: z.string(),
-  additionalOptions: z.array(z.string()),
 });
 
 export default function GroupReservationFormClient() {
@@ -57,25 +65,37 @@ export default function GroupReservationFormClient() {
   const reservableSaleProduct = useReservableSaleProductQuery();
 
   // 단체 예약 req
-  const createGroupReservationMutation = useCreateGroupReservationMutation({});
+  const createGroupReservationMutation = useCreateGroupReservationMutation({
+    onSuccess: () => {
+      groupReservationForm.reset();
+    },
+  });
+
+  const defaultValues: GroupReservationForm = {
+    companyName: '',
+    contactPersonInfo: '',
+    appointmentDate: '',
+    guideContactInfo: '',
+    numberOfPeopel: '',
+    nationality: '',
+    productId: '',
+    productName: '',
+    additionalOptions: [],
+    mealCoupon: '',
+    paymentType: {
+      type: '',
+      memo: '',
+    },
+    estimatedArrivalTime: {
+      type: '',
+      memo: '',
+    },
+    vehicleAndTransportType: '',
+  };
 
   const groupReservationForm = useForm<GroupReservationForm>({
     resolver: zodResolver(GroupReservationFormSchema),
-    defaultValues: {
-      companyName: '',
-      contactPersonInfo: '',
-      appointmentDate: '',
-      guideContactInfo: '',
-      numberOfPeopel: '',
-      nationality: '',
-      productId: '',
-      productName: '',
-      additionalOptions: [],
-      mealCoupon: '',
-      paymentType: '',
-      estimatedArrivalTime: '',
-      vehicleAndTransportType: '',
-    },
+    defaultValues,
   });
 
   // 추가 옵션
@@ -103,9 +123,6 @@ export default function GroupReservationFormClient() {
   };
 
   const handleSubmit = () => {
-    console.log(groupReservationForm.getValues());
-
-    return;
     createGroupReservationMutation.mutate(groupReservationForm.getValues());
   };
 
@@ -282,7 +299,7 @@ export default function GroupReservationFormClient() {
                     onValueChange={(value) =>
                       handleProductChange(value, { ...field })
                     }
-                    defaultValue={field.value}
+                    value={field.value || ''}
                     className="grid grid-cols-1 md:grid-cols-3 gap-4"
                   >
                     {Array.isArray(reservableSaleProduct) &&
@@ -373,7 +390,7 @@ export default function GroupReservationFormClient() {
                 <FormControl>
                   <RadioGroup
                     onValueChange={field.onChange}
-                    defaultValue={field.value}
+                    value={field.value || ''}
                     className="flex flex-col space-y-1"
                   >
                     {MEAL_COUPON.map((d) => (
@@ -407,32 +424,51 @@ export default function GroupReservationFormClient() {
                   부탁드립니다.)
                 </FormDescription>
                 <FormControl>
-                  <RadioGroup
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    className="flex flex-col space-y-1"
-                  >
-                    {PAYMENT_TYPE.map((d) => (
-                      <FormItem
-                        key={d.value}
-                        className="flex items-center bg-white p-3 rounded border"
-                      >
-                        <div className="flex items-center min-w-0">
+                  <div className="space-y-4">
+                    <RadioGroup
+                      onValueChange={(value) =>
+                        field.onChange({
+                          type: value,
+                          // type이 변경될 때 memo 초기화
+                          memo: ['cashPayment', 'preDeposit'].includes(value)
+                            ? field.value?.memo
+                            : '',
+                        })
+                      }
+                      value={field.value?.type || ''}
+                      className="flex flex-col space-y-1"
+                    >
+                      {PAYMENT_TYPE.map((d) => (
+                        <FormItem
+                          key={d.value}
+                          className="flex items-center space-x-3 space-y-0 bg-white p-3 rounded border"
+                        >
                           <FormControl>
                             <RadioGroupItem value={d.value} />
                           </FormControl>
-                          <FormLabel className="ml-2 font-normal whitespace-nowrap">
+                          <FormLabel className="font-normal">
                             {d.label}
                           </FormLabel>
-                        </div>
-                        {d.etc && (
-                          <FormControl className="flex-1 ml-4">
-                            <Input className="bg-white border-gray-200 focus:border-purple-500" />
-                          </FormControl>
-                        )}
-                      </FormItem>
-                    ))}
-                  </RadioGroup>
+                        </FormItem>
+                      ))}
+                    </RadioGroup>
+                    <Input
+                      placeholder="추가 메모"
+                      value={field.value?.memo || ''}
+                      disabled={
+                        !['cashPayment', 'preDeposit'].includes(
+                          field.value?.type
+                        )
+                      }
+                      onChange={(e) =>
+                        field.onChange({
+                          ...field.value,
+                          memo: e.target.value,
+                        })
+                      }
+                      className="bg-white border-gray-200 focus:border-purple-500"
+                    />
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -450,33 +486,42 @@ export default function GroupReservationFormClient() {
                   (미정일 경우 비워두시고 확정되면 연락부탁드립니다.)
                 </FormDescription>
                 <FormControl>
-                  <RadioGroup
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    className="flex flex-col space-y-1"
-                  >
-                    {ESTIMATED_ARRIVAL_TIME.map((d) => (
-                      <FormItem
-                        key={d.value}
-                        className="flex items-center space-x-3 space-y-0 bg-white p-3 rounded border"
-                      >
-                        <FormControl>
-                          <RadioGroupItem value={d.value} />
-                        </FormControl>
-                        <FormLabel className="font-normal whitespace-nowrap">
-                          {d.label}
-                        </FormLabel>
-                        {d.value === 'etc' && (
+                  <div className="space-y-4">
+                    <RadioGroup
+                      onValueChange={(value) =>
+                        field.onChange({
+                          type: value,
+                          // etc가 아닐 때만 memo 초기화
+                          memo: value === 'etc' ? field.value?.memo : '',
+                        })
+                      }
+                      value={field.value?.type || ''}
+                      className="flex flex-col space-y-1"
+                    >
+                      {ESTIMATED_ARRIVAL_TIME.map((d) => (
+                        <FormItem
+                          key={d.value}
+                          className="flex items-center space-x-3 space-y-0 bg-white p-3 rounded border"
+                        >
                           <FormControl>
-                            <Input
-                              placeholder="기타 장소"
-                              className="flex-1 bg-white border-gray-200 focus:border-purple-500"
-                            />
+                            <RadioGroupItem value={d.value} />
                           </FormControl>
-                        )}
-                      </FormItem>
-                    ))}
-                  </RadioGroup>
+                          <FormLabel className="font-normal">
+                            {d.label}
+                          </FormLabel>
+                        </FormItem>
+                      ))}
+                    </RadioGroup>
+                    <Input
+                      placeholder="추가 메모"
+                      value={field.value?.memo || ''}
+                      disabled={!('etc' === field.value?.type)}
+                      onChange={(e) =>
+                        field.onChange({ ...field.value, memo: e.target.value })
+                      }
+                      className="bg-white border-gray-200 focus:border-purple-500"
+                    />
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>

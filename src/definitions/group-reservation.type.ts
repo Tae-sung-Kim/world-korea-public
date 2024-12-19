@@ -24,7 +24,13 @@ export type GroupReservationForm = {
   productName: string;
   additionalOptions: string[]; // 추가 옵션
   mealCoupon: string; // 밀 쿠폰
-  paymentType: string; // 결제 방법
-  estimatedArrivalTime: string; //예상 도착시간 및 미팅장소
+  paymentType: {
+    type: string;
+    memo?: string;
+  }; // 결제 방법
+  estimatedArrivalTime: {
+    type: string;
+    memo?: string;
+  }; //예상 도착시간 및 미팅장소
   vehicleAndTransportType: string; //차량번호 혹은 교통수단
 };

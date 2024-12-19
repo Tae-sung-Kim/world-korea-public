@@ -1,9 +1,8 @@
 import { getQueryParams } from '../utils/api.utils';
-import { getCurrentUser } from '../utils/auth.util';
 import connectMongo from '@/app/api/libs/database';
 import GroupReservationModel from '@/app/api/models/group-reservation.model';
 import { createResponse } from '@/app/api/utils/http.util';
-import { HTTP_STATUS, USER_CATEGORY_LEVEL_ADMIN } from '@/definitions';
+import { HTTP_STATUS } from '@/definitions';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
@@ -38,8 +37,9 @@ export async function POST(req: NextRequest) {
 
     const body = await req.json();
     let { customData, usedAt } = body;
+    //usedAt은 없을수도 있음
 
-    if (!customData || !usedAt) {
+    if (!customData) {
       return createResponse(HTTP_STATUS.BAD_REQUEST);
     }
 
