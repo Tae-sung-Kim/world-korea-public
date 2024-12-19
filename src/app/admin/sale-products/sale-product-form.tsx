@@ -3,6 +3,7 @@
 import { priceShcema } from '../products/product.schema';
 import { useUserCategoryListQuery } from '../queries';
 import { useCreateSaleProductMutation } from '../queries/sale-product.queries';
+import DetailTitle from '@/app/components/common/detail-title.compoent';
 import SaleProductDetail from '@/app/components/sale-products/sale-product-detail.component';
 import { Button } from '@/components/ui/button';
 import {
@@ -124,8 +125,10 @@ export default function SaleProductForm({
   };
 
   return (
-    <div className="h-[calc(100vh-80px)] flex flex-col max-w-[1920px] mx-auto">
-      <div className="flex-1 bg-white rounded-lg shadow-sm p-6">
+    <div className="flex flex-col max-w-[1920px] mx-auto">
+      <DetailTitle title="판매 상품 상세" />
+
+      <div className="flex-1 bg-white rounded-lg shadow-sm p-6 overflow-y-auto">
         <Form {...saleProductForm}>
           <form
             onSubmit={saleProductForm.handleSubmit(handleSubmit)}

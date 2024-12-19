@@ -1,6 +1,7 @@
 'use client';
 
 import { useUpdatePartnerMutation } from '@/app/admin/queries';
+import DetailTitle from '@/app/components/common/detail-title.compoent';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -133,7 +134,7 @@ export default function PartnerDetailClient({ userId }: IProps) {
           onSubmit={partnerForm.handleSubmit(handleSubmit)}
           className="space-y-8"
         >
-          <h1 className="text-2xl font-semibold">파트너 수정</h1>
+          <DetailTitle title="파트너 수정" />
 
           <FormField
             control={partnerForm.control}

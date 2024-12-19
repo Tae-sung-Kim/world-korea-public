@@ -5,6 +5,7 @@ import {
   useUserCategoryListQuery,
   useUpdateUserMutation,
 } from '../../queries';
+import DetailTitle from '@/app/components/common/detail-title.compoent';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -135,9 +136,7 @@ export default function UsersDetailClient({ userId }: IProps) {
     <div className="container">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
-          <h1 className="text-2xl font-semibold">
-            회원 {isEdit ? '수정' : '상세'}
-          </h1>
+          <DetailTitle title={`회원 ${isEdit ? '수정' : '상세'}`} />
 
           <FormField
             control={form.control}
