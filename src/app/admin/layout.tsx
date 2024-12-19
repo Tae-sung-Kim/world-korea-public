@@ -19,7 +19,7 @@ export default function AdminLayout({
         <div className="min-h-screen bg-gradient-to-br to-gray-100">
           <div className="flex min-h-screen">
             {/* Sidebar */}
-            <div className="w-[180px] lg:w-64 bg-white shadow-lg shrink-0 sticky top-0 h-screen">
+            <div className="w-[180px] lg:w-64 bg-white shadow-lg shrink-0 sticky top-0 h-screen overflow-y-auto">
               <MenuNavigation />
             </div>
 
@@ -27,7 +27,7 @@ export default function AdminLayout({
             <div className="flex-1 p-4 sm:p-6 lg:p-8 overflow-x-auto">
               <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
                 <Breadcrumb type="admin" />
-                {children}
+                <div className="mt-4 sm:mt-6">{children}</div>
               </div>
             </div>
           </div>

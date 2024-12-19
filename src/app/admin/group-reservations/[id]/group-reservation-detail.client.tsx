@@ -42,8 +42,8 @@ export default function GroupReservationDetailClient({
     .join(', ');
 
   return (
-    <div className="space-y-4 sm:space-y-6 min-w-[280px]">
-      <div className="flex items-center justify-between pb-4 sm:pb-6 border-b">
+    <div className="min-w-[280px]">
+      <div className="pb-4 sm:pb-6 mb-4 sm:mb-6 border-b">
         <h1 className="text-lg sm:text-xl lg:text-2xl font-semibold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
           단체 예약 상세
         </h1>
@@ -52,20 +52,18 @@ export default function GroupReservationDetailClient({
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
         <Card className="min-w-0 hover:shadow-md transition-shadow duration-200">
           <CardHeader className="p-3 sm:p-4 lg:p-6 border-b bg-gray-50/50">
-            <CardTitle className="text-base sm:text-lg flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2">
               <div className="w-1 h-4 bg-blue-500 rounded-full" />
               기본 정보
             </CardTitle>
           </CardHeader>
-          <CardContent className="p-3 sm:p-4 lg:p-6 pt-4 space-y-4">
-            <div className="space-y-1.5">
-              <h3 className="text-sm font-medium text-gray-500">업체명</h3>
-              <p className="text-gray-900">
-                {customData?.companyName}
-              </p>
+          <CardContent className="p-3 sm:p-4 lg:p-6 space-y-4">
+            <div>
+              <h3 className="text-sm font-medium text-gray-500 mb-1.5">업체명</h3>
+              <p className="text-gray-900">{customData?.companyName}</p>
             </div>
-            <div className="space-y-1.5">
-              <h3 className="text-sm font-medium text-gray-500">방문 일자</h3>
+            <div>
+              <h3 className="text-sm font-medium text-gray-500 mb-1.5">방문 일자</h3>
               <p className="text-gray-900">
                 {customData?.appointmentDate &&
                   format(new Date(customData.appointmentDate), 'PPP', {
@@ -73,72 +71,60 @@ export default function GroupReservationDetailClient({
                   })}
               </p>
             </div>
-            <div className="space-y-1.5">
-              <h3 className="text-sm font-medium text-gray-500">인원수</h3>
-              <p className="text-gray-900">
-                {customData?.numberOfPeopel}
-              </p>
+            <div>
+              <h3 className="text-sm font-medium text-gray-500 mb-1.5">인원수</h3>
+              <p className="text-gray-900">{customData?.numberOfPeopel}</p>
             </div>
-            <div className="space-y-1.5">
-              <h3 className="text-sm font-medium text-gray-500">국적</h3>
-              <p className="text-gray-900">
-                {customData?.nationality}
-              </p>
+            <div>
+              <h3 className="text-sm font-medium text-gray-500 mb-1.5">국적</h3>
+              <p className="text-gray-900">{customData?.nationality}</p>
             </div>
           </CardContent>
         </Card>
 
         <Card className="min-w-0 hover:shadow-md transition-shadow duration-200">
           <CardHeader className="p-3 sm:p-4 lg:p-6 border-b bg-gray-50/50">
-            <CardTitle className="text-base sm:text-lg flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2">
               <div className="w-1 h-4 bg-green-500 rounded-full" />
               연락처 정보
             </CardTitle>
           </CardHeader>
-          <CardContent className="p-3 sm:p-4 lg:p-6 pt-4 space-y-4">
-            <div className="space-y-1.5">
-              <h3 className="text-sm font-medium text-gray-500">
+          <CardContent className="p-3 sm:p-4 lg:p-6 space-y-4">
+            <div>
+              <h3 className="text-sm font-medium text-gray-500 mb-1.5">
                 예약 담당자 성함 및 연락처
               </h3>
-              <p className="text-gray-900">
-                {customData?.contactPersonInfo}
-              </p>
+              <p className="text-gray-900">{customData?.contactPersonInfo}</p>
             </div>
-            <div className="space-y-1.5">
-              <h3 className="text-sm font-medium text-gray-500">
+            <div>
+              <h3 className="text-sm font-medium text-gray-500 mb-1.5">
                 인솔자(가이드)님 성함 및 연락처
               </h3>
-              <p className="text-gray-900">
-                {customData?.guideContactInfo}
-              </p>
+              <p className="text-gray-900">{customData?.guideContactInfo}</p>
             </div>
           </CardContent>
         </Card>
 
         <Card className="sm:col-span-2 min-w-0 hover:shadow-md transition-shadow duration-200">
           <CardHeader className="p-3 sm:p-4 lg:p-6 border-b bg-gray-50/50">
-            <CardTitle className="text-base sm:text-lg flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2">
               <div className="w-1 h-4 bg-purple-500 rounded-full" />
               상품 정보
             </CardTitle>
           </CardHeader>
-          <CardContent className="p-3 sm:p-4 lg:p-6 pt-4 space-y-4">
-            <div className="space-y-1.5">
-              <h3 className="text-sm font-medium text-gray-500">
-                이용상품(메인상품)
-              </h3>
-              <p className="text-gray-900">
-                {customData?.productName}
-              </p>
+          <CardContent className="p-3 sm:p-4 lg:p-6 space-y-4">
+            <div>
+              <h3 className="text-sm font-medium text-gray-500 mb-1.5">이용상품(메인상품)</h3>
+              <p className="text-gray-900">{customData?.productName}</p>
             </div>
-            <div className="space-y-1.5">
-              <h3 className="text-sm font-medium text-gray-500">추가 옵션</h3>
+            <div>
+              <h3 className="text-sm font-medium text-gray-500 mb-1.5">추가 옵션</h3>
               <p className="text-gray-900">
                 {additionalOptionsLabels || '추가 옵션 없음'}
               </p>
             </div>
-            <div className="space-y-1.5">
-              <h3 className="text-sm font-medium text-gray-500">밀쿠폰</h3>
+            <div>
+              <h3 className="text-sm font-medium text-gray-500 mb-1.5">밀쿠폰</h3>
               <p className="text-gray-900">
                 {getLabel(customData?.mealCoupon, MEAL_COUPON)}
               </p>
@@ -148,14 +134,14 @@ export default function GroupReservationDetailClient({
 
         <Card className="min-w-0 hover:shadow-md transition-shadow duration-200">
           <CardHeader className="p-3 sm:p-4 lg:p-6 border-b bg-gray-50/50">
-            <CardTitle className="text-base sm:text-lg flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2">
               <div className="w-1 h-4 bg-orange-500 rounded-full" />
               결제 및 도착 정보
             </CardTitle>
           </CardHeader>
-          <CardContent className="p-3 sm:p-4 lg:p-6 pt-4 space-y-4">
-            <div className="space-y-1.5">
-              <h3 className="text-sm font-medium text-gray-500">결제 방법</h3>
+          <CardContent className="p-3 sm:p-4 lg:p-6 space-y-4">
+            <div>
+              <h3 className="text-sm font-medium text-gray-500 mb-1.5">결제 방법</h3>
               <p className="text-gray-900">
                 {getLabel(customData?.paymentType?.type, PAYMENT_TYPE)}
               </p>
@@ -165,8 +151,8 @@ export default function GroupReservationDetailClient({
                 </p>
               )}
             </div>
-            <div className="space-y-1.5">
-              <h3 className="text-sm font-medium text-gray-500">
+            <div>
+              <h3 className="text-sm font-medium text-gray-500 mb-1.5">
                 예상 도착시간 및 미팅장소
               </h3>
               <p className="text-gray-900">
@@ -186,19 +172,17 @@ export default function GroupReservationDetailClient({
 
         <Card className="min-w-0 hover:shadow-md transition-shadow duration-200">
           <CardHeader className="p-3 sm:p-4 lg:p-6 border-b bg-gray-50/50">
-            <CardTitle className="text-base sm:text-lg flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2">
               <div className="w-1 h-4 bg-red-500 rounded-full" />
               교통 정보
             </CardTitle>
           </CardHeader>
-          <CardContent className="p-3 sm:p-4 lg:p-6 pt-4 space-y-4">
-            <div className="space-y-1.5">
-              <h3 className="text-sm font-medium text-gray-500">
+          <CardContent className="p-3 sm:p-4 lg:p-6 space-y-4">
+            <div>
+              <h3 className="text-sm font-medium text-gray-500 mb-1.5">
                 차량번호 혹은 교통수단
               </h3>
-              <p className="text-gray-900">
-                {customData?.vehicleAndTransportType}
-              </p>
+              <p className="text-gray-900">{customData?.vehicleAndTransportType}</p>
             </div>
           </CardContent>
         </Card>
