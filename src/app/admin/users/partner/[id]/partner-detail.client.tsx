@@ -1,7 +1,7 @@
 'use client';
 
 import { useUpdatePartnerMutation } from '@/app/admin/queries';
-import DetailTitle from '@/app/components/common/detail-title.compoent';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -128,166 +128,221 @@ export default function PartnerDetailClient({ userId }: IProps) {
   };
 
   return (
-    <div className="container">
+    <div className="container mx-auto py-6">
       <Form {...partnerForm}>
         <form
           onSubmit={partnerForm.handleSubmit(handleSubmit)}
-          className="space-y-8"
+          className="space-y-6"
         >
-          <DetailTitle title="파트너 수정" />
+          <Card>
+            <CardHeader>
+              <CardTitle>파트너 수정</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <FormField
+                  control={partnerForm.control}
+                  name="companyName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium">업체명</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="업체명을 입력하세요"
+                          {...field}
+                          disabled
+                          readOnly
+                          value={field.value ?? ''}
+                          className="w-full"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-          <FormField
-            control={partnerForm.control}
-            name="companyName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>업체명</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder=""
-                    {...field}
-                    disabled
-                    readOnly
-                    value={field.value ?? ''}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                <FormField
+                  control={partnerForm.control}
+                  name="address"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium">주소</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="주소를 입력하세요"
+                          {...field}
+                          value={field.value ?? ''}
+                          {...isReadOnly}
+                          className="w-full"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-          <div className="grid grid-cols-2">
-            <div>
-              <Label>파트너 상품 리스트</Label>
-              <div>
-                {productData.map((d) => {
-                  return (
-                    <Button
-                      key={d._id}
-                      type="button"
-                      value={d._id ?? ''}
-                      className="m-1"
-                      variant={
-                        partnerProducts.map((d) => d._id).includes(d._id)
-                          ? 'secondary'
-                          : 'outline'
-                      }
-                      onClick={() => handleToggleClick(d)}
-                    >
-                      {d.name}
-                    </Button>
-                  );
-                })}
+                <FormField
+                  control={partnerForm.control}
+                  name="contactNumber"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium">연락처</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="연락처를 입력하세요"
+                          {...field}
+                          value={field.value ?? ''}
+                          {...isReadOnly}
+                          className="w-full"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={partnerForm.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium">이름</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="이름을 입력하세요"
+                          {...field}
+                          value={field.value ?? ''}
+                          {...isReadOnly}
+                          className="w-full"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={partnerForm.control}
+                  name="phoneNumber"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium">휴대폰</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="휴대폰 번호를 입력하세요"
+                          {...field}
+                          value={field.value ?? ''}
+                          {...isReadOnly}
+                          className="w-full"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={partnerForm.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium">이메일</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="이메일을 입력하세요"
+                          {...field}
+                          value={field.value ?? ''}
+                          {...isReadOnly}
+                          className="w-full"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
-            </div>
-            <div>
-              <Label>선택된 상품</Label>
-              <div>
-                {partnerProducts.map((d) => {
-                  return <Badge key={d._id}>{d.name}</Badge>;
-                })}
+
+              <div className="space-y-6">
+                <Card className="border-dashed">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg">파트너 상품 리스트</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                      {productData.map((d) => {
+                        const isSelected = partnerProducts.map((d) => d._id).includes(d._id);
+                        return (
+                          <Button
+                            key={d._id}
+                            type="button"
+                            value={d._id ?? ''}
+                            variant={isSelected ? 'secondary' : 'outline'}
+                            onClick={() => handleToggleClick(d)}
+                            className={`
+                              h-auto px-3 py-4 justify-start text-left
+                              ${isSelected ? 'border-primary bg-primary/10' : 'hover:border-primary/50'}
+                            `}
+                          >
+                            {d.name}
+                            {isSelected && (
+                              <span className="text-xs text-primary ml-2">
+                                선택됨
+                              </span>
+                            )}
+                          </Button>
+                        );
+                      })}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-muted/50">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      선택된 상품
+                      {partnerProducts.length > 0 && (
+                        <span className="text-sm text-muted-foreground">
+                          ({partnerProducts.length}개 선택됨)
+                        </span>
+                      )}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    {partnerProducts.length === 0 ? (
+                      <p className="text-sm text-muted-foreground text-center py-4">
+                        선택된 상품이 없습니다
+                      </p>
+                    ) : (
+                      <div className="flex flex-wrap gap-2">
+                        {partnerProducts.map((d) => (
+                          <Badge 
+                            key={d._id}
+                            variant="secondary" 
+                            className="px-3 py-1.5 text-sm bg-background hover:bg-background"
+                          >
+                            {d.name}
+                            <button
+                              type="button"
+                              onClick={() => handleToggleClick(d)}
+                              className="ml-2 hover:text-destructive"
+                            >
+                              ×
+                            </button>
+                          </Badge>
+                        ))}
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
               </div>
-            </div>
-          </div>
 
-          <FormField
-            control={partnerForm.control}
-            name="address"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>주소</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder=""
-                    {...field}
-                    value={field.value ?? ''}
-                    {...isReadOnly}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={partnerForm.control}
-            name="contactNumber"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>연락처</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder=""
-                    {...field}
-                    value={field.value ?? ''}
-                    {...isReadOnly}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={partnerForm.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>이름</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder=""
-                    {...field}
-                    value={field.value ?? ''}
-                    {...isReadOnly}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={partnerForm.control}
-            name="phoneNumber"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>휴대폰</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder=""
-                    {...field}
-                    value={field.value ?? ''}
-                    {...isReadOnly}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={partnerForm.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>이메일</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder=""
-                    {...field}
-                    value={field.value ?? ''}
-                    {...isReadOnly}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <Button type="submit" className="ml-2">
-            수정하기
-          </Button>
+              <div className="flex justify-end">
+                <Button type="submit" className="px-6">
+                  수정하기
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         </form>
       </Form>
     </div>
