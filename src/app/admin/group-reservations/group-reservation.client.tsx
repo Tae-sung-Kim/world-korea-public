@@ -1,7 +1,7 @@
 'use client';
 
 import ExportExcelButton from '../components/export-excel-button.component';
-import GroupReservationList from './group-reservation-list.component';
+import GroupReservationList from './group-reservation-list.client';
 import { useRef } from 'react';
 
 export default function GroupReservationClient() {

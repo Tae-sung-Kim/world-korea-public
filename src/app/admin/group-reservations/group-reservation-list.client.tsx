@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/table';
 import { useGroupReservationListQuery } from '@/queries';
 import { format } from 'date-fns';
+import { useRouter } from 'next/navigation';
 
 type Props = {
   tableId?: string;
@@ -21,6 +22,8 @@ type Props = {
 export default function GroupReservationListClient({
   tableId = 'reservationList',
 }: Props) {
+  const router = useRouter();
+
   const { pageNumber = 1, pageSize = 10 } = usePagination();
 
   const reservationData = useGroupReservationListQuery({
@@ -28,7 +31,11 @@ export default function GroupReservationListClient({
     pageSize,
   });
 
-  console.log('reservationData', reservationData);
+  const handleGroupReservationClick =
+    ({ id }: { id: string }) =>
+    () => {
+      router.push(`/admin/group-reservations/${id}`);
+    };
 
   return (
     <>
@@ -46,10 +53,10 @@ export default function GroupReservationListClient({
                       번호
                     </TableHead>
                     <TableHead className="w-[50px] h-12 text-sm font-semibold text-gray-900">
-                      방문 일자
+                      업체명
                     </TableHead>
                     <TableHead className="w-[50px] h-12 text-sm font-semibold text-gray-900">
-                      업체명
+                      예약일
                     </TableHead>
                     <TableHead className="w-[50px] h-12 text-sm font-semibold text-gray-900">
                       예약자명
@@ -58,29 +65,37 @@ export default function GroupReservationListClient({
                       상품명
                     </TableHead>
                     <TableHead className="w-[50px] h-12 text-sm font-semibold text-gray-900">
+                      예약 인원
+                    </TableHead>
+                    <TableHead className="w-[50px] h-12 text-sm font-semibold text-gray-900">
                       연락처
+                    </TableHead>
+                    <TableHead className="w-[50px] h-12 text-sm font-semibold text-gray-900">
+                      방문 일자
                     </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {reservationData.list.map((data, idx) => {
                     const customData = data.customData;
-
                     return (
                       <TableRow
                         key={data._id}
                         className="hover:bg-gray-50 transition-colors"
+                        onClick={handleGroupReservationClick({ id: data._id })}
                       >
                         <TableCell className="p-4" data-exclude-excel>
                           {reservationData.totalItems -
                             (pageNumber - 1) * pageSize -
                             idx}
                         </TableCell>
-                        <TableCell className="p-4">
-                          {format(data.usedAt, 'yyyy.MM.dd')}
-                        </TableCell>
+
                         <TableCell className="p-4">
                           {customData.companyName as string}
+                        </TableCell>
+                        <TableCell className="p-4">
+                          {data.createdAt &&
+                            format(data.createdAt, 'yyyy.MM.dd')}
                         </TableCell>
                         <TableCell className="p-4">
                           {customData.guideContactInfo as string}
@@ -89,7 +104,13 @@ export default function GroupReservationListClient({
                           {customData.productName as string}
                         </TableCell>
                         <TableCell className="p-4">
+                          {customData.numberOfPeopel as string}
+                        </TableCell>
+                        <TableCell className="p-4">
                           {customData.guideContactInfo as string}
+                        </TableCell>
+                        <TableCell className="p-4">
+                          {data.usedAt && format(data.usedAt, 'yyyy.MM.dd')}
                         </TableCell>
                       </TableRow>
                     );

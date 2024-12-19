@@ -26,6 +26,10 @@ class GroupReservationService {
       `/api/group-reservations?${params}`
     );
   }
+
+  getGroupReservationDetails(id: string) {
+    return http.get<GroupReservation>(`/api/group-reservations/${id}`);
+  }
 }
 
 const groupReservationService = new GroupReservationService();

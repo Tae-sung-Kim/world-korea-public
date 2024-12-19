@@ -61,3 +61,14 @@ export function useGroupReservationListQuery(
 
   return data;
 }
+
+export function useGroupReservationDetailsQuery(id: string) {
+  const fallback: Partial<GroupReservation> = {};
+
+  const { data = fallback } = useQuery({
+    queryKey: [QUERY_KEY, id],
+    queryFn: () => groupReservationService.getGroupReservationDetails(id),
+  });
+
+  return data;
+}
