@@ -43,20 +43,20 @@ export default function MenuNavigation({
 
   return (
     <div className="h-full flex flex-col">
-      <div className="p-2 lg:p-4 border-b border-gray-200">
+      <div className="p-3 border-b border-gray-200">
         <div className="text-center">
           <h2 className="text-xl font-bold text-gray-800">{title} 메뉴</h2>
           <div className="h-1 w-16 bg-gradient-to-r from-blue-500 to-indigo-500 mx-auto mt-2 rounded-full"></div>
         </div>
       </div>
-      <nav className="flex-1 py-2 lg:py-4">
-        <ul className="space-y-1 px-1 lg:px-3 h-[calc(100vh-120px)] overflow-y-auto">
+      <nav className="flex-1">
+        <ul className="space-y-1 px-3 py-2 overflow-y-auto">
           {menus.map((section) => (
             <li key={section.label}>
-              <div className="mb-2 lg:mb-4">
-                <span className="flex items-center px-2 py-2 text-gray-800 rounded-lg bg-gray-50 shadow-sm">
+              <div className="mb-2">
+                <span className="flex items-center px-3 py-2 text-gray-800 rounded-lg bg-gray-50 shadow-sm">
                   {section.key in MENU_ICONS && (
-                    <span className="mr-1.5 lg:mr-3">
+                    <span className="mr-2">
                       {React.createElement(MENU_ICONS[section.key as MenuKey], {
                         className: 'w-5 h-5 text-indigo-600',
                       })}
@@ -64,7 +64,7 @@ export default function MenuNavigation({
                   )}
                   <span className="font-medium">{section.label}</span>
                 </span>
-                <ul className="mt-1 space-y-1">
+                <ul className="mt-1 space-y-0.5">
                   {section.items.map((item) => (
                     <li key={item.label}>
                       <Link
