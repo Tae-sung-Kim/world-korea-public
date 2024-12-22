@@ -4,6 +4,7 @@ import {
   PAGE_SIZE_DEFAULT,
 } from '@/definitions/pagination.constant';
 import { PaginationParams } from '@/definitions/pagination.type';
+import '@/app/api/models/product.model';
 import type { Pin } from '@/definitions/pin.type';
 import {
   model,
@@ -28,6 +29,10 @@ export interface PinDB {
   deletedAt?: Date;
 }
 
+type GetPinListParams = {
+  partnerProducts?: string[];
+}
+
 type PinDocument =
   | (Document<unknown, {}, PinDB> &
       Omit<
@@ -43,7 +48,7 @@ interface PinMethods {}
 
 interface PinSchemaModel extends Model<PinDB, {}, PinMethods> {
   getPinList(
-    paginationParams: PaginationParams
+    paginationParams: PaginationParams, getPinListParams?: GetPinListParams
   ): Promise<PaginationResponse<Pin[]>>; // 핀 목록 반환
   getPinById(pinId: string): Promise<Pin>; // 핀 상세 반환
   getPinByNumber(pinNumber: string): Promise<Pin>; // 핀 상세 반환
@@ -90,10 +95,16 @@ schema.static(
   async function getPinList({
     pageNumber = PAGE_NUMBER_DEFAULT,
     pageSize = PAGE_SIZE_DEFAULT,
-  } = {}) {
+  } = {}, {
+    partnerProducts = null,
+  }) {
     const skip = (pageNumber - 1) * pageSize;
-    const filter = {};
+    const filter: Record<string, any> = {};
     const sort = { createdAt: -1 as SortOrder }; // 최신순 정렬
+
+    if (Array.isArray(partnerProducts)) {
+      filter['product'] = { $in: partnerProducts };
+    }
 
     // 총 개수 가져오기
     const totalItems = await this.countDocuments(filter);
@@ -103,7 +114,10 @@ schema.static(
       .sort(sort)
       .skip(skip)
       .limit(pageSize)
-      .populate('product');
+      .populate({
+        path: 'product',
+        select: '_id name status images',
+      });
 
     // 전체 페이지 수 계산
     const totalPages = Math.ceil(totalItems / pageSize);

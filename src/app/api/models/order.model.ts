@@ -126,7 +126,6 @@ schema.static(
     if (userId) {
       filter.user = userId;
     }
-    console.log(filter)
 
     // 총 개수 가져오기
     const totalItems = await this.countDocuments(filter);
