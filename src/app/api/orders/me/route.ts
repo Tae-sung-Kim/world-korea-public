@@ -9,7 +9,7 @@ import {
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
- * 주문 목록 반환
+ * 주문 목록 반환 (나의)
  */
 export async function GET(req: NextRequest) {
   try {
@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
     }
 
     const { pageNumber, pageSize, filter } = getQueryParams(req);
-    const paginationResponse = await OrderModel.getOrderMyList({
+    const paginationResponse = await OrderModel.getOrderList({
       pageNumber,
       pageSize,
       filter

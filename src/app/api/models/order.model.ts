@@ -56,10 +56,7 @@ interface OrderMethods {}
 
 interface OrderSchemaModel extends Model<OrderDB, {}, OrderMethods> {
   getOrderList(
-    paginationParams: PaginationParams
-  ): PaginationResponse<Promise<Order[]>>;
-  getOrderMyList(
-    paginationParams: PaginationParams, userId: string
+    paginationParams: PaginationParams, userId?: string
   ): PaginationResponse<Promise<Order[]>>;
   checkShortIdExists(shortId: string): Promise<boolean>; // shortUrl 이 이미 있는지 여부 반환
   getOrderByShortId(shortId: string): Promise<OrderDocument | null>;
@@ -112,70 +109,6 @@ schema.static(
     pageNumber = PAGE_NUMBER_DEFAULT,
     pageSize = PAGE_SIZE_DEFAULT,
     filter: filterQuery = null,
-  } = {}) {
-    const skip = (pageNumber - 1) * pageSize;
-    const filter: Record<string, any> = {
-      // accessLevel: { $lte: level },
-    };
-    const sort = { createdAt: -1 as SortOrder }; // 최신순 정렬
-
-    if (filterQuery) {
-      Object.keys(filterQuery).forEach((key) => {
-        const value = filterQuery[key];
-        filter[key] = { $regex: value, $options: 'i' }; // 정규식 검색 적용
-      });
-    }
-
-    // 총 개수 가져오기
-    const totalItems = await this.countDocuments(filter);
-
-    // 데이터 가져오기
-    let list = (
-      await this.find(filter)
-        .sort(sort)
-        .skip(skip)
-        .limit(pageSize)
-        .populate({
-          path: 'user',
-          select: '_id name companyName',
-        })
-        .populate({
-          path: 'saleProduct',
-          select: '_id name',
-        })
-    ).map((d) => d.toObject());
-
-    // 전체 페이지 수 계산
-    const totalPages = Math.ceil(totalItems / pageSize);
-
-    // 페이지네이션 관련 정보 계산
-    const hasPreviousPage = pageNumber > 1;
-    const hasNextPage = pageNumber < totalPages;
-    const previousPage = hasPreviousPage ? pageNumber - 1 : null;
-    const nextPage = hasNextPage ? pageNumber + 1 : null;
-
-    return {
-      list,
-      pageNumber,
-      pageSize,
-      totalItems,
-      totalPages,
-      hasPreviousPage,
-      hasNextPage,
-      previousPage,
-      nextPage,
-      startIndex: skip,
-      endIndex: totalItems - 1,
-    };
-  }
-);
-
-schema.static(
-  'getOrderMyList',
-  async function getOrderMyList({
-    pageNumber = PAGE_NUMBER_DEFAULT,
-    pageSize = PAGE_SIZE_DEFAULT,
-    filter: filterQuery = null,
   } = {}, userId) {
     const skip = (pageNumber - 1) * pageSize;
     const filter: Record<string, any> = {
@@ -190,15 +123,17 @@ schema.static(
       });
     }
 
+    if (userId) {
+      filter.user = userId;
+    }
+    console.log(filter)
+
     // 총 개수 가져오기
     const totalItems = await this.countDocuments(filter);
 
     // 데이터 가져오기
     let list = (
-      await this.find({
-          ...filter,
-          user: userId,
-        })
+      await this.find(filter)
         .sort(sort)
         .skip(skip)
         .limit(pageSize)
