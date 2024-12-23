@@ -1,39 +1,48 @@
 'use client';
 
-import { ADMIN_MENU, PARTNER_MENU } from '@/definitions/menu.constant';
+import { ADMIN_MENU, PARTNER_MENU, MY_MENU } from '@/definitions/menu.constant';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';
 import { HiChevronRight } from 'react-icons/hi';
 
 interface BreadcrumbProps {
-  type: 'admin' | 'partner';
+  type: 'admin' | 'partner' | 'my';
 }
 
 export default function Breadcrumb({ type }: BreadcrumbProps) {
   const pathname = usePathname();
-  
+
   const breadcrumbs = useMemo(() => {
-    const menu = type === 'admin' ? ADMIN_MENU : PARTNER_MENU;
-    
+    let menu;
+    if (type === 'admin') {
+      menu = ADMIN_MENU;
+    } else if (type === 'partner') {
+      menu = PARTNER_MENU;
+    } else if (type === 'my') {
+      menu = MY_MENU;
+    }
+
+    if (!menu) return [];
+
     // 현재 경로에 맞는 메뉴 아이템 찾기
     for (const section of menu) {
       for (const item of section.items) {
-        if (item.href === pathname) {
+        if (pathname === item.href) {
           return [
             {
               label: section.label,
-              href: '#'
+              href: '#',
             },
             {
               label: item.label,
-              href: item.href
-            }
+              href: item.href,
+            },
           ];
         }
       }
     }
-    
+
     return [];
   }, [pathname, type]);
 

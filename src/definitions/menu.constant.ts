@@ -128,7 +128,7 @@ export const PARTNER_MENU: MenuSection[] = [
 ];
 
 // 일반 회원
-export const USER_MENU: MenuSection[] = [
+export const MY_MENU: MenuSection[] = [
   {
     key: 'my',
     label: '내 정보',
