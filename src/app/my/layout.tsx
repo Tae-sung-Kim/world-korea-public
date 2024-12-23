@@ -1,11 +1,11 @@
 'use client';
 
 import MenuNavigation from '../components/common/menu-navigation.component';
-import Layout from '@/layouts/layout/Layout';
-import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { MdMenu, MdClose } from 'react-icons/md';
+import Layout from '@/layouts/layout/Layout';
 import { cn } from '@/lib/utils';
+import { useState } from 'react';
+import { MdMenu, MdClose } from 'react-icons/md';
 
 export default function MyLayout({
   children,
@@ -41,7 +41,7 @@ export default function MyLayout({
             <div className="flex flex-col h-full">
               <div className="h-16" /> {/* 헤더 높이만큼 빈 공간 */}
               <nav className="flex-1 px-4 overflow-y-auto">
-                <MenuNavigation title="마이페이지" />
+                <MenuNavigation title="마이페이지" isMy={true} />
               </nav>
             </div>
           </aside>
