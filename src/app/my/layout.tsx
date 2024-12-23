@@ -1,13 +1,18 @@
 'use client';
 
 import MenuNavigation from '@/app/components/common/menu-navigation.component';
+import Breadcrumb from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
 import Layout from '@/layouts/layout/Layout';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import { MdMenu, MdClose } from 'react-icons/md';
-import Breadcrumb from '@/components/ui/breadcrumb';
 
+/**
+ * @description A layout component for the my page.
+ * @param {{ children: React.ReactNode }} props
+ * @returns {JSX.Element}
+ */
 export default function MyLayout({
   children,
 }: Readonly<{

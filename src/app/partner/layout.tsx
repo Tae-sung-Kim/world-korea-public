@@ -21,8 +21,8 @@ export default function PartnerLayout({
     <Layout>
       <AdminProtectedRoute>
         <Loading />
-        <div className="min-h-screen bg-gradient-to-br to-gray-100">
-          <div className="flex min-h-screen relative">
+        <div className="h-full bg-gradient-to-br to-gray-100">
+          <div className="flex h-full">
             {/* Mobile Menu Button */}
             <Button
               variant="ghost"

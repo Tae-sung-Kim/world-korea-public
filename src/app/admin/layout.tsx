@@ -21,8 +21,8 @@ export default function AdminLayout({
     <Layout>
       <AdminProtectedRoute>
         <Loading />
-        <div className="min-h-screen bg-gradient-to-br to-gray-100">
-          <div className="flex min-h-screen relative">
+        <div className="h-full bg-gradient-to-br to-gray-100">
+          <div className="flex h-full">
             {/* Mobile Menu Button */}
             <Button
               variant="ghost"
@@ -48,7 +48,7 @@ export default function AdminLayout({
               <div className="flex flex-col h-full">
                 <div className="h-16" /> {/* 헤더 높이만큼 빈 공간 */}
                 <nav className="flex-1 px-4 pb-6 overflow-y-auto">
-                  <MenuNavigation />
+                  <MenuNavigation title="관리자" />
                 </nav>
               </div>
             </aside>
