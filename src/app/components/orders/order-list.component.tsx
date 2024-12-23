@@ -30,6 +30,7 @@ import {
   OrderPayType,
 } from '@/definitions';
 import usePortonePayment from '@/hooks/usePortonePaymnent';
+import { useMyOrderListQuery } from '@/queries';
 import { addComma } from '@/utils/number';
 import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
@@ -41,6 +42,7 @@ import { toast } from 'sonner';
 
 type Props = {
   tableId?: string;
+  isMy?: boolean;
 };
 
 type QrCodeProps = {
@@ -54,7 +56,7 @@ interface ExtendedRefundRequest extends RefundRequest {
   payType: OrderPayType;
 }
 
-export default function OrderList({ tableId }: Props) {
+export default function OrderList({ tableId, isMy }: Props) {
   const { openModal } = useModalContext();
   const router = useRouter();
 
@@ -68,7 +70,11 @@ export default function OrderList({ tableId }: Props) {
     queryFilters: { 'saleProduct.name': '' },
   });
 
-  const ordersData = useOrderListQuery({
+  const searchOrderListQuery = useMemo(() => {
+    return isMy ? useMyOrderListQuery : useOrderListQuery;
+  }, [isMy]);
+
+  let ordersData = searchOrderListQuery({
     pageNumber: Number(pageNumber),
     pageSize: Number(pageSize),
     filter,
@@ -235,7 +241,9 @@ export default function OrderList({ tableId }: Props) {
                     <TableHead className="w-[110px] h-12 text-sm font-semibold text-gray-900 text-center">
                       결제 상태
                     </TableHead>
-                    <TableHead className="w-[150px] h-12 text-sm font-semibold text-gray-900 text-center"></TableHead>
+                    {!isMy && (
+                      <TableHead className="w-[150px] h-12 text-sm font-semibold text-gray-900 text-center"></TableHead>
+                    )}
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -281,59 +289,63 @@ export default function OrderList({ tableId }: Props) {
                       <TableCell className="p-4 text-gray-700 text-center">
                         {ORDER_STATUS_MESSAGE[d.status]}
                       </TableCell>
-                      <TableCell className="p-2 text-center">
-                        {OrderStatus.Completed === d.status && (
-                          <>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-7 w-7 text-gray-600 hover:text-gray-900"
-                              onClick={() =>
-                                handleQrCodeClick({
-                                  tickets: d.tickets ?? [],
-                                  title: d.saleProduct.name,
-                                })
-                              }
-                            >
-                              <LuQrCode className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-7 w-7 text-gray-600 hover:text-gray-900"
-                              onClick={() => handleQrCodePrint(d.tickets ?? [])}
-                            >
-                              <IoMdPrint className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-7 w-7 text-red-500 hover:text-red-600"
-                              onClick={() =>
-                                handleRefundClick({
-                                  title: d.saleProduct.name,
-                                  orderDate: d.orderDate,
-                                  orderId: d._id,
-                                  paymentId: d.paymentId,
-                                  payType: d.payType,
-                                })
-                              }
-                            >
-                              <RiRefundLine className="h-4 w-4" />
-                            </Button>
-                          </>
-                        )}
+                      {!isMy && (
+                        <TableCell className="p-2 text-center">
+                          {OrderStatus.Completed === d.status && (
+                            <>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-7 w-7 text-gray-600 hover:text-gray-900"
+                                onClick={() =>
+                                  handleQrCodeClick({
+                                    tickets: d.tickets ?? [],
+                                    title: d.saleProduct.name,
+                                  })
+                                }
+                              >
+                                <LuQrCode className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-7 w-7 text-gray-600 hover:text-gray-900"
+                                onClick={() =>
+                                  handleQrCodePrint(d.tickets ?? [])
+                                }
+                              >
+                                <IoMdPrint className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-7 w-7 text-red-500 hover:text-red-600"
+                                onClick={() =>
+                                  handleRefundClick({
+                                    title: d.saleProduct.name,
+                                    orderDate: d.orderDate,
+                                    orderId: d._id,
+                                    paymentId: d.paymentId,
+                                    payType: d.payType,
+                                  })
+                                }
+                              >
+                                <RiRefundLine className="h-4 w-4" />
+                              </Button>
+                            </>
+                          )}
 
-                        {OrderStatus.VbankReady === d.status && (
-                          <div className="space-y-1 text-sm">
-                            <div className="flex items-center gap-2">
-                              <span className="font-medium">
-                                {d.vbankName}: {d.vbankNum}
-                              </span>
+                          {OrderStatus.VbankReady === d.status && (
+                            <div className="space-y-1 text-sm">
+                              <div className="flex items-center gap-2">
+                                <span className="font-medium">
+                                  {d.vbankName}: {d.vbankNum}
+                                </span>
+                              </div>
                             </div>
-                          </div>
-                        )}
-                      </TableCell>
+                          )}
+                        </TableCell>
+                      )}
                     </TableRow>
                   ))}
                 </TableBody>

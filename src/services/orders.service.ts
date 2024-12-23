@@ -57,6 +57,15 @@ class OrdersService {
   patchCancel({ orderId }: PaymentRequest) {
     return http.patch<string>(`/api/orders/${orderId}/cancel`);
   }
+
+  // 회원 구매 목록
+
+  getUserOrderList(pageParams?: PaginationProp<PageFilter>) {
+    const params = qs.stringify(pageParams ?? {});
+    return http.get<PaginationResponse<SaleProductBuyDisplayData<UserInfo>>>(
+      `/api/orders/me?${params}`
+    );
+  }
 }
 
 const ordersService = new OrdersService();
