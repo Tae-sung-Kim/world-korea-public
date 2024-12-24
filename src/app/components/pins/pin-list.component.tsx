@@ -71,8 +71,6 @@ export default function PinList({ tableId, isPartner }: Props) {
     return pinData.list;
   }, [pinData]);
 
-  console.log('data', data);
-
   const [sortColumn, setSortColumn] = useState<keyof (typeof data)[0] | string>(
     ''
   );
