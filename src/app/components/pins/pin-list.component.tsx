@@ -35,6 +35,7 @@ import {
 } from '@/components/ui/table';
 import { MODAL_TYPE, useModalContext } from '@/contexts/modal.context';
 import { Pin } from '@/definitions/pin.type';
+import { usePartnerPinsListQuery } from '@/queries/pins.queries';
 import { addComma } from '@/utils/number';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
@@ -42,9 +43,10 @@ import { RiDeleteBin6Line } from 'react-icons/ri';
 
 type Props = {
   tableId?: string;
+  isPartner?: boolean;
 };
 
-export default function PinList({ tableId }: Props) {
+export default function PinList({ tableId, isPartner }: Props) {
   const router = useRouter();
   const productData = useProductListQuery();
   const [selectedProductId, setSelectedProductId] = useState<string>('');
@@ -56,13 +58,20 @@ export default function PinList({ tableId }: Props) {
 
   const { pageNumber = 1, pageSize = 10 } = usePagination();
 
-  const pinData = usePinsListQuery({
+  const searchPinsListQuery = useMemo(() => {
+    return isPartner ? usePartnerPinsListQuery : usePinsListQuery;
+  }, [isPartner]);
+
+  const pinData = searchPinsListQuery({
     pageNumber,
     pageSize,
   });
+
   const data = useMemo(() => {
     return pinData.list;
   }, [pinData]);
+
+  console.log('data', data);
 
   const [sortColumn, setSortColumn] = useState<keyof (typeof data)[0] | string>(
     ''

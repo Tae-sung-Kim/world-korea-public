@@ -12,7 +12,7 @@ export default function PinClient() {
       <div className="flex items-center justify-end mb-4">
         <ExportExcelButton tableId={tableIdRef.current} fileName="핀리스트" />
       </div>
-      <PinList tableId={tableIdRef.current} />
+      <PinList tableId={tableIdRef.current} isPartner={true} />
     </div>
   );
 }

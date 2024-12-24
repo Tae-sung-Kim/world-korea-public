@@ -1,6 +1,10 @@
 import ProductModel from '../../models/product.model';
 import { getQueryParams } from '../../utils/api.utils';
-import { getCurrentUser, requiredIsAdmin, requiredIsLoggedIn } from '../../utils/auth.util';
+import {
+  getCurrentUser,
+  requiredIsAdmin,
+  requiredIsLoggedIn,
+} from '../../utils/auth.util';
 import connectMongo from '@/app/api/libs/database';
 import PinModel, { PinDB } from '@/app/api/models/pin.model';
 import { createResponse } from '@/app/api/utils/http.util';
@@ -24,14 +28,17 @@ export async function GET(req: NextRequest) {
     }
 
     const partnerProducts = userData.partnerProducts as string[];
-    
+
     const { pageNumber, pageSize } = getQueryParams(req);
-    const paginationResponse = await PinModel.getPinList({
-      pageNumber,
-      pageSize,
-    }, {
-      partnerProducts: partnerProducts.map(d => String(d))
-    });
+    const paginationResponse = await PinModel.getPinList(
+      {
+        pageNumber,
+        pageSize,
+      },
+      {
+        partnerProducts: partnerProducts.map((d) => String(d)),
+      }
+    );
 
     return NextResponse.json(paginationResponse);
   } catch (error) {

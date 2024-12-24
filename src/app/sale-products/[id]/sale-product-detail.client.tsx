@@ -4,7 +4,7 @@ import SaleProductDetailBottom from './sale-product-detail-bottom.component';
 import SaleProductDetailForm from './sale-product-detail-form.component';
 import SaleProductDetailImage from './sale-product-detail-image.component';
 import SaleProductDetailInfo from './sale-product-detail-info.component';
-import { useDetailSaleProductQuery } from '@/queries/product.queries';
+import { useDetailSaleProductQuery } from '@/queries/products.queries';
 import { useMemo } from 'react';
 
 type Props = {

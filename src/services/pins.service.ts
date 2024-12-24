@@ -40,6 +40,13 @@ class PinsService {
   usedPinQrCode(pinNumber: string) {
     return http.get(`api/pins/used/number/${pinNumber}`);
   }
+
+  //핀 리스트
+  getPartnerListPin(pageParams?: PaginationProp<PageFilter>) {
+    const params = qs.stringify(pageParams ?? {});
+
+    return http.get<PaginationResponse<Pin>>(`api/pins/partner?${params}`);
+  }
 }
 
 const pinsService = new PinsService();

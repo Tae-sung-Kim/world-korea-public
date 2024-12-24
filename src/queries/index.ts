@@ -1,3 +1,3 @@
-export * from './product.queries';
-export * from './group-reservation.queries';
-export * from './order.queries';
+export * from './products.queries';
+export * from './group-reservations.queries';
+export * from './orders.queries';

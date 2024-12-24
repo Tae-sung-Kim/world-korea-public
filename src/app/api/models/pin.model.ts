@@ -31,7 +31,7 @@ export interface PinDB {
 
 type GetPinListParams = {
   partnerProducts?: string[];
-}
+};
 
 type PinDocument =
   | (Document<unknown, {}, PinDB> &
@@ -48,7 +48,8 @@ interface PinMethods {}
 
 interface PinSchemaModel extends Model<PinDB, {}, PinMethods> {
   getPinList(
-    paginationParams: PaginationParams, getPinListParams?: GetPinListParams
+    paginationParams: PaginationParams,
+    getPinListParams?: GetPinListParams
   ): Promise<PaginationResponse<Pin[]>>; // 핀 목록 반환
   getPinById(pinId: string): Promise<Pin>; // 핀 상세 반환
   getPinByNumber(pinNumber: string): Promise<Pin>; // 핀 상세 반환
@@ -92,12 +93,10 @@ const schema = new Schema<PinDB, PinSchemaModel, PinMethods>({
 
 schema.static(
   'getPinList',
-  async function getPinList({
-    pageNumber = PAGE_NUMBER_DEFAULT,
-    pageSize = PAGE_SIZE_DEFAULT,
-  } = {}, {
-    partnerProducts = null,
-  }) {
+  async function getPinList(
+    { pageNumber = PAGE_NUMBER_DEFAULT, pageSize = PAGE_SIZE_DEFAULT } = {},
+    { partnerProducts = null } = {}
+  ) {
     const skip = (pageNumber - 1) * pageSize;
     const filter: Record<string, any> = {};
     const sort = { createdAt: -1 as SortOrder }; // 최신순 정렬
