@@ -1,8 +1,13 @@
 import BackgroundOverlay from '@/components/common/BackgroundOverlay';
+import cn from 'classnames';
 
-export default function Footer() {
+interface FooterProps {
+  className?: string;
+}
+
+export default function Footer({ className }: FooterProps) {
   return (
-    <footer className="relative border-t border-gray-200 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+    <footer className={cn('relative border-t border-gray-200 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]', className)}>
       <BackgroundOverlay className="opacity-50" />
       <div className="relative w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col text-sm py-4">
         <span className="font-bold text-gray-800 mb-1.5">월드코리아</span>
