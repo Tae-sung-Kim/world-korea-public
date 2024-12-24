@@ -67,7 +67,7 @@ export default function ContentsLayout({
 
           {/* Main Content */}
           <div className="flex-1 p-4">
-            <div className="bg-white rounded-2xl shadow-lg h-[calc(100%-2rem)] my-4 overflow-y-auto">
+            <div className="bg-white rounded-2xl shadow-lg h-[calc(100vh-240px)] my-4 overflow-auto">
               <div className="p-6">
                 <Breadcrumb
                   type={isPartner ? 'partner' : isAdmin ? 'admin' : 'my'}
