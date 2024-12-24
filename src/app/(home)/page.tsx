@@ -2,7 +2,7 @@ import HomeClient from './home.client';
 
 export default function Home() {
   return (
-    <div className="p-12">
+    <div className="p-8">
       <HomeClient />
     </div>
   );

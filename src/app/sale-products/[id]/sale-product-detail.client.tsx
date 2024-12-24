@@ -30,8 +30,8 @@ export default function SaleProductDetailClient({ saleProductId }: Props) {
   }
 
   return (
-    <div className="w-full max-w-7xl mx-auto space-y-8">
-      <div className="flex flex-col lg:flex-row gap-8">
+    <div className="w-full max-w-7xl mx-auto space-y-6">
+      <div className="flex flex-col lg:flex-row gap-6">
         {/* 이미지 섹션 */}
         <SaleProductDetailImage images={images} />
 

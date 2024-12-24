@@ -9,7 +9,7 @@ export default function HomeLayout({
   return (
     <Layout>
       <HomeProtectedRoute>
-        <div className="w-full px-4 py-8">
+        <div className="w-full px-4 py-4">
           {children}
         </div>
       </HomeProtectedRoute>

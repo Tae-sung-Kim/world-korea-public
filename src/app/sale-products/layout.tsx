@@ -7,8 +7,8 @@ export default function SaleProductsLayout({
 }>) {
   return (
     <Layout>
-      <div className="min-h-screen bg-gradient-to-br from-slate-100 to-slate-200">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
+      <div className="h-full w-full bg-gradient-to-br from-slate-100 to-slate-200 overflow-auto">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
           {children}
         </div>
       </div>

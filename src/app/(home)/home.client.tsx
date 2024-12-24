@@ -38,9 +38,9 @@ export default function HomeClient() {
   // 로그인하지 않은 경우
   if (!isLoggedIn) {
     return (
-      <div className="w-full space-y-16">
+      <div className="w-full space-y-12">
         {/* 히어로 섹션 */}
-        <div className="relative h-[500px] -mt-12 mb-16">
+        <div className="relative h-[500px] -mt-8 mb-12">
           <div className="absolute inset-0 bg-gradient-to-br from-pink-300/80 via-purple-300/80 to-indigo-300/80">
             <div className="absolute inset-0 bg-[url('/theme-park-bg.jpg')] bg-cover bg-center mix-blend-overlay opacity-40" />
           </div>
@@ -67,7 +67,7 @@ export default function HomeClient() {
         </div>
 
         {/* 서비스 특징 섹션 */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-4">
           <div
             className="text-center space-y-3 animate-fade-up group"
             style={{ animationDelay: '100ms' }}
