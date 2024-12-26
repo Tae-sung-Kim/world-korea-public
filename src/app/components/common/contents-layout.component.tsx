@@ -55,7 +55,7 @@ export default function ContentsLayout({
           {/* Sidebar */}
           <aside
             className={cn(
-              'h-[calc(100%-2rem)] w-64 bg-gray-50/80 border-r border-gray-200 transition-transform duration-200 ease-in-out overflow-hidden lg:static my-4 mx-4 rounded-2xl shadow-lg',
+              'h-[calc(100%-2rem)] w-48 bg-gray-50/80 border-r border-gray-200 transition-transform duration-200 ease-in-out overflow-hidden lg:static my-4 mx-4 rounded-2xl shadow-lg',
               isSidebarOpen
                 ? 'fixed inset-y-0 left-0 z-40 translate-x-0'
                 : 'fixed inset-y-0 left-0 z-40 -translate-x-full lg:translate-x-0'
@@ -84,7 +84,7 @@ export default function ContentsLayout({
             <Breadcrumb
               type={isPartner ? 'partner' : isAdmin ? 'admin' : 'my'}
             />
-            <div className="bg-white rounded-2xl shadow-lg h-[calc(100vh-230px)] overflow-auto">
+            <div className="bg-white rounded-2xl shadow-lg h-[calc(100%-3rem)] overflow-auto">
               <div className="mt-4">{children}</div>
             </div>
           </div>
