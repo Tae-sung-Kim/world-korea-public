@@ -93,7 +93,7 @@ export async function POST(req: NextRequest, ctx: { params: { id: string } }) {
       return createResponse(HTTP_STATUS.BAD_REQUEST, '티켓이 없습니다.');
     }
 
-    if (payType !== OrderPayType.Vbank) {
+    if (payType !== OrderPayType.Trans) {
       // 포트원 환불 처리
       const accessToken = await getPortoneAccessToken();
       await requestRefund(accessToken, paymentId);

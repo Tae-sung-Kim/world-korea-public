@@ -3,7 +3,6 @@ import { OrderDB } from '@/app/api/models/order.model';
 export enum OrderStatus {
   Unpaid = 'unpaid',
   Pending = 'pending',
-  VbankReady = 'vbank_ready',
   Completed = 'completed',
   Canceled = 'canceled',
   Refunded = 'refunded',
@@ -11,7 +10,7 @@ export enum OrderStatus {
 
 export enum OrderPayType {
   Card = 'card',
-  Vbank = 'vbank',
+  Trans = 'trans',
 }
 
 export type Order = OrderDB & {
@@ -33,16 +32,16 @@ export type PaymentRequest = {
   paymentId?: string | null | undefined;
   amount?: number;
   merchantId?: string;
-  vbankName?: string;
-  vbankNum?: string;
+  transName?: string;
+  transNum?: string;
   payType?: string;
 };
 
-export type VBankResponse = {
-  vbankName?: string;
-  vbankHolder?: string;
-  vbankNum?: string;
-  vbankDate?: string;
+export type TransResponse = {
+  transName?: string;
+  transHolder?: string;
+  transNum?: string;
+  transDate?: string;
   amount?: number;
   buyerName?: string;
 };

@@ -48,7 +48,7 @@ export async function PATCH(req: NextRequest, ctx: { params: { id: string } }) {
         { _id: pinNumber },
         {
           $set: {
-            orderStatus: null,
+            orderStatus: OrderStatus.Unpaid,
             updatedAt: new Date(),
             order: null,
           },

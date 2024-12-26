@@ -1,6 +1,6 @@
 'use client';
 
-import VbankPaymentModal from './vbank-payment.modal';
+import TransPaymentModal from './trans-payment.modal';
 import { useOrderSaleProductMutation } from '@/app/admin/queries';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -18,7 +18,7 @@ import { useModalContext } from '@/contexts/modal.context';
 import {
   ProductDisplayData,
   SaleProductFormData,
-  VBankResponse,
+  TransResponse,
   OrderPayType,
   RequestPayParams,
 } from '@/definitions';
@@ -59,14 +59,14 @@ export default function SaleProductDetailForm({
   const { openModal } = useModalContext();
 
   const { onPayment } = usePortonePayment({
-    onVankSuccess: async (res: VBankResponse) => {
-      return await openModal({
-        title: '가상계좌(무통장입금) 안내',
-        Component: () => {
-          return <VbankPaymentModal vbank={res} />;
-        },
-      });
-    },
+    // onVankSuccess: async (res: TransResponse) => {
+    //   return await openModal({
+    //     title: '가상계좌(무통장입금) 안내',
+    //     Component: () => {
+    //       return <TransPaymentModal trans={res} />;
+    //     },
+    //   });
+    // },
     onPaymentSuccess: () => {
       window.location.reload();
       // saleProductForm.reset();
@@ -265,11 +265,9 @@ export default function SaleProductDetailForm({
                       </FormItem>
                       <FormItem className="flex items-center space-x-3 space-y-0">
                         <FormControl>
-                          <RadioGroupItem value={OrderPayType.Vbank} />
+                          <RadioGroupItem value={OrderPayType.Trans} />
                         </FormControl>
-                        <FormLabel className="font-normal">
-                          가상계좌 (무통장입금)
-                        </FormLabel>
+                        <FormLabel className="font-normal">계좌입금</FormLabel>
                       </FormItem>
                     </RadioGroup>
                   </FormControl>
@@ -283,8 +281,8 @@ export default function SaleProductDetailForm({
               className="w-full"
               disabled={saleProductForm.formState.isSubmitting}
             >
-              {saleProductForm.watch('payType') === OrderPayType.Vbank
-                ? '가상계좌 발급받기'
+              {saleProductForm.watch('payType') === OrderPayType.Trans
+                ? '계좌입금'
                 : '결제하기'}
               ({addComma(saleProductForm.watch('amount'))}원)
             </Button>

@@ -22,7 +22,7 @@ export async function POST(req: NextRequest, ctx: { params: { id: string } }) {
       // 내부 API 토큰 검증
       const authHeader = req.headers.get('Authorization');
       const token = authHeader?.replace('Bearer ', '');
-      
+
       if (token !== process.env.INTERNAL_API_TOKEN) {
         console.error('Invalid internal token');
         return createResponse(
@@ -54,7 +54,7 @@ export async function POST(req: NextRequest, ctx: { params: { id: string } }) {
     }
 
     // 결제 가능한 상태 체크
-    const allowedStatuses = [OrderStatus.Pending, OrderStatus.VbankReady];
+    const allowedStatuses = [OrderStatus.Pending];
     if (!allowedStatuses.includes(orderData.status)) {
       return createResponse(
         HTTP_STATUS.BAD_REQUEST,

@@ -57,7 +57,7 @@ export interface SaleProductBuyDisplayData<T>
   user: UserInfo;
   tickets: Tickets[];
   paymentId: string;
-  vbankName: string;
-  vbankNum: string;
   merchantId: string;
+  transName?: string;
+  transNum?: string;
 }

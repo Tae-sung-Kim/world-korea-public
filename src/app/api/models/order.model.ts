@@ -32,8 +32,6 @@ export interface OrderDB extends Document {
   payType: string;
   paymentId: string;
   merchantId: string;
-  vbankName: string;
-  vbankNum: string;
   orderDate: Date;
   createdAt: Date;
   updatedAt: Date;
@@ -56,7 +54,8 @@ interface OrderMethods {}
 
 interface OrderSchemaModel extends Model<OrderDB, {}, OrderMethods> {
   getOrderList(
-    paginationParams: PaginationParams, userId?: string
+    paginationParams: PaginationParams,
+    userId?: string
   ): PaginationResponse<Promise<Order[]>>;
   checkShortIdExists(shortId: string): Promise<boolean>; // shortUrl 이 이미 있는지 여부 반환
   getOrderByShortId(shortId: string): Promise<OrderDocument | null>;
@@ -94,8 +93,6 @@ const schema = new Schema<OrderDB, OrderSchemaModel, OrderMethods>({
   payType: { type: String },
   paymentId: { type: String },
   merchantId: { type: String },
-  vbankName: { type: String },
-  vbankNum: { type: String },
   orderDate: { type: Date },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
@@ -105,11 +102,14 @@ const schema = new Schema<OrderDB, OrderSchemaModel, OrderMethods>({
 
 schema.static(
   'getOrderList',
-  async function getOrderList({
-    pageNumber = PAGE_NUMBER_DEFAULT,
-    pageSize = PAGE_SIZE_DEFAULT,
-    filter: filterQuery = null,
-  } = {}, userId) {
+  async function getOrderList(
+    {
+      pageNumber = PAGE_NUMBER_DEFAULT,
+      pageSize = PAGE_SIZE_DEFAULT,
+      filter: filterQuery = null,
+    } = {},
+    userId
+  ) {
     const skip = (pageNumber - 1) * pageSize;
     const filter: Record<string, any> = {
       // accessLevel: { $lte: level },

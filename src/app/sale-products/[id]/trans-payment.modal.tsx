@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { VBankResponse } from '@/definitions';
+import { TransResponse } from '@/definitions';
 import { addComma } from '@/utils/number';
 import {
   MdAccessTime,
@@ -17,14 +17,14 @@ import {
 } from 'react-icons/md';
 import { toast } from 'sonner';
 
-interface VbankPaymentModalProps {
-  vbank: VBankResponse;
+interface TransPaymentModalProps {
+  trans: TransResponse;
 }
 
-export default function VbankPaymentModal({ vbank }: VbankPaymentModalProps) {
+export default function TransPaymentModal({ trans }: TransPaymentModalProps) {
   const handleCopyAccount = async () => {
     try {
-      await navigator.clipboard.writeText(vbank.vbankNum || '');
+      await navigator.clipboard.writeText(trans.transNum || '');
       toast.success('계좌번호가 복사되었습니다.');
     } catch (err) {
       toast.error('계좌번호 복사에 실패했습니다.');
@@ -47,7 +47,7 @@ export default function VbankPaymentModal({ vbank }: VbankPaymentModalProps) {
               <MdAccountBalance className="h-5 w-5 text-gray-500" />
               <span className="text-sm text-gray-600">은행명</span>
             </div>
-            <span className="font-medium">{vbank.vbankName}</span>
+            <span className="font-medium">{trans.transName}</span>
           </div>
 
           {/* 계좌번호 */}
@@ -57,7 +57,7 @@ export default function VbankPaymentModal({ vbank }: VbankPaymentModalProps) {
               <span className="text-sm text-gray-600">계좌번호</span>
             </div>
             <div className="flex items-center space-x-2">
-              <span className="font-medium">{vbank.vbankNum}</span>
+              <span className="font-medium">{trans.transNum}</span>
               <Button
                 variant="ghost"
                 size="sm"
@@ -76,7 +76,7 @@ export default function VbankPaymentModal({ vbank }: VbankPaymentModalProps) {
               <span className="text-sm text-gray-600">입금금액</span>
             </div>
             <span className="font-semibold text-blue-600">
-              {addComma(vbank.amount ?? 0)}원
+              {addComma(trans.amount ?? 0)}원
             </span>
           </div>
 
@@ -86,7 +86,7 @@ export default function VbankPaymentModal({ vbank }: VbankPaymentModalProps) {
               <MdAccessTime className="h-5 w-5 text-gray-500" />
               <span className="text-sm text-gray-600">입금기한</span>
             </div>
-            <span className="font-medium text-red-600">{vbank.vbankDate}</span>
+            <span className="font-medium text-red-600">{trans.transDate}</span>
           </div>
 
           {/* 구매자명 */}
@@ -95,7 +95,7 @@ export default function VbankPaymentModal({ vbank }: VbankPaymentModalProps) {
               <MdPerson className="h-5 w-5 text-gray-500" />
               <span className="text-sm text-gray-600">구매자</span>
             </div>
-            <span className="font-medium">{vbank.buyerName}</span>
+            <span className="font-medium">{trans.buyerName}</span>
           </div>
         </div>
 

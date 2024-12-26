@@ -334,16 +334,6 @@ export default function OrderList({ tableId, isMy }: Props) {
                               </Button>
                             </>
                           )}
-
-                          {OrderStatus.VbankReady === d.status && (
-                            <div className="space-y-1 text-sm">
-                              <div className="flex items-center gap-2">
-                                <span className="font-medium">
-                                  {d.vbankName}: {d.vbankNum}
-                                </span>
-                              </div>
-                            </div>
-                          )}
                         </TableCell>
                       )}
                     </TableRow>

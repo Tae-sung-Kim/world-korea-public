@@ -7,10 +7,9 @@ export const ORDER_STATUS_MESSAGE: Record<OrderStatus, string> = {
   [OrderStatus.Completed]: '완료',
   [OrderStatus.Canceled]: '취소',
   [OrderStatus.Refunded]: '결제 취소',
-  [OrderStatus.VbankReady]: '결제 중',
 };
 
 export const ORDER_PAY_TYPE_MESSAGE: Record<OrderPayType, string> = {
   [OrderPayType.Card]: '신용카드',
-  [OrderPayType.Vbank]: '가상계좌(무통장입금)',
+  [OrderPayType.Trans]: '계좌입금',
 };
