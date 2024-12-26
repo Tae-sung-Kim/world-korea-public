@@ -106,7 +106,7 @@ export default function ProductListClient() {
       <div className="mb-4">
         <ProductSearch />
       </div>
-      <div className="flex-1 bg-white rounded-lg shadow-sm">
+      <div className="list-container">
         <div className="relative h-full flex flex-col">
           <div className="absolute inset-0 overflow-auto">
             <Table>

@@ -87,7 +87,7 @@ export default function ContentsLayout({
               type={isPartner ? 'partner' : isAdmin ? 'admin' : 'my'}
             />
             <div className="bg-white rounded-2xl shadow-lg h-[calc(100%-3rem)] overflow-auto">
-              <div className="mt-4">{children}</div>
+              <div className="m-4">{children}</div>
             </div>
           </div>
         </div>

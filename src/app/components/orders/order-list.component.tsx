@@ -177,7 +177,7 @@ export default function OrderList({ tableId, isMy }: Props) {
 
   return (
     <>
-      <div className="flex-1 bg-white rounded-lg shadow-sm">
+      <div className="list-container">
         <div className="relative h-full flex flex-col">
           <div className="absolute inset-0 overflow-auto">
             <div className="min-w-[1024px]">

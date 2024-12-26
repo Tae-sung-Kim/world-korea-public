@@ -100,11 +100,11 @@ export default function SaleProductListClient() {
   };
 
   return (
-    <div className="h-[calc(100vh-80px)] flex flex-col max-w-[1920px] mx-auto">
+    <div className="content-search-container">
       <div className="flex mb-4">
         <SaleProductSearch />
       </div>
-      <div className="flex-1 bg-white rounded-lg shadow-sm flex flex-col">
+      <div className="list-container flex flex-col">
         <div className="flex-1 relative">
           <div className="absolute inset-0 overflow-auto">
             <div className="overflow-x-auto min-w-full">

@@ -152,7 +152,7 @@ export default function UserCategoriesClient() {
         </Button>
       </div>
 
-      <div className="flex-1 bg-white rounded-lg shadow-sm overflow-hidden">
+      <div className="list-container">
         <div className="h-full">
           <div className="overflow-auto pt-8">
             <Form {...userCategoriesForm}>

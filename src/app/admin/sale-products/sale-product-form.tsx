@@ -130,7 +130,7 @@ export default function SaleProductForm({
     <div className="flex flex-col max-w-[1920px] mx-auto">
       <DetailTitle title="판매 상품 상세" />
 
-      <div className="flex-1 bg-white rounded-lg shadow-sm p-6 overflow-y-auto">
+      <div className="list-container p-6 overflow-y-auto">
         <Form {...saleProductForm}>
           <form
             onSubmit={saleProductForm.handleSubmit(handleSubmit)}

@@ -25,7 +25,7 @@ export default function PartnerListClient() {
 
   return (
     <div className="h-[calc(100vh-80px)] flex flex-col max-w-[1920px] mx-auto">
-      <div className="flex-1 bg-white rounded-lg shadow-sm flex flex-col">
+      <div className="list-container flex flex-col">
         <div className="relative flex-1">
           <div className="absolute inset-0 overflow-auto">
             <Table>
