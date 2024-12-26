@@ -25,6 +25,7 @@ export interface SaleProductDB {
   accessLevel: number; // 접근 레벨
   products: Types.ObjectId[]; // 상품 목록
   price: number; // 판매가
+  taxFree: number; // 면세가
   isReservable: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -65,6 +66,7 @@ const schema = new Schema<
   accessLevel: { type: Number, default: 1 },
   products: [{ type: Schema.Types.ObjectId, ref: 'Product' }],
   price: { type: Number, required: true },
+  taxFree: { type: Number, default: 0 },
   isReservable: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },

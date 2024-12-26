@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
       return createResponse(HTTP_STATUS.FORBIDDEN);
     }
 
-    const { name, accessLevel, products, price, isReservable } =
+    const { name, accessLevel, products, price, taxFree, isReservable } =
       await req.json();
 
     if (!Array.isArray(products) || products.length === 0) {
@@ -54,6 +54,7 @@ export async function POST(req: NextRequest) {
       accessLevel,
       products,
       price,
+      taxFree,
       isReservable,
     });
 

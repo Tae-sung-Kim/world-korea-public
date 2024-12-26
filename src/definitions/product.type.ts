@@ -38,6 +38,7 @@ export interface ProductFormData<T> {
   regularPrice: string; // 정가
   salePrice: string; // 할인가
   price: string; // 판매가
+  taxFree: string; // 면세가
   description1: string;
   description2: string;
   description3: string;

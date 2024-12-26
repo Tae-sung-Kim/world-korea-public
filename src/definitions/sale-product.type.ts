@@ -24,6 +24,7 @@ export interface SaleProductFormData<T> {
   _id?: string;
   name: string; // 상품명
   price: string; // 판매가
+  taxFree: string; // 면세가
   products: T[];
   accessLevel: string;
   isReservable: boolean;

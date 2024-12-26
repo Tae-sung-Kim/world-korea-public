@@ -43,6 +43,7 @@ const SaleProductFormSchema = z.object({
   isReservable: z.boolean(), // 단체 예약 상품 여부
   // regularPrice: z.string().optional(), // 정가
   price: priceShcema(), // 판매가
+  taxFree: priceShcema(), // 면세가
 });
 
 type SaleProductFormValues = z.infer<typeof SaleProductFormSchema>;
@@ -102,6 +103,7 @@ export default function SaleProductForm({
           name: '', // 상품명
           accessLevel: '1', // 접근 레벨
           price: '0', // 판매가
+          taxFree: '0', // 면세가
           products: [],
           isReservable: false,
         },
@@ -228,6 +230,7 @@ export default function SaleProductForm({
                   <Input
                     placeholder="정가를 입력해 주세요."
                     readOnly
+                    disabled
                     value={addComma(regularPrice ?? 0)}
                     className="w-full"
                   />
@@ -247,6 +250,27 @@ export default function SaleProductForm({
                       <Input
                         {...field}
                         placeholder="판매가를 입력해 주세요."
+                        value={addComma(field.value)}
+                        onChange={(e) => handlePriceChange(e, { ...field })}
+                        className="w-full"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={saleProductForm.control}
+                name="taxFree"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium text-gray-900">
+                      면세가
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="면세가 입력해 주세요."
                         value={addComma(field.value)}
                         onChange={(e) => handlePriceChange(e, { ...field })}
                         className="w-full"
