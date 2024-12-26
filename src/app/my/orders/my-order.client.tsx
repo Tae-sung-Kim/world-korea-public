@@ -9,7 +9,7 @@ export default function MyOrderClient() {
   const tableIdRef = useRef('userOrderExportExcelTable');
 
   return (
-    <div className="h-[calc(100vh-80px)] flex flex-col max-w-[1920px] mx-auto px-4">
+    <div className="content-search-container">
       <div className="flex items-center justify-between mb-4">
         <div className="flex-1 max-w-xl">
           <OrderSearch />

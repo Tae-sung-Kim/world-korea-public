@@ -66,6 +66,8 @@ export default function ContentsLayout({
                 <MenuNavigation
                   title={isPartner ? '파트너' : isAdmin ? '관리자' : '마이'}
                   isMy={isMy}
+                  setIsSidebarOpen={setIsSidebarOpen}
+                  isSidebarOpen={isSidebarOpen}
                 />
               </nav>
             </div>

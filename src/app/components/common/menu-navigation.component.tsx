@@ -3,7 +3,7 @@ import { ADMIN_MENU, PARTNER_MENU, MY_MENU } from '@/definitions/menu.constant';
 import { MenuKey } from '@/definitions/menu.type';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { IconType } from 'react-icons';
 import { AiOutlineNotification, AiOutlineProduct } from 'react-icons/ai';
 import { BiPurchaseTag } from 'react-icons/bi';
@@ -23,12 +23,27 @@ const MENU_ICONS: Record<MenuKey, IconType> = {
 export default function MenuNavigation({
   title = '관리자',
   isMy = false,
+  setIsSidebarOpen,
+  isSidebarOpen,
 }: {
   title?: string;
   isMy?: boolean;
+  setIsSidebarOpen?: (isOpen: boolean) => void;
+  isSidebarOpen?: boolean;
 }) {
   const { user } = useAuthContext();
   const { isAdmin, isPartner } = user ?? {};
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024); // lg 브레이크포인트
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const menus = useMemo(
     () => (isMy ? MY_MENU : isAdmin ? ADMIN_MENU : PARTNER_MENU),
@@ -45,7 +60,7 @@ export default function MenuNavigation({
           <div className="h-1 w-16 bg-gradient-to-r from-blue-500 to-indigo-500 mx-auto mt-2 rounded-full"></div>
         </div>
       </div>
-      <nav className="flex-1 overflow-y-auto">
+      <nav className={`flex-1 ${isMobile ? (isSidebarOpen ? 'overflow-y-auto' : 'overflow-y-hidden') : 'overflow-y-auto'}`}>
         <ul className="space-y-3 p-4">
           {menus.map((section) => (
             <li key={section.label}>
@@ -65,11 +80,12 @@ export default function MenuNavigation({
                     <li key={item.label}>
                       <Link
                         href={item.href}
-                        className={`flex items-center px-4 py-2 text-sm rounded-xl hover:bg-gray-100 transition-colors ${
+                        className={`flex items-center px-4 py-2 text-sm rounded-xl ${
                           pathname === item.href
                             ? 'bg-indigo-50 text-indigo-600 font-medium'
                             : 'text-gray-700'
                         }`}
+                        onClick={() => setIsSidebarOpen?.(false)}
                       >
                         {item.label}
                       </Link>
