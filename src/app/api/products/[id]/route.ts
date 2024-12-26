@@ -47,6 +47,7 @@ export async function PATCH(req: NextRequest, ctx: { params: { id: string } }) {
     const regularPrice = formData.get('regularPrice') as string;
     const salePrice = formData.get('salePrice') as string;
     const price = formData.get('price') as string;
+    const taxFree = formData.get('taxFree') as string;
     const description1 = formData.get('description1') as string;
     const description2 = formData.get('description2') as string;
     const description3 = formData.get('description3') as string;
@@ -65,6 +66,7 @@ export async function PATCH(req: NextRequest, ctx: { params: { id: string } }) {
       regularPrice,
       salePrice,
       price,
+      taxFree,
       description1,
       description2,
       description3,

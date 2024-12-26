@@ -29,6 +29,7 @@ export interface ProductDB {
   regularPrice: number; // 정가
   salePrice: number; // 할인가
   price: number; // 판매가
+  taxFree: number; // 면세가
   description1: string;
   description2: string;
   description3: string;
