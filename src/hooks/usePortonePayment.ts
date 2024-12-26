@@ -46,7 +46,6 @@ export default function usePortonePayment(props: PortoneProps = {}) {
     //계좌 입금할때
     if (reqData.pay_method === 'trans') {
       //계좌 입금 안내
-      console.log('reqData');
       try {
         await ordersService.createPayment({
           orderId: orderIdRef.current,
