@@ -67,7 +67,7 @@ export default function LoginClient() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br py-12 px-4 sm:px-6 lg:px-8">
+    <div className="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8 bg-white/90 backdrop-blur-sm p-8 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-gray-100">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-gray-900">로그인</h1>
