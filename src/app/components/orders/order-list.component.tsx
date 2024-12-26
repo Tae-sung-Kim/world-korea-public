@@ -29,7 +29,7 @@ import {
   RefundRequest,
   OrderPayType,
 } from '@/definitions';
-import usePortonePayment from '@/hooks/usePortonePaymnent';
+import usePortonePayment from '@/hooks/usePortonePayment';
 import { useMyOrderListQuery } from '@/queries';
 import { addComma } from '@/utils/number';
 import { format } from 'date-fns';

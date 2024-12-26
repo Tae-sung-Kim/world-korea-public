@@ -12,10 +12,17 @@ import { toast } from 'sonner';
 
 type PortoneProps = {
   onPaymentSuccess?: () => void;
+  onTransPayment?: (data: {
+    transName: string;
+    transHolder: string;
+    transNum: string;
+    amount: number;
+    buyerName: string;
+  }) => void;
 };
 
 export default function usePortonePayment(props: PortoneProps = {}) {
-  const { onPaymentSuccess } = props;
+  const { onPaymentSuccess, onTransPayment } = props;
   const router = useRouter();
 
   const [paymentStatus, setPaymentStatus] = useState<PaymentStatus>(
@@ -30,27 +37,56 @@ export default function usePortonePayment(props: PortoneProps = {}) {
     reqData: RequestPayParams,
     orderId: string
   ) => {
-    if (!window.IMP) return;
     setPaymentStatus(PaymentStatus.Ready);
 
     const { name, phoneNumber, email, address } =
       await userService.getCurrentUser();
 
     orderIdRef.current = orderId;
+    //계좌 입금할때
+    if (reqData.pay_method === 'trans') {
+      //계좌 입금 안내
+      console.log('reqData');
+      try {
+        await ordersService.createPayment({
+          orderId: orderIdRef.current,
+        });
 
-    const { IMP } = window;
-    IMP.init(String(process.env.NEXT_PUBLIC_PORTONE_CUSTOMER_ID));
+        onTransPayment &&
+          onTransPayment({
+            transName: '입력해야함', // 은행명
+            transHolder: name, // 예금주
+            transNum: '입력해야함', // 계좌 번호
+            amount: reqData.amount, // 입금금액
+            buyerName: name, // 구매자
+          });
 
-    const data: RequestPayParams = {
-      pg: 'html5_inicis',
-      buyer_name: name,
-      buyer_tel: phoneNumber,
-      buyer_email: email,
-      buyer_addr: address,
-      ...reqData,
-    };
+        toast.success('결제가 완료되었습니다.');
+        setPaymentStatus(PaymentStatus.Success);
+      } catch (error) {
+        await ordersService.patchCancel({
+          orderId: orderIdRef.current,
+        });
+        toast.error('결제 실패');
+        setPaymentStatus(PaymentStatus.Error);
+      }
+    } else {
+      if (!window.IMP) return;
 
-    IMP.request_pay(data, callback);
+      const { IMP } = window;
+      IMP.init(String(process.env.NEXT_PUBLIC_PORTONE_CUSTOMER_ID));
+
+      const data: RequestPayParams = {
+        pg: 'html5_inicis',
+        buyer_name: name,
+        buyer_tel: phoneNumber,
+        buyer_email: email,
+        buyer_addr: address,
+        ...reqData,
+      };
+
+      IMP.request_pay(data, callback);
+    }
   };
 
   const callback = async (res: RequestPayResponse) => {

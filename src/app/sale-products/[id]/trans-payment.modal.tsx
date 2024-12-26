@@ -34,10 +34,8 @@ export default function TransPaymentModal({ trans }: TransPaymentModalProps) {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>가상계좌 입금 안내</CardTitle>
-        <CardDescription>
-          아래 계좌로 입금기한 내에 입금해 주시기 바랍니다.
-        </CardDescription>
+        <CardTitle>입금 안내</CardTitle>
+        <CardDescription>아래 계좌로 입금해 주시기 바랍니다.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="rounded-lg bg-gray-50 p-6 space-y-4">
@@ -49,7 +47,6 @@ export default function TransPaymentModal({ trans }: TransPaymentModalProps) {
             </div>
             <span className="font-medium">{trans.transName}</span>
           </div>
-
           {/* 계좌번호 */}
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
@@ -68,7 +65,6 @@ export default function TransPaymentModal({ trans }: TransPaymentModalProps) {
               </Button>
             </div>
           </div>
-
           {/* 입금금액 */}
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
@@ -79,16 +75,14 @@ export default function TransPaymentModal({ trans }: TransPaymentModalProps) {
               {addComma(trans.amount ?? 0)}원
             </span>
           </div>
-
-          {/* 입금기한 */}
-          <div className="flex items-center justify-between">
+          입금기한
+          {/* <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <MdAccessTime className="h-5 w-5 text-gray-500" />
               <span className="text-sm text-gray-600">입금기한</span>
             </div>
             <span className="font-medium text-red-600">{trans.transDate}</span>
-          </div>
-
+          </div> */}
           {/* 구매자명 */}
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
@@ -102,7 +96,6 @@ export default function TransPaymentModal({ trans }: TransPaymentModalProps) {
         <div className="rounded-lg border border-yellow-200 bg-yellow-50 p-4">
           <p className="text-sm text-yellow-800">
             * 위 계좌로 정확한 금액을 입금해 주셔야 주문이 완료됩니다.
-            <br />* 입금기한 내 미입금 시 주문이 자동 취소됩니다.
           </p>
         </div>
       </CardContent>

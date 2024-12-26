@@ -60,4 +60,5 @@ export interface SaleProductBuyDisplayData<T>
   merchantId: string;
   transName?: string;
   transNum?: string;
+  refundAt?: Date | string;
 }

@@ -63,9 +63,9 @@ export async function POST(req: NextRequest, ctx: { params: { id: string } }) {
       return createResponse(HTTP_STATUS.UNAUTHORIZED);
     }
 
-    if (!paymentId) {
-      return createResponse(HTTP_STATUS.BAD_REQUEST, 'paymentId 가 없습니다.');
-    }
+    // if (!paymentId) {
+    //   return createResponse(HTTP_STATUS.BAD_REQUEST, 'paymentId 가 없습니다.');
+    // }
 
     const orderData = await OrderModel.findOne({
       _id: orderId,
@@ -102,7 +102,7 @@ export async function POST(req: NextRequest, ctx: { params: { id: string } }) {
     // 주문 상태 업데이트
     await OrderModel.updateOne(
       { _id: orderId },
-      { $set: { status: OrderStatus.Refunded } }
+      { $set: { status: OrderStatus.Refunded, refundedAt: new Date() } }
     );
 
     // PIN 상태 업데이트

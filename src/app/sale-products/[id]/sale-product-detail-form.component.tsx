@@ -22,7 +22,7 @@ import {
   OrderPayType,
   RequestPayParams,
 } from '@/definitions';
-import usePortonePayment from '@/hooks/usePortonePaymnent';
+import usePortonePayment from '@/hooks/usePortonePayment';
 import { addComma } from '@/utils/number';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Separator } from '@radix-ui/react-separator';
@@ -59,17 +59,22 @@ export default function SaleProductDetailForm({
   const { openModal } = useModalContext();
 
   const { onPayment } = usePortonePayment({
-    // onVankSuccess: async (res: TransResponse) => {
-    //   return await openModal({
-    //     title: '가상계좌(무통장입금) 안내',
-    //     Component: () => {
-    //       return <TransPaymentModal trans={res} />;
-    //     },
-    //   });
-    // },
+    onTransPayment: async (res: TransResponse) => {
+      return await openModal({
+        title: '계좌입금 안내',
+        Component: () => {
+          return <TransPaymentModal trans={res} />;
+        },
+        onCancel: () => {
+          window.location.reload();
+        },
+        onOk: () => {
+          window.location.reload();
+        },
+      });
+    },
     onPaymentSuccess: () => {
       window.location.reload();
-      // saleProductForm.reset();
     },
   });
   const purchaseDate = useMemo(() => addDays(new Date(), 1), []);

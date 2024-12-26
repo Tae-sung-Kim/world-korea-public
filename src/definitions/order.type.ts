@@ -32,16 +32,13 @@ export type PaymentRequest = {
   paymentId?: string | null | undefined;
   amount?: number;
   merchantId?: string;
-  transName?: string;
-  transNum?: string;
   payType?: string;
 };
 
 export type TransResponse = {
-  transName?: string;
-  transHolder?: string;
-  transNum?: string;
-  transDate?: string;
-  amount?: number;
-  buyerName?: string;
+  transName?: string; // 은행명
+  transHolder?: string; // 예금주
+  transNum?: string; // 계좌 번호
+  amount?: number; // 입금금액
+  buyerName?: string; // 구매자
 };

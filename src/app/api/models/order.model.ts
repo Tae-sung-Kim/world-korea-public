@@ -37,6 +37,7 @@ export interface OrderDB extends Document {
   updatedAt: Date;
   deletedAt: Date;
   visitDate: Date;
+  refundedAt: Date;
 }
 
 type OrderDocument =
@@ -98,6 +99,7 @@ const schema = new Schema<OrderDB, OrderSchemaModel, OrderMethods>({
   updatedAt: { type: Date, default: Date.now },
   deletedAt: { type: Date },
   visitDate: { type: Date },
+  refundedAt: { type: Date },
 });
 
 schema.static(
