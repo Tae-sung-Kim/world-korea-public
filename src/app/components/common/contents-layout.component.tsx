@@ -50,9 +50,11 @@ export default function ContentsLayout({
             )}
           >
             <div className="flex flex-col h-full">
-              <div className="h-16" /> {/* 헤더 높이만큼 빈 공간 */}
-              <nav className="flex-1 px-4 pb-6 overflow-y-auto">
-                <MenuNavigation title="파트너" />
+              <nav className="flex-1 overflow-y-auto">
+                <MenuNavigation
+                  title={isPartner ? '파트너' : isAdmin ? '관리자' : '마이'}
+                  isMy={isMy}
+                />
               </nav>
             </div>
           </aside>
