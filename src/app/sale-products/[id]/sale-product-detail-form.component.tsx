@@ -43,6 +43,7 @@ const SaleProductBuyFormSchema = z.object({
     .min(1, '수량을 선택해 주세요.')
     .max(99, '최대 수량은 99개입니다.'),
   payType: z.nativeEnum(OrderPayType),
+  taxFree: z.number(),
 });
 
 type SaleProductBuyFormValues = z.infer<typeof SaleProductBuyFormSchema>;
@@ -88,6 +89,7 @@ export default function SaleProductDetailForm({
           merchant_uid: `mid_${purchaseDate.getTime()}`, // 주문번호
           amount: saleProductForm.getValues().amount,
           name: saleProductDetailData.name, // 주문명
+          tax_free: saleProductForm.getValues().taxFree,
         };
         await onPayment(reqData, orderId);
       } else {
@@ -104,6 +106,7 @@ export default function SaleProductDetailForm({
       quantity: 0,
       payType: OrderPayType.Card,
       orderDate: new Date(),
+      taxFree: 0,
     },
   });
 
@@ -127,6 +130,12 @@ export default function SaleProductDetailForm({
       saleProductForm.setValue(
         'amount',
         Number(saleProductDetailData.price) * numberValue
+      );
+
+      //면세
+      saleProductForm.setValue(
+        'taxFree',
+        Number(saleProductDetailData.taxFree) * numberValue
       );
     }
   };
