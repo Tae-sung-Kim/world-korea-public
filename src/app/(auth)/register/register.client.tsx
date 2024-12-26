@@ -83,8 +83,8 @@ export default function Register() {
   };
 
   return (
-    <div className="flex items-center justify-center h-full">
-      <div className="w-full max-w-[800px] p-4">
+    <div className="flex items-center justify-center min-h-screen w-full py-8 px-4">
+      <div className="w-full max-w-[800px]">
         <div className="bg-white/50 backdrop-blur-sm p-8 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
           <div className="flex flex-col space-y-2 text-center">
             <h1 className="text-2xl font-semibold tracking-tight">회원가입</h1>
@@ -109,7 +109,7 @@ export default function Register() {
                       계정에 사용할 기본 정보를 입력해주세요.
                     </p>
                   </div>
-                  <div className="p-6 pt-0 grid grid-cols-3 gap-4">
+                  <div className="p-6 pt-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     <FormField
                       control={form.control}
                       name="id"
@@ -176,7 +176,7 @@ export default function Register() {
                       업체와 관련된 정보를 입력해주세요.
                     </p>
                   </div>
-                  <div className="p-6 pt-0 grid grid-cols-3 gap-4">
+                  <div className="p-6 pt-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     <FormField
                       control={form.control}
                       name="companyName"
@@ -241,7 +241,7 @@ export default function Register() {
                       담당자의 연락처 정보를 입력해주세요.
                     </p>
                   </div>
-                  <div className="p-6 pt-0 grid grid-cols-3 gap-4">
+                  <div className="p-6 pt-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     <FormField
                       control={form.control}
                       name="name"

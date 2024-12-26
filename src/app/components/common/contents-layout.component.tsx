@@ -22,8 +22,20 @@ export default function ContentsLayout({
 }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  const ProtectedRouteComponent = ({
+    children,
+  }: {
+    children: React.ReactNode;
+  }) => {
+    return isMy ? (
+      <>{children}</>
+    ) : (
+      <AdminProtectedRoute>{children}</AdminProtectedRoute>
+    );
+  };
+
   return (
-    <AdminProtectedRoute>
+    <ProtectedRouteComponent>
       <Loading />
       <div className="h-full bg-gradient-to-br to-gray-100">
         <div className="flex h-full">
@@ -69,17 +81,15 @@ export default function ContentsLayout({
 
           {/* Main Content */}
           <div className="flex-1 p-4">
-            <div className="bg-white rounded-2xl shadow-lg h-[calc(100vh-240px)] my-4 overflow-auto">
-              <div className="p-6">
-                <Breadcrumb
-                  type={isPartner ? 'partner' : isAdmin ? 'admin' : 'my'}
-                />
-                <div className="mt-4">{children}</div>
-              </div>
+            <Breadcrumb
+              type={isPartner ? 'partner' : isAdmin ? 'admin' : 'my'}
+            />
+            <div className="bg-white rounded-2xl shadow-lg h-[calc(100vh-230px)] overflow-auto">
+              <div className="mt-4">{children}</div>
             </div>
           </div>
         </div>
       </div>
-    </AdminProtectedRoute>
+    </ProtectedRouteComponent>
   );
 }

@@ -11,7 +11,7 @@ interface ProductGridProps {
 
 export default function SaleProductList({ products }: ProductGridProps) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 p-2">
       {products.map((d, index) => {
         const { _id, name, price, products } = d;
         const images = products.map((d2) => d2.images).flat();
@@ -24,10 +24,10 @@ export default function SaleProductList({ products }: ProductGridProps) {
           >
             <Link
               href={`/sale-products/${_id}`}
-              className="block overflow-hidden rounded-2xl bg-white/10 hover:bg-white/20 transition-all duration-300 transform hover:-translate-y-1"
+              className="block overflow-hidden rounded-xl bg-white/10 hover:bg-white/20 transition-all duration-300 transform hover:-translate-y-1"
             >
               <div className="relative">
-                <div className="aspect-square w-[95%] mx-auto mt-3 overflow-hidden rounded-xl">
+                <div className="aspect-square w-[90%] mx-auto mt-2 overflow-hidden rounded-lg">
                   <ProductImage url={images[0]} />
                 </div>
                 <ProductInfo name={name} price={price} />
