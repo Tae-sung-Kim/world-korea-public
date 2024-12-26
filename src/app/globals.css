@@ -73,13 +73,4 @@
   body {
     @apply bg-background text-foreground;
   }
-
-  /* 리스트 형태에서 엑셀이나  검색 조회 영역이 있을 경우 */
-  .content-search-container {
-    @apply h-[calc(100vh-270px)] flex flex-col max-w-[1920px] mx-auto;
-  }
-  /* 단순 조회 리스트 */
-  .content-container {
-    @apply h-[calc(100vh-80px)] flex flex-col max-w-[1920px] mx-auto;
-  }
 }
