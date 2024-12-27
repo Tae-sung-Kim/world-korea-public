@@ -30,34 +30,34 @@ export default function UsersClient() {
               <Table>
                 <TableHeader className="bg-gray-50 sticky top-0 z-10">
                   <TableRow className="border-b border-gray-200">
-                    <TableHead className="table-th whitespace-nowrap">
+                    <TableHead className="table-th whitespace-nowrap w-[80px]">
                       구분
                     </TableHead>
-                    <TableHead className="table-th whitespace-nowrap">
+                    <TableHead className="table-th whitespace-nowrap w-[80px]">
                       상태
                     </TableHead>
-                    <TableHead className="table-th whitespace-nowrap">
+                    <TableHead className="table-th whitespace-nowrap w-[100px]">
                       회원명
                     </TableHead>
-                    <TableHead className="table-th whitespace-nowrap">
+                    <TableHead className="table-th whitespace-nowrap w-[120px]">
                       아이디
                     </TableHead>
-                    <TableHead className="table-th whitespace-nowrap">
+                    <TableHead className="table-th whitespace-nowrap w-[100px]">
                       회원 분류
                     </TableHead>
-                    <TableHead className="table-th whitespace-nowrap">
+                    <TableHead className="table-th whitespace-nowrap w-[140px]">
                       업체명
                     </TableHead>
-                    <TableHead className="table-th whitespace-nowrap">
+                    <TableHead className="table-th whitespace-nowrap w-[100px]">
                       업체번호
                     </TableHead>
-                    <TableHead className="table-th whitespace-nowrap hidden md:table-cell">
+                    <TableHead className="table-th whitespace-nowrap w-[140px] hidden md:table-cell">
                       이메일
                     </TableHead>
-                    <TableHead className="table-th whitespace-nowrap hidden md:table-cell">
+                    <TableHead className="table-th whitespace-nowrap w-[120px] hidden md:table-cell">
                       연락처
                     </TableHead>
-                    <TableHead className="table-th whitespace-nowrap hidden md:table-cell">
+                    <TableHead className="table-th whitespace-nowrap w-[120px] hidden md:table-cell">
                       등록일
                     </TableHead>
                   </TableRow>
@@ -69,7 +69,7 @@ export default function UsersClient() {
                       className="cursor-pointer hover:bg-gray-50 transition-colors"
                       onClick={() => handleUserClick(user)}
                     >
-                      <TableCell className="p-6 whitespace-nowrap">
+                      <TableCell className="table-cell">
                         <span
                           className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                             user.isPartner
@@ -80,7 +80,7 @@ export default function UsersClient() {
                           {user.isPartner ? '파트너' : '일반'}
                         </span>
                       </TableCell>
-                      <TableCell className="p-6 whitespace-nowrap">
+                      <TableCell className="table-cell">
                         <span
                           className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                             user.isApproved
@@ -91,28 +91,28 @@ export default function UsersClient() {
                           {user.isApproved ? '승인' : '미승인'}
                         </span>
                       </TableCell>
-                      <TableCell className="p-6 font-medium text-gray-900 whitespace-nowrap">
+                      <TableCell className="table-cell font-medium text-gray-900">
                         {user.name}
                       </TableCell>
-                      <TableCell className="p-6 text-gray-700 whitespace-nowrap">
+                      <TableCell className="table-cell text-gray-700">
                         {user.loginId}
                       </TableCell>
-                      <TableCell className="p-6 text-gray-700 whitespace-nowrap">
+                      <TableCell className="table-cell text-gray-700">
                         {user.userCategory?.name}
                       </TableCell>
-                      <TableCell className="p-6 text-gray-700 whitespace-nowrap">
+                      <TableCell className="table-cell text-gray-700">
                         {user.companyName}
                       </TableCell>
-                      <TableCell className="p-6 text-gray-700 whitespace-nowrap">
+                      <TableCell className="table-cell text-gray-700">
                         {user.companyNo}
                       </TableCell>
-                      <TableCell className="p-6 text-gray-700 whitespace-nowrap hidden md:table-cell">
+                      <TableCell className="table-cell text-gray-700 hidden md:table-cell">
                         {user.email}
                       </TableCell>
-                      <TableCell className="p-6 text-gray-700 whitespace-nowrap hidden md:table-cell">
+                      <TableCell className="table-cell text-gray-700 hidden md:table-cell">
                         {user.contactNumber}
                       </TableCell>
-                      <TableCell className="p-6 text-gray-700 whitespace-nowrap hidden md:table-cell">
+                      <TableCell className="table-cell text-gray-700 hidden md:table-cell">
                         {user.createdAt &&
                           new Intl.DateTimeFormat('ko-KR', {
                             year: 'numeric',

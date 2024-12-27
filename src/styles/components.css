@@ -35,3 +35,8 @@
 .search-container {
   @apply w-full bg-white rounded-lg;
 }
+
+/* 테이블 셀 공통 스타일 */
+.table-cell {
+  @apply px-4 py-4 truncate;
+}
