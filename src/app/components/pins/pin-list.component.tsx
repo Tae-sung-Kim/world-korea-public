@@ -157,26 +157,20 @@ export default function PinList({ tableId, isPartner }: Props) {
   return (
     <>
       <div className="list-container">
-        <div className="relative h-full flex flex-col">
+        <div className="list-content-wrapper">
           <div className="absolute inset-0 overflow-auto">
             <div className="min-w-[1024px]">
               <Table id={tableId}>
                 <TableHeader className="bg-gray-50 sticky top-0 z-10">
                   <TableRow className="border-b border-gray-200">
-                    <TableHead
-                      className="w-[50px] h-12 text-sm font-semibold text-gray-900"
-                      data-exclude-excel
-                    >
+                    <TableHead className="w-[50px] table-th" data-exclude-excel>
                       <Checkbox />
                     </TableHead>
-                    <TableHead
-                      className="w-[50px] h-12 text-sm font-semibold text-gray-900"
-                      data-exclude-excel
-                    >
+                    <TableHead className="w-[50px] table-th" data-exclude-excel>
                       번호
                     </TableHead>
                     <TableHead
-                      className="w-[200px] h-12 text-sm font-semibold text-gray-900 cursor-pointer"
+                      className="w-[200px] table-th cursor-pointer"
                       onClick={() => handleSortClick('number')}
                     >
                       <SortIcons
@@ -185,7 +179,7 @@ export default function PinList({ tableId, isPartner }: Props) {
                       />
                     </TableHead>
                     <TableHead
-                      className="h-12 text-sm font-semibold text-gray-900 cursor-pointer"
+                      className="table-th cursor-pointer"
                       onClick={() => handleSortClick('product.name')}
                     >
                       <SortIcons
@@ -193,14 +187,14 @@ export default function PinList({ tableId, isPartner }: Props) {
                         order={sortColumn === 'product.name' ? order : ''}
                       />
                     </TableHead>
-                    <TableHead className="w-[110px] h-12 text-sm font-semibold text-gray-900 text-center">
+                    <TableHead className="w-[110px] table-th text-center">
                       <SortIcons
                         title="업체명"
                         order={sortColumn === 'product.name' ? order : ''}
                       />
                     </TableHead>
                     <TableHead
-                      className="w-[110px] h-12 text-sm font-semibold text-gray-900 text-center cursor-pointer"
+                      className="w-[110px] table-th text-center cursor-pointer"
                       onClick={() => handleSortClick('endDate')}
                     >
                       <SortIcons
@@ -209,7 +203,7 @@ export default function PinList({ tableId, isPartner }: Props) {
                       />
                     </TableHead>
                     <TableHead
-                      className="w-[110px] h-12 text-sm font-semibold text-gray-900 text-center cursor-pointer"
+                      className="w-[110px] table-th text-center cursor-pointer"
                       onClick={() => handleSortClick('createdAt')}
                     >
                       <SortIcons
@@ -218,7 +212,7 @@ export default function PinList({ tableId, isPartner }: Props) {
                       />
                     </TableHead>
                     <TableHead
-                      className="w-[100px] h-12 text-sm font-semibold text-gray-900 text-center cursor-pointer"
+                      className="w-[100px] table-th text-center cursor-pointer"
                       onClick={() => handleSortClick('usedDate')}
                     >
                       <SortIcons
@@ -226,7 +220,7 @@ export default function PinList({ tableId, isPartner }: Props) {
                         order={sortColumn === 'usedDate' ? order : ''}
                       />
                     </TableHead>
-                    <TableHead className="w-[50px] h-12 text-sm font-semibold text-gray-900 text-center"></TableHead>
+                    <TableHead className="w-[50px] table-th text-center"></TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>

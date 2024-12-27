@@ -16,9 +16,7 @@ export default function ExportExcelButton({
   return (
     <>
       <div className="flex-grow" />
-
       <Button
-        className="m-5"
         variant="outline"
         size="icon"
         onClick={() =>

@@ -59,42 +59,29 @@ export default function GroupReservationListClient({
   return (
     <>
       <div className="list-container">
-        <div className="relative h-full flex flex-col">
+        <div className="list-content-wrapper">
           <div className="absolute inset-0 overflow-auto">
             <div className="min-w-[1024px]">
               <Table id={tableId}>
                 <TableHeader className="bg-gray-50 sticky top-0 z-10">
                   <TableRow className="border-b border-gray-200">
-                    <TableHead
-                      className="w-[80px] h-12 text-sm font-semibold text-gray-900"
-                      data-exclude-excel
-                    >
+                    <TableHead className="w-[80px] table-th" data-exclude-excel>
                       번호
                     </TableHead>
-                    <TableHead className="w-[200px] h-12 text-sm font-semibold text-gray-900">
-                      업체명
-                    </TableHead>
-                    <TableHead className="w-[120px] h-12 text-sm font-semibold text-gray-900">
-                      예약일
-                    </TableHead>
-                    <TableHead className="w-[150px] h-12 text-sm font-semibold text-gray-900">
+                    <TableHead className="w-[200px] table-th">업체명</TableHead>
+                    <TableHead className="w-[120px] table-th">예약일</TableHead>
+                    <TableHead className="w-[150px] table-th">
                       예약자명
                     </TableHead>
-                    <TableHead className="w-[200px] h-12 text-sm font-semibold text-gray-900">
-                      상품명
-                    </TableHead>
-                    <TableHead className="w-[100px] h-12 text-sm font-semibold text-gray-900">
+                    <TableHead className="w-[200px] table-th">상품명</TableHead>
+                    <TableHead className="w-[100px] table-th">
                       예약 인원
                     </TableHead>
-                    <TableHead className="w-[150px] h-12 text-sm font-semibold text-gray-900">
-                      연락처
-                    </TableHead>
-                    <TableHead className="w-[120px] h-12 text-sm font-semibold text-gray-900">
+                    <TableHead className="w-[150px] table-th">연락처</TableHead>
+                    <TableHead className="w-[120px] table-th">
                       방문 일자
                     </TableHead>
-                    <TableHead className="w-[250px] h-12 text-sm font-semibold text-gray-900">
-                      비고
-                    </TableHead>
+                    <TableHead className="w-[250px] table-th">비고</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>

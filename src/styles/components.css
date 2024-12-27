@@ -1,6 +1,6 @@
 /* 리스트 형태에서 엑셀이나  검색 조회 영역이 있을 경우 */
 .content-search-container {
-  @apply h-[calc(100vh-270px)] flex flex-col max-w-[1920px] mx-auto;
+  @apply h-[calc(100vh-285px)] flex flex-col max-w-[1920px] mx-auto;
 }
 /* 단순 조회 리스트 */
 .content-container {
@@ -10,4 +10,28 @@
 /* 리스트 형태 */
 .list-container {
   @apply flex-1 bg-white rounded-lg shadow-sm;
+}
+
+.list-content-wrapper {
+  @apply relative h-full flex flex-col;
+}
+
+.table-th {
+  @apply h-12 text-sm font-semibold text-gray-900;
+}
+
+.table-td {
+  @apply font-medium text-gray-900;
+}
+
+.group-reservation-td {
+  @apply py-4 text-gray-700;
+}
+
+.search-wrapper {
+  @apply flex flex-col sm:flex-row items-start sm:items-center gap-4;
+}
+
+.search-container {
+  @apply w-full bg-white rounded-lg;
 }

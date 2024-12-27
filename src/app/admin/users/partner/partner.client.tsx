@@ -24,38 +24,38 @@ export default function PartnerListClient() {
   };
 
   return (
-    <div className="h-[calc(100vh-80px)] flex flex-col max-w-[1920px] mx-auto">
+    <div className="content-search-container">
       <div className="list-container flex flex-col">
-        <div className="relative flex-1">
+        <div className="list-content-wrapper">
           <div className="absolute inset-0 overflow-auto">
             <Table>
               <TableHeader className="bg-gray-50 sticky top-0 z-10">
                 <TableRow className="border-b border-gray-200">
-                  <TableHead className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap">
+                  <TableHead className="table-th whitespace-nowrap">
                     분류
                   </TableHead>
-                  <TableHead className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap">
+                  <TableHead className="table-th whitespace-nowrap">
                     상태
                   </TableHead>
-                  <TableHead className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap">
+                  <TableHead className="table-th whitespace-nowrap">
                     아이디
                   </TableHead>
-                  <TableHead className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap">
+                  <TableHead className="table-th whitespace-nowrap">
                     회원명
                   </TableHead>
-                  <TableHead className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap">
+                  <TableHead className="table-th whitespace-nowrap">
                     업체번호
                   </TableHead>
-                  <TableHead className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap">
+                  <TableHead className="table-th whitespace-nowrap">
                     업체명
                   </TableHead>
-                  <TableHead className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap hidden md:table-cell">
+                  <TableHead className="table-th whitespace-nowrap hidden md:table-cell">
                     이메일
                   </TableHead>
-                  <TableHead className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap hidden md:table-cell">
+                  <TableHead className="table-th whitespace-nowrap hidden md:table-cell">
                     연락처
                   </TableHead>
-                  <TableHead className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap hidden md:table-cell">
+                  <TableHead className="table-th whitespace-nowrap hidden md:table-cell">
                     등록일
                   </TableHead>
                 </TableRow>

@@ -102,21 +102,21 @@ export default function ProductListClient() {
   };
 
   return (
-    <div className="h-[calc(100vh-80px)] flex flex-col max-w-[1920px] mx-auto">
+    <div className="content-search-container">
       <div className="mb-4">
         <ProductSearch />
       </div>
       <div className="list-container">
-        <div className="relative h-full flex flex-col">
+        <div className="list-content-wrapper">
           <div className="absolute inset-0 overflow-auto">
             <Table>
               <TableHeader className="bg-gray-50 sticky top-0 z-10">
                 <TableRow className="border-b border-gray-200">
-                  <TableHead className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap w-[70px] min-w-[70px]">
+                  <TableHead className="table-th whitespace-nowrap w-[70px] min-w-[70px]">
                     번호
                   </TableHead>
                   <TableHead
-                    className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap cursor-pointer min-w-[200px]"
+                    className="table-th whitespace-nowrap cursor-pointer min-w-[200px]"
                     onClick={() => handleSortClick('name')}
                   >
                     <SortIcons
@@ -125,7 +125,7 @@ export default function ProductListClient() {
                     />
                   </TableHead>
                   <TableHead
-                    className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap w-[90px] min-w-[90px] cursor-pointer"
+                    className="table-th whitespace-nowrap w-[90px] min-w-[90px] cursor-pointer"
                     onClick={() => handleSortClick('accessLevel')}
                   >
                     <SortIcons
@@ -134,7 +134,7 @@ export default function ProductListClient() {
                     />
                   </TableHead>
                   <TableHead
-                    className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap w-[90px] min-w-[90px] cursor-pointer"
+                    className="table-th whitespace-nowrap w-[90px] min-w-[90px] cursor-pointer"
                     onClick={() => handleSortClick('status')}
                   >
                     <SortIcons
@@ -143,7 +143,7 @@ export default function ProductListClient() {
                     />
                   </TableHead>
                   <TableHead
-                    className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap w-[100px] min-w-[100px] text-right cursor-pointer"
+                    className="table-th whitespace-nowrap w-[100px] min-w-[100px] text-right cursor-pointer"
                     onClick={() => handleSortClick('regularPrice')}
                   >
                     <SortIcons
@@ -152,7 +152,7 @@ export default function ProductListClient() {
                     />
                   </TableHead>
                   <TableHead
-                    className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap w-[100px] min-w-[100px] text-right cursor-pointer"
+                    className="table-th whitespace-nowrap w-[100px] min-w-[100px] text-right cursor-pointer"
                     onClick={() => handleSortClick('salePrice')}
                   >
                     <SortIcons
@@ -161,7 +161,7 @@ export default function ProductListClient() {
                     />
                   </TableHead>
                   <TableHead
-                    className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap w-[70px] min-w-[70px] text-right cursor-pointer"
+                    className="table-th whitespace-nowrap w-[70px] min-w-[70px] text-right cursor-pointer"
                     onClick={() => handleSortClick('pinCount')}
                   >
                     <SortIcons
@@ -169,7 +169,7 @@ export default function ProductListClient() {
                       order={sortColumn === 'pinCount' ? order : ''}
                     />
                   </TableHead>
-                  <TableHead className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap w-[70px] min-w-[70px]" />
+                  <TableHead className="table-th whitespace-nowrap w-[70px] min-w-[70px]" />
                 </TableRow>
               </TableHeader>
               <TableBody>

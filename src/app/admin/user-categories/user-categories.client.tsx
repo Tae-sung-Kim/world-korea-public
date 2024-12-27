@@ -129,7 +129,7 @@ export default function UserCategoriesClient() {
   }, [userCategoriesForm, userCategoryList]);
 
   return (
-    <div className="h-full flex flex-col max-w-[1920px] mx-auto p-4">
+    <div className="content-search-container">
       <div className="flex items-center justify-between mb-4">
         <Button
           variant="outline"
@@ -152,152 +152,145 @@ export default function UserCategoriesClient() {
         </Button>
       </div>
 
-      <div className="list-container">
-        <div className="h-full">
-          <div className="overflow-auto pt-8">
-            <Form {...userCategoriesForm}>
-              <Table>
-                <TableHeader className="bg-gray-50 sticky top-0 z-10">
-                  <TableRow className="border-b border-gray-200">
-                    <TableHead className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap w-[70px]">
-                      번호
-                    </TableHead>
-                    <TableHead className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap">
-                      회원등급명
-                    </TableHead>
-                    <TableHead className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap w-[80px] text-center">
-                      level
-                    </TableHead>
-                    <TableHead className="h-12 text-sm font-semibold text-gray-900 whitespace-nowrap w-[100px]"></TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {categoryList.fields.map(
-                    (d: FieldUserCategory, idx: number) => (
-                      <TableRow
-                        key={d.id}
-                        className="hover:bg-gray-50 transition-colors"
-                      >
-                        <TableCell className="p-4 text-sm text-gray-700">
-                          {idx + 1}
-                        </TableCell>
-                        <TableCell className="p-4">
-                          <Controller
-                            name={`categories.${idx}.name`}
-                            control={userCategoriesForm.control}
-                            render={({ field, fieldState }) => (
-                              <div className="space-y-2">
-                                <Input
-                                  {...field}
-                                  type="text"
-                                  className="max-w-[300px] bg-white border-gray-200 focus:border-blue-500 focus:ring-blue-500"
-                                  placeholder="회원등급명을 입력해 주세요."
-                                />
-                                {fieldState.error && (
-                                  <span className="text-red-500 text-xs block">
-                                    {fieldState.error.message}
-                                  </span>
-                                )}
-                              </div>
-                            )}
+      <div className="list-container overflow-auto">
+        <Form {...userCategoriesForm}>
+          <Table>
+            <TableHeader className="bg-gray-50 sticky top-0 z-10">
+              <TableRow className="border-b border-gray-200">
+                <TableHead className="table-th whitespace-nowrap w-[70px]">
+                  번호
+                </TableHead>
+                <TableHead className="table-th whitespace-nowrap">
+                  회원등급명
+                </TableHead>
+                <TableHead className="table-th whitespace-nowrap w-[80px] text-center">
+                  level
+                </TableHead>
+                <TableHead className="table-th whitespace-nowrap w-[100px]"></TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {categoryList.fields.map((d: FieldUserCategory, idx: number) => (
+                <TableRow
+                  key={d.id}
+                  className="hover:bg-gray-50 transition-colors"
+                >
+                  <TableCell className="p-4 text-sm text-gray-700">
+                    {idx + 1}
+                  </TableCell>
+                  <TableCell className="p-4">
+                    <Controller
+                      name={`categories.${idx}.name`}
+                      control={userCategoriesForm.control}
+                      render={({ field, fieldState }) => (
+                        <div className="space-y-2">
+                          <Input
+                            {...field}
+                            type="text"
+                            className="max-w-[300px] bg-white border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+                            placeholder="회원등급명을 입력해 주세요."
                           />
-                        </TableCell>
-                        <TableCell className="p-4">
-                          <Controller
-                            name={`categories.${idx}.level`}
-                            control={userCategoriesForm.control}
-                            render={({ field, fieldState }) => (
-                              <div className="space-y-2">
-                                <Input
-                                  {...field}
-                                  type="text"
-                                  className="w-full bg-white border-gray-200 focus:border-blue-500 focus:ring-blue-500"
-                                  placeholder="레벨"
-                                />
-                                {fieldState.error && (
-                                  <span className="text-red-500 text-xs block">
-                                    {fieldState.error.message}
-                                  </span>
-                                )}
-                              </div>
-                            )}
+                          {fieldState.error && (
+                            <span className="text-red-500 text-xs block">
+                              {fieldState.error.message}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    />
+                  </TableCell>
+                  <TableCell className="p-4">
+                    <Controller
+                      name={`categories.${idx}.level`}
+                      control={userCategoriesForm.control}
+                      render={({ field, fieldState }) => (
+                        <div className="space-y-2">
+                          <Input
+                            {...field}
+                            type="text"
+                            className="w-full bg-white border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+                            placeholder="레벨"
                           />
-                        </TableCell>
-                        <TableCell className="p-4">
-                          <div className="flex justify-end space-x-2">
-                            {d._id ? (
-                              <>
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  className="h-8 w-8 hover:bg-gray-100"
-                                  onClick={() => {
-                                    userCategoriesForm.handleSubmit(() => {
-                                      handleUserCategoryUpdate(d._id ?? '');
-                                    })();
-                                  }}
-                                >
-                                  <BsPencilSquare className="h-4 w-4 text-gray-600" />
-                                </Button>
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  className="h-8 w-8 hover:bg-red-100"
-                                  onClick={() =>
-                                    handleUserCategoryDelete({
-                                      id: d._id ?? '',
-                                      idx,
-                                    })
-                                  }
-                                >
-                                  <RiDeleteBinFill className="h-4 w-4 text-red-600" />
-                                </Button>
-                              </>
-                            ) : (
-                              <>
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  className="h-8 w-8 hover:bg-green-100"
-                                  type="button"
-                                  onClick={async () => {
-                                    const isValid =
-                                      await userCategoriesForm.trigger([
-                                        `categories.${idx}.name`,
-                                        `categories.${idx}.level`,
-                                      ]);
-                                    if (isValid) {
-                                      handleUserCategoryAdded(idx);
-                                    }
-                                  }}
-                                >
-                                  <AiOutlineUserAdd className="h-4 w-4 text-green-600" />
-                                </Button>
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  className="h-8 w-8 hover:bg-red-100"
-                                  onClick={() =>
-                                    handleUserCategoryDelete({
-                                      id: d._id ?? '',
-                                      idx,
-                                    })
-                                  }
-                                >
-                                  <RiDeleteBinFill className="h-4 w-4 text-red-600" />
-                                </Button>
-                              </>
-                            )}
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    )
-                  )}
-                </TableBody>
-              </Table>
-            </Form>
-          </div>
-        </div>
+                          {fieldState.error && (
+                            <span className="text-red-500 text-xs block">
+                              {fieldState.error.message}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    />
+                  </TableCell>
+                  <TableCell className="p-4">
+                    <div className="flex justify-end space-x-2">
+                      {d._id ? (
+                        <>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 hover:bg-gray-100"
+                            onClick={() => {
+                              userCategoriesForm.handleSubmit(() => {
+                                handleUserCategoryUpdate(d._id ?? '');
+                              })();
+                            }}
+                          >
+                            <BsPencilSquare className="h-4 w-4 text-gray-600" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 hover:bg-red-100"
+                            onClick={() =>
+                              handleUserCategoryDelete({
+                                id: d._id ?? '',
+                                idx,
+                              })
+                            }
+                          >
+                            <RiDeleteBinFill className="h-4 w-4 text-red-600" />
+                          </Button>
+                        </>
+                      ) : (
+                        <>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 hover:bg-green-100"
+                            type="button"
+                            onClick={async () => {
+                              const isValid = await userCategoriesForm.trigger([
+                                `categories.${idx}.name`,
+                                `categories.${idx}.level`,
+                              ]);
+                              if (isValid) {
+                                handleUserCategoryAdded(idx);
+                              }
+                            }}
+                          >
+                            <AiOutlineUserAdd className="h-4 w-4 text-green-600" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 hover:bg-red-100"
+                            onClick={() =>
+                              handleUserCategoryDelete({
+                                id: d._id ?? '',
+                                idx,
+                              })
+                            }
+                          >
+                            <RiDeleteBinFill className="h-4 w-4 text-red-600" />
+                          </Button>
+                        </>
+                      )}
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Form>
       </div>
       <div className="mt-4">
         <TotalCountBottom

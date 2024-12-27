@@ -178,20 +178,17 @@ export default function OrderList({ tableId, isMy }: Props) {
   return (
     <>
       <div className="list-container">
-        <div className="relative h-full flex flex-col">
+        <div className="list-content-wrapper">
           <div className="absolute inset-0 overflow-auto">
             <div className="min-w-[1024px]">
               <Table id={tableId ?? 'exportExcelTableId'}>
                 <TableHeader className="bg-gray-50 sticky top-0 z-10">
                   <TableRow className="border-b border-gray-200">
-                    <TableHead
-                      className="w-[50px] h-12 text-sm font-semibold text-gray-900"
-                      data-exclude-excel
-                    >
+                    <TableHead className="w-[50px] table-th" data-exclude-excel>
                       번호
                     </TableHead>
                     <TableHead
-                      className="w-[200px] h-12 text-sm font-semibold text-gray-900 cursor-pointer"
+                      className="w-[200px] table-th cursor-pointer"
                       onClick={() => handleSortClick('saleProduct.name')}
                     >
                       <SortIcons
@@ -199,14 +196,14 @@ export default function OrderList({ tableId, isMy }: Props) {
                         order={sortColumn === 'saleProduct.name' ? order : ''}
                       />
                     </TableHead>
-                    <TableHead className="w-[110px] h-12 text-sm font-semibold text-gray-900 text-center">
+                    <TableHead className="w-[110px] table-th text-center">
                       업체명
                     </TableHead>
-                    <TableHead className="w-[110px] h-12 text-sm font-semibold text-gray-900 text-center">
+                    <TableHead className="w-[110px] table-th text-center">
                       담당자명
                     </TableHead>
                     <TableHead
-                      className="w-[100px] h-12 text-sm font-semibold text-gray-900 text-center cursor-pointer"
+                      className="w-[100px] table-th text-center cursor-pointer"
                       onClick={() => handleSortClick('quantity')}
                     >
                       <SortIcons
@@ -215,7 +212,7 @@ export default function OrderList({ tableId, isMy }: Props) {
                       />
                     </TableHead>
                     <TableHead
-                      className="w-[110px] h-12 text-sm font-semibold text-gray-900 text-right cursor-pointer"
+                      className="w-[110px] table-th text-right cursor-pointer"
                       onClick={() => handleSortClick('totalPrice')}
                     >
                       <SortIcons
@@ -224,7 +221,7 @@ export default function OrderList({ tableId, isMy }: Props) {
                       />
                     </TableHead>
                     <TableHead
-                      className="w-[110px] h-12 text-sm font-semibold text-gray-900 text-center cursor-pointer"
+                      className="w-[110px] table-th text-center cursor-pointer"
                       onClick={() => handleSortClick('orderDate')}
                     >
                       <SortIcons
@@ -232,17 +229,17 @@ export default function OrderList({ tableId, isMy }: Props) {
                         order={sortColumn === 'orderDate' ? order : ''}
                       />
                     </TableHead>
-                    <TableHead className="w-[110px] h-12 text-sm font-semibold text-gray-900 text-center">
+                    <TableHead className="w-[110px] table-th text-center">
                       방문예정일
                     </TableHead>
-                    <TableHead className="w-[110px] h-12 text-sm font-semibold text-gray-900 text-center">
+                    <TableHead className="w-[110px] table-th text-center">
                       결제 방법
                     </TableHead>
-                    <TableHead className="w-[110px] h-12 text-sm font-semibold text-gray-900 text-center">
+                    <TableHead className="w-[110px] table-th text-center">
                       결제 상태
                     </TableHead>
                     {!isMy && (
-                      <TableHead className="w-[150px] h-12 text-sm font-semibold text-gray-900 text-center"></TableHead>
+                      <TableHead className="w-[150px] table-th text-center"></TableHead>
                     )}
                   </TableRow>
                 </TableHeader>

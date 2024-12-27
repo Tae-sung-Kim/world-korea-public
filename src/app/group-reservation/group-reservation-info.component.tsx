@@ -61,22 +61,32 @@ export default function GroupReservationInfo() {
           </TableHeader>
           <TableBody>
             <TableRow className="hover:bg-gray-50 transition-colors">
-              <TableCell className="py-4 text-gray-700 font-medium bg-gray-50 border-r" rowSpan={3}>
+              <TableCell
+                className="group-reservation-td font-medium bg-gray-50 border-r"
+                rowSpan={3}
+              >
                 단품
               </TableCell>
-              <TableCell className="py-4 text-gray-700" colSpan={2}>
+              <TableCell className="group-reservation-td" colSpan={2}>
                 롯데월드
               </TableCell>
-              <TableCell className="py-4 text-gray-700 text-center">29,000</TableCell>
-              <TableCell className="py-4 text-red-600 font-medium text-center">27,000</TableCell>
-              <TableCell className="py-4 text-gray-700" rowSpan={7}>
+              <TableCell className="group-reservation-td text-center">
+                29,000
+              </TableCell>
+              <TableCell className="py-4 text-red-600 font-medium text-center">
+                27,000
+              </TableCell>
+              <TableCell className="group-reservation-td" rowSpan={7}>
                 <div className="space-y-4">
-                  <p className="font-medium text-gray-900">&lt;월드코리아 상품 예약 안내 (공통)&gt;</p>
+                  <p className="font-medium text-gray-900">
+                    &lt;월드코리아 상품 예약 안내 (공통)&gt;
+                  </p>
                   <ul className="space-y-3 text-sm">
                     <li className="flex items-start space-x-2">
                       <span className="text-blue-500 mt-1">•</span>
                       <span>
-                        방문일자 (방문시간) / 업체명 / 이용상품<br/>
+                        방문일자 (방문시간) / 업체명 / 이용상품
+                        <br />
                         인원 (손님+인솔자 각각) / 국적 / 인솔자 정보
                       </span>
                     </li>
@@ -89,9 +99,11 @@ export default function GroupReservationInfo() {
                     <li className="flex items-start space-x-2">
                       <span className="text-blue-500 mt-1">•</span>
                       <span>
-                        매표소에서 구매하실 경우 사전 예약 요금은 적용되지 않습니다.
+                        매표소에서 구매하실 경우 사전 예약 요금은 적용되지
+                        않습니다.
                         <p className="text-red-600 font-medium mt-1">
-                          티켓수령 및 결제는 반드시 월드코리아 담당자와 대면 진행하시도록 전달 바랍니다.
+                          티켓수령 및 결제는 반드시 월드코리아 담당자와 대면
+                          진행하시도록 전달 바랍니다.
                         </p>
                       </span>
                     </li>
@@ -100,60 +112,93 @@ export default function GroupReservationInfo() {
               </TableCell>
             </TableRow>
             <TableRow className="hover:bg-gray-50 transition-colors">
-              <TableCell className="py-4 text-gray-700" colSpan={2}>
+              <TableCell className="group-reservation-td" colSpan={2}>
                 아쿠아리움
               </TableCell>
-              <TableCell className="py-4 text-gray-700 text-center">22,000</TableCell>
-              <TableCell className="py-4 text-red-600 font-medium text-center">20,000</TableCell>
+              <TableCell className="group-reservation-td text-center">
+                22,000
+              </TableCell>
+              <TableCell className="py-4 text-red-600 font-medium text-center">
+                20,000
+              </TableCell>
             </TableRow>
             <TableRow className="hover:bg-gray-50 transition-colors">
-              <TableCell className="py-4 text-gray-700" colSpan={2}>
+              <TableCell className="group-reservation-td" colSpan={2}>
                 서울스카이
               </TableCell>
-              <TableCell className="py-4 text-gray-700 text-center">24,000</TableCell>
-              <TableCell className="py-4 text-red-600 font-medium text-center">22,000</TableCell>
+              <TableCell className="group-reservation-td text-center">
+                24,000
+              </TableCell>
+              <TableCell className="py-4 text-red-600 font-medium text-center">
+                22,000
+              </TableCell>
             </TableRow>
             <TableRow className="hover:bg-gray-50 transition-colors">
-              <TableCell className="py-4 text-gray-700 font-medium bg-gray-50 border-r" rowSpan={4}>
-                롯데월드<br/>패키지
+              <TableCell
+                className="group-reservation-td font-medium bg-gray-50 border-r"
+                rowSpan={4}
+              >
+                롯데월드
+                <br />
+                패키지
               </TableCell>
-              <TableCell className="py-4 text-gray-700" colSpan={2}>
+              <TableCell className="group-reservation-td" colSpan={2}>
                 롯데월드+아쿠아리움
               </TableCell>
-              <TableCell className="py-4 text-gray-700 text-center">38,000</TableCell>
-              <TableCell className="py-4 text-red-600 font-medium text-center">35,000</TableCell>
+              <TableCell className="group-reservation-td text-center">
+                38,000
+              </TableCell>
+              <TableCell className="py-4 text-red-600 font-medium text-center">
+                35,000
+              </TableCell>
             </TableRow>
             <TableRow className="hover:bg-gray-50 transition-colors">
-              <TableCell className="py-4 text-gray-700" colSpan={2}>
+              <TableCell className="group-reservation-td" colSpan={2}>
                 롯데월드+서울스카이
               </TableCell>
-              <TableCell className="py-4 text-gray-700 text-center">40,000</TableCell>
-              <TableCell className="py-4 text-red-600 font-medium text-center">37,000</TableCell>
+              <TableCell className="group-reservation-td text-center">
+                40,000
+              </TableCell>
+              <TableCell className="py-4 text-red-600 font-medium text-center">
+                37,000
+              </TableCell>
             </TableRow>
             <TableRow className="hover:bg-gray-50 transition-colors">
-              <TableCell className="py-4 text-gray-700" colSpan={2}>
+              <TableCell className="group-reservation-td" colSpan={2}>
                 서울스카이+아쿠아리움
               </TableCell>
-              <TableCell className="py-4 text-gray-700 text-center">40,000</TableCell>
-              <TableCell className="py-4 text-red-600 font-medium text-center">37,000</TableCell>
+              <TableCell className="group-reservation-td text-center">
+                40,000
+              </TableCell>
+              <TableCell className="py-4 text-red-600 font-medium text-center">
+                37,000
+              </TableCell>
             </TableRow>
             <TableRow className="hover:bg-gray-50 transition-colors">
-              <TableCell className="py-4 text-gray-700" colSpan={2}>
+              <TableCell className="group-reservation-td" colSpan={2}>
                 롯데월드+서울스카이+아쿠아리움
               </TableCell>
-              <TableCell className="py-4 text-gray-700 text-center">50,000</TableCell>
-              <TableCell className="py-4 text-red-600 font-medium text-center">47,000</TableCell>
+              <TableCell className="group-reservation-td text-center">
+                50,000
+              </TableCell>
+              <TableCell className="py-4 text-red-600 font-medium text-center">
+                47,000
+              </TableCell>
             </TableRow>
             <TableRow className="hover:bg-gray-50 transition-colors">
-              <TableCell className="py-4 text-gray-700 font-medium bg-gray-50 border-r">
+              <TableCell className="group-reservation-td font-medium bg-gray-50 border-r">
                 부산
               </TableCell>
-              <TableCell className="py-4 text-gray-700" colSpan={2}>
+              <TableCell className="group-reservation-td" colSpan={2}>
                 부산 롯데월드
               </TableCell>
-              <TableCell className="py-4 text-gray-700 text-center">35,000</TableCell>
-              <TableCell className="py-4 text-red-600 font-medium text-center">26,000</TableCell>
-              <TableCell className="py-4 text-gray-700">
+              <TableCell className="group-reservation-td text-center">
+                35,000
+              </TableCell>
+              <TableCell className="py-4 text-red-600 font-medium text-center">
+                26,000
+              </TableCell>
+              <TableCell className="group-reservation-td">
                 <ul className="space-y-3 text-sm">
                   <li className="flex items-start space-x-2">
                     <span className="text-blue-500 mt-1">•</span>
@@ -164,9 +209,7 @@ export default function GroupReservationInfo() {
                   </li>
                   <li className="flex items-start space-x-2">
                     <span className="text-blue-500 mt-1">•</span>
-                    <span>
-                      가이드증 미지참 시 인솔자도 매표 필요
-                    </span>
+                    <span>가이드증 미지참 시 인솔자도 매표 필요</span>
                   </li>
                 </ul>
               </TableCell>
@@ -175,13 +218,14 @@ export default function GroupReservationInfo() {
               <TableCell colSpan={5}></TableCell>
             </TableRow>
             <TableRow className="hover:bg-gray-50 transition-colors">
-              <TableCell className="py-4 text-gray-700 font-medium bg-gray-50 border-r" rowSpan={2}>
+              <TableCell
+                className="group-reservation-td font-medium bg-gray-50 border-r"
+                rowSpan={2}
+              >
                 밀쿠폰
               </TableCell>
-              <TableCell className="py-4 text-gray-700">
-                엠테이블
-              </TableCell>
-              <TableCell className="py-4 text-gray-700">
+              <TableCell className="group-reservation-td">엠테이블</TableCell>
+              <TableCell className="group-reservation-td">
                 <ul className="space-y-3 text-sm">
                   <li className="flex items-start space-x-2">
                     <span className="text-blue-500 mt-1">•</span>
@@ -195,40 +239,40 @@ export default function GroupReservationInfo() {
                   </li>
                   <li className="flex items-start space-x-2">
                     <span className="text-blue-500 mt-1">•</span>
-                    <span>
-                      밀쿠폰 내 지도 기재
-                    </span>
+                    <span>밀쿠폰 내 지도 기재</span>
                   </li>
                 </ul>
               </TableCell>
-              <TableCell rowSpan={2} className="py-4 text-gray-700 text-center">
+              <TableCell
+                rowSpan={2}
+                className="group-reservation-td text-center"
+              >
                 -
               </TableCell>
-              <TableCell rowSpan={2} className="py-4 text-red-600 font-medium text-center">
+              <TableCell
+                rowSpan={2}
+                className="py-4 text-red-600 font-medium text-center"
+              >
                 10,000
               </TableCell>
-              <TableCell className="py-4 text-gray-700">
+              <TableCell className="group-reservation-td">
                 <ul className="space-y-3 text-sm">
                   <li className="flex items-start space-x-2">
                     <span className="text-blue-500 mt-1">•</span>
-                    <span>
-                      롯데월드 어드벤처 내 3층
-                    </span>
+                    <span>롯데월드 어드벤처 내 3층</span>
                   </li>
                   <li className="flex items-start space-x-2">
                     <span className="text-blue-500 mt-1">•</span>
-                    <span>
-                      식권 뒷편 약도 첨부
-                    </span>
+                    <span>식권 뒷편 약도 첨부</span>
                   </li>
                 </ul>
               </TableCell>
             </TableRow>
             <TableRow className="hover:bg-gray-50 transition-colors">
-              <TableCell className="py-4 text-gray-700">
+              <TableCell className="group-reservation-td">
                 얼오브샌드위치
               </TableCell>
-              <TableCell className="py-4 text-gray-700">
+              <TableCell className="group-reservation-td">
                 <ul className="space-y-3 text-sm">
                   <li className="flex items-start space-x-2">
                     <span className="text-blue-500 mt-1">•</span>
@@ -240,25 +284,19 @@ export default function GroupReservationInfo() {
                   </li>
                   <li className="flex items-start space-x-2">
                     <span className="text-blue-500 mt-1">•</span>
-                    <span>
-                      밀쿠폰 내 지도 기재
-                    </span>
+                    <span>밀쿠폰 내 지도 기재</span>
                   </li>
                 </ul>
               </TableCell>
-              <TableCell className="py-4 text-gray-700">
+              <TableCell className="group-reservation-td">
                 <ul className="space-y-3 text-sm">
                   <li className="flex items-start space-x-2">
                     <span className="text-blue-500 mt-1">•</span>
-                    <span>
-                      롯데월드 정문매표소 옆 연간이용센터 앞
-                    </span>
+                    <span>롯데월드 정문매표소 옆 연간이용센터 앞</span>
                   </li>
                   <li className="flex items-start space-x-2">
                     <span className="text-blue-500 mt-1">•</span>
-                    <span>
-                      포장 or 매장이용 가능 ( 입장 전/ 퇴장 후)
-                    </span>
+                    <span>포장 or 매장이용 가능 ( 입장 전/ 퇴장 후)</span>
                   </li>
                   <li className="flex items-start space-x-2">
                     <span className="text-blue-500 mt-1">•</span>
@@ -271,8 +309,8 @@ export default function GroupReservationInfo() {
                     <span>
                       선택 가능 메뉴 (에그&체다, 비엘티, 이탈리안, 햄&에그,
                       캐논볼, 클럽, 튜나멜트, 햄&스위스, 치폴레 치킨 아보카도,
-                      오리지널1762, 하와이안바베큐, 풀몬태규, 치즈불닭, 얼스버거,
-                      베지)
+                      오리지널1762, 하와이안바베큐, 풀몬태규, 치즈불닭,
+                      얼스버거, 베지)
                     </span>
                   </li>
                 </ul>

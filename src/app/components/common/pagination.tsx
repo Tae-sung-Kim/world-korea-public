@@ -80,7 +80,7 @@ export default function Paginations({
   };
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-4">
+    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-2">
       <div className="text-sm text-muted-foreground bg-gray-50 px-4 py-2 rounded-md">
         전체 <span className="font-semibold text-primary">{totalItems}</span>개
         중{' '}

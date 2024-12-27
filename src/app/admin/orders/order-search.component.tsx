@@ -39,10 +39,12 @@ export default function OrderSearch() {
   };
 
   return (
-    <div className="w-full bg-white rounded-lg shadow-sm">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4">
+    <div className="search-container">
+      <div className="search-wrapper">
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full">
-          <Label className="min-w-20 text-sm font-medium text-gray-900">상품명</Label>
+          <Label className="min-w-20 text-sm font-medium text-gray-900">
+            상품명
+          </Label>
           <div className="flex-1 w-full sm:w-auto">
             <Input
               value={value}
@@ -53,7 +55,7 @@ export default function OrderSearch() {
               onKeyDown={handleKeyDown}
             />
           </div>
-          <Button 
+          <Button
             onClick={handleSearchClick}
             className="w-full sm:w-auto bg-primary hover:bg-primary/90"
           >

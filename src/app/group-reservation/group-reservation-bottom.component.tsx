@@ -102,13 +102,13 @@ export default function GroupReservationBottom() {
             </TableHeader>
             <TableBody>
               <TableRow className="hover:bg-gray-50 transition-colors">
-                <TableCell className="py-4 text-gray-700 font-medium">
+                <TableCell className="group-reservation-td font-medium">
                   홍미리 팀장
                 </TableCell>
-                <TableCell className="py-4 text-gray-700">
+                <TableCell className="group-reservation-td">
                   통합 문의/예약 및 FIT, 제휴
                 </TableCell>
-                <TableCell className="py-4 text-gray-700">
+                <TableCell className="group-reservation-td">
                   <a
                     href="tel:010-4074-8587"
                     className="text-blue-600 hover:underline"
@@ -116,20 +116,20 @@ export default function GroupReservationBottom() {
                     010-4074-8587
                   </a>
                 </TableCell>
-                <TableCell className="py-4 text-gray-700">
+                <TableCell className="group-reservation-td">
                   <span className="bg-yellow-50 text-yellow-800 px-3 py-1 rounded-full text-sm">
                     worldkorea_official
                   </span>
                 </TableCell>
               </TableRow>
               <TableRow className="hover:bg-gray-50 transition-colors">
-                <TableCell className="py-4 text-gray-700 font-medium">
+                <TableCell className="group-reservation-td font-medium">
                   장재은 주임
                 </TableCell>
-                <TableCell className="py-4 text-gray-700">
+                <TableCell className="group-reservation-td">
                   롯데월드 어드벤처
                 </TableCell>
-                <TableCell className="py-4 text-gray-700">
+                <TableCell className="group-reservation-td">
                   <a
                     href="tel:010-9234-8587"
                     className="text-blue-600 hover:underline"
@@ -137,20 +137,20 @@ export default function GroupReservationBottom() {
                     010-9234-8587
                   </a>
                 </TableCell>
-                <TableCell className="py-4 text-gray-700">
+                <TableCell className="group-reservation-td">
                   <span className="bg-yellow-50 text-yellow-800 px-3 py-1 rounded-full text-sm">
                     worldkorea_info
                   </span>
                 </TableCell>
               </TableRow>
               <TableRow className="hover:bg-gray-50 transition-colors">
-                <TableCell className="py-4 text-gray-700 font-medium">
+                <TableCell className="group-reservation-td font-medium">
                   한상탁 매니저
                 </TableCell>
-                <TableCell className="py-4 text-gray-700">
+                <TableCell className="group-reservation-td">
                   서울스카이 / 아쿠아리움
                 </TableCell>
-                <TableCell className="py-4 text-gray-700">
+                <TableCell className="group-reservation-td">
                   <a
                     href="tel:010-2742-8587"
                     className="text-blue-600 hover:underline"
@@ -158,7 +158,7 @@ export default function GroupReservationBottom() {
                     010-2742-8587
                   </a>
                 </TableCell>
-                <TableCell className="py-4 text-gray-700">
+                <TableCell className="group-reservation-td">
                   <span className="bg-yellow-50 text-yellow-800 px-3 py-1 rounded-full text-sm">
                     worldkorea_seoulsky
                   </span>

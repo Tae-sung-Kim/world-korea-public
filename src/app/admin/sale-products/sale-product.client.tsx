@@ -111,11 +111,11 @@ export default function SaleProductListClient() {
               <Table className="min-w-[1000px] w-full">
                 <TableHeader className="bg-gray-50 sticky top-0 z-10">
                   <TableRow className="border-b border-gray-200">
-                    <TableHead className="h-12 text-sm font-semibold text-gray-900 w-[5%] text-center">
+                    <TableHead className="table-th w-[5%] text-center">
                       번호
                     </TableHead>
                     <TableHead
-                      className="h-12 text-sm font-semibold text-gray-900 w-[18%] text-center cursor-pointer"
+                      className="table-th w-[18%] text-center cursor-pointer"
                       onClick={() => handleSortClick('name')}
                     >
                       <SortIcons
@@ -123,17 +123,17 @@ export default function SaleProductListClient() {
                         order={sortColumn === 'name' ? order : ''}
                       />
                     </TableHead>
-                    <TableHead className="h-12 text-sm font-semibold text-gray-900 w-[22%] text-center">
+                    <TableHead className="table-th w-[22%] text-center">
                       상세 상품명
                     </TableHead>
-                    <TableHead className="h-12 text-sm font-semibold text-gray-900 w-[12%] text-center hidden md:table-cell">
+                    <TableHead className="table-th w-[12%] text-center hidden md:table-cell">
                       level
                     </TableHead>
-                    <TableHead className="h-12 text-sm font-semibold text-gray-900 w-[12%] text-center hidden md:table-cell">
+                    <TableHead className="table-th w-[12%] text-center hidden md:table-cell">
                       단체예약여부
                     </TableHead>
                     <TableHead
-                      className="h-12 text-sm font-semibold text-gray-900 w-[13%] text-center cursor-pointer"
+                      className="table-th w-[13%] text-center cursor-pointer"
                       onClick={() => handleSortClick('price')}
                     >
                       <SortIcons
@@ -141,10 +141,10 @@ export default function SaleProductListClient() {
                         order={sortColumn === 'price' ? order : ''}
                       />
                     </TableHead>
-                    <TableHead className="h-12 text-sm font-semibold text-gray-900 w-[13%] text-center hidden md:table-cell">
+                    <TableHead className="table-th w-[13%] text-center hidden md:table-cell">
                       재고
                     </TableHead>
-                    <TableHead className="h-12 text-sm font-semibold text-gray-900 w-[5%] text-center"></TableHead>
+                    <TableHead className="table-th w-[5%] text-center"></TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
