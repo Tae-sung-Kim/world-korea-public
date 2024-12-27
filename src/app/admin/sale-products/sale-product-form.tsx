@@ -43,7 +43,7 @@ const SaleProductFormSchema = z.object({
   isReservable: z.boolean(), // 단체 예약 상품 여부
   // regularPrice: z.string().optional(), // 정가
   price: priceShcema(), // 판매가
-  taxFree: priceShcema(), // 면세가
+  taxFree: z.string(), // 면세가
 });
 
 type SaleProductFormValues = z.infer<typeof SaleProductFormSchema>;
@@ -96,6 +96,8 @@ export default function SaleProductForm({
 
             return {
               ...other,
+              price: String(other.price),
+              taxFree: String(other.taxFree),
               products: [],
             };
           })

@@ -1,9 +1,10 @@
 'use client';
 
 import { useUpdatePartnerMutation } from '@/app/admin/queries';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import DetailTitle from '@/app/components/common/detail-title.component';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Form,
   FormControl,
@@ -129,15 +130,17 @@ export default function PartnerDetailClient({ userId }: IProps) {
 
   return (
     <div className="container mx-auto py-6">
+      <DetailTitle title="파트너 상세" />
+
       <Form {...partnerForm}>
         <form
           onSubmit={partnerForm.handleSubmit(handleSubmit)}
           className="space-y-6"
         >
           <Card>
-            <CardHeader>
+            {/* <CardHeader>
               <CardTitle>파트너 수정</CardTitle>
-            </CardHeader>
+            </CardHeader> */}
             <CardContent className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <FormField
@@ -145,7 +148,9 @@ export default function PartnerDetailClient({ userId }: IProps) {
                   name="companyName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-medium">업체명</FormLabel>
+                      <FormLabel className="text-sm font-medium">
+                        업체명
+                      </FormLabel>
                       <FormControl>
                         <Input
                           placeholder="업체명을 입력하세요"
@@ -166,7 +171,9 @@ export default function PartnerDetailClient({ userId }: IProps) {
                   name="address"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-medium">주소</FormLabel>
+                      <FormLabel className="text-sm font-medium">
+                        주소
+                      </FormLabel>
                       <FormControl>
                         <Input
                           placeholder="주소를 입력하세요"
@@ -186,7 +193,9 @@ export default function PartnerDetailClient({ userId }: IProps) {
                   name="contactNumber"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-medium">연락처</FormLabel>
+                      <FormLabel className="text-sm font-medium">
+                        연락처
+                      </FormLabel>
                       <FormControl>
                         <Input
                           placeholder="연락처를 입력하세요"
@@ -206,7 +215,9 @@ export default function PartnerDetailClient({ userId }: IProps) {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-medium">이름</FormLabel>
+                      <FormLabel className="text-sm font-medium">
+                        이름
+                      </FormLabel>
                       <FormControl>
                         <Input
                           placeholder="이름을 입력하세요"
@@ -226,7 +237,9 @@ export default function PartnerDetailClient({ userId }: IProps) {
                   name="phoneNumber"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-medium">휴대폰</FormLabel>
+                      <FormLabel className="text-sm font-medium">
+                        휴대폰
+                      </FormLabel>
                       <FormControl>
                         <Input
                           placeholder="휴대폰 번호를 입력하세요"
@@ -246,7 +259,9 @@ export default function PartnerDetailClient({ userId }: IProps) {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-medium">이메일</FormLabel>
+                      <FormLabel className="text-sm font-medium">
+                        이메일
+                      </FormLabel>
                       <FormControl>
                         <Input
                           placeholder="이메일을 입력하세요"
@@ -265,12 +280,16 @@ export default function PartnerDetailClient({ userId }: IProps) {
               <div className="space-y-6">
                 <Card className="border-dashed">
                   <CardHeader className="pb-3">
-                    <CardTitle className="text-lg">파트너 상품 리스트</CardTitle>
+                    <CardTitle className="text-lg">
+                      파트너 상품 리스트
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
                       {productData.map((d) => {
-                        const isSelected = partnerProducts.map((d) => d._id).includes(d._id);
+                        const isSelected = partnerProducts
+                          .map((d) => d._id)
+                          .includes(d._id);
                         return (
                           <Button
                             key={d._id}
@@ -280,7 +299,11 @@ export default function PartnerDetailClient({ userId }: IProps) {
                             onClick={() => handleToggleClick(d)}
                             className={`
                               h-auto px-3 py-4 justify-start text-left
-                              ${isSelected ? 'border-primary bg-primary/10' : 'hover:border-primary/50'}
+                              ${
+                                isSelected
+                                  ? 'border-primary bg-primary/10'
+                                  : 'hover:border-primary/50'
+                              }
                             `}
                           >
                             {d.name}
@@ -315,9 +338,9 @@ export default function PartnerDetailClient({ userId }: IProps) {
                     ) : (
                       <div className="flex flex-wrap gap-2">
                         {partnerProducts.map((d) => (
-                          <Badge 
+                          <Badge
                             key={d._id}
-                            variant="secondary" 
+                            variant="secondary"
                             className="px-3 py-1.5 text-sm bg-background hover:bg-background"
                           >
                             {d.name}

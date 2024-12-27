@@ -468,7 +468,7 @@ export default function ProductDetail({ productId, disabled = false }: Props) {
                 return (
                   <FormItem>
                     <FormLabel className="text-sm font-medium text-gray-700">
-                      정가(과세)
+                      정가
                     </FormLabel>
                     <FormControl>
                       <Input
