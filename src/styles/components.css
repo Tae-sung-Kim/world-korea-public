@@ -44,3 +44,8 @@
 .table-cell {
   @apply px-4 py-4 truncate;
 }
+
+/* 삭제 버튼 아이콘 */
+.delete-icon {
+  @apply w-4 h-4 text-destructive;
+}
