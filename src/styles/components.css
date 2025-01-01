@@ -49,3 +49,8 @@
 .delete-icon {
   @apply w-4 h-4 text-destructive;
 }
+
+/* 리스트 search 영역 */
+.list-search-buttons {
+  @apply flex items-center justify-between mb-4;
+}
