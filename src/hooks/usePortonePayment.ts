@@ -93,7 +93,7 @@ export default function usePortonePayment(props: PortoneProps = {}) {
 
       // 모바일인 경우 결제 완료 페이지로 리디렉션
       if (isMobile) {
-        data.m_redirect_url = `${window.location.origin}/orders/complete?orderId=${orderId}&saleProductId=${saleProductId}`;
+        data.m_redirect_url = `${window.location.origin}/admin/orders/complete?orderId=${orderId}&saleProductId=${saleProductId}`;
         IMP.request_pay(data);
       } else {
         IMP.request_pay(data, callback);
