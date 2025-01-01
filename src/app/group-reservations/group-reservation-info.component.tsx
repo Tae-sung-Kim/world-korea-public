@@ -21,7 +21,7 @@ export default function GroupReservationInfo() {
         </h1>
       </div>
 
-      <div className="space-y-6 max-w-3xl mx-auto text-center">
+      <div className="space-y-6 max-w-4xl mx-auto text-center">
         <p className="text-red-500 text-sm md:text-base bg-red-50 p-4 rounded-lg">
           ※ 월드코리아에서 제공하는 요금은 모든 해외 국적 단체에 적용
           가능합니다. (해외 인바운드 / 국내 체류 외국인)
@@ -36,7 +36,7 @@ export default function GroupReservationInfo() {
       </div>
 
       <div className="overflow-x-auto">
-        <div className="inline-block min-w-full align-middle">
+        <div className="inline-block min-w-[900px] align-middle">
           <div className="overflow-hidden border border-gray-200 rounded-lg">
             <table className="min-w-full divide-y divide-gray-200">
               <TableHeader>
@@ -226,7 +226,9 @@ export default function GroupReservationInfo() {
                   >
                     밀쿠폰
                   </TableCell>
-                  <TableCell className="group-reservation-td">엠테이블</TableCell>
+                  <TableCell className="group-reservation-td">
+                    엠테이블
+                  </TableCell>
                   <TableCell className="group-reservation-td">
                     <ul className="space-y-3 text-sm">
                       <li className="flex items-start space-x-2">
@@ -310,9 +312,9 @@ export default function GroupReservationInfo() {
                         <span className="text-blue-500 mt-1">•</span>
                         <span>
                           선택 가능 메뉴 (에그&체다, 비엘티, 이탈리안, 햄&에그,
-                          캐논볼, 클럽, 튜나멜트, 햄&스위스, 치폴레 치킨 아보카도,
-                          오리지널1762, 하와이안바베큐, 풀몬태규, 치즈불닭,
-                          얼스버거, 베지)
+                          캐논볼, 클럽, 튜나멜트, 햄&스위스, 치폴레 치킨
+                          아보카도, 오리지널1762, 하와이안바베큐, 풀몬태규,
+                          치즈불닭, 얼스버거, 베지)
                         </span>
                       </li>
                     </ul>

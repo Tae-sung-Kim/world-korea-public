@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 export default function GroupReservationTop() {
   return (
-    <div className="flex justify-between items-center px-4 py-6 md:px-6 md:py-8 bg-white shadow-sm">
+    <div className="flex flex-col md:flex-row justify-between items-center gap-4 md:gap-0 px-4 py-6 md:px-6 md:py-8 bg-white shadow-sm">
       <Image
         src="/images/main_logo_invert.png"
         width={350}

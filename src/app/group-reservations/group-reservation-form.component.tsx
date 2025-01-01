@@ -132,7 +132,7 @@ export default function GroupReservationFormClient() {
         onSubmit={groupReservationForm.handleSubmit(handleSubmit)}
         className="max-w-6xl mx-auto space-y-8"
       >
-        <div className="relative py-8">
+        <div className="relative py-4">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t-2 border-purple-200"></div>
           </div>
@@ -142,7 +142,7 @@ export default function GroupReservationFormClient() {
             </h1>
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           <FormField
             control={groupReservationForm.control}
             name="companyName"
@@ -547,7 +547,7 @@ export default function GroupReservationFormClient() {
             )}
           />
         </div>
-        <div className="flex justify-center pt-8">
+        <div className="flex justify-center p-4">
           <Button
             size="lg"
             className="px-12 py-6 text-lg font-semibold bg-gradient-to-r from-purple-500 to-purple-700 text-white hover:from-purple-600 hover:to-purple-800 transition-all duration-300 shadow-lg hover:shadow-xl rounded-xl"

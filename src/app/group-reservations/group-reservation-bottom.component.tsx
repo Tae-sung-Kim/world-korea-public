@@ -15,7 +15,7 @@ import Image from 'next/image';
 export default function GroupReservationBottom() {
   return (
     <>
-      <div className="bg-white p-8 rounded-lg shadow-sm border border-gray-100">
+      <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
         <div className="relative">
           <div className="text-base md:text-lg mb-8 text-center font-medium">
             <span className="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-6 py-2 rounded-full inline-block">
@@ -83,19 +83,19 @@ export default function GroupReservationBottom() {
               문의사항이 있으시다면 언제든 연락주세요.
             </p>
           </div>
-          <Table className="min-w-[600px] bg-white rounded-xl overflow-hidden border-collapse">
+          <Table className="min-w-[700px] bg-white rounded-xl overflow-hidden border-collapse">
             <TableHeader>
               <TableRow className="border-b">
-                <TableHead className="bg-blue-50 py-4 text-blue-900 font-medium text-base w-[15%]">
+                <TableHead className="bg-blue-50 py-4 text-blue-900 font-medium text-base w-[140px]">
                   담당자
                 </TableHead>
-                <TableHead className="bg-blue-50 py-4 text-blue-900 font-medium text-base w-[40%]">
+                <TableHead className="bg-blue-50 py-4 text-blue-900 font-medium text-base w-[280px]">
                   담당
                 </TableHead>
-                <TableHead className="bg-blue-50 py-4 text-blue-900 font-medium text-base w-[25%]">
+                <TableHead className="bg-blue-50 py-4 text-blue-900 font-medium text-base w-[140px]">
                   연락처
                 </TableHead>
-                <TableHead className="bg-blue-50 py-4 text-blue-900 font-medium text-base w-[20%]">
+                <TableHead className="bg-blue-50 py-4 text-blue-900 font-medium text-base w-[140px]">
                   카카오톡
                 </TableHead>
               </TableRow>
