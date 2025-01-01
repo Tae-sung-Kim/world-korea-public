@@ -161,7 +161,7 @@ export default function PinList({ tableId, isPartner }: Props) {
           <div className="absolute inset-0 overflow-auto">
             <div className="min-w-[1024px]">
               <Table id={tableId}>
-                <TableHeader className="bg-gray-50 sticky top-0 z-10">
+                <TableHeader className="table-header">
                   <TableRow className="border-b border-gray-200">
                     <TableHead className="w-[50px] table-th" data-exclude-excel>
                       <Checkbox />

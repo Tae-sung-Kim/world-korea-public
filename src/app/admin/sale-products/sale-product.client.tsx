@@ -109,7 +109,7 @@ export default function SaleProductListClient() {
           <div className="absolute inset-0 overflow-auto">
             <div className="overflow-x-auto min-w-full">
               <Table className="min-w-[1000px] w-full">
-                <TableHeader className="bg-gray-50 sticky top-0 z-10">
+                <TableHeader className="table-header">
                   <TableRow className="border-b border-gray-200">
                     <TableHead className="table-th w-[5%] text-center">
                       번호

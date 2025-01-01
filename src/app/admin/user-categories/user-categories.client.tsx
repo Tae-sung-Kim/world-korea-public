@@ -155,7 +155,7 @@ export default function UserCategoriesClient() {
       <div className="list-container overflow-auto">
         <Form {...userCategoriesForm}>
           <Table>
-            <TableHeader className="bg-gray-50 sticky top-0 z-10">
+            <TableHeader className="table-header">
               <TableRow className="border-b border-gray-200">
                 <TableHead className="table-th whitespace-nowrap w-[70px]">
                   번호

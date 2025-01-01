@@ -83,11 +83,11 @@ export default function ContentsLayout({
 
           {/* Main Content */}
           <div className="flex-1 p-4">
-            <div className="bg-white rounded-2xl shadow-lg h-full overflow-auto">
+            <div className="bg-white rounded-2xl shadow-lg h-full overflow-hidden">
               <Breadcrumb
                 type={isPartner ? 'partner' : isAdmin ? 'admin' : 'my'}
               />
-              <div className="m-4">{children}</div>
+              <div className="m-4 overflow-auto">{children}</div>
             </div>
           </div>
         </div>

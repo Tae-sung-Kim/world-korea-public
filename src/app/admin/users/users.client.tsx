@@ -28,7 +28,7 @@ export default function UsersClient() {
           <div className="absolute inset-0 overflow-auto">
             <div className="min-w-[1024px]">
               <Table>
-                <TableHeader className="bg-gray-50 sticky top-0 z-10">
+                <TableHeader className="table-header">
                   <TableRow className="border-b border-gray-200">
                     <TableHead className="table-th whitespace-nowrap w-[80px]">
                       구분
@@ -51,13 +51,13 @@ export default function UsersClient() {
                     <TableHead className="table-th whitespace-nowrap w-[100px]">
                       업체번호
                     </TableHead>
-                    <TableHead className="table-th whitespace-nowrap w-[140px] hidden md:table-cell">
+                    <TableHead className="table-th whitespace-nowrap w-[140px]">
                       이메일
                     </TableHead>
-                    <TableHead className="table-th whitespace-nowrap w-[120px] hidden md:table-cell">
+                    <TableHead className="table-th whitespace-nowrap w-[120px]">
                       연락처
                     </TableHead>
-                    <TableHead className="table-th whitespace-nowrap w-[120px] hidden md:table-cell">
+                    <TableHead className="table-th whitespace-nowrap w-[120px]">
                       등록일
                     </TableHead>
                   </TableRow>
@@ -106,13 +106,13 @@ export default function UsersClient() {
                       <TableCell className="table-cell text-gray-700">
                         {user.companyNo}
                       </TableCell>
-                      <TableCell className="table-cell text-gray-700 hidden md:table-cell">
+                      <TableCell className="table-cell text-gray-700">
                         {user.email}
                       </TableCell>
-                      <TableCell className="table-cell text-gray-700 hidden md:table-cell">
+                      <TableCell className="table-cell text-gray-700">
                         {user.contactNumber}
                       </TableCell>
-                      <TableCell className="table-cell text-gray-700 hidden md:table-cell">
+                      <TableCell className="table-cell text-gray-700">
                         {user.createdAt &&
                           new Intl.DateTimeFormat('ko-KR', {
                             year: 'numeric',

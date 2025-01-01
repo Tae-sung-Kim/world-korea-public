@@ -110,7 +110,7 @@ export default function ProductListClient() {
         <div className="list-content-wrapper">
           <div className="absolute inset-0 overflow-auto">
             <Table>
-              <TableHeader className="bg-gray-50 sticky top-0 z-10">
+              <TableHeader className="table-header">
                 <TableRow className="border-b border-gray-200">
                   <TableHead className="table-th whitespace-nowrap w-[70px] min-w-[70px]">
                     번호
