@@ -1,7 +1,7 @@
 'use client';
 
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { Card } from '@/components/ui/card';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tickets } from '@/definitions';
 import { QRCodeCanvas } from 'qrcode.react';
 
@@ -12,36 +12,62 @@ type Props = {
 
 const SingleQRCode = ({ value }: { value: string }) => {
   return (
-    <div className="flex flex-col items-center w-full max-w-md mx-auto p-8">
-      <Card className="relative w-full aspect-square max-w-[300px] p-6 group hover:shadow-lg transition-all duration-300">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/20 to-purple-50/20 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300" />
-        <QRCodeCanvas
-          value={value}
-          className="w-full h-full relative z-10"
-        />
-      </Card>
-      <span className="mt-4 text-sm sm:text-base font-medium text-gray-700 break-all text-center">
-        {value}
-      </span>
+    <div className="flex flex-col items-center w-full max-w-md mx-auto p-4">
+      <div className="flex flex-col items-center p-3 space-y-3 border rounded-lg bg-white">
+        <span className="text-sm font-medium text-gray-900">{value}</span>
+        <div className="w-full flex items-center justify-center">
+          <QRCodeCanvas
+            value={value}
+            size={200}
+            level="H"
+            className="w-[200px] h-[200px]"
+          />
+        </div>
+      </div>
     </div>
   );
 };
 
 const QRCodeGrid = ({ tickets }: { tickets: Tickets[] }) => {
+  const getGridConfig = (count: number) => {
+    if (count <= 1) return {
+      cols: 'grid-cols-1',
+      qrSize: 'w-[200px] h-[200px]',
+    };
+    if (count <= 4) return {
+      cols: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3',
+      qrSize: 'w-[180px] h-[180px] sm:w-[160px] sm:h-[160px]',
+    };
+    if (count <= 10) return {
+      cols: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5',
+      qrSize: 'w-[180px] h-[180px] sm:w-[140px] sm:h-[140px]',
+    };
+    return {
+      cols: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5',
+      qrSize: 'w-[180px] h-[180px] sm:w-[120px] sm:h-[120px]',
+    };
+  };
+
+  const config = getGridConfig(tickets.length);
+
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 w-full">
+    <div className={`grid gap-3 sm:gap-4 place-items-center ${config.cols}`}>
       {tickets.map((ticket) => (
-        <div key={ticket._id} className="flex flex-col">
-          <Card className="group relative w-full aspect-square p-4 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-50/20 to-purple-50/20 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300" />
-            <QRCodeCanvas
-              value={window.location.origin + '/short/o/' + ticket.shortId}
-              className="relative w-full h-full z-10"
-            />
-          </Card>
-          <span className="mt-3 text-sm font-medium text-gray-600 break-all text-center group-hover:text-gray-800 transition-colors duration-300">
+        <div
+          key={ticket._id}
+          className="flex flex-col items-center p-2 sm:p-3 space-y-2 sm:space-y-3 border rounded-lg bg-white"
+        >
+          <span className="text-xs sm:text-sm font-medium text-gray-900">
             {ticket.shortId}
           </span>
+          <div className="w-full flex items-center justify-center">
+            <QRCodeCanvas
+              value={window.location.origin + '/short/o/' + ticket.shortId}
+              size={200}
+              level="H"
+              className={config.qrSize}
+            />
+          </div>
         </div>
       ))}
     </div>
@@ -50,11 +76,9 @@ const QRCodeGrid = ({ tickets }: { tickets: Tickets[] }) => {
 
 export default function QrCodeModal({ pinNumber, tickets }: Props) {
   return (
-    <Card className="relative w-full min-h-[200px] max-h-[80vh] bg-gradient-to-br from-gray-50 to-white p-6 overflow-hidden">
-      <div className="absolute inset-0 bg-grid-pattern opacity-5" />
-      
-      <ScrollArea className="relative w-full h-full z-10">
-        <div className="space-y-6">
+    <Card className="flex flex-col max-h-[90vh] bg-gray-50">
+      <ScrollArea className="flex-1 min-h-0">
+        <div className="p-3 sm:p-4">
           {Array.isArray(tickets) && tickets.length > 0 ? (
             <QRCodeGrid tickets={tickets} />
           ) : (

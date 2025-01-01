@@ -125,6 +125,7 @@ export default function OrderList({ tableId, isMy }: Props) {
         Component: () => {
           return <QrCodeModal tickets={firstTickets} />;
         },
+        useCancelButton: false,
       });
     } else {
       toast.error('구매 상품이 잘못 되었습니다. 다시 확인해주세요.');
