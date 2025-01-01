@@ -245,7 +245,7 @@ function ModalProvider({ children }: { children: ReactNode }) {
                   )}
                   {showFooter && (
                     <ModalFooter>
-                      {onCancel && (
+                      {type !== MODAL_TYPE.ALERT && onCancel && (
                         <Button
                           variant="outline"
                           size="sm"

@@ -11,7 +11,7 @@ export default function ProductFormClient({
   return (
     <>
       {productId && <DetailTitle title="상품 상세" />}
-      <ProductDetail productId={productId} />;
+      <ProductDetail productId={productId} />
     </>
   );
 }

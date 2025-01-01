@@ -263,124 +263,126 @@ export default function ProductDetail({ productId, disabled = false }: Props) {
     <Form {...productForm}>
       <form
         onSubmit={productForm.handleSubmit(handleSubmit)}
-        className="max-w-4xl mx-auto p-6 space-y-8 bg-white rounded-lg shadow-sm"
+        className="max-w-5xl mx-auto p-8 space-y-8 bg-white rounded-xl shadow-sm"
       >
-        {/* 상품명 undefined 확인 */}
         {!disabled && (
-          <FormField
-            control={productForm.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem className="mb-6">
-                <FormLabel className="text-sm font-medium text-gray-700">
-                  상품명
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    type="text"
-                    placeholder="상품명을 입력해 주세요."
-                    value={field.value ?? ''}
-                    disabled={disabled}
-                    className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500"
-                  />
-                </FormControl>
-                <FormMessage className="text-sm text-red-500" />
-              </FormItem>
-            )}
-          />
-        )}
-
-        {!disabled && (
-          <FormField
-            control={productForm.control}
-            name="accessLevel"
-            render={({ field }) => {
-              return (
-                <FormItem className="mb-6">
-                  <FormLabel className="text-sm font-medium text-gray-700">
-                    Level
+          <div className="space-y-6">
+            <FormField
+              control={productForm.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-base font-semibold text-gray-800">
+                    상품명
                   </FormLabel>
                   <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      value={field.value}
+                    <Input
+                      {...field}
+                      type="text"
+                      placeholder="상품명을 입력해 주세요"
+                      value={field.value ?? ''}
                       disabled={disabled}
-                    >
-                      <SelectTrigger className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500">
-                        <SelectValue placeholder="선택" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          {userCategoryList?.map((d) => {
-                            return (
-                              <SelectItem key={d._id} value={String(d.level)}>
+                      className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    />
+                  </FormControl>
+                  <FormMessage className="text-sm text-red-500 mt-1" />
+                </FormItem>
+              )}
+            />
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <FormField
+                control={productForm.control}
+                name="accessLevel"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-base font-semibold text-gray-800">
+                      Level
+                    </FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                        disabled={disabled}
+                      >
+                        <SelectTrigger className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500">
+                          <SelectValue placeholder="레벨을 선택해 주세요" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white">
+                          <SelectGroup>
+                            {userCategoryList?.map((d) => (
+                              <SelectItem
+                                key={d._id}
+                                value={String(d.level)}
+                                className="hover:bg-gray-50"
+                              >
                                 {d.name}
                               </SelectItem>
-                            );
-                          })}
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage className="text-sm text-red-500" />
-                </FormItem>
-              );
-            }}
-          />
-        )}
-        {!disabled && (
-          <FormField
-            control={productForm.control}
-            name="status"
-            render={({ field }) => (
-              <FormItem className="mb-6">
-                <FormLabel className="text-sm font-medium text-gray-700">
-                  상태
-                </FormLabel>
-                <FormControl>
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value}
-                    disabled={disabled}
-                  >
-                    <SelectTrigger className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500">
-                      <SelectValue placeholder="선택" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        {Object.entries(PRODUCT_STATUS_MESSAGE).map(
-                          ([key, value]) => {
-                            return (
-                              <SelectItem key={key} value={String(key)}>
-                                {value}
-                              </SelectItem>
-                            );
-                          }
-                        )}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage className="text-sm text-red-500" />
-              </FormItem>
-            )}
-          />
+                            ))}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage className="text-sm text-red-500 mt-1" />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={productForm.control}
+                name="status"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-base font-semibold text-gray-800">
+                      상태
+                    </FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                        disabled={disabled}
+                      >
+                        <SelectTrigger className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500">
+                          <SelectValue placeholder="상태를 선택해 주세요" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white">
+                          <SelectGroup>
+                            {Object.entries(PRODUCT_STATUS_MESSAGE).map(
+                              ([key, value]) => (
+                                <SelectItem
+                                  key={key}
+                                  value={String(key)}
+                                  className="hover:bg-gray-50"
+                                >
+                                  {value}
+                                </SelectItem>
+                              )
+                            )}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage className="text-sm text-red-500 mt-1" />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
         )}
 
-        <div className="mb-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <Label className="text-sm font-medium text-gray-700">
-                이미지
-              </Label>
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <h3 className="text-lg font-semibold text-gray-800">
+                상품 이미지
+              </h3>
               {!disabled && (
                 <Button
                   variant="outline"
                   size="icon"
                   type="button"
                   onClick={() => handleAddImage()}
-                  className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100"
+                  className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-blue-50 hover:text-blue-600 transition-colors"
                 >
                   <FaPlus className="w-3 h-3" />
                 </Button>
@@ -393,27 +395,34 @@ export default function ProductDetail({ productId, disabled = false }: Props) {
               const blobImages = productImageList[idx];
 
               return (
-                <div key={d.id} className="relative">
+                <div key={d.id} className="relative group">
                   {blobImages ? (
-                    <div className="relative bg-gray-50 rounded-lg overflow-hidden">
-                      <div className="p-3 border-b">
-                        {!!blobImages.name && (
-                          <div className="text-sm text-gray-600">
-                            파일명: {blobImages.name}
-                          </div>
-                        )}
-                        {!!blobImages.size && (
-                          <div className="text-sm text-gray-600">
-                            용량: {blobImages.size} MB
-                          </div>
-                        )}
+                    <div className="relative bg-white rounded-xl overflow-hidden border border-gray-200 transition-all hover:shadow-lg">
+                      <div className="p-4 border-b border-gray-100 bg-gray-50">
+                        <div className="space-y-1.5">
+                          {!!blobImages.name && (
+                            <div className="text-sm text-gray-700">
+                              <span className="font-medium">파일명:</span>
+                              <span className="ml-1 break-all">
+                                {blobImages.name}
+                              </span>
+                            </div>
+                          )}
+                          {!!blobImages.size && (
+                            <div className="text-sm text-gray-600">
+                              <span className="font-medium">용량:</span>
+                              <span className="ml-1">{blobImages.size} MB</span>
+                            </div>
+                          )}
+                        </div>
                       </div>
-                      <div className="relative aspect-square">
+                      <div className="relative aspect-square bg-gray-50">
                         <Image
                           src={blobImages.blob}
                           fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 33vw"
                           alt="등록 이미지"
-                          className="object-cover"
+                          className="object-cover transition-transform group-hover:scale-105"
                         />
                       </div>
                     </div>
@@ -423,19 +432,36 @@ export default function ProductDetail({ productId, disabled = false }: Props) {
                         name={`images.${idx}.file`}
                         control={productForm.control}
                         render={({ field, fieldState }) => (
-                          <div className="space-y-2">
-                            <Input
-                              type="file"
-                              accept="image/*"
-                              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                                handleInputFileChange(e, { ...field })
-                              }
-                              className="w-full"
-                            />
+                          <div className="space-y-3">
+                            <div className="relative">
+                              <div className="relative border-2 border-dashed border-gray-200 rounded-xl p-6 transition-all hover:border-blue-400 group/upload">
+                                <input
+                                  type="file"
+                                  accept="image/*"
+                                  onChange={(
+                                    e: ChangeEvent<HTMLInputElement>
+                                  ) => handleInputFileChange(e, { ...field })}
+                                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                                />
+                                <div className="text-center space-y-3">
+                                  <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center mx-auto group-hover/upload:bg-blue-100 transition-colors">
+                                    <FaPlus className="w-5 h-5 text-blue-600" />
+                                  </div>
+                                  <div>
+                                    <p className="text-sm font-medium text-gray-700">
+                                      클릭하여 이미지 업로드
+                                    </p>
+                                    <p className="text-xs text-gray-500 mt-1">
+                                      또는 이미지를 여기로 드래그하세요
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                             {fieldState.error && (
-                              <span className="text-sm text-red-500">
+                              <p className="text-sm text-red-500 text-center">
                                 {fieldState.error.message}
-                              </span>
+                              </p>
                             )}
                           </div>
                         )}
@@ -448,7 +474,7 @@ export default function ProductDetail({ productId, disabled = false }: Props) {
                       size="icon"
                       type="button"
                       onClick={() => handleDeleteImage(idx)}
-                      className="absolute -top-2 -right-2 z-10 w-7 h-7 p-0 rounded-full bg-white hover:bg-red-50 border shadow-md"
+                      className="absolute -top-2 -right-2 z-10 w-7 h-7 p-0 rounded-full bg-white hover:bg-red-50 border shadow-sm transition-all opacity-0 group-hover:opacity-100"
                     >
                       <FaMinus className="w-3 h-3 text-red-500" />
                     </Button>
@@ -460,74 +486,72 @@ export default function ProductDetail({ productId, disabled = false }: Props) {
         </div>
 
         {!disabled && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <FormField
               control={productForm.control}
               name="regularPrice"
-              render={({ field }) => {
-                return (
-                  <FormItem>
-                    <FormLabel className="text-sm font-medium text-gray-700">
-                      정가
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="정가를 입력해 주세요."
-                        value={addComma(field.value)}
-                        disabled={disabled}
-                        onChange={(e) => handlePriceChange(e, { ...field })}
-                        className="w-full text-right"
-                      />
-                    </FormControl>
-                    <FormMessage className="text-sm text-red-500" />
-                  </FormItem>
-                );
-              }}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-base font-semibold text-gray-800">
+                    정가
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      placeholder="정가를 입력해 주세요"
+                      value={addComma(field.value)}
+                      disabled={disabled}
+                      onChange={(e) => handlePriceChange(e, { ...field })}
+                      className="w-full p-3 text-right border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    />
+                  </FormControl>
+                  <FormMessage className="text-sm text-red-500 mt-1" />
+                </FormItem>
+              )}
             />
-            {/* <FormField
-              control={productForm.control}
-              name="taxFreeRegularPrice"
-              render={({ field }) => {
-                return (
-                  <FormItem>
-                    <FormLabel className="text-sm font-medium text-gray-700">
-                      정가(면세)
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="정가를 입력해 주세요."
-                        value={addComma(field.value)}
-                        disabled={disabled}
-                        onChange={(e) => handlePriceChange(e, { ...field })}
-                        className="w-full text-right"
-                      />
-                    </FormControl>
-                    <FormMessage className="text-sm text-red-500" />
-                  </FormItem>
-                );
-              }}
-            /> */}
+
             <FormField
               control={productForm.control}
               name="salePrice"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium text-gray-700">
-                    할인 가격
+                  <FormLabel className="text-base font-semibold text-gray-800">
+                    할인가
                   </FormLabel>
                   <FormControl>
                     <Input
                       {...field}
-                      placeholder="할인 가격을 입력해 주세요."
+                      placeholder="할인가를 입력해 주세요"
                       value={addComma(field.value)}
                       disabled={disabled}
                       onChange={(e) => handlePriceChange(e, { ...field })}
-                      className="w-full text-right"
+                      className="w-full p-3 text-right border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     />
                   </FormControl>
-                  <FormMessage className="text-sm text-red-500" />
+                  <FormMessage className="text-sm text-red-500 mt-1" />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={productForm.control}
+              name="price"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-base font-semibold text-gray-800">
+                    판매가
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      placeholder="판매가를 입력해 주세요"
+                      value={addComma(field.value)}
+                      disabled={disabled}
+                      onChange={(e) => handlePriceChange(e, { ...field })}
+                      className="w-full p-3 text-right border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    />
+                  </FormControl>
+                  <FormMessage className="text-sm text-red-500 mt-1" />
                 </FormItem>
               )}
             />
@@ -542,19 +566,19 @@ export default function ProductDetail({ productId, disabled = false }: Props) {
               name={`description${num}` as keyof ProductFormValues}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium text-gray-700">
-                    추가 정보{num}
+                  <FormLabel className="text-base font-semibold text-gray-800">
+                    추가 정보 {num}
                   </FormLabel>
                   <FormControl>
                     <Textarea
                       {...field}
-                      value={typeof field.value === 'string' ? field.value : ''}
-                      placeholder={`추가 정보를 입력해주세요.`}
-                      className="min-h-[100px] w-full resize-none focus:ring-2 focus:ring-blue-500"
                       disabled={disabled}
+                      value={typeof field.value === 'string' ? field.value : ''}
+                      placeholder={`추가 정보를 입력해주세요`}
+                      className="min-h-[100px] w-full resize-none p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     />
                   </FormControl>
-                  <FormMessage className="text-sm text-red-500" />
+                  <FormMessage className="text-sm text-red-500 mt-1" />
                 </FormItem>
               )}
             />
@@ -565,9 +589,9 @@ export default function ProductDetail({ productId, disabled = false }: Props) {
           <div className="flex justify-end pt-6">
             <Button
               type="submit"
-              className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+              className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
-              상품 {productId ? '수정' : '등록'}
+              {productId ? '수정' : '등록'}
             </Button>
           </div>
         )}
