@@ -237,7 +237,7 @@ export default function OrderList({ tableId, isMy }: Props) {
                 결제 상태
               </TableHead>
               {!isMy && (
-                <TableHead className="w-[150px] table-th text-center"></TableHead>
+                <TableHead className="min-w-[110px] table-th text-center"></TableHead>
               )}
             </TableRow>
           </TableHeader>
