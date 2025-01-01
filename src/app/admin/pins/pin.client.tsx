@@ -10,7 +10,7 @@ export default function PinClient() {
 
   return (
     <div className="content-search-container">
-      <div className="flex items-center justify-between mb-4">
+      <div className="list-search-buttons">
         <div className="flex-1 max-w-xl">
           <PinSearch />
         </div>

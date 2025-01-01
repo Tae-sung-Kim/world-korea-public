@@ -9,7 +9,7 @@ export default function GroupReservationClient() {
 
   return (
     <div className="content-search-container">
-      <div className="flex items-center justify-between mb-4">
+      <div className="list-search-buttons">
         <ExportExcelButton
           tableId={tableIdRef.current}
           fileName="단체예약 리스트"

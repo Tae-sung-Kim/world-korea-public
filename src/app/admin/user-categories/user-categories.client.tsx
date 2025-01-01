@@ -130,7 +130,7 @@ export default function UserCategoriesClient() {
 
   return (
     <div className="content-search-container">
-      <div className="flex items-center justify-between mb-4">
+      <div className="list-search-buttons">
         <Button
           variant="outline"
           size="sm"

@@ -237,16 +237,16 @@ export default function PinList({ tableId, isPartner }: Props) {
                         key={pin._id}
                         className="hover:bg-gray-50 transition-colors"
                       >
-                        <TableCell className="p-4" data-exclude-excel>
+                        <TableCell className="table-cell" data-exclude-excel>
                           <Checkbox />
                         </TableCell>
-                        <TableCell className="p-4" data-exclude-excel>
+                        <TableCell className="table-cell" data-exclude-excel>
                           {pinData.totalItems -
                             (pageNumber - 1) * pageSize -
                             idx}
                         </TableCell>
                         <TableCell
-                          className="p-4 font-medium text-gray-900 cursor-pointer"
+                          className="table-cell font-medium text-gray-900 cursor-pointer"
                           onClick={() =>
                             handlePinNumberClick({
                               name: pin.product?.name ?? '',
@@ -257,23 +257,23 @@ export default function PinList({ tableId, isPartner }: Props) {
                           {splitFourChar(pin.number)}
                         </TableCell>
                         <TableCell
-                          className="p-4 text-gray-700 cursor-pointer"
+                          className="table-cell text-gray-700 cursor-pointer"
                           onClick={() => handlePinListClick(pin.product?._id)}
                         >
                           {pin.product?.name}
                         </TableCell>
-                        <TableCell className="p-4 text-gray-700 text-center">
+                        <TableCell className="table-cell text-gray-700 text-center">
                           업체명
                         </TableCell>
-                        <TableCell className="p-4 text-gray-700 text-center">
+                        <TableCell className="table-cell text-gray-700 text-center">
                           {pin.endDate &&
                             new Date(pin.endDate).toLocaleDateString()}
                         </TableCell>
-                        <TableCell className="p-4 text-gray-700 text-center">
+                        <TableCell className="table-cell text-gray-700 text-center">
                           {pin.createdAt &&
                             new Date(pin.createdAt).toLocaleDateString()}
                         </TableCell>
-                        <TableCell className="p-4 text-center">
+                        <TableCell className="table-cell text-center">
                           <>
                             <Checkbox
                               onCheckedChange={() =>
@@ -290,7 +290,7 @@ export default function PinList({ tableId, isPartner }: Props) {
                             </span>
                           </>
                         </TableCell>
-                        <TableCell className="p-4 text-center">
+                        <TableCell className="table-cell text-center">
                           <Button
                             variant="ghost"
                             size="icon"

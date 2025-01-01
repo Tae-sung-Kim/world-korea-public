@@ -103,7 +103,7 @@ export default function ProductListClient() {
 
   return (
     <div className="content-search-container">
-      <div className="mb-4">
+      <div className="list-search-buttons">
         <ProductSearch />
       </div>
       <div className="list-container">
