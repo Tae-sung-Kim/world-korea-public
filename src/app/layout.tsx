@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     maximumScale: 1,
     minimumScale: 1,
     userScalable: false,
-    viewportFit: 'cover'
+    viewportFit: 'cover',
   },
 };
 
