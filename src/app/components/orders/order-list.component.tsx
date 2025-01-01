@@ -203,7 +203,7 @@ export default function OrderList({ tableId, isMy }: Props) {
                       담당자명
                     </TableHead>
                     <TableHead
-                      className="w-[100px] table-th text-center cursor-pointer"
+                      className="w-[160px] table-th text-center cursor-pointer"
                       onClick={() => handleSortClick('quantity')}
                     >
                       <SortIcons
@@ -249,41 +249,41 @@ export default function OrderList({ tableId, isMy }: Props) {
                       key={d._id}
                       className="hover:bg-gray-50 transition-colors"
                     >
-                      <TableCell className="p-4" data-exclude-excel>
+                      <TableCell className="table-cell" data-exclude-excel>
                         {ordersData.totalItems -
                           (pageNumber - 1) * pageSize -
                           idx}
                       </TableCell>
                       <TableCell
-                        className="p-4 font-medium text-blue-600 hover:text-blue-800 cursor-pointer"
+                        className="table-cell font-medium text-blue-600 hover:text-blue-800 cursor-pointer"
                         onClick={() => handleOrderListClick(d.saleProduct._id)}
                       >
                         {d.saleProduct.name}
                       </TableCell>
-                      <TableCell className="p-4 text-gray-700 text-center">
+                      <TableCell className="table-cell text-gray-700 text-center">
                         {d.user.companyName}
                       </TableCell>
-                      <TableCell className="p-4 text-gray-700 text-center">
+                      <TableCell className="table-cell text-gray-700 text-center">
                         {d.user.name}
                       </TableCell>
-                      <TableCell className="p-4 text-gray-700 text-center">
+                      <TableCell className="table-cell text-gray-700 text-center">
                         {addComma(d.quantity ?? 0)}
                       </TableCell>
-                      <TableCell className="p-4 text-gray-700 text-right">
+                      <TableCell className="table-cell text-gray-700 text-right">
                         {addComma(d.totalPrice ?? 0)}
                       </TableCell>
-                      <TableCell className="p-4 text-gray-700 text-center">
+                      <TableCell className="table-cell text-gray-700 text-center">
                         {d.orderDate &&
                           format(new Date(d.orderDate), 'yy.MM.dd HH:mm')}
                       </TableCell>
-                      <TableCell className="p-4 text-gray-700 text-center">
+                      <TableCell className="table-cell text-gray-700 text-center">
                         {d.visitDate &&
                           format(new Date(d.visitDate), 'yy.MM.dd')}
                       </TableCell>
-                      <TableCell className="p-4 text-gray-700 text-center">
+                      <TableCell className="table-cell text-gray-700 text-center">
                         {ORDER_PAY_TYPE_MESSAGE[d.payType]}
                       </TableCell>
-                      <TableCell className="p-4 text-gray-700 text-center">
+                      <TableCell className="table-cell text-gray-700 text-center">
                         {ORDER_STATUS_MESSAGE[d.status]}
                       </TableCell>
                       {!isMy && (
