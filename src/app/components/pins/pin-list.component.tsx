@@ -143,12 +143,18 @@ export default function PinList({ tableId, isPartner }: Props) {
     }
   };
 
-  const handlePinNumberClick = async (pinNumber: string = '') => {
+  const handlePinNumberClick = async ({
+    name,
+    pinNumber,
+  }: {
+    name: string;
+    pinNumber: string;
+  }) => {
     if (!!pinNumber) {
       return await openModal({
-        title: `${splitFourChar(pinNumber)}`,
+        title: name,
         Component: () => {
-          return <QrCodeModal pinNumber={splitFourChar(pinNumber) ?? ''} />;
+          return <QrCodeModal pinNumber={splitFourChar(pinNumber)} />;
         },
       });
     }
@@ -241,7 +247,12 @@ export default function PinList({ tableId, isPartner }: Props) {
                         </TableCell>
                         <TableCell
                           className="p-4 font-medium text-gray-900 cursor-pointer"
-                          onClick={() => handlePinNumberClick(pin.number)}
+                          onClick={() =>
+                            handlePinNumberClick({
+                              name: pin.product?.name ?? '',
+                              pinNumber: pin.number ?? '',
+                            })
+                          }
                         >
                           {splitFourChar(pin.number)}
                         </TableCell>

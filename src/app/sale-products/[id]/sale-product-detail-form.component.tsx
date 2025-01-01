@@ -237,26 +237,28 @@ export default function SaleProductDetailForm({
                 )}
               />
 
-              <FormField
-                control={saleProductForm.control}
-                name="amount"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>총 금액</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        value={addComma(field.value)}
-                        type="text"
-                        readOnly
-                        disabled
-                        className="bg-muted/90 font-semibold"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <span className="hidden">
+                <FormField
+                  control={saleProductForm.control}
+                  name="amount"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>총 금액</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          value={addComma(field.value)}
+                          type="text"
+                          readOnly
+                          disabled
+                          className="bg-muted/90 font-semibold"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </span>
             </div>
 
             <FormField

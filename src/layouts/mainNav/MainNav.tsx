@@ -6,8 +6,8 @@ export default function MainNav() {
   return (
     <nav className="w-full border-b border-gray-200">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <h1 className="flex-shrink-0 ml-12">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-4 sm:py-0">
+          <h1 className="flex justify-center sm:justify-start flex-shrink-0 sm:ml-12 mb-4 sm:mb-0">
             <Link href="/" className="block">
               <Image
                 src="/images/main_logo_invert.png"
@@ -19,7 +19,9 @@ export default function MainNav() {
               />
             </Link>
           </h1>
-          <AccessPanel />
+          <div className="flex justify-center sm:justify-end">
+            <AccessPanel />
+          </div>
         </div>
       </div>
     </nav>
