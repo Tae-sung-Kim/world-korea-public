@@ -60,20 +60,20 @@ export default function SaleProductDetailForm({
   const { openModal } = useModalContext();
 
   const { onPayment } = usePortonePayment({
+    // 계좌 입금
     onTransPayment: async (res: TransResponse) => {
       return await openModal({
         title: '계좌입금 안내',
         Component: () => {
           return <TransPaymentModal trans={res} />;
         },
-        onCancel: () => {
-          window.location.reload();
-        },
         onOk: () => {
           window.location.reload();
         },
+        useCancelButton: false,
       });
     },
+    // 카드 결제
     onPaymentSuccess: () => {
       window.location.reload();
     },

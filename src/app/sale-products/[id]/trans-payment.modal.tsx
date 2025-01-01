@@ -75,7 +75,7 @@ export default function TransPaymentModal({ trans }: TransPaymentModalProps) {
               {addComma(trans.amount ?? 0)}원
             </span>
           </div>
-          입금기한
+          {/* 입금기한 */}
           {/* <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <MdAccessTime className="h-5 w-5 text-gray-500" />

@@ -41,6 +41,8 @@ type ModalComponentType = {
   useOverlayClose?: boolean;
   useOverlayOpacity?: boolean;
   useCloseButton?: boolean;
+  useCancelButton?: boolean;
+  useOkButton?: boolean;
   useOkClose?: boolean;
   useCancelClose?: boolean;
   onOk?: () => void;
@@ -95,6 +97,8 @@ function ModalProvider({ children }: { children: ReactNode }) {
     cancelName,
     useOverlayOpacity = true,
     useCloseButton = true,
+    useCancelButton = true,
+    useOkButton = true,
     showFooter = true,
     showHeader = true,
     useOverlayClose = false,
@@ -161,6 +165,8 @@ function ModalProvider({ children }: { children: ReactNode }) {
             cancelName,
             useOverlayOpacity,
             useCloseButton,
+            useCancelButton,
+            useOkButton,
             showFooter,
             showHeader,
             useOverlayClose,
@@ -193,6 +199,8 @@ function ModalProvider({ children }: { children: ReactNode }) {
           cancelName,
           useOverlayOpacity = true,
           useCloseButton,
+          useCancelButton,
+          useOkButton,
           showFooter,
           showHeader,
           useOverlayClose,
@@ -245,7 +253,7 @@ function ModalProvider({ children }: { children: ReactNode }) {
                   )}
                   {showFooter && (
                     <ModalFooter>
-                      {type !== MODAL_TYPE.ALERT && onCancel && (
+                      {onCancel && useCancelButton && (
                         <Button
                           variant="outline"
                           size="sm"
@@ -258,7 +266,7 @@ function ModalProvider({ children }: { children: ReactNode }) {
                           {cancelName || '취소'}
                         </Button>
                       )}
-                      {onOk && (
+                      {onOk && useOkButton && (
                         <Button
                           size="sm"
                           className="w-full sm:w-auto min-w-[72px]"
