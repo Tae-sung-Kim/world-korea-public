@@ -93,39 +93,39 @@ export default function GroupReservationListClient({
                         className="hover:bg-gray-50 transition-colors"
                         onClick={handleGroupReservationClick({ id: data._id })}
                       >
-                        <TableCell className="py-2 px-4" data-exclude-excel>
+                        <TableCell className="table-cell" data-exclude-excel>
                           {reservationData.totalItems -
                             (pageNumber - 1) * pageSize -
                             idx}
                         </TableCell>
 
-                        <TableCell className="py-2 px-4">
+                        <TableCell className="table-cell">
                           {customData.companyName as string}
                         </TableCell>
-                        <TableCell className="py-2 px-4">
+                        <TableCell className="table-cell">
                           {data.createdAt &&
                             format(data.createdAt, 'yyyy.MM.dd')}
                         </TableCell>
-                        <TableCell className="py-2 px-4">
+                        <TableCell className="table-cell">
                           {customData.guideContactInfo as string}
                         </TableCell>
-                        <TableCell className="py-2 px-4">
+                        <TableCell className="table-cell">
                           {customData.productName as string}
                         </TableCell>
-                        <TableCell className="py-2 px-4">
+                        <TableCell className="table-cell">
                           {customData.numberOfPeopel as string}
                         </TableCell>
-                        <TableCell className="py-2 px-4">
+                        <TableCell className="table-cell">
                           {customData.guideContactInfo as string}
                         </TableCell>
-                        <TableCell className="py-2 px-4">
+                        <TableCell className="table-cell">
                           {data.usedAt && format(data.usedAt, 'yyyy.MM.dd')}
                         </TableCell>
                         <TableCell
-                          className="py-2 px-4"
+                          className="table-cell"
                           onClick={(e) => e.stopPropagation()}
                         >
-                          <div className="flex flex-col gap-1">
+                          <div className="flex items-center gap-2 py-0.5">
                             <Textarea
                               value={
                                 memos[data._id] ??
@@ -138,13 +138,13 @@ export default function GroupReservationListClient({
                                   [data._id]: e.target.value,
                                 }));
                               }}
-                              className="w-full min-h-[60px] resize-none text-sm focus-visible:ring-1 focus-visible:ring-blue-500 py-1.5"
+                              className="flex-1 resize-none text-sm focus-visible:ring-1 focus-visible:ring-blue-500 py-0.5 px-2"
                               placeholder="비고를 입력해주세요."
                             />
                             <Button
                               variant="outline"
                               size="sm"
-                              className="w-full hover:bg-blue-50 h-7 text-xs"
+                              className="shrink-0 hover:bg-blue-50 h-7 text-xs font-medium px-3"
                               onClick={() => {
                                 const newData = {
                                   ...data.customData,
