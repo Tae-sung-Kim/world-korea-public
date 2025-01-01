@@ -182,8 +182,8 @@ export default function OrderList({ tableId, isMy }: Props) {
       <ListWrapper>
         <Table id={tableId ?? 'exportExcelTableId'}>
           <TableHeader className="table-header">
-            <TableRow className="border-b border-gray-200">
-              <TableHead className="w-[50px] table-th" data-exclude-excel>
+            <TableRow className="list-table-row">
+              <TableHead className="w-[70px] table-th" data-exclude-excel>
                 번호
               </TableHead>
               <TableHead
@@ -202,7 +202,7 @@ export default function OrderList({ tableId, isMy }: Props) {
                 담당자명
               </TableHead>
               <TableHead
-                className="w-[160px] table-th text-center cursor-pointer"
+                className="w-[180px] table-th text-center cursor-pointer"
                 onClick={() => handleSortClick('quantity')}
               >
                 <SortIcons
@@ -228,7 +228,7 @@ export default function OrderList({ tableId, isMy }: Props) {
                   order={sortColumn === 'orderDate' ? order : ''}
                 />
               </TableHead>
-              <TableHead className="w-[110px] table-th text-center">
+              <TableHead className="w-[120px] table-th text-center">
                 방문예정일
               </TableHead>
               <TableHead className="w-[110px] table-th text-center">
@@ -283,7 +283,7 @@ export default function OrderList({ tableId, isMy }: Props) {
                   {ORDER_STATUS_MESSAGE[d.status]}
                 </TableCell>
                 {!isMy && (
-                  <TableCell className="p-2 text-center">
+                  <TableCell className="table-cell text-center">
                     {OrderStatus.Completed === d.status && (
                       <>
                         <Button

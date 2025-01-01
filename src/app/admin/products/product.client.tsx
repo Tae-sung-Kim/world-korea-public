@@ -110,12 +110,10 @@ export default function ProductListClient() {
       <ListWrapper>
         <Table>
           <TableHeader className="table-header">
-            <TableRow className="border-b border-gray-200">
-              <TableHead className="table-th whitespace-nowrap w-[70px] min-w-[70px]">
-                번호
-              </TableHead>
+            <TableRow className="list-table-row">
+              <TableHead className="table-th w-[70px]">번호</TableHead>
               <TableHead
-                className="table-th whitespace-nowrap cursor-pointer min-w-[200px]"
+                className="table-th cursor-pointer min-w-[200px]"
                 onClick={() => handleSortClick('name')}
               >
                 <SortIcons
@@ -124,7 +122,7 @@ export default function ProductListClient() {
                 />
               </TableHead>
               <TableHead
-                className="table-th whitespace-nowrap w-[90px] min-w-[90px] cursor-pointer"
+                className="table-th w-[90px] min-w-[90px] cursor-pointer"
                 onClick={() => handleSortClick('accessLevel')}
               >
                 <SortIcons
@@ -133,7 +131,7 @@ export default function ProductListClient() {
                 />
               </TableHead>
               <TableHead
-                className="table-th whitespace-nowrap w-[90px] min-w-[90px] cursor-pointer"
+                className="table-th w-[90px] min-w-[90px] cursor-pointer"
                 onClick={() => handleSortClick('status')}
               >
                 <SortIcons
@@ -142,7 +140,7 @@ export default function ProductListClient() {
                 />
               </TableHead>
               <TableHead
-                className="table-th whitespace-nowrap w-[100px] min-w-[100px] text-right cursor-pointer"
+                className="table-th w-[100px] min-w-[100px] text-right cursor-pointer"
                 onClick={() => handleSortClick('regularPrice')}
               >
                 <SortIcons
@@ -151,7 +149,7 @@ export default function ProductListClient() {
                 />
               </TableHead>
               <TableHead
-                className="table-th whitespace-nowrap w-[100px] min-w-[100px] text-right cursor-pointer"
+                className="table-th w-[100px] min-w-[100px] text-right cursor-pointer"
                 onClick={() => handleSortClick('salePrice')}
               >
                 <SortIcons
@@ -160,7 +158,7 @@ export default function ProductListClient() {
                 />
               </TableHead>
               <TableHead
-                className="table-th whitespace-nowrap w-[70px] min-w-[70px] text-right cursor-pointer"
+                className="table-th w-[70px] min-w-[70px] text-right cursor-pointer"
                 onClick={() => handleSortClick('pinCount')}
               >
                 <SortIcons
@@ -168,7 +166,7 @@ export default function ProductListClient() {
                   order={sortColumn === 'pinCount' ? order : ''}
                 />
               </TableHead>
-              <TableHead className="table-th whitespace-nowrap w-[70px] min-w-[70px]" />
+              <TableHead className="table-th w-[70px] min-w-[70px]" />
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -178,20 +176,20 @@ export default function ProductListClient() {
                 className="cursor-pointer transition-colors hover:bg-gray-50 focus:outline-none focus:bg-gray-50"
                 onClick={() => handleProductItemClick(product._id)}
               >
-                <TableCell className="p-4 text-gray-700 truncate">
+                <TableCell className="table-cell text-gray-700 truncate">
                   {(pageNumber - 1) * pageSize + idx + 1}
                 </TableCell>
-                <TableCell className="p-4 font-medium text-gray-900 truncate">
+                <TableCell className="table-cell font-medium text-gray-900 truncate">
                   {product.name}
                 </TableCell>
-                <TableCell className="p-4 text-gray-700 truncate">
+                <TableCell className="table-cell text-gray-700 truncate">
                   {
                     userCategoryList?.find(
                       (f) => f.level === String(product.accessLevel)
                     )?.name
                   }
                 </TableCell>
-                <TableCell className="p-4">
+                <TableCell className="table-cell">
                   <span
                     className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium truncate
                         ${
@@ -203,16 +201,16 @@ export default function ProductListClient() {
                     {PRODUCT_STATUS_MESSAGE[product.status]}
                   </span>
                 </TableCell>
-                <TableCell className="p-4 text-right text-gray-700 truncate">
+                <TableCell className="table-cell text-right text-gray-700 truncate">
                   {addComma(product.regularPrice)}
                 </TableCell>
-                <TableCell className="p-4 text-right text-gray-700 truncate">
+                <TableCell className="table-cell text-right text-gray-700 truncate">
                   {addComma(product.salePrice)}
                 </TableCell>
-                <TableCell className="p-4 text-right text-gray-700 truncate">
+                <TableCell className="table-cell text-right text-gray-700 truncate">
                   {addComma(product.pinCount)}
                 </TableCell>
-                <TableCell className="p-4 text-right">
+                <TableCell className="table-cell text-right">
                   <Button
                     variant="ghost"
                     size="icon"

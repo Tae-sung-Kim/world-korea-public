@@ -166,7 +166,7 @@ export default function PinList({ tableId, isPartner }: Props) {
       <ListWrapper>
         <Table id={tableId}>
           <TableHeader className="table-header">
-            <TableRow className="border-b border-gray-200">
+            <TableRow className="list-table-row">
               <TableHead className="w-[50px] table-th" data-exclude-excel>
                 <Checkbox />
               </TableHead>

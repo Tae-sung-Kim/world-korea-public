@@ -17,7 +17,7 @@ export default function HomePopupModal({ onCancel, data }: PopupProps) {
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl shadow-lg sm:shadow-2xl max-w-[95vw] min-w-[400px] sm:min-w-[500px] md:min-w-[600px] sm:max-w-xl md:max-w-2xl mx-auto overflow-hidden">
-      <div className="relative bg-gradient-to-r from-blue-50 to-blue-100/50 dark:from-gray-800 dark:to-gray-800/95 border-b border-gray-200 dark:border-gray-700">
+      <div className="relative bg-gradient-to-r from-blue-50 to-blue-100/50 dark:from-gray-800 dark:to-gray-800/95 list-table-row dark:border-gray-700">
         <div className="px-4 py-3 sm:px-6 sm:py-4 md:px-8">
           <h2 className="text-lg sm:text-xl md:text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent pr-12">
             {data.title}

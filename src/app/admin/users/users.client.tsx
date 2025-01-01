@@ -24,40 +24,20 @@ export default function UsersClient() {
 
   return (
     <div className="content-search-container">
-      <ListWrapper>
+      <ListWrapper className="flex flex-col">
         <Table>
           <TableHeader className="table-header">
-            <TableRow className="border-b border-gray-200">
-              <TableHead className="table-th whitespace-nowrap w-[80px]">
-                구분
-              </TableHead>
-              <TableHead className="table-th whitespace-nowrap w-[80px]">
-                상태
-              </TableHead>
-              <TableHead className="table-th whitespace-nowrap w-[100px]">
-                회원명
-              </TableHead>
-              <TableHead className="table-th whitespace-nowrap w-[120px]">
-                아이디
-              </TableHead>
-              <TableHead className="table-th whitespace-nowrap w-[100px]">
-                회원 분류
-              </TableHead>
-              <TableHead className="table-th whitespace-nowrap w-[140px]">
-                업체명
-              </TableHead>
-              <TableHead className="table-th whitespace-nowrap w-[100px]">
-                업체번호
-              </TableHead>
-              <TableHead className="table-th whitespace-nowrap w-[140px]">
-                이메일
-              </TableHead>
-              <TableHead className="table-th whitespace-nowrap w-[120px]">
-                연락처
-              </TableHead>
-              <TableHead className="table-th whitespace-nowrap w-[120px]">
-                등록일
-              </TableHead>
+            <TableRow className="list-table-row">
+              <TableHead className="table-th">구분</TableHead>
+              <TableHead className="table-th">상태</TableHead>
+              <TableHead className="table-th">회원명</TableHead>
+              <TableHead className="table-th">아이디</TableHead>
+              <TableHead className="table-th">회원 분류</TableHead>
+              <TableHead className="table-th">업체명</TableHead>
+              <TableHead className="table-th">업체번호</TableHead>
+              <TableHead className="table-th">이메일</TableHead>
+              <TableHead className="table-th">연락처</TableHead>
+              <TableHead className="table-th">등록일</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

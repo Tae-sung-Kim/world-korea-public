@@ -156,7 +156,7 @@ export default function UserCategoriesClient() {
         <Form {...userCategoriesForm}>
           <Table>
             <TableHeader className="table-header">
-              <TableRow className="border-b border-gray-200">
+              <TableRow className="list-table-row">
                 <TableHead className="table-th whitespace-nowrap w-[70px]">
                   번호
                 </TableHead>

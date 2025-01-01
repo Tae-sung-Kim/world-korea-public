@@ -50,7 +50,7 @@ const ModalHeader = React.forwardRef<
         'sticky top-0 z-20',
         'flex items-center justify-between',
         'px-3 py-2.5 sm:px-4 sm:py-3',
-        'border-b border-gray-200/75 dark:border-gray-700/75',
+        'list-table-row/75 dark:border-gray-700/75',
         'bg-white dark:bg-gray-900',
         'shadow-[0_1px_3px_rgba(0,0,0,0.05)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.2)]',
         className

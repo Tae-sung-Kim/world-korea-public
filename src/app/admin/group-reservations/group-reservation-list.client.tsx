@@ -22,6 +22,7 @@ import {
 import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { RiSave3Line } from 'react-icons/ri';
 
 type Props = {
   tableId?: string;
@@ -62,7 +63,7 @@ export default function GroupReservationListClient({
       <ListWrapper>
         <Table id={tableId}>
           <TableHeader className="table-header">
-            <TableRow className="border-b border-gray-200">
+            <TableRow className="list-table-row">
               <TableHead className="w-[80px] table-th" data-exclude-excel>
                 번호
               </TableHead>
@@ -129,13 +130,15 @@ export default function GroupReservationListClient({
                             [data._id]: e.target.value,
                           }));
                         }}
-                        className="flex-1 resize-none text-sm focus-visible:ring-1 focus-visible:ring-blue-500 py-0.5 px-2"
+                        rows={2}
+                        className="flex-1 resize-none text-sm focus-visible:ring-1 focus-visible:ring-blue-500 py-0.5 px-2 min-h-[28px]"
                         placeholder="비고를 입력해주세요."
                       />
                       <Button
-                        variant="outline"
-                        size="sm"
-                        className="shrink-0 hover:bg-blue-50 h-7 text-xs font-medium px-3"
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="h-7 w-7 hover:bg-blue-50"
                         onClick={() => {
                           const newData = {
                             ...data.customData,
@@ -147,8 +150,9 @@ export default function GroupReservationListClient({
                             data: newData,
                           })();
                         }}
+                        title="저장"
                       >
-                        저장
+                        <RiSave3Line className="w-4 h-4 text-blue-500" />
                       </Button>
                     </div>
                   </TableCell>

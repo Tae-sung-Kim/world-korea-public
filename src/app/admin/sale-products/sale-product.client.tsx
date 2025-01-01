@@ -9,6 +9,7 @@ import {
   useUserCategoryListQuery,
 } from '../queries';
 import SaleProductSearch from './sale-product-search.component';
+import ListWrapper from '@/app/components/common/list-wrapper.component';
 import Pagination from '@/app/components/common/pagination';
 import TotalCountBottom from '@/app/components/common/total-count-bottom.component';
 import { Button } from '@/components/ui/button';
@@ -117,168 +118,162 @@ export default function SaleProductListClient() {
       <div className="flex mb-4">
         <SaleProductSearch />
       </div>
-      <div className="list-container flex flex-col">
-        <div className="flex-1 relative">
-          <div className="absolute inset-0 overflow-auto">
-            <div className="overflow-x-auto min-w-full">
-              <Table className="min-w-[1000px] w-full">
-                <TableHeader className="table-header">
-                  <TableRow className="border-b border-gray-200">
-                    <TableHead className="table-th w-[50px] text-center">
-                      번호
-                    </TableHead>
-                    <TableHead
-                      className="table-th w-[180px] text-center cursor-pointer"
-                      onClick={() => handleSortClick('name')}
-                    >
-                      <SortIcons
-                        title="판매 상품명"
-                        order={sortColumn === 'name' ? order : ''}
-                      />
-                    </TableHead>
-                    <TableHead className="table-th min-w-[250px] text-center">
-                      상세 상품명
-                    </TableHead>
-                    <TableHead className="table-th w-[120px] text-center">
-                      level
-                    </TableHead>
-                    <TableHead className="table-th w-[120px] text-center">
-                      단체예약여부
-                    </TableHead>
-                    <TableHead
-                      className="table-th w-[120px] text-center cursor-pointer"
-                      onClick={() => handleSortClick('price')}
-                    >
-                      <SortIcons
-                        title="판매가"
-                        order={sortColumn === 'price' ? order : ''}
-                      />
-                    </TableHead>
-                    <TableHead className="table-th w-[120px] text-center">
-                      재고
-                    </TableHead>
-                    <TableHead className="table-th w-[150px] text-center"></TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {sortedData.map((data, idx) => {
-                    const id = data._id ?? '';
 
-                    return (
-                      <React.Fragment key={data._id}>
-                        <TableRow className="group cursor-pointer hover:bg-gray-50 transition-colors">
-                          <TableCell className="table-th text-gray-700">
-                            {(pageNumber - 1) * pageSize + idx + 1}
-                          </TableCell>
-                          <TableCell className="table-th font-medium text-gray-900">
-                            {data.name}
-                          </TableCell>
-                          <TableCell className="table-th text-gray-700">
-                            <span className="text-sm min-w-0 flex-1">
-                              {data.products[0]?.name}
-                              {data.products.length > 1 && (
-                                <span className="text-gray-500">
-                                  {` 외 ${data.products.length - 1}개`}
-                                </span>
-                              )}
-                            </span>
-                          </TableCell>
-                          <TableCell className="table-th text-gray-700">
-                            {
-                              userCategoryList?.find(
-                                (f) => f.level === String(data.accessLevel)
-                              )?.name
-                            }
-                          </TableCell>
-                          <TableCell className="table-th text-gray-700">
-                            <span
-                              className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
-                                data.isReservable
-                                  ? 'bg-green-100 text-green-800'
-                                  : 'bg-gray-100 text-gray-800'
-                              }`}
-                            >
-                              {data.isReservable ? 'Y' : 'N'}
-                            </span>
-                          </TableCell>
-                          <TableCell className="table-th text-gray-700 text-right">
-                            {addComma(data.price)} 원
-                          </TableCell>
-                          <TableCell className="table-th text-gray-700 text-right">
-                            총{' '}
-                            {addComma(
-                              data.products.reduce(
-                                (acc, curr) => acc + (curr.pinCount ?? 0),
-                                0
-                              )
-                            )}
-                            개
-                          </TableCell>
-                          <TableCell className="table-th text-center">
-                            <div className="flex items-center justify-end gap-2">
-                              <button
-                                onClick={(e) => toggleRow(id, e)}
-                                className="flex items-center gap-1 p-1 rounded hover:bg-gray-100"
+      <ListWrapper className="flex flex-col">
+        <Table>
+          <TableHeader className="table-header">
+            <TableRow className="list-table-row">
+              <TableHead className="table-th w-[70px]">번호</TableHead>
+              <TableHead
+                className="table-th w-[180px] text-center cursor-pointer"
+                onClick={() => handleSortClick('name')}
+              >
+                <SortIcons
+                  title="판매 상품명"
+                  order={sortColumn === 'name' ? order : ''}
+                />
+              </TableHead>
+              <TableHead className="table-th min-w-[250px] text-center">
+                상세 상품명
+              </TableHead>
+              <TableHead className="table-th w-[120px] text-center">
+                level
+              </TableHead>
+              <TableHead className="table-th w-[170px] text-center">
+                단체예약여부
+              </TableHead>
+              <TableHead
+                className="table-th w-[120px] text-center cursor-pointer"
+                onClick={() => handleSortClick('price')}
+              >
+                <SortIcons
+                  title="판매가"
+                  order={sortColumn === 'price' ? order : ''}
+                />
+              </TableHead>
+              <TableHead className="table-th w-[120px] text-center">
+                재고
+              </TableHead>
+              <TableHead className="table-th w-[150px] text-center"></TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {sortedData.map((data, idx) => {
+              const id = data._id ?? '';
+
+              return (
+                <React.Fragment key={data._id}>
+                  <TableRow className="group cursor-pointer hover:bg-gray-50 transition-colors">
+                    <TableCell className="table-cell text-gray-700">
+                      {(pageNumber - 1) * pageSize + idx + 1}
+                    </TableCell>
+                    <TableCell className="table-cell font-medium text-gray-900">
+                      {data.name}
+                    </TableCell>
+                    <TableCell className="table-cell text-gray-700">
+                      <span className="text-sm min-w-0 flex-1">
+                        {data.products[0]?.name}
+                        {data.products.length > 1 && (
+                          <span className="text-gray-500">
+                            {` 외 ${data.products.length - 1}개`}
+                          </span>
+                        )}
+                      </span>
+                    </TableCell>
+                    <TableCell className="table-cell text-gray-700">
+                      {
+                        userCategoryList?.find(
+                          (f) => f.level === String(data.accessLevel)
+                        )?.name
+                      }
+                    </TableCell>
+                    <TableCell className="table-cell text-gray-700">
+                      <span
+                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
+                          data.isReservable
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-gray-100 text-gray-800'
+                        }`}
+                      >
+                        {data.isReservable ? 'Y' : 'N'}
+                      </span>
+                    </TableCell>
+                    <TableCell className="table-cell text-gray-700 text-right">
+                      {addComma(data.price)} 원
+                    </TableCell>
+                    <TableCell className="table-cell text-gray-700 text-right">
+                      총{' '}
+                      {addComma(
+                        data.products.reduce(
+                          (acc, curr) => acc + (curr.pinCount ?? 0),
+                          0
+                        )
+                      )}
+                      개
+                    </TableCell>
+                    <TableCell className="table-cell text-center">
+                      <div className="flex items-center justify-end gap-2">
+                        <button
+                          onClick={(e) => toggleRow(id, e)}
+                          className="flex items-center gap-1 p-1 rounded hover:bg-gray-100"
+                        >
+                          <span className="text-xs text-gray-500">
+                            상세정보
+                          </span>
+                          <RiArrowDownSLine
+                            className={`w-4 h-4 transition-transform ${
+                              expandedRows.has(id) ? 'rotate-180' : ''
+                            }`}
+                          />
+                        </button>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          className="p-2 hover:bg-red-50"
+                          onClick={() =>
+                            handleDeleteProduct({ id, title: data.name })
+                          }
+                        >
+                          <RiDeleteBin6Line className="w-4 h-4 text-red-500" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                  {expandedRows.has(id) && (
+                    <TableRow className="bg-gray-50">
+                      <TableCell colSpan={8} className="bg-gray-50 p-4">
+                        <div className="flex flex-col gap-3">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                            {data.products.map((product) => (
+                              <div
+                                key={product._id}
+                                className="flex items-center justify-between px-4 py-3 bg-white rounded border border-gray-100"
                               >
-                                <span className="text-xs text-gray-500">
-                                  상세정보
+                                <span className="text-sm text-gray-900">
+                                  {product.name}
                                 </span>
-                                <RiArrowDownSLine
-                                  className={`w-4 h-4 transition-transform ${
-                                    expandedRows.has(id) ? 'rotate-180' : ''
-                                  }`}
-                                />
-                              </button>
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                className="p-2 hover:bg-red-50"
-                                onClick={() =>
-                                  handleDeleteProduct({ id, title: data.name })
-                                }
-                              >
-                                <RiDeleteBin6Line className="w-4 h-4 text-red-500" />
-                              </Button>
-                            </div>
-                          </TableCell>
-                        </TableRow>
-                        {expandedRows.has(id) && (
-                          <TableRow className="bg-gray-50">
-                            <TableCell colSpan={8} className="bg-gray-50 p-4">
-                              <div className="flex flex-col gap-3">
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                                  {data.products.map((product) => (
-                                    <div
-                                      key={product._id}
-                                      className="flex items-center justify-between px-4 py-3 bg-white rounded border border-gray-100"
-                                    >
-                                      <span className="text-sm text-gray-900">
-                                        {product.name}
-                                      </span>
-                                      <div className="flex items-center gap-1">
-                                        <span className="text-sm text-gray-500">
-                                          재고
-                                        </span>
-                                        <span className="text-sm font-medium text-gray-900">
-                                          {addComma(product.pinCount ?? 0)}개
-                                        </span>
-                                      </div>
-                                    </div>
-                                  ))}
+                                <div className="flex items-center gap-1">
+                                  <span className="text-sm text-gray-500">
+                                    재고
+                                  </span>
+                                  <span className="text-sm font-medium text-gray-900">
+                                    {addComma(product.pinCount ?? 0)}개
+                                  </span>
                                 </div>
                               </div>
-                            </TableCell>
-                          </TableRow>
-                        )}
-                      </React.Fragment>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </div>
-          </div>
-        </div>
-      </div>
+                            ))}
+                          </div>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </React.Fragment>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </ListWrapper>
+
       <div className="mt-4">
         <TotalCountBottom
           title="총 판매 상품"
