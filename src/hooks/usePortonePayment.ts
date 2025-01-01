@@ -33,10 +33,15 @@ export default function usePortonePayment(props: PortoneProps = {}) {
   const orderIdRef = useRef<string>('');
 
   // 결제 함수
-  const handlePaymentClick = async (
-    reqData: RequestPayParams,
-    orderId: string
-  ) => {
+  const handlePaymentClick = async ({
+    reqData,
+    orderId,
+    saleProductId,
+  }: {
+    reqData: RequestPayParams;
+    orderId: string;
+    saleProductId?: string;
+  }) => {
     setPaymentStatus(PaymentStatus.Ready);
 
     const { name, phoneNumber, email, address } =
@@ -75,6 +80,8 @@ export default function usePortonePayment(props: PortoneProps = {}) {
       const { IMP } = window;
       IMP.init(String(process.env.NEXT_PUBLIC_PORTONE_CUSTOMER_ID));
 
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
       const data: RequestPayParams = {
         pg: 'html5_inicis',
         buyer_name: name,
@@ -84,7 +91,13 @@ export default function usePortonePayment(props: PortoneProps = {}) {
         ...reqData,
       };
 
-      IMP.request_pay(data, callback);
+      // 모바일인 경우 결제 완료 페이지로 리디렉션
+      if (isMobile) {
+        data.m_redirect_url = `${window.location.origin}/orders/complete?orderId=${orderId}&saleProductId=${saleProductId}`;
+        IMP.request_pay(data);
+      } else {
+        IMP.request_pay(data, callback);
+      }
     }
   };
 

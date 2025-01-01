@@ -84,6 +84,7 @@ export default function SaleProductDetailForm({
     onSuccess: async (data) => {
       if (data) {
         const orderId = data._id;
+        const saleProductId = data.saleProduct;
         const reqData: RequestPayParams = {
           pay_method: saleProductForm.getValues().payType, // 결제수단
           merchant_uid: `mid_${purchaseDate.getTime()}`, // 주문번호
@@ -91,7 +92,7 @@ export default function SaleProductDetailForm({
           name: saleProductDetailData.name, // 주문명
           tax_free: saleProductForm.getValues().taxFree,
         };
-        await onPayment(reqData, orderId);
+        await onPayment({ reqData, orderId, saleProductId });
       } else {
         toast.error('다시 시도하여 주세요.');
         return null;

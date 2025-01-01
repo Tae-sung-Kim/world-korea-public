@@ -44,6 +44,11 @@ class OrdersService {
     return http.patch<string>(`/api/orders/${orderId}/cancel`);
   }
 
+  // 주문 상태 확인
+  getOrderStatus(orderId: string) {
+    return http.get<{ isPaid: boolean }>(`/api/orders/${orderId}/status`);
+  }
+
   // 회원 구매 목록
 
   getUserOrderList(pageParams?: PaginationProp<PageFilter>) {
