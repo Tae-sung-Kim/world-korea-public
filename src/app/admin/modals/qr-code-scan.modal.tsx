@@ -19,23 +19,30 @@ export default function QrCodeScanModal({
 
   const handleScan = useCallback(
     async (result: QrScanner.ScanResult) => {
-      if (!!result.data && !isProcessing) {
+      if (!result.data || isProcessing) return;
+
+      try {
         setIsProcessing(true);
+        qrScannerRef.current?.stop(); // 스캔 일시 중지
 
         const usedPinQrCode = await pinsService.usedPinQrCode(
           result.data.replaceAll('-', '')
         );
 
         if (usedPinQrCode) {
-          openModal({
+          await openModal({
             type: MODAL_TYPE.ALERT,
             title: result.data,
             content: `${result.data}는 이미 사용된 코드입니다.\n다시 확인해 주세요.`,
+            onOk: () => qrScannerRef.current?.start(),
           });
+          qrScannerRef.current?.start(); // 스캔 재개
         } else {
-          onResiveData && onResiveData(result.data);
-          onCancel && onCancel();
+          onResiveData?.(result.data);
+          onCancel?.();
         }
+      } finally {
+        setIsProcessing(false);
       }
     },
     [onResiveData, onCancel, openModal, isProcessing]
@@ -46,32 +53,24 @@ export default function QrCodeScanModal({
       const videoElement = videoRef.current;
 
       if (videoElement && !qrScannerRef.current) {
-        const qrScanner = new QrScanner(
-          videoElement,
-          (result) => {
-            if (!isProcessing) {
-              return handleScan(result);
-            }
-          },
-          QrOptions
-        );
+        const qrScanner = new QrScanner(videoElement, handleScan, QrOptions);
 
         qrScannerRef.current = qrScanner;
 
         await qrScanner.start();
 
-        return () => qrScanner.destroy();
+        return () => {
+          qrScanner.destroy();
+          qrScannerRef.current = null;
+        };
       }
     })();
-  }, [handleScan, isProcessing]);
+  }, [handleScan]);
 
   return (
     <div className="flex flex-col items-center space-y-4 p-2 sm:p-4 w-full">
       <div className="relative w-full max-w-[90vw] sm:max-w-md aspect-square rounded-lg overflow-hidden shadow-lg bg-gray-900">
-        <video
-          ref={videoRef}
-          className="w-full h-full object-cover"
-        />
+        <video ref={videoRef} className="w-full h-full object-cover" />
         <div className="absolute inset-0 border-2 border-blue-400 opacity-50 animate-pulse"></div>
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="w-36 h-36 sm:w-48 sm:h-48 border-2 border-white/50 rounded-lg"></div>
