@@ -1,5 +1,6 @@
 'use client';
 
+import ListWrapper from '../common/list-wrapper.component';
 import TotalCountBottom from '../common/total-count-bottom.component';
 import SortIcons from '@/app/admin/components/sort-icons.component';
 import { usePagination } from '@/app/admin/hooks/usePagination';
@@ -177,170 +178,159 @@ export default function OrderList({ tableId, isMy }: Props) {
 
   return (
     <>
-      <div className="list-container">
-        <div className="list-content-wrapper">
-          <div className="absolute inset-0 overflow-auto">
-            <div className="min-w-[1024px]">
-              <Table id={tableId ?? 'exportExcelTableId'}>
-                <TableHeader className="table-header">
-                  <TableRow className="border-b border-gray-200">
-                    <TableHead className="w-[50px] table-th" data-exclude-excel>
-                      번호
-                    </TableHead>
-                    <TableHead
-                      className="w-[200px] table-th cursor-pointer"
-                      onClick={() => handleSortClick('saleProduct.name')}
-                    >
-                      <SortIcons
-                        title="상품명"
-                        order={sortColumn === 'saleProduct.name' ? order : ''}
-                      />
-                    </TableHead>
-                    <TableHead className="w-[110px] table-th text-center">
-                      업체명
-                    </TableHead>
-                    <TableHead className="w-[110px] table-th text-center">
-                      담당자명
-                    </TableHead>
-                    <TableHead
-                      className="w-[160px] table-th text-center cursor-pointer"
-                      onClick={() => handleSortClick('quantity')}
-                    >
-                      <SortIcons
-                        title="구매수량"
-                        order={sortColumn === 'quantity' ? order : ''}
-                      />
-                    </TableHead>
-                    <TableHead
-                      className="w-[110px] table-th text-right cursor-pointer"
-                      onClick={() => handleSortClick('totalPrice')}
-                    >
-                      <SortIcons
-                        title="가격"
-                        order={sortColumn === 'totalPrice' ? order : ''}
-                      />
-                    </TableHead>
-                    <TableHead
-                      className="w-[110px] table-th text-center cursor-pointer"
-                      onClick={() => handleSortClick('orderDate')}
-                    >
-                      <SortIcons
-                        title="구매일"
-                        order={sortColumn === 'orderDate' ? order : ''}
-                      />
-                    </TableHead>
-                    <TableHead className="w-[110px] table-th text-center">
-                      방문예정일
-                    </TableHead>
-                    <TableHead className="w-[110px] table-th text-center">
-                      결제 방법
-                    </TableHead>
-                    <TableHead className="w-[110px] table-th text-center">
-                      결제 상태
-                    </TableHead>
-                    {!isMy && (
-                      <TableHead className="w-[150px] table-th text-center"></TableHead>
+      <ListWrapper>
+        <Table id={tableId ?? 'exportExcelTableId'}>
+          <TableHeader className="table-header">
+            <TableRow className="border-b border-gray-200">
+              <TableHead className="w-[50px] table-th" data-exclude-excel>
+                번호
+              </TableHead>
+              <TableHead
+                className="w-[200px] table-th cursor-pointer"
+                onClick={() => handleSortClick('saleProduct.name')}
+              >
+                <SortIcons
+                  title="상품명"
+                  order={sortColumn === 'saleProduct.name' ? order : ''}
+                />
+              </TableHead>
+              <TableHead className="w-[110px] table-th text-center">
+                업체명
+              </TableHead>
+              <TableHead className="w-[110px] table-th text-center">
+                담당자명
+              </TableHead>
+              <TableHead
+                className="w-[160px] table-th text-center cursor-pointer"
+                onClick={() => handleSortClick('quantity')}
+              >
+                <SortIcons
+                  title="구매수량"
+                  order={sortColumn === 'quantity' ? order : ''}
+                />
+              </TableHead>
+              <TableHead
+                className="w-[110px] table-th text-right cursor-pointer"
+                onClick={() => handleSortClick('totalPrice')}
+              >
+                <SortIcons
+                  title="가격"
+                  order={sortColumn === 'totalPrice' ? order : ''}
+                />
+              </TableHead>
+              <TableHead
+                className="w-[110px] table-th text-center cursor-pointer"
+                onClick={() => handleSortClick('orderDate')}
+              >
+                <SortIcons
+                  title="구매일"
+                  order={sortColumn === 'orderDate' ? order : ''}
+                />
+              </TableHead>
+              <TableHead className="w-[110px] table-th text-center">
+                방문예정일
+              </TableHead>
+              <TableHead className="w-[110px] table-th text-center">
+                결제 방법
+              </TableHead>
+              <TableHead className="w-[110px] table-th text-center">
+                결제 상태
+              </TableHead>
+              {!isMy && (
+                <TableHead className="w-[150px] table-th text-center"></TableHead>
+              )}
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {sortedData.map((d, idx) => (
+              <TableRow
+                key={d._id}
+                className="hover:bg-gray-50 transition-colors"
+              >
+                <TableCell className="table-cell" data-exclude-excel>
+                  {ordersData.totalItems - (pageNumber - 1) * pageSize - idx}
+                </TableCell>
+                <TableCell
+                  className="table-cell font-medium text-blue-600 hover:text-blue-800 cursor-pointer"
+                  onClick={() => handleOrderListClick(d.saleProduct._id)}
+                >
+                  {d.saleProduct.name}
+                </TableCell>
+                <TableCell className="table-cell text-gray-700 text-center">
+                  {d.user.companyName}
+                </TableCell>
+                <TableCell className="table-cell text-gray-700 text-center">
+                  {d.user.name}
+                </TableCell>
+                <TableCell className="table-cell text-gray-700 text-center">
+                  {addComma(d.quantity ?? 0)}
+                </TableCell>
+                <TableCell className="table-cell text-gray-700 text-right">
+                  {addComma(d.totalPrice ?? 0)}
+                </TableCell>
+                <TableCell className="table-cell text-gray-700 text-center">
+                  {d.orderDate &&
+                    format(new Date(d.orderDate), 'yy.MM.dd HH:mm')}
+                </TableCell>
+                <TableCell className="table-cell text-gray-700 text-center">
+                  {d.visitDate && format(new Date(d.visitDate), 'yy.MM.dd')}
+                </TableCell>
+                <TableCell className="table-cell text-gray-700 text-center">
+                  {ORDER_PAY_TYPE_MESSAGE[d.payType]}
+                </TableCell>
+                <TableCell className="table-cell text-gray-700 text-center">
+                  {ORDER_STATUS_MESSAGE[d.status]}
+                </TableCell>
+                {!isMy && (
+                  <TableCell className="p-2 text-center">
+                    {OrderStatus.Completed === d.status && (
+                      <>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-7 w-7 text-gray-600 hover:text-gray-900"
+                          onClick={() =>
+                            handleQrCodeClick({
+                              tickets: d.tickets ?? [],
+                              title: d.saleProduct.name,
+                            })
+                          }
+                        >
+                          <LuQrCode className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-7 w-7 text-gray-600 hover:text-gray-900"
+                          onClick={() => handleQrCodePrint(d.tickets ?? [])}
+                        >
+                          <IoMdPrint className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-7 w-7 text-red-500 hover:text-red-600"
+                          onClick={() =>
+                            handleRefundClick({
+                              title: d.saleProduct.name,
+                              orderDate: d.orderDate,
+                              orderId: d._id,
+                              paymentId: d.paymentId,
+                              payType: d.payType,
+                            })
+                          }
+                        >
+                          <RiRefundLine className="h-4 w-4" />
+                        </Button>
+                      </>
                     )}
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {sortedData.map((d, idx) => (
-                    <TableRow
-                      key={d._id}
-                      className="hover:bg-gray-50 transition-colors"
-                    >
-                      <TableCell className="table-cell" data-exclude-excel>
-                        {ordersData.totalItems -
-                          (pageNumber - 1) * pageSize -
-                          idx}
-                      </TableCell>
-                      <TableCell
-                        className="table-cell font-medium text-blue-600 hover:text-blue-800 cursor-pointer"
-                        onClick={() => handleOrderListClick(d.saleProduct._id)}
-                      >
-                        {d.saleProduct.name}
-                      </TableCell>
-                      <TableCell className="table-cell text-gray-700 text-center">
-                        {d.user.companyName}
-                      </TableCell>
-                      <TableCell className="table-cell text-gray-700 text-center">
-                        {d.user.name}
-                      </TableCell>
-                      <TableCell className="table-cell text-gray-700 text-center">
-                        {addComma(d.quantity ?? 0)}
-                      </TableCell>
-                      <TableCell className="table-cell text-gray-700 text-right">
-                        {addComma(d.totalPrice ?? 0)}
-                      </TableCell>
-                      <TableCell className="table-cell text-gray-700 text-center">
-                        {d.orderDate &&
-                          format(new Date(d.orderDate), 'yy.MM.dd HH:mm')}
-                      </TableCell>
-                      <TableCell className="table-cell text-gray-700 text-center">
-                        {d.visitDate &&
-                          format(new Date(d.visitDate), 'yy.MM.dd')}
-                      </TableCell>
-                      <TableCell className="table-cell text-gray-700 text-center">
-                        {ORDER_PAY_TYPE_MESSAGE[d.payType]}
-                      </TableCell>
-                      <TableCell className="table-cell text-gray-700 text-center">
-                        {ORDER_STATUS_MESSAGE[d.status]}
-                      </TableCell>
-                      {!isMy && (
-                        <TableCell className="p-2 text-center">
-                          {OrderStatus.Completed === d.status && (
-                            <>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-7 w-7 text-gray-600 hover:text-gray-900"
-                                onClick={() =>
-                                  handleQrCodeClick({
-                                    tickets: d.tickets ?? [],
-                                    title: d.saleProduct.name,
-                                  })
-                                }
-                              >
-                                <LuQrCode className="h-4 w-4" />
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-7 w-7 text-gray-600 hover:text-gray-900"
-                                onClick={() =>
-                                  handleQrCodePrint(d.tickets ?? [])
-                                }
-                              >
-                                <IoMdPrint className="h-4 w-4" />
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-7 w-7 text-red-500 hover:text-red-600"
-                                onClick={() =>
-                                  handleRefundClick({
-                                    title: d.saleProduct.name,
-                                    orderDate: d.orderDate,
-                                    orderId: d._id,
-                                    paymentId: d.paymentId,
-                                    payType: d.payType,
-                                  })
-                                }
-                              >
-                                <RiRefundLine className="h-4 w-4" />
-                              </Button>
-                            </>
-                          )}
-                        </TableCell>
-                      )}
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-          </div>
-        </div>
-      </div>
+                  </TableCell>
+                )}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </ListWrapper>
 
       <div className="mt-4">
         <TotalCountBottom count={ordersData.totalItems} />
