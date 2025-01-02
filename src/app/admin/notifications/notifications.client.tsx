@@ -33,19 +33,21 @@ export default function NotificationsListClient() {
               <Card key={d._id} className="overflow-hidden">
                 <CardHeader className="space-y-1">
                   <div className="flex items-center justify-between">
-                    <CardTitle className="text-xl">#{idx + 1}</CardTitle>
+                    <CardTitle className="text-xl flex items-center gap-2">
+                      <span className="text-muted-foreground">#{idx + 1}</span>
+                      <span>{d.title}</span>
+                    </CardTitle>
                     <Button
                       variant="ghost"
                       size="icon"
+                      className="delete-icon"
                       onClick={() => handleDeleteNotification(d._id)}
-                      className="text-red-500 hover:text-red-700 hover:bg-red-100"
                     >
                       <RiDeleteBin6Line className="h-5 w-5" />
                     </Button>
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <h3 className="font-semibold text-lg">{d.title}</h3>
                   {d.image && (
                     <div
                       className="relative aspect-video w-full overflow-hidden rounded-lg cursor-pointer"

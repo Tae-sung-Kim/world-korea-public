@@ -252,7 +252,7 @@ export default function OrderList({ tableId, isMy }: Props) {
                   {ordersData.totalItems - (pageNumber - 1) * pageSize - idx}
                 </TableCell>
                 <TableCell
-                  className="table-cell font-medium text-blue-600 hover:text-blue-800 cursor-pointer"
+                  className="table-cell font-medium list-click-color"
                   onClick={() => handleOrderListClick(d.saleProduct._id)}
                 >
                   {d.saleProduct.name}

@@ -242,7 +242,7 @@ export default function PinList({ tableId, isPartner }: Props) {
                     {pinData.totalItems - (pageNumber - 1) * pageSize - idx}
                   </TableCell>
                   <TableCell
-                    className="table-cell font-medium text-gray-900 cursor-pointer"
+                    className="table-cell font-medium list-click-color"
                     onClick={() =>
                       handlePinNumberClick({
                         name: pin.product?.name ?? '',
@@ -253,7 +253,7 @@ export default function PinList({ tableId, isPartner }: Props) {
                     {splitFourChar(pin.number)}
                   </TableCell>
                   <TableCell
-                    className="table-cell text-gray-700 cursor-pointer"
+                    className="table-cell list-click-color"
                     onClick={() => handlePinListClick(pin.product?._id)}
                   >
                     {pin.product?.name}

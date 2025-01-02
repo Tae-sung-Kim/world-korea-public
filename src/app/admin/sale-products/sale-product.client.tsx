@@ -73,12 +73,17 @@ export default function SaleProductListClient() {
     }
   };
 
-  //유저 레벨
+  // 유저 레벨
   const userCategoryList = useUserCategoryListQuery();
 
-  //테이블 리스트 클릭 -> 상세
-  const handleProductItemClick = (id: string = '') => {
+  // 판매 상품 이동
+  const handleSaleProductItemClick = (id: string = '') => {
     router.push(`/admin/sale-products/${id}`);
+  };
+
+  // 상품 이동
+  const handleProductItemClick = (id: string = '') => {
+    router.push(`/admin/products/${id}`);
   };
 
   const deleteProductMutation = useDeleteProductMutation();
@@ -102,6 +107,7 @@ export default function SaleProductListClient() {
 
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
 
+  // 상세 정보
   const toggleRow = (id: string, event: React.MouseEvent) => {
     event.stopPropagation();
     const newExpandedRows = new Set(expandedRows);
@@ -163,11 +169,14 @@ export default function SaleProductListClient() {
 
               return (
                 <React.Fragment key={data._id}>
-                  <TableRow className="group cursor-pointer hover:bg-gray-50 transition-colors">
+                  <TableRow className="group hover:bg-gray-50 transition-colors">
                     <TableCell className="table-cell text-gray-700">
                       {(pageNumber - 1) * pageSize + idx + 1}
                     </TableCell>
-                    <TableCell className="table-cell font-medium text-gray-900">
+                    <TableCell
+                      className="table-cell font-medium list-click-color"
+                      onClick={() => handleSaleProductItemClick(id)}
+                    >
                       {data.name}
                     </TableCell>
                     <TableCell className="table-cell text-gray-700">
@@ -213,7 +222,9 @@ export default function SaleProductListClient() {
                     </TableCell>
                     <TableCell className="table-cell text-center">
                       <div className="flex items-center justify-end gap-2">
-                        <button
+                        <Button
+                          type="button"
+                          variant="ghost"
                           onClick={(e) => toggleRow(id, e)}
                           className="flex items-center gap-1 p-1 rounded hover:bg-gray-100"
                         >
@@ -225,7 +236,7 @@ export default function SaleProductListClient() {
                               expandedRows.has(id) ? 'rotate-180' : ''
                             }`}
                           />
-                        </button>
+                        </Button>
                         <Button
                           type="button"
                           variant="ghost"
@@ -249,9 +260,16 @@ export default function SaleProductListClient() {
                                 key={product._id}
                                 className="flex items-center justify-between px-4 py-3 bg-white rounded border border-gray-100"
                               >
-                                <span className="text-sm text-gray-900">
+                                <Button
+                                  type="button"
+                                  variant="ghost"
+                                  className="flex items-center gap-1 rounded hover:bg-gray-100"
+                                  onClick={() =>
+                                    handleProductItemClick(product._id)
+                                  }
+                                >
                                   {product.name}
-                                </span>
+                                </Button>
                                 <div className="flex items-center gap-1">
                                   <span className="text-sm text-gray-500">
                                     재고

@@ -118,7 +118,7 @@ export default function SaleProductForm({
     saleProductCreateMutation.mutate(saleProductForm.getValues());
   };
 
-  //가격 입력
+  // 가격 입력
   const handlePriceChange = (
     e: ChangeEvent<HTMLInputElement>,
     field: ControllerRenderProps
