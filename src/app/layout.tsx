@@ -1,6 +1,6 @@
 import { pretendard } from '@/utils/fonts';
 import type { Metadata } from 'next';
-import './globals.css';
+import './globals.scss';
 import { OuterProvider, InnerProvider } from './providers/Providers';
 import Script from 'next/script';
 
