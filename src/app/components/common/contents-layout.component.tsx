@@ -42,7 +42,7 @@ export default function ContentsLayout({
           {/* Mobile Menu Button */}
           <Button
             variant="ghost"
-            className="lg:hidden fixed top-6 left-2 z-50 bg-white/80 hover:bg-white/90 rounded border border-gray-200 shadow-sm transition-colors"
+            className="lg:hidden fixed top-2 left-2 z-50 bg-white/80 hover:bg-white/90 rounded border border-gray-200 shadow-sm transition-colors"
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
           >
             {isSidebarOpen ? (
