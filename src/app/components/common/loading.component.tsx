@@ -2,6 +2,7 @@
 
 import { useIsFetching } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import { BiLoaderAlt } from 'react-icons/bi';
 
 /**
  * 
@@ -68,12 +69,12 @@ export default function Loading({
     <div className={`${containerStyles} ${className}`}>
       <div className={overlayStyles} />
       <div className="relative flex h-full items-center justify-center">
-        <div className="flex flex-col items-center bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg">
-          <svg
-            className={`animate-spin rounded-full border-4 border-gray-300 border-t-gray-900 ${spinnerSizes[size]}`}
+        <div className="flex flex-col items-center bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+          <BiLoaderAlt 
+            className={`animate-spin text-primary ${spinnerSizes[size]}`}
           />
           {message && (
-            <p className="text-gray-600 dark:text-gray-300 mt-3 text-sm font-medium min-w-[80px] text-center">
+            <p className="text-gray-600 dark:text-gray-300 mt-4 text-sm font-medium min-w-[80px] text-center">
               {message}
               {dots}
             </p>

@@ -21,7 +21,7 @@ export default function OrderClient() {
           />
         </div>
       </div>
-      <OrderList tableId={tableIdRef.current} />
+      <OrderList tableId={tableIdRef.current} isPartner={true} />
     </div>
   );
 }

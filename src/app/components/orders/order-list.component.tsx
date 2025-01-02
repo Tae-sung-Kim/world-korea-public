@@ -44,6 +44,7 @@ import { toast } from 'sonner';
 type Props = {
   tableId?: string;
   isMy?: boolean;
+  isPartner?: boolean;
 };
 
 type QrCodeProps = {
@@ -57,7 +58,7 @@ interface ExtendedRefundRequest extends RefundRequest {
   payType: OrderPayType;
 }
 
-export default function OrderList({ tableId, isMy }: Props) {
+export default function OrderList({ tableId, isMy, isPartner }: Props) {
   const { openModal } = useModalContext();
   const router = useRouter();
 
@@ -109,7 +110,7 @@ export default function OrderList({ tableId, isMy }: Props) {
     }
   };
 
-  const handleOrderListClick = (productId: string = '') => {
+  const handleSaleProductMove = (productId: string = '') => {
     router.push('/sale-products/' + productId);
   };
 
@@ -252,8 +253,14 @@ export default function OrderList({ tableId, isMy }: Props) {
                   {ordersData.totalItems - (pageNumber - 1) * pageSize - idx}
                 </TableCell>
                 <TableCell
-                  className="table-cell font-medium list-click-color"
-                  onClick={() => handleOrderListClick(d.saleProduct._id)}
+                  className={`table-cell font-medium ${
+                    isPartner ? '' : 'list-click-color'
+                  }`}
+                  onClick={
+                    isPartner
+                      ? undefined
+                      : () => handleSaleProductMove(d.saleProduct._id)
+                  }
                 >
                   {d.saleProduct.name}
                 </TableCell>

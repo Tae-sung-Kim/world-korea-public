@@ -63,7 +63,7 @@ export default function Paginations({
     pageNumbers.push(i);
   }
 
-  const handleMovePage = (pageNumber: number) => {
+  const handlePageMove = (pageNumber: number) => {
     const params = qs.stringify({ ...qs.parse(allParams), pageNumber });
 
     router.push(pathName + '?' + params);
@@ -96,7 +96,7 @@ export default function Paginations({
               <PaginationLink
                 onClick={(e) => {
                   e.preventDefault();
-                  if (pageNumber > 1) handleMovePage(1);
+                  if (pageNumber > 1) handlePageMove(1);
                 }}
                 className={cn(
                   'hover:bg-gray-50 transition-colors rounded-md cursor-pointer',
@@ -112,7 +112,7 @@ export default function Paginations({
               <PaginationPrevious
                 onClick={(e) => {
                   e.preventDefault();
-                  if (pageNumber > 1) handleMovePage(pageNumber - 1);
+                  if (pageNumber > 1) handlePageMove(pageNumber - 1);
                 }}
                 className={cn(
                   'hover:bg-gray-50 transition-colors rounded-md cursor-pointer',
@@ -128,7 +128,7 @@ export default function Paginations({
                   <PaginationLink
                     onClick={(e) => {
                       e.preventDefault();
-                      handleMovePage(1);
+                      handlePageMove(1);
                     }}
                     className="hover:bg-gray-50 transition-colors rounded-md font-medium cursor-pointer"
                   >
@@ -146,7 +146,7 @@ export default function Paginations({
                 <PaginationLink
                   onClick={(e) => {
                     e.preventDefault();
-                    handleMovePage(d);
+                    handlePageMove(d);
                   }}
                   className={cn(
                     'hover:bg-gray-50 transition-colors rounded-md min-w-[2.5rem] font-medium cursor-pointer',
@@ -169,7 +169,7 @@ export default function Paginations({
                   <PaginationLink
                     onClick={(e) => {
                       e.preventDefault();
-                      handleMovePage(totalPages);
+                      handlePageMove(totalPages);
                     }}
                     className="hover:bg-gray-50 transition-colors rounded-md font-medium cursor-pointer"
                   >
@@ -183,7 +183,7 @@ export default function Paginations({
               <PaginationNext
                 onClick={(e) => {
                   e.preventDefault();
-                  if (pageNumber < totalPages) handleMovePage(pageNumber + 1);
+                  if (pageNumber < totalPages) handlePageMove(pageNumber + 1);
                 }}
                 className={cn(
                   'hover:bg-gray-50 transition-colors rounded-md cursor-pointer',
@@ -196,7 +196,7 @@ export default function Paginations({
               <PaginationLink
                 onClick={(e) => {
                   e.preventDefault();
-                  if (pageNumber < totalPages) handleMovePage(totalPages);
+                  if (pageNumber < totalPages) handlePageMove(totalPages);
                 }}
                 className={cn(
                   'hover:bg-gray-50 transition-colors rounded-md cursor-pointer',

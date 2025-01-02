@@ -104,12 +104,3 @@ $breakpoint-2xl: 1536px;
 .list-click-color {
   @apply text-blue-600 hover:text-blue-800 cursor-pointer;
 }
-
-// 햄버거 메뉴 버튼
-.menu-button {
-  @apply hover:bg-gray-100 rounded-full p-2 transition-colors duration-200;
-  
-  svg {
-    @apply w-5 h-5 text-gray-500 hover:text-gray-700;
-  }
-}

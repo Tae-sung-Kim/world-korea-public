@@ -96,8 +96,8 @@ export default function PinList({ tableId, isPartner }: Props) {
     }
   };
 
-  //리스트 클릭
-  const handlePinListClick = (productId: string = '') => {
+  // 상품 상세 이동
+  const handleProductMove = (productId: string = '') => {
     router.push('products/' + productId);
   };
 
@@ -224,7 +224,9 @@ export default function PinList({ tableId, isPartner }: Props) {
                   order={sortColumn === 'usedDate' ? order : ''}
                 />
               </TableHead>
-              <TableHead className="w-[50px] table-th text-center"></TableHead>
+              {!isPartner && (
+                <TableHead className="w-[50px] table-th text-center"></TableHead>
+              )}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -253,8 +255,14 @@ export default function PinList({ tableId, isPartner }: Props) {
                     {splitFourChar(pin.number)}
                   </TableCell>
                   <TableCell
-                    className="table-cell list-click-color"
-                    onClick={() => handlePinListClick(pin.product?._id)}
+                    className={`table-cell ${
+                      isPartner ? '' : 'list-click-color'
+                    }`}
+                    onClick={
+                      isPartner
+                        ? undefined
+                        : () => handleProductMove(pin.product?._id)
+                    }
                   >
                     {pin.product?.name}
                   </TableCell>
@@ -283,21 +291,23 @@ export default function PinList({ tableId, isPartner }: Props) {
                       <span className="hidden">{!!isUsed ? 'Y' : 'N'}</span>
                     </>
                   </TableCell>
-                  <TableCell className="table-cell text-center">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="hover:bg-destructive/10"
-                      onClick={() =>
-                        handleDeletePin({
-                          id: pin._id ?? '',
-                          number: pin.number ?? '',
-                        })
-                      }
-                    >
-                      <RiDeleteBin6Line className="delete-icon" />
-                    </Button>
-                  </TableCell>
+                  {!isPartner && (
+                    <TableCell className="table-cell text-center">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="hover:bg-destructive/10"
+                        onClick={() =>
+                          handleDeletePin({
+                            id: pin._id ?? '',
+                            number: pin.number ?? '',
+                          })
+                        }
+                      >
+                        <RiDeleteBin6Line className="delete-icon" />
+                      </Button>
+                    </TableCell>
+                  )}
                 </TableRow>
               );
             })}
