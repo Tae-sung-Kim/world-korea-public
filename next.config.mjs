@@ -6,6 +6,9 @@ const nextConfig = {
       { protocol: 'http', hostname: '**.**.co(m|.kr)' },
     ],
   },
+  sassOptions: {
+    includePaths: ['./src/styles', './src/app'],
+  },
 };
 
 export default nextConfig;
