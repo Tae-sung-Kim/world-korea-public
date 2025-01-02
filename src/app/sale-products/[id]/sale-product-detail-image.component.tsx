@@ -25,31 +25,29 @@ export default function SaleProductDetailImage({
   );
 
   return (
-    <article className="w-full lg:w-1/2 bg-white/60 rounded-2xl p-6 lg:p-8 shadow-lg border border-slate-200 space-y-6">
+    <article className="w-full lg:w-1/2 bg-white/60 rounded-2xl p-6 lg:p-8 shadow-lg space-y-6">
       {/* 메인 이미지 캐러셀 */}
-      <div className="w-full lg:w-1/2">
-        <div className="relative aspect-[4/3] w-full">
-          <Carousel className="w-full max-w-md mx-auto" setApi={setApi}>
-            <CarouselContent>
-              {images.map((d) => (
-                <CarouselItem key={String(d)}>
-                  <figure className="relative aspect-square">
-                    <Image
-                      className="object-contain transition-all duration-300 group-hover:scale-105"
-                      alt="상품 이미지"
-                      src={String(d) ?? ''}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      priority
-                    />
-                  </figure>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious className="hidden md:flex -translate-x-6 bg-white/90 shadow-xl hover:shadow-2xl transition-all duration-200 hover:scale-110 w-12 h-12 rounded-full" />
-            <CarouselNext className="hidden md:flex translate-x-6 bg-white/90 shadow-xl hover:shadow-2xl transition-all duration-200 hover:scale-110 w-12 h-12 rounded-full" />
-          </Carousel>
-        </div>
+      <div className="relative aspect-square w-full">
+        <Carousel className="w-full max-w-md mx-auto" setApi={setApi}>
+          <CarouselContent>
+            {images.map((d) => (
+              <CarouselItem key={String(d)}>
+                <figure className="relative aspect-square">
+                  <Image
+                    className="object-contain transition-all duration-300 group-hover:scale-105"
+                    alt="상품 이미지"
+                    src={String(d) ?? ''}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    priority
+                  />
+                </figure>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="hidden md:flex -translate-x-6 bg-white/90 shadow-xl hover:shadow-2xl transition-all duration-200 hover:scale-110 w-12 h-12 rounded-full" />
+          <CarouselNext className="hidden md:flex translate-x-6 bg-white/90 shadow-xl hover:shadow-2xl transition-all duration-200 hover:scale-110 w-12 h-12 rounded-full" />
+        </Carousel>
       </div>
 
       {/* 썸네일 갤러리 */}
