@@ -55,10 +55,10 @@ export default function ContentsLayout({
           {/* Sidebar */}
           <aside
             className={cn(
-              'h-[calc(100%-2rem)] w-48 bg-gray-50/80 border-r border-gray-200 transition-transform duration-200 ease-in-out overflow-hidden lg:static my-4 mx-4 rounded-2xl shadow-lg',
+              'w-48 bg-gray-50/80 border-r border-gray-200 transition-transform duration-200 ease-in-out overflow-hidden lg:static my-4 mx-4 rounded-2xl shadow-lg',
               isSidebarOpen
-                ? 'fixed inset-y-0 left-0 z-40 translate-x-0'
-                : 'fixed inset-y-0 left-0 z-40 -translate-x-full lg:translate-x-0'
+                ? 'fixed top-10 bottom-16 left-0 z-40 translate-x-0'
+                : 'fixed top-10 bottom-16 left-0 z-40 -translate-x-full lg:translate-x-0 lg:h-[calc(100%-2rem)] lg:top-4 lg:bottom-5'
             )}
           >
             <div className="flex flex-col h-full">
