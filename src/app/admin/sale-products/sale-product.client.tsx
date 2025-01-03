@@ -252,13 +252,13 @@ export default function SaleProductListClient() {
                   </TableRow>
                   {expandedRows.has(id) && (
                     <TableRow className="bg-gray-50">
-                      <TableCell colSpan={8} className="bg-gray-50 p-4">
+                      <TableCell colSpan={8} className="bg-gray-50 p-2">
                         <div className="flex flex-col gap-3">
                           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                             {data.products.map((product) => (
                               <div
                                 key={product._id}
-                                className="flex items-center justify-between px-4 py-3 bg-white rounded border border-gray-100"
+                                className="flex items-center justify-between px-2 py-1 bg-white rounded border border-gray-100"
                               >
                                 <Button
                                   type="button"

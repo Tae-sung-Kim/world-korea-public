@@ -93,7 +93,7 @@ export default function Register() {
   };
 
   return (
-    <div className="max-w-[800px] mx-auto p-8">
+    <div className="max-w-[960px] mx-auto p-8">
       <div className="bg-white/50 backdrop-blur-sm p-8 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
         <div className="text-center mb-6">
           <h1 className="text-2xl font-semibold tracking-tight">회원가입</h1>
@@ -103,7 +103,10 @@ export default function Register() {
         </div>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-6"
+          >
             <RegisterSection
               title="계정 정보"
               description="계정에 사용할 기본 정보를 입력해주세요."

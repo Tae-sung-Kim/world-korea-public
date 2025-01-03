@@ -113,7 +113,7 @@ export default function ProductListClient() {
             <TableRow className="list-table-row">
               <TableHead className="table-th w-[70px]">번호</TableHead>
               <TableHead
-                className="table-th cursor-pointer min-w-[200px]"
+                className="table-th cursor-pointer w-[200px]"
                 onClick={() => handleSortClick('name')}
               >
                 <SortIcons
@@ -122,7 +122,7 @@ export default function ProductListClient() {
                 />
               </TableHead>
               <TableHead
-                className="table-th w-[90px] min-w-[90px] cursor-pointer"
+                className="table-th w-[90px] cursor-pointer"
                 onClick={() => handleSortClick('accessLevel')}
               >
                 <SortIcons
@@ -131,7 +131,7 @@ export default function ProductListClient() {
                 />
               </TableHead>
               <TableHead
-                className="table-th w-[90px] min-w-[90px] cursor-pointer"
+                className="table-th w-[90px] cursor-pointer"
                 onClick={() => handleSortClick('status')}
               >
                 <SortIcons
@@ -140,7 +140,7 @@ export default function ProductListClient() {
                 />
               </TableHead>
               <TableHead
-                className="table-th w-[100px] min-w-[100px] text-right cursor-pointer"
+                className="table-th w-[100px] text-right cursor-pointer"
                 onClick={() => handleSortClick('regularPrice')}
               >
                 <SortIcons
@@ -149,7 +149,7 @@ export default function ProductListClient() {
                 />
               </TableHead>
               <TableHead
-                className="table-th w-[100px] min-w-[100px] text-right cursor-pointer"
+                className="table-th w-[100px] text-right cursor-pointer"
                 onClick={() => handleSortClick('salePrice')}
               >
                 <SortIcons
@@ -158,7 +158,7 @@ export default function ProductListClient() {
                 />
               </TableHead>
               <TableHead
-                className="table-th w-[70px] min-w-[70px] text-right cursor-pointer"
+                className="table-th w-[70px] text-right cursor-pointer"
                 onClick={() => handleSortClick('pinCount')}
               >
                 <SortIcons
@@ -166,7 +166,7 @@ export default function ProductListClient() {
                   order={sortColumn === 'pinCount' ? order : ''}
                 />
               </TableHead>
-              <TableHead className="table-th w-[70px] min-w-[70px]" />
+              <TableHead className="table-th w-[70px]" />
             </TableRow>
           </TableHeader>
           <TableBody>

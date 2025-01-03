@@ -56,6 +56,11 @@ $breakpoint-2xl: 1536px;
   &-table-row {
     @apply border-b border-gray-200;
   }
+
+  // 리스트 Click
+  &-click-color {
+    @apply text-blue-600 hover:text-blue-800 cursor-pointer;
+  }
 }
 
 /* 테이블 스타일 */
@@ -98,9 +103,4 @@ $breakpoint-2xl: 1536px;
 /* 삭제 버튼 아이콘 */
 .delete-icon {
   @apply w-4 h-4 text-destructive;
-}
-
-// 리스트 Click
-.list-click-color {
-  @apply text-blue-600 hover:text-blue-800 cursor-pointer;
 }
