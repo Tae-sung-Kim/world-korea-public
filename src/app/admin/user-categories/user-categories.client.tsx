@@ -25,7 +25,7 @@ import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { AiOutlineUserAdd } from 'react-icons/ai';
 import { BsPencilSquare } from 'react-icons/bs';
 import { FaPlus } from 'react-icons/fa';
-import { RiDeleteBinFill } from 'react-icons/ri';
+import { RiDeleteBin6Line } from 'react-icons/ri';
 import { z } from 'zod';
 
 type FieldUserCategory = Partial<UserCategory & { id: string }>;
@@ -152,8 +152,8 @@ export default function UserCategoriesClient() {
         </Button>
       </div>
 
-      <div className="list-container overflow-auto">
-        <Form {...userCategoriesForm}>
+      <Form {...userCategoriesForm}>
+        <div className="list-container overflow-auto">
           <Table>
             <TableHeader className="table-header">
               <TableRow className="list-table-row">
@@ -247,7 +247,7 @@ export default function UserCategoriesClient() {
                               })
                             }
                           >
-                            <RiDeleteBinFill className="h-4 w-4 text-red-600" />
+                            <RiDeleteBin6Line className="delete-icon" />
                           </Button>
                         </>
                       ) : (
@@ -280,7 +280,7 @@ export default function UserCategoriesClient() {
                               })
                             }
                           >
-                            <RiDeleteBinFill className="h-4 w-4 text-red-600" />
+                            <RiDeleteBin6Line className="delete-icon" />
                           </Button>
                         </>
                       )}
@@ -290,8 +290,8 @@ export default function UserCategoriesClient() {
               ))}
             </TableBody>
           </Table>
-        </Form>
-      </div>
+        </div>
+      </Form>
       <div className="mt-4">
         <TotalCountBottom
           title="총 회원등급"

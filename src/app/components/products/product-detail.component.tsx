@@ -239,6 +239,7 @@ export default function ProductDetail({ productId, disabled = false }: Props) {
         type: MODAL_TYPE.ALERT,
         showHeader: false,
         content: '상품 이미지는 최소 1개 이상입니다.',
+        useCancelButton: false,
       });
       return;
     }
