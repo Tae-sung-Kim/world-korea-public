@@ -1,7 +1,6 @@
 import { RiArticleLine } from 'react-icons/ri';
 
 export default function DetailTitle({ title }: { title: string }) {
-  console.log(title);
   return (
     <>
       {title && (
