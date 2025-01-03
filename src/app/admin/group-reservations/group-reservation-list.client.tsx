@@ -43,20 +43,22 @@ export default function GroupReservationListClient({
   });
 
   // 단체 예약 상세
-  const handleGroupReservationClick =
-    ({ id }: { id: string }) =>
-    () => {
-      router.push(`/admin/group-reservations/${id}`);
-    };
+  const handleGroupReservationClick = (id: string) => {
+    router.push(`/admin/group-reservations/${id}`);
+  };
 
   const updateGroupReservationMutation = useUpdateGroupReservationMutation({});
 
   // 단체 예약 수정(비고 입력)
-  const handleGroupReservationUpdate =
-    ({ id, data }: { id: string; data: GroupReservationForm }) =>
-    () => {
-      updateGroupReservationMutation.mutate({ id, data });
-    };
+  const handleGroupReservationUpdate = ({
+    id,
+    data,
+  }: {
+    id: string;
+    data: GroupReservationForm;
+  }) => {
+    updateGroupReservationMutation.mutate({ id, data });
+  };
 
   return (
     <>
@@ -84,7 +86,7 @@ export default function GroupReservationListClient({
                 <TableRow
                   key={data._id}
                   className="hover:bg-gray-50 transition-colors"
-                  onClick={handleGroupReservationClick({ id: data._id })}
+                  onClick={() => handleGroupReservationClick(data._id)}
                 >
                   <TableCell className="table-cell" data-exclude-excel>
                     {reservationData.totalItems -
@@ -139,17 +141,15 @@ export default function GroupReservationListClient({
                         variant="ghost"
                         size="icon"
                         className="h-7 w-7 hover:bg-blue-50"
-                        onClick={() => {
-                          const newData = {
-                            ...data.customData,
-                            memo: memos[data._id],
-                          } as GroupReservationForm;
-
-                          return handleGroupReservationUpdate({
+                        onClick={() =>
+                          handleGroupReservationUpdate({
                             id: data._id,
-                            data: newData,
-                          })();
-                        }}
+                            data: {
+                              ...customData,
+                              memo: memos[data._id],
+                            } as GroupReservationForm,
+                          })
+                        }
                         title="저장"
                       >
                         <RiSave3Line className="w-4 h-4 text-blue-500" />
