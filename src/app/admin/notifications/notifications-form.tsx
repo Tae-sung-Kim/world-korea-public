@@ -1,6 +1,7 @@
 'use client';
 
 import { useCreateNotificationsMutation } from '../queries/notifications.queries';
+import FileSelect from '@/app/components/common/file-select.component';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -122,7 +123,6 @@ export default function NotificationsForm() {
                       className="flex items-center gap-2 hover:bg-destructive/90 hover:text-destructive-foreground transition-colors"
                     >
                       <FaMinus className="h-4 w-4" />
-                      <span>삭제</span>
                     </Button>
                   </div>
 
@@ -147,20 +147,11 @@ export default function NotificationsForm() {
                         이미지
                       </FormLabel>
                       <FormControl>
-                        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                          <Input
-                            type="file"
-                            accept="image/*"
-                            onChange={(e) =>
+                        <div className="flex justify-center w-full">
+                          <FileSelect
+                            onInputFileChange={(e) =>
                               handleInputFileChange(e, { ...field })
                             }
-                            className="w-full h-full py-2 file:mr-4 file:py-2 file:px-4 
-                            file:rounded-lg file:border-0
-                            file:text-sm file:font-semibold
-                            file:bg-blue-600 file:text-white
-                            hover:file:bg-blue-700 cursor-pointer
-                            text-sm text-muted-foreground
-                            file:transition-colors file:duration-200"
                           />
                         </div>
                       </FormControl>

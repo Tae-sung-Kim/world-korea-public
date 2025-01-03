@@ -1,5 +1,6 @@
 'use client';
 
+import FileSelect from '../common/file-select.component';
 import {
   descriptionShcema,
   priceShcema,
@@ -434,31 +435,11 @@ export default function ProductDetail({ productId, disabled = false }: Props) {
                         control={productForm.control}
                         render={({ field, fieldState }) => (
                           <div className="space-y-3">
-                            <div className="relative">
-                              <div className="relative border-2 border-dashed border-gray-200 rounded-xl p-6 transition-all hover:border-blue-400 group/upload">
-                                <input
-                                  type="file"
-                                  accept="image/*"
-                                  onChange={(
-                                    e: ChangeEvent<HTMLInputElement>
-                                  ) => handleInputFileChange(e, { ...field })}
-                                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                                />
-                                <div className="text-center space-y-3">
-                                  <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center mx-auto group-hover/upload:bg-blue-100 transition-colors">
-                                    <FaPlus className="w-5 h-5 text-blue-600" />
-                                  </div>
-                                  <div>
-                                    <p className="text-sm font-medium text-gray-700">
-                                      클릭하여 이미지 업로드
-                                    </p>
-                                    <p className="text-xs text-gray-500 mt-1">
-                                      또는 이미지를 여기로 드래그하세요
-                                    </p>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
+                            <FileSelect
+                              onInputFileChange={(
+                                e: ChangeEvent<HTMLInputElement>
+                              ) => handleInputFileChange(e, { ...field })}
+                            />
                             {fieldState.error && (
                               <p className="text-sm text-red-500 text-center">
                                 {fieldState.error.message}
