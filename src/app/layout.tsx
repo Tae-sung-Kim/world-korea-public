@@ -28,7 +28,7 @@ export default function RootLayout({
         <body
           className={`${pretendard.variable} ${pretendard.className} bg-gray-50 w-full`}
         >
-          <Script src="https://cdn.iamport.kr/v1/iamport.js" />
+          <Script src="https://cdn.iamport.kr/v1/iamport.js" rel="preload" />
           <InnerProvider>{children}</InnerProvider>
         </body>
       </html>

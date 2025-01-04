@@ -121,7 +121,7 @@ export default function LoginClient() {
                   )}
                 />
                 <div className="pt-2">
-                  <Button className="w-full" type="submit">
+                  <Button className="w-full" type="submit" variant="submit">
                     로그인
                   </Button>
                 </div>

@@ -295,6 +295,7 @@ export default function SaleProductDetailForm({
 
             <Button
               type="submit"
+              variant="submit"
               className="w-full"
               disabled={saleProductForm.formState.isSubmitting}
             >

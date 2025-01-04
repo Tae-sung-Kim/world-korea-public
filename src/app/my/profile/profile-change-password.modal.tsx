@@ -14,9 +14,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 
 interface PropsType {
   id?: string;
@@ -196,11 +196,7 @@ export default function ProfileChangePasswordModal({
               >
                 취소
               </Button>
-              <Button
-                type="submit"
-                className="w-full sm:w-32 font-medium bg-blue-500 hover:bg-blue-600 text-white"
-                disabled={isLoading}
-              >
+              <Button type="submit" variant="submit" disabled={isLoading}>
                 {isLoading ? (
                   <div className="flex items-center justify-center gap-2">
                     <AiOutlineLoading3Quarters className="animate-spin h-4 w-4" />

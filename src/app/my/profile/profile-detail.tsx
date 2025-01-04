@@ -142,7 +142,7 @@ export default function ProfileDetail({
             <Button
               onClick={handleUpdate}
               disabled={!currentUserData}
-              className="relative inline-flex items-center px-8 py-3 overflow-hidden text-lg font-medium transition duration-300 ease-out rounded-lg group bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
+              variant="submit"
             >
               <span className="relative flex items-center gap-2">
                 <MdOutlineEdit className="text-xl" />

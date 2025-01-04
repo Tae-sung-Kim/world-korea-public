@@ -42,7 +42,7 @@ export default function HomeClient() {
         {/* 히어로 섹션 */}
         <div className="relative h-[500px] -mt-8 mb-12">
           <div className="absolute inset-0 bg-gradient-to-br from-pink-300/80 via-purple-300/80 to-indigo-300/80">
-            <div className="absolute inset-0 bg-[url('/theme-park-bg.jpg')] bg-cover bg-center mix-blend-overlay opacity-40" />
+            <div className="absolute inset-0 bg-cover bg-center mix-blend-overlay opacity-40" />
           </div>
           <div className="relative h-full flex items-center justify-center text-center px-4">
             <div className="max-w-3xl space-y-4 animate-fade-up">

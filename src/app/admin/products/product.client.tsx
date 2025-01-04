@@ -223,7 +223,7 @@ export default function ProductListClient() {
                       });
                     }}
                   >
-                    <RiDeleteBin6Line className="delete-icon" />
+                    <RiDeleteBin6Line className="icon-delete" />
                   </Button>
                 </TableCell>
               </TableRow>

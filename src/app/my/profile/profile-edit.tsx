@@ -115,7 +115,9 @@ export default function ProfileEdit({
               className="space-y-6 sm:space-y-8"
             >
               <div className="flex justify-between items-center mb-4 sm:mb-6">
-                <h2 className="text-xl sm:text-2xl font-semibold">회원 정보 수정</h2>
+                <h2 className="text-xl sm:text-2xl font-semibold">
+                  회원 정보 수정
+                </h2>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
@@ -272,10 +274,7 @@ export default function ProfileEdit({
                     취소
                   </span>
                 </Button>
-                <Button
-                  type="submit"
-                  className="w-full sm:w-32 font-medium bg-blue-500 hover:bg-blue-600 text-white"
-                >
+                <Button type="submit" variant="submit">
                   <span className="relative flex items-center justify-center gap-2">
                     <MdOutlineCheck className="text-xl" />
                     저장

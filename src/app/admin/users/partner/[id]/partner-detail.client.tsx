@@ -360,7 +360,7 @@ export default function PartnerDetailClient({ userId }: IProps) {
               </div>
 
               <div className="flex justify-end">
-                <Button type="submit" className="px-6">
+                <Button type="submit" variant="submit" className="px-6">
                   수정하기
                 </Button>
               </div>

@@ -5,7 +5,11 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, { useMemo, useState, useEffect } from 'react';
 import { IconType } from 'react-icons';
-import { AiOutlineNotification, AiOutlineProduct } from 'react-icons/ai';
+import {
+  AiOutlineNotification,
+  AiOutlineProduct,
+  AiOutlineSetting,
+} from 'react-icons/ai';
 import { BiPurchaseTag } from 'react-icons/bi';
 import { TbTicket, TbUser } from 'react-icons/tb';
 import { TiSortNumericallyOutline } from 'react-icons/ti';
@@ -18,6 +22,7 @@ const MENU_ICONS: Record<MenuKey, IconType> = {
   member: TbUser,
   pin: TiSortNumericallyOutline,
   popup: AiOutlineNotification,
+  setting: AiOutlineSetting,
 } as const;
 
 export default function MenuNavigation({

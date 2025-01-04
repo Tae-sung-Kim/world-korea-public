@@ -255,7 +255,9 @@ export default function PinCreateClient() {
                 >
                   초기화
                 </Button>
-                <Button type="submit">핀번호 생성</Button>
+                <Button type="submit" variant="submit">
+                  핀번호 생성
+                </Button>
               </div>
             </form>
           </Form>

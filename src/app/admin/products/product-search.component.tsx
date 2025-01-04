@@ -55,11 +55,8 @@ export default function ProductSearch() {
               onKeyDown={handleKeyDown}
             />
           </div>
-          <Button
-            onClick={handleSearchClick}
-            className="w-full sm:w-auto bg-primary hover:bg-primary/90"
-          >
-            <FaSearch className="mr-2 h-4 w-4" />
+          <Button onClick={handleSearchClick} variant="search">
+            <FaSearch className="icon-search" />
             검색
           </Button>
         </div>

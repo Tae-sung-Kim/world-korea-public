@@ -166,10 +166,9 @@ export default function NotificationsForm() {
           <div className="flex justify-end pt-4">
             <Button
               type="submit"
+              variant="submit"
               size="lg"
               disabled={createNotifications.isPending}
-              className="min-w-[120px] bg-blue-600 hover:bg-blue-700 text-white 
-                transition-colors duration-200 shadow-sm hover:shadow-md"
             >
               {createNotifications.isPending ? '처리중...' : '등록하기'}
             </Button>

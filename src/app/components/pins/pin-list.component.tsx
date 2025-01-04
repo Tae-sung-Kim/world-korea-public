@@ -304,7 +304,7 @@ export default function PinList({ tableId, isPartner }: Props) {
                           })
                         }
                       >
-                        <RiDeleteBin6Line className="delete-icon" />
+                        <RiDeleteBin6Line className="icon-delete" />
                       </Button>
                     </TableCell>
                   )}

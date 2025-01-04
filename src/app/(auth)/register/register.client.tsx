@@ -279,7 +279,9 @@ export default function Register() {
               >
                 이미 계정이 있으신가요?
               </Link>
-              <Button type="submit">회원가입</Button>
+              <Button type="submit" variant="submit">
+                회원가입
+              </Button>
             </div>
           </form>
         </Form>

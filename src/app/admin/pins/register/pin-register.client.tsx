@@ -160,7 +160,7 @@ export default function PinRegisterClient() {
               >
                 초기화
               </Button>
-              <Button type="submit" className="w-32">
+              <Button type="submit" variant="submit" className="w-32">
                 등록하기
               </Button>
             </div>

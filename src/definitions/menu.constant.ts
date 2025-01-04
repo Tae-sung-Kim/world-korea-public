@@ -97,6 +97,17 @@ export const ADMIN_MENU: MenuSection[] = [
       },
     ],
   },
+  // 개발 완료 후 주석 제거
+  // {
+  //   key: 'setting',
+  //   label: '설정 관리',
+  //   items: [
+  //     {
+  //       label: '설정',
+  //       href: '/admin/settings',
+  //     },
+  //   ],
+  // },
 ];
 
 // 파트너사

@@ -245,7 +245,7 @@ export default function SaleProductListClient() {
                             handleDeleteProduct({ id, title: data.name })
                           }
                         >
-                          <RiDeleteBin6Line className="delete-icon" />
+                          <RiDeleteBin6Line className="icon-delete" />
                         </Button>
                       </div>
                     </TableCell>

@@ -325,6 +325,7 @@ export default function UsersDetailClient({ userId }: IProps) {
 
           <Button
             type="submit"
+            variant="submit"
             className="ml-2"
             disabled={updateMutation.isPending}
           >

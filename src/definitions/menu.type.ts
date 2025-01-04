@@ -5,7 +5,8 @@ export type MenuKey =
   | 'purchase'
   | 'member'
   | 'pin'
-  | 'popup';
+  | 'popup'
+  | 'setting';
 
 export interface MenuItem {
   label: string;

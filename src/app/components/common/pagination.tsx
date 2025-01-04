@@ -149,9 +149,8 @@ export default function Paginations({
                     handlePageMove(d);
                   }}
                   className={cn(
-                    'hover:bg-gray-50 transition-colors rounded-md min-w-[2.5rem] font-medium cursor-pointer',
-                    pageNumber === d &&
-                      'bg-primary text-primary-foreground hover:bg-primary/90'
+                    'hover:bg-gray-50 transition-colors rounded-md font-medium cursor-pointer',
+                    pageNumber === d && 'bg-blue-50 text-blue-600'
                   )}
                   isActive={pageNumber === d}
                 >

@@ -247,7 +247,7 @@ export default function UserCategoriesClient() {
                               })
                             }
                           >
-                            <RiDeleteBin6Line className="delete-icon" />
+                            <RiDeleteBin6Line className="icon-delete" />
                           </Button>
                         </>
                       ) : (
@@ -280,7 +280,7 @@ export default function UserCategoriesClient() {
                               })
                             }
                           >
-                            <RiDeleteBin6Line className="delete-icon" />
+                            <RiDeleteBin6Line className="icon-delete" />
                           </Button>
                         </>
                       )}

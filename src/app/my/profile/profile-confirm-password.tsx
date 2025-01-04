@@ -15,8 +15,8 @@ import { IOnVerifyPassword } from '@/definitions';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { MdOutlineCheck } from 'react-icons/md';
+import { z } from 'zod';
 
 const formSchema = z.object({
   password: z.string().min(4, { message: '4자 이상 입력해주세요.' }),
@@ -43,9 +43,14 @@ export default function ProfileConfirmPassword({
       <div className="px-4">
         <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4 sm:space-y-6">
+            <form
+              onSubmit={form.handleSubmit(handleSubmit)}
+              className="space-y-4 sm:space-y-6"
+            >
               <div className="text-center space-y-2">
-                <h2 className="text-xl sm:text-2xl font-semibold">비밀번호 확인</h2>
+                <h2 className="text-xl sm:text-2xl font-semibold">
+                  비밀번호 확인
+                </h2>
                 <p className="text-sm text-gray-500">
                   회원정보 수정을 위해 비밀번호를 입력해주세요.
                 </p>
@@ -57,7 +62,9 @@ export default function ProfileConfirmPassword({
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-medium">비밀번호</FormLabel>
+                      <FormLabel className="text-sm font-medium">
+                        비밀번호
+                      </FormLabel>
                       <FormControl>
                         <div className="relative">
                           <Input
@@ -74,10 +81,7 @@ export default function ProfileConfirmPassword({
                 />
 
                 <div className="flex justify-center pt-4 sm:pt-6">
-                  <Button
-                    type="submit"
-                    className="w-full sm:w-32 font-medium bg-blue-500 hover:bg-blue-600 text-white"
-                  >
+                  <Button type="submit" variant="submit">
                     <span className="relative flex items-center justify-center gap-2">
                       <MdOutlineCheck className="text-xl" />
                       확인

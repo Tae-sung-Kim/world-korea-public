@@ -42,7 +42,7 @@ export default function NotificationsListClient() {
                       size="icon"
                       onClick={() => handleDeleteNotification(d._id)}
                     >
-                      <RiDeleteBin6Line className="delete-icon" />
+                      <RiDeleteBin6Line className="icon-delete" />
                     </Button>
                   </div>
                 </CardHeader>
