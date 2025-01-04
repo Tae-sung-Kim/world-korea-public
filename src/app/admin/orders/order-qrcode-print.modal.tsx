@@ -76,7 +76,7 @@ export default function QrCodePrintModal({ tickets, onCancel }: Props) {
         </div>
       </div>
 
-      <div className="shrink-0 flex justify-end gap-2 p-4 border-t bg-white">
+      <div className="shrink-0 form-button-area gap-2 p-4 border-t bg-white">
         <Button variant="outline" onClick={onCancel}>
           닫기
         </Button>

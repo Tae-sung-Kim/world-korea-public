@@ -69,10 +69,10 @@ export default function GroupReservationListClient({
               <TableHead className="w-[80px] table-th" data-exclude-excel>
                 번호
               </TableHead>
+              <TableHead className="w-[200px] table-th">상품명</TableHead>
               <TableHead className="w-[200px] table-th">업체명</TableHead>
               <TableHead className="w-[120px] table-th">예약일</TableHead>
               <TableHead className="w-[150px] table-th">예약자명</TableHead>
-              <TableHead className="w-[200px] table-th">상품명</TableHead>
               <TableHead className="w-[100px] table-th">예약 인원</TableHead>
               <TableHead className="w-[150px] table-th">연락처</TableHead>
               <TableHead className="w-[120px] table-th">방문 일자</TableHead>
@@ -86,14 +86,18 @@ export default function GroupReservationListClient({
                 <TableRow
                   key={data._id}
                   className="hover:bg-gray-50 transition-colors"
-                  onClick={() => handleGroupReservationClick(data._id)}
                 >
                   <TableCell className="table-cell" data-exclude-excel>
                     {reservationData.totalItems -
                       (pageNumber - 1) * pageSize -
                       idx}
                   </TableCell>
-
+                  <TableCell
+                    className="table-cell list-link"
+                    onClick={() => handleGroupReservationClick(data._id)}
+                  >
+                    {customData.productName as string}
+                  </TableCell>
                   <TableCell className="table-cell">
                     {customData.companyName as string}
                   </TableCell>
@@ -102,9 +106,6 @@ export default function GroupReservationListClient({
                   </TableCell>
                   <TableCell className="table-cell">
                     {customData.guideContactInfo as string}
-                  </TableCell>
-                  <TableCell className="table-cell">
-                    {customData.productName as string}
                   </TableCell>
                   <TableCell className="table-cell">
                     {customData.numberOfPeopel as string}

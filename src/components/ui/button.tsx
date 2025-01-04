@@ -27,9 +27,11 @@ const buttonVariants = cva(
         search:
           'bg-blue-500 text-white hover:bg-blue-600 active:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2',
         confirm:
-          'bg-green-500 text-white hover:bg-green-600 active:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2',
+          'bg-emerald-500 text-white hover:bg-emerald-600 active:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2',
         utility:
-          'bg-gray-500 text-white hover:bg-gray-600 active:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2',
+          'bg-amber-500 text-white hover:bg-amber-600 active:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2',
+        reset:
+          'bg-rose-100 text-rose-600 hover:bg-rose-200 active:bg-rose-300 border border-rose-200 focus:outline-none focus:ring-2 focus:ring-rose-400 focus:ring-offset-2',
       },
       size: {
         default: 'h-9 px-4 py-2',

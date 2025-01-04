@@ -129,20 +129,17 @@ export default function PartnerDetailClient({ userId }: IProps) {
   };
 
   return (
-    <div className="container mx-auto py-6">
+    <>
       <DetailTitle title="파트너 상세" />
 
       <Form {...partnerForm}>
-        <form
-          onSubmit={partnerForm.handleSubmit(handleSubmit)}
-          className="space-y-6"
-        >
+        <form onSubmit={partnerForm.handleSubmit(handleSubmit)}>
           <Card>
             {/* <CardHeader>
               <CardTitle>파트너 수정</CardTitle>
             </CardHeader> */}
             <CardContent className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
                 <FormField
                   control={partnerForm.control}
                   name="companyName"
@@ -359,7 +356,7 @@ export default function PartnerDetailClient({ userId }: IProps) {
                 </Card>
               </div>
 
-              <div className="flex justify-end">
+              <div className="form-button-area">
                 <Button type="submit" variant="submit" className="px-6">
                   수정하기
                 </Button>
@@ -368,6 +365,6 @@ export default function PartnerDetailClient({ userId }: IProps) {
           </Card>
         </form>
       </Form>
-    </div>
+    </>
   );
 }

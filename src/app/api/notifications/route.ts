@@ -1,4 +1,4 @@
-import { requiredIsAdmin } from '../utils/auth.util';
+import { getCurrentUser, requiredIsAdmin } from '../utils/auth.util';
 import { FILE_PATH, FILE_TYPE, uploadFile } from '../utils/upload.util';
 import connectMongo from '@/app/api/libs/database';
 import NotificationModel from '@/app/api/models/notification.model';
@@ -20,6 +20,11 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function GET() {
   try {
     await connectMongo();
+
+    const userData = await getCurrentUser();
+    if (!userData) {
+      return createResponse(HTTP_STATUS.UNAUTHORIZED);
+    }
 
     const nofitications = await NotificationModel.find({});
 

@@ -90,83 +90,73 @@ export default function PinRegisterClient() {
   }, [productData.list, pinForm]);
 
   return (
-    <div className="container mx-auto p-4 max-w-4xl">
-      <div className="bg-white rounded-lg shadow-md p-6 border-t border-gray-100">
-        <Form {...pinForm}>
-          <form
-            onSubmit={pinForm.handleSubmit(handleSubmit)}
-            className="space-y-6"
-          >
-            <div className="grid gap-6 md:grid-cols-2">
-              <FormField
-                control={pinForm.control}
-                name="productId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-sm font-medium">
-                      상품 선택
-                    </FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="상품을 선택해주세요" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            {productData.list.map((d: ProductDisplayData) => (
-                              <SelectItem key={d._id} value={String(d._id)}>
-                                {d.name}
-                              </SelectItem>
-                            ))}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage className="text-xs" />
-                  </FormItem>
-                )}
-              />
-            </div>
-
+    <div className="bg-white rounded-lg shadow-md p-6 border-t border-gray-100">
+      <Form {...pinForm}>
+        <form
+          onSubmit={pinForm.handleSubmit(handleSubmit)}
+          className="space-y-6"
+        >
+          <div className="grid gap-6 md:grid-cols-2">
             <FormField
               control={pinForm.control}
-              name="pinList"
+              name="productId"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-sm font-medium">
-                    핀번호 등록
+                    상품 선택
                   </FormLabel>
                   <FormControl>
-                    <Textarea
-                      {...field}
-                      className="min-h-[400px] resize-y"
-                      placeholder="엑셀에서 복사한 핀 번호와 날짜를 붙여넣기 해주세요."
-                    />
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="상품을 선택해주세요" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          {productData.list.map((d: ProductDisplayData) => (
+                            <SelectItem key={d._id} value={String(d._id)}>
+                              {d.name}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage className="text-xs" />
                 </FormItem>
               )}
             />
+          </div>
 
-            <div className="flex justify-end space-x-4 pt-6">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleResetFormData}
-                className="w-32"
-              >
-                초기화
-              </Button>
-              <Button type="submit" variant="submit" className="w-32">
-                등록하기
-              </Button>
-            </div>
-          </form>
-        </Form>
-      </div>
+          <FormField
+            control={pinForm.control}
+            name="pinList"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-medium">
+                  핀번호 등록
+                </FormLabel>
+                <FormControl>
+                  <Textarea
+                    {...field}
+                    className="min-h-[400px] resize-none "
+                    placeholder="엑셀에서 복사한 핀 번호와 날짜를 붙여넣기 해주세요."
+                  />
+                </FormControl>
+                <FormMessage className="text-xs" />
+              </FormItem>
+            )}
+          />
+
+          <div className="form-button-area space-x-4">
+            <Button type="button" variant="reset" onClick={handleResetFormData}>
+              초기화
+            </Button>
+            <Button type="submit" variant="submit">
+              등록하기
+            </Button>
+          </div>
+        </form>
+      </Form>
     </div>
   );
 }

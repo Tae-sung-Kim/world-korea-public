@@ -221,7 +221,7 @@ export default function UserCategoriesClient() {
                     />
                   </TableCell>
                   <TableCell className="p-4">
-                    <div className="flex justify-end space-x-2">
+                    <div className="form-button-area space-x-2">
                       {d._id ? (
                         <>
                           <Button

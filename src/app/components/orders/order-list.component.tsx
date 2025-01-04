@@ -110,8 +110,14 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
     }
   };
 
+  // 판매 상품 이동
   const handleSaleProductMove = (productId: string = '') => {
     router.push('/sale-products/' + productId);
+  };
+
+  // 회원 정보로 이동
+  const handleUserInfoMove = (userId: string = '') => {
+    router.push('/admin/users/' + userId);
   };
 
   const handleQrCodeClick = async ({
@@ -254,7 +260,7 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
                 </TableCell>
                 <TableCell
                   className={`table-cell font-medium ${
-                    isPartner ? '' : 'list-click-color'
+                    isPartner ? '' : 'list-link'
                   }`}
                   onClick={
                     isPartner
@@ -264,10 +270,20 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
                 >
                   {d.saleProduct.name}
                 </TableCell>
-                <TableCell className="table-cell text-gray-700 text-center">
+                <TableCell
+                  className={`table-cell text-center ${
+                    isPartner ? '' : 'list-link'
+                  }`}
+                  onClick={() => handleUserInfoMove(d.user._id)}
+                >
                   {d.user.companyName}
                 </TableCell>
-                <TableCell className="table-cell text-gray-700 text-center">
+                <TableCell
+                  className={`table-cell text-center ${
+                    isPartner ? '' : 'list-link'
+                  }`}
+                  onClick={() => handleUserInfoMove(d.user._id)}
+                >
                   {d.user.name}
                 </TableCell>
                 <TableCell className="table-cell text-gray-700 text-center">

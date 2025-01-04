@@ -163,7 +163,7 @@ export default function NotificationsForm() {
             </div>
           </div>
 
-          <div className="flex justify-end pt-4">
+          <div className="form-button-area">
             <Button
               type="submit"
               variant="submit"

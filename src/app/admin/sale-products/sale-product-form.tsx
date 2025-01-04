@@ -130,7 +130,7 @@ export default function SaleProductForm({
 
   return (
     <div className="flex flex-col max-w-[1920px] mx-auto">
-      <DetailTitle title="판매 상품 상세" />
+      {!!productId && <DetailTitle title="판매 상품 상세" />}
 
       <div className="list-container p-6 overflow-y-auto">
         <Form {...saleProductForm}>
@@ -284,7 +284,7 @@ export default function SaleProductForm({
               />
             </div>
 
-            <div className="flex justify-end space-x-2 pt-6">
+            <div className="form-button-area space-x-2">
               <Button type="submit" variant="submit">
                 상품 {detailProducts.length > 0 ? '수정' : '등록'}
               </Button>

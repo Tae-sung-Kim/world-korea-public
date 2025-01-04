@@ -173,13 +173,15 @@ export default function ProductListClient() {
             {sortedData.map((product, idx) => (
               <TableRow
                 key={product._id}
-                className="cursor-pointer transition-colors hover:bg-gray-50 focus:outline-none focus:bg-gray-50"
-                onClick={() => handleProductItemClick(product._id)}
+                className="transition-colors hover:bg-gray-50 focus:outline-none focus:bg-gray-50"
               >
                 <TableCell className="table-cell text-gray-700 truncate">
                   {(pageNumber - 1) * pageSize + idx + 1}
                 </TableCell>
-                <TableCell className="table-cell font-medium text-gray-900 truncate">
+                <TableCell
+                  className="table-cell font-medium truncate list-link"
+                  onClick={() => handleProductItemClick(product._id)}
+                >
                   {product.name}
                 </TableCell>
                 <TableCell className="table-cell text-gray-700 truncate">

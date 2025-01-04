@@ -174,7 +174,7 @@ export default function SaleProductListClient() {
                       {(pageNumber - 1) * pageSize + idx + 1}
                     </TableCell>
                     <TableCell
-                      className="table-cell font-medium list-click-color"
+                      className="table-cell font-medium list-link"
                       onClick={() => handleSaleProductItemClick(id)}
                     >
                       {data.name}

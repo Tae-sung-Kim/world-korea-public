@@ -18,7 +18,7 @@ import {
   useEffect,
 } from 'react';
 import ReactDOM from 'react-dom';
-import { IoClose } from 'react-icons/io5';
+import { IoCloseCircleOutline } from 'react-icons/io5';
 import { v4 as uuidv4 } from 'uuid';
 
 export const MODAL_TYPE = {
@@ -234,7 +234,7 @@ function ModalProvider({ children }: { children: ReactNode }) {
                             closeModal(id);
                           }}
                         >
-                          <IoClose className="h-4 w-4 sm:h-5 sm:w-5" />
+                          <IoCloseCircleOutline className="h-4 w-4 sm:h-5 sm:w-5" />
                         </Button>
                       )}
                     </ModalHeader>
@@ -255,9 +255,9 @@ function ModalProvider({ children }: { children: ReactNode }) {
                     <ModalFooter>
                       {onCancel && useCancelButton && (
                         <Button
-                          variant="outline"
+                          variant="cancel"
                           size="sm"
-                          className="w-full sm:w-auto min-w-[72px] bg-white hover:bg-gray-50 dark:bg-gray-900 dark:hover:bg-gray-800"
+                          className="w-full sm:w-auto min-w-[72px]"
                           onClick={() => {
                             onCancel();
                             closeModal(id);
@@ -270,6 +270,7 @@ function ModalProvider({ children }: { children: ReactNode }) {
                         <Button
                           size="sm"
                           className="w-full sm:w-auto min-w-[72px]"
+                          variant="confirm"
                           onClick={() => {
                             onOk();
                             closeModal(id);

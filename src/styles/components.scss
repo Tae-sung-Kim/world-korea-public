@@ -39,6 +39,12 @@ $breakpoint-2xl: 1536px;
   @apply h-[calc(100vh-95px)] flex flex-col max-w-[1920px] mx-auto;
 }
 
+// form button area
+.form {
+  &-button-area {
+    @apply flex justify-end;
+  }
+}
 /* 리스트 형태 */
 .list {
   &-container {
@@ -58,7 +64,7 @@ $breakpoint-2xl: 1536px;
   }
 
   // 리스트 Click
-  &-click-color {
+  &-link {
     @apply text-blue-600 hover:text-blue-800 cursor-pointer;
   }
 }
@@ -100,7 +106,12 @@ $breakpoint-2xl: 1536px;
   }
 }
 
-/* 삭제 버튼 아이콘 */
-.delete-icon {
-  @apply w-4 h-4 text-destructive;
+//  아이콘
+.icon {
+  &-delete {
+    @apply w-4 h-4 text-destructive;
+  }
+  &-search {
+    @apply mr-2 h-4 w-4;
+  }
 }
