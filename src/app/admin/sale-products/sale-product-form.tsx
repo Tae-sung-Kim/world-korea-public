@@ -2,7 +2,10 @@
 
 import { priceShcema } from '../products/product.schema';
 import { useUserCategoryListQuery } from '../queries';
-import { useCreateSaleProductMutation } from '../queries/sale-product.queries';
+import {
+  useCreateSaleProductMutation,
+  useUpdateSaleProductMutation,
+} from '../queries/sale-product.queries';
 import DetailTitle from '@/app/components/common/detail-title.component';
 import SaleProductDetail from '@/app/components/sale-products/sale-product-detail.component';
 import { Button } from '@/components/ui/button';
@@ -64,20 +67,22 @@ export default function SaleProductForm({
   const [detailProducts, setDetailProducts] = useState<ProductDisplayData[]>(
     []
   );
-  //상품 등록 후 reset
+  // 상품 등록 후 reset
   const handleResetForm = () => {
     onResetData && onResetData();
     saleProductForm.reset();
   };
 
-  //상품 생성
-  const saleProductCreateMutation = useCreateSaleProductMutation({
+  // 상품 생성
+  const createSaleProductMutation = useCreateSaleProductMutation({
     onSuccess: handleResetForm,
   });
 
+  // 상품 수정
+  const updateSaleProductMutation = useUpdateSaleProductMutation({});
+
   const regularPrice = useMemo(() => {
-    const data =
-      detailProducts.length > 0 ? detailProducts : selectProductData ?? [];
+    const data = !!productId ? detailProducts : selectProductData ?? [];
 
     return data.reduce((acc: number, cur: ProductDisplayData): number => {
       return Number(acc + cur.regularPrice);
@@ -91,7 +96,7 @@ export default function SaleProductForm({
           saleProductService.getDetailSaleProudct(productId).then((res) => {
             const { products, ...other } = res;
 
-            //상품상세 세팅
+            // 상품상세 세팅
             setDetailProducts(products);
 
             return {
@@ -112,10 +117,15 @@ export default function SaleProductForm({
   });
 
   const handleSubmit = () => {
-    const products: string[] = selectProductData?.map((d) => d._id ?? '') ?? [];
+    if (!!productId) {
+      updateSaleProductMutation.mutate(saleProductForm.getValues());
+    } else {
+      const products: string[] =
+        selectProductData?.map((d) => d._id ?? '') ?? [];
+      saleProductForm.setValue('products', products);
 
-    saleProductForm.setValue('products', products);
-    saleProductCreateMutation.mutate(saleProductForm.getValues());
+      createSaleProductMutation.mutate(saleProductForm.getValues());
+    }
   };
 
   // 가격 입력
@@ -286,13 +296,13 @@ export default function SaleProductForm({
 
             <div className="form-button-area space-x-2">
               <Button type="submit" variant="submit">
-                상품 {detailProducts.length > 0 ? '수정' : '등록'}
+                상품 {!!productId ? '수정' : '등록'}
               </Button>
             </div>
           </form>
         </Form>
 
-        {detailProducts.length > 0 && (
+        {!!productId && (
           <div className="mt-6">
             <SaleProductDetail products={detailProducts} />
           </div>

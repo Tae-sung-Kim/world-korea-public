@@ -1,5 +1,5 @@
 import SaleProductModel from '../../models/sale-product.model';
-import { requiredIsMe } from '../../utils/auth.util';
+import { requiredIsAdmin, requiredIsMe } from '../../utils/auth.util';
 import connectMongo from '@/app/api/libs/database';
 import { createResponse } from '@/app/api/utils/http.util';
 import { HTTP_STATUS } from '@/definitions';
@@ -25,6 +25,37 @@ export async function GET(req: NextRequest, ctx: { params: { id: string } }) {
     });
 
     return NextResponse.json(saleProductData);
+  } catch (error) {
+    return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
+  }
+}
+
+/**
+ * 판매 상품 내용 변경
+ */
+export async function PATCH(req: NextRequest, ctx: { params: { id: string } }) {
+  try {
+    const id = ctx.params.id;
+
+    const { name, accessLevel, price, taxFree, isReservable } =
+      await req.json();
+
+    await connectMongo();
+
+    if (!(await requiredIsAdmin())) {
+      return createResponse(HTTP_STATUS.FORBIDDEN);
+    }
+
+    await SaleProductModel.findByIdAndUpdate(id, {
+      name,
+      accessLevel,
+      price,
+      taxFree,
+      isReservable,
+      updatedAt: new Date(),
+    });
+
+    return NextResponse.json(true);
   } catch (error) {
     return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
   }

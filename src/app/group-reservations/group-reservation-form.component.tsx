@@ -1,6 +1,6 @@
 'use client';
 
-import useReservableSaleProductQuery from '../admin/queries/sale-product.queries';
+import { useReservableSaleProductQuery } from '../admin/queries';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Checkbox } from '@/components/ui/checkbox';

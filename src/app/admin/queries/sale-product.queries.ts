@@ -65,7 +65,7 @@ export function useDetailSaleProductQuery(id: string) {
   return data;
 }
 
-export default function useReservableSaleProductQuery() {
+export function useReservableSaleProductQuery() {
   const fallback: SaleProductFormData<ProductDisplayData>[] = [];
 
   const { data = fallback } = useQuery({
@@ -74,4 +74,20 @@ export default function useReservableSaleProductQuery() {
   });
 
   return data;
+}
+
+export function useUpdateSaleProductMutation({
+  onSuccess,
+  onError,
+  onSettled,
+}: FunctionProps) {
+  return useMutation({
+    mutationFn: saleProductService.updateSaleProduct,
+    onSuccess: () => {
+      onSuccess && onSuccess();
+      toast.success('판매 상품이 수정 되었습니다.');
+    },
+    onError,
+    onSettled,
+  });
 }

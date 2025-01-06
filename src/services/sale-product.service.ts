@@ -9,12 +9,12 @@ import http from '@/services';
 import qs from 'qs';
 
 class SaleProductService {
-  // 판매 생성
+  // 판매 상품 생성
   createSaleProduct(data: SaleProductFormData<string>) {
     return http.post<SaleProductFormData<string>>(`/api/sale-products`, data);
   }
 
-  // 판매 목록
+  // 판매 상품 목록
   getSaleProudctList(pageParams?: PaginationProp<PageFilter>) {
     const params = qs.stringify(pageParams ?? {});
 
@@ -23,10 +23,18 @@ class SaleProductService {
     );
   }
 
-  // 판매 상세
+  // 판매 상품 상세
   getDetailSaleProudct(id: string) {
     return http.get<SaleProductFormData<ProductDisplayData>>(
       `/api/sale-products/${id}`
+    );
+  }
+
+  // 판매 상품 수정
+  updateSaleProduct(data: SaleProductFormData<string>) {
+    return http.patch<SaleProductFormData<string>>(
+      `/api/sale-products/${data._id}`,
+      data
     );
   }
 
