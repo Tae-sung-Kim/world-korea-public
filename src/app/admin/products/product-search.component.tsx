@@ -42,7 +42,7 @@ export default function ProductSearch() {
   return (
     <ListSearchComponent
       value={value}
-      title="상풍명"
+      title="상품명"
       placeholder="상품명을 입력해 주세요."
       onInputChange={handleInputChange}
       onKeyDown={handleKeyDown}
