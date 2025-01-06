@@ -1,10 +1,10 @@
+import ProductModel from './product.model';
 import { OrderStatus, PaginationResponse } from '@/definitions';
 import {
   PAGE_NUMBER_DEFAULT,
   PAGE_SIZE_DEFAULT,
 } from '@/definitions/pagination.constant';
 import { PaginationParams } from '@/definitions/pagination.type';
-import '@/app/api/models/product.model';
 import type { Pin } from '@/definitions/pin.type';
 import {
   model,
@@ -94,15 +94,38 @@ const schema = new Schema<PinDB, PinSchemaModel, PinMethods>({
 schema.static(
   'getPinList',
   async function getPinList(
-    { pageNumber = PAGE_NUMBER_DEFAULT, pageSize = PAGE_SIZE_DEFAULT } = {},
+    {
+      pageNumber = PAGE_NUMBER_DEFAULT,
+      pageSize = PAGE_SIZE_DEFAULT,
+      filter: filterQuery = null,
+      sort: sortQuery = null,
+    } = {},
     { partnerProducts = null } = {}
   ) {
     const skip = (pageNumber - 1) * pageSize;
     const filter: Record<string, any> = {};
-    const sort = { createdAt: -1 as SortOrder }; // 최신순 정렬
+    const sort: { [key: string]: SortOrder } = sortQuery
+      ? { [sortQuery.name]: sortQuery.order === 'asc' ? 1 : -1 }
+      : { createdAt: -1 }; // 최신순 정렬
 
     if (Array.isArray(partnerProducts)) {
       filter['product'] = { $in: partnerProducts };
+    }
+
+    const { name } = filterQuery ?? {};
+
+    // 상품명 검색 조건 추가
+    if (name) {
+      const products = await ProductModel.find({
+        name: { $regex: name, $options: 'i' },
+      }).select('_id');
+
+      const productIds = products.map((p: { _id: Types.ObjectId }) => p._id);
+      // 검색된 상품이 없는 경우 빈 배열로 설정하여 결과가 없도록 함
+      filter['product'] =
+        productIds.length > 0
+          ? { $in: [...(filter['product']?.$in || []), ...productIds] }
+          : { $in: [] };
     }
 
     // 총 개수 가져오기

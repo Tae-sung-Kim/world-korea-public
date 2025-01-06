@@ -1,6 +1,7 @@
 'use client';
 
 import ListWrapper from '../common/list-wrapper.component';
+import NoDataFound from '../common/no-data-found.component';
 import TotalCountBottom from '../common/total-count-bottom.component';
 import SortIcons from '@/app/admin/components/sort-icons.component';
 import { usePagination } from '@/app/admin/hooks/usePagination';
@@ -13,7 +14,7 @@ import {
   useProductListQuery,
   useUsedPinMutation,
 } from '@/app/admin/queries';
-import Pagination from '@/app/components/common/pagination';
+import Pagination from '@/app/components/common/pagination.component';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -57,7 +58,7 @@ export default function PinList({ tableId, isPartner }: Props) {
 
   const usedPinMutation = useUsedPinMutation();
 
-  const { pageNumber = 1, pageSize = 10 } = usePagination();
+  const { pageNumber = 1, pageSize = 10, filter } = usePagination();
 
   const searchPinsListQuery = useMemo(() => {
     return isPartner ? usePartnerPinsListQuery : usePinsListQuery;
@@ -66,6 +67,7 @@ export default function PinList({ tableId, isPartner }: Props) {
   const pinData = searchPinsListQuery({
     pageNumber,
     pageSize,
+    filter,
   });
 
   const data = useMemo(() => {
@@ -76,12 +78,6 @@ export default function PinList({ tableId, isPartner }: Props) {
     ''
   );
   const [order, setOrder] = useState<SortOrder>('');
-
-  const sortedData = useSort<Pin>({
-    data,
-    sortColumn,
-    order,
-  });
 
   const handleSortClick = (column: string) => {
     const isPrevColumn = sortColumn !== column;
@@ -163,167 +159,174 @@ export default function PinList({ tableId, isPartner }: Props) {
 
   return (
     <>
-      <ListWrapper>
-        <Table id={tableId}>
-          <TableHeader className="table-header">
-            <TableRow className="list-table-row">
-              <TableHead className="w-[50px] table-th" data-exclude-excel>
-                <Checkbox />
-              </TableHead>
-              <TableHead className="w-[50px] table-th" data-exclude-excel>
-                번호
-              </TableHead>
-              <TableHead
-                className="w-[200px] table-th cursor-pointer"
-                onClick={() => handleSortClick('number')}
-              >
-                <SortIcons
-                  title="핀 번호"
-                  order={sortColumn === 'number' ? order : ''}
-                />
-              </TableHead>
-              <TableHead
-                className="table-th cursor-pointer"
-                onClick={() => handleSortClick('product.name')}
-              >
-                <SortIcons
-                  title="연결 상품"
-                  order={sortColumn === 'product.name' ? order : ''}
-                />
-              </TableHead>
-              <TableHead className="w-[110px] table-th text-center">
-                <SortIcons
-                  title="업체명"
-                  order={sortColumn === 'product.name' ? order : ''}
-                />
-              </TableHead>
-              <TableHead
-                className="w-[110px] table-th text-center cursor-pointer"
-                onClick={() => handleSortClick('endDate')}
-              >
-                <SortIcons
-                  title="종료일"
-                  order={sortColumn === 'endDate' ? order : ''}
-                />
-              </TableHead>
-              <TableHead
-                className="w-[110px] table-th text-center cursor-pointer"
-                onClick={() => handleSortClick('createdAt')}
-              >
-                <SortIcons
-                  title="생성일"
-                  order={sortColumn === 'createdAt' ? order : ''}
-                />
-              </TableHead>
-              <TableHead
-                className="w-[100px] table-th text-center cursor-pointer"
-                onClick={() => handleSortClick('usedDate')}
-              >
-                <SortIcons
-                  title="사용여부"
-                  order={sortColumn === 'usedDate' ? order : ''}
-                />
-              </TableHead>
-              {!isPartner && (
-                <TableHead className="w-[50px] table-th text-center"></TableHead>
-              )}
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {sortedData.map((pin: Pin, idx: number) => {
-              const isUsed = pin.usedDate;
-              return (
-                <TableRow
-                  key={pin._id}
-                  className="hover:bg-gray-50 transition-colors"
-                >
-                  <TableCell className="table-cell" data-exclude-excel>
+      {data.length > 0 ? (
+        <>
+          <ListWrapper>
+            <Table id={tableId}>
+              <TableHeader className="table-header">
+                <TableRow className="list-table-row">
+                  <TableHead className="w-[50px] table-th" data-exclude-excel>
                     <Checkbox />
-                  </TableCell>
-                  <TableCell className="table-cell" data-exclude-excel>
-                    {pinData.totalItems - (pageNumber - 1) * pageSize - idx}
-                  </TableCell>
-                  <TableCell
-                    className="table-cell font-medium list-link"
-                    onClick={() =>
-                      handlePinNumberClick({
-                        name: pin.product?.name ?? '',
-                        pinNumber: pin.number ?? '',
-                      })
-                    }
+                  </TableHead>
+                  <TableHead className="w-[50px] table-th" data-exclude-excel>
+                    번호
+                  </TableHead>
+                  <TableHead
+                    className="w-[200px] table-th cursor-pointer"
+                    onClick={() => handleSortClick('number')}
                   >
-                    {splitFourChar(pin.number)}
-                  </TableCell>
-                  <TableCell
-                    className={`table-cell ${isPartner ? '' : 'list-link'}`}
-                    onClick={
-                      isPartner
-                        ? undefined
-                        : () => handleProductMove(pin.product?._id)
-                    }
+                    <SortIcons
+                      title="핀 번호"
+                      order={sortColumn === 'number' ? order : ''}
+                    />
+                  </TableHead>
+                  <TableHead
+                    className="table-th cursor-pointer"
+                    onClick={() => handleSortClick('product.name')}
                   >
-                    {pin.product?.name}
-                  </TableCell>
-                  <TableCell className="table-cell text-gray-700 text-center">
-                    업체명
-                  </TableCell>
-                  <TableCell className="table-cell text-gray-700 text-center">
-                    {pin.endDate && new Date(pin.endDate).toLocaleDateString()}
-                  </TableCell>
-                  <TableCell className="table-cell text-gray-700 text-center">
-                    {pin.createdAt &&
-                      new Date(pin.createdAt).toLocaleDateString()}
-                  </TableCell>
-                  <TableCell className="table-cell text-center">
-                    <>
-                      <Checkbox
-                        onCheckedChange={() =>
-                          handleUsedPin({
-                            id: pin._id,
-                            number: pin.number,
-                            used: !!isUsed,
-                          })
-                        }
-                        checked={!!isUsed}
-                      />
-                      <span className="hidden">{!!isUsed ? 'Y' : 'N'}</span>
-                    </>
-                  </TableCell>
+                    <SortIcons
+                      title="연결 상품"
+                      order={sortColumn === 'product.name' ? order : ''}
+                    />
+                  </TableHead>
+                  <TableHead className="w-[110px] table-th text-center">
+                    <SortIcons
+                      title="업체명"
+                      order={sortColumn === 'product.name' ? order : ''}
+                    />
+                  </TableHead>
+                  <TableHead
+                    className="w-[110px] table-th text-center cursor-pointer"
+                    onClick={() => handleSortClick('endDate')}
+                  >
+                    <SortIcons
+                      title="종료일"
+                      order={sortColumn === 'endDate' ? order : ''}
+                    />
+                  </TableHead>
+                  <TableHead
+                    className="w-[110px] table-th text-center cursor-pointer"
+                    onClick={() => handleSortClick('createdAt')}
+                  >
+                    <SortIcons
+                      title="생성일"
+                      order={sortColumn === 'createdAt' ? order : ''}
+                    />
+                  </TableHead>
+                  <TableHead
+                    className="w-[100px] table-th text-center cursor-pointer"
+                    onClick={() => handleSortClick('usedDate')}
+                  >
+                    <SortIcons
+                      title="사용여부"
+                      order={sortColumn === 'usedDate' ? order : ''}
+                    />
+                  </TableHead>
                   {!isPartner && (
-                    <TableCell className="table-cell text-center">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="hover:bg-destructive/10"
+                    <TableHead className="w-[50px] table-th text-center"></TableHead>
+                  )}
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {data.map((pin: Pin, idx: number) => {
+                  const isUsed = pin.usedDate;
+                  return (
+                    <TableRow
+                      key={pin._id}
+                      className="hover:bg-gray-50 transition-colors"
+                    >
+                      <TableCell className="table-cell" data-exclude-excel>
+                        <Checkbox />
+                      </TableCell>
+                      <TableCell className="table-cell" data-exclude-excel>
+                        {pinData.totalItems - (pageNumber - 1) * pageSize - idx}
+                      </TableCell>
+                      <TableCell
+                        className="table-cell font-medium list-link"
                         onClick={() =>
-                          handleDeletePin({
-                            id: pin._id ?? '',
-                            number: pin.number ?? '',
+                          handlePinNumberClick({
+                            name: pin.product?.name ?? '',
+                            pinNumber: pin.number ?? '',
                           })
                         }
                       >
-                        <RiDeleteBin6Line className="icon-delete" />
-                      </Button>
-                    </TableCell>
-                  )}
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </ListWrapper>
-      <div className="mt-4">
-        <TotalCountBottom title="총 핀번호" count={pinData.totalItems} />
+                        {splitFourChar(pin.number)}
+                      </TableCell>
+                      <TableCell
+                        className={`table-cell ${isPartner ? '' : 'list-link'}`}
+                        onClick={
+                          isPartner
+                            ? undefined
+                            : () => handleProductMove(pin.product?._id)
+                        }
+                      >
+                        {pin.product?.name}
+                      </TableCell>
+                      <TableCell className="table-cell text-gray-700 text-center">
+                        업체명
+                      </TableCell>
+                      <TableCell className="table-cell text-gray-700 text-center">
+                        {pin.endDate &&
+                          new Date(pin.endDate).toLocaleDateString()}
+                      </TableCell>
+                      <TableCell className="table-cell text-gray-700 text-center">
+                        {pin.createdAt &&
+                          new Date(pin.createdAt).toLocaleDateString()}
+                      </TableCell>
+                      <TableCell className="table-cell text-center">
+                        <>
+                          <Checkbox
+                            onCheckedChange={() =>
+                              handleUsedPin({
+                                id: pin._id,
+                                number: pin.number,
+                                used: !!isUsed,
+                              })
+                            }
+                            checked={!!isUsed}
+                          />
+                          <span className="hidden">{!!isUsed ? 'Y' : 'N'}</span>
+                        </>
+                      </TableCell>
+                      {!isPartner && (
+                        <TableCell className="table-cell text-center">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="hover:bg-destructive/10"
+                            onClick={() =>
+                              handleDeletePin({
+                                id: pin._id ?? '',
+                                number: pin.number ?? '',
+                              })
+                            }
+                          >
+                            <RiDeleteBin6Line className="icon-delete" />
+                          </Button>
+                        </TableCell>
+                      )}
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </ListWrapper>
+          <div className="mt-4">
+            <TotalCountBottom title="총 핀번호" count={pinData.totalItems} />
 
-        <Pagination
-          pageNumber={pageNumber}
-          pageSize={pageSize}
-          totalPages={pinData.totalPages}
-          totalItems={pinData.totalItems}
-          pageRange={2}
-          minPages={5}
-        />
-      </div>
+            <Pagination
+              pageNumber={pageNumber}
+              pageSize={pageSize}
+              totalPages={pinData.totalPages}
+              totalItems={pinData.totalItems}
+              pageRange={2}
+              minPages={5}
+            />
+          </div>
+        </>
+      ) : (
+        <NoDataFound />
+      )}
     </>
   );
 }

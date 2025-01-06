@@ -10,7 +10,7 @@ import {
 } from '../queries';
 import ProductSearch from './product-search.component';
 import ListWrapper from '@/app/components/common/list-wrapper.component';
-import Pagination from '@/app/components/common/pagination';
+import Pagination from '@/app/components/common/pagination.component';
 import TotalCountBottom from '@/app/components/common/total-count-bottom.component';
 import { Button } from '@/components/ui/button';
 import {

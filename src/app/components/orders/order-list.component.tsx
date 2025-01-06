@@ -8,7 +8,7 @@ import useSort, { SortOrder } from '@/app/admin/hooks/useSort';
 import QrCodeModal from '@/app/admin/modals/qr-code.modal';
 import QrCodePrintModal from '@/app/admin/orders/order-qrcode-print.modal';
 import { useOrderListQuery } from '@/app/admin/queries';
-import Pagination from '@/app/components/common/pagination';
+import Pagination from '@/app/components/common/pagination.component';
 import { Button } from '@/components/ui/button';
 import {
   Table,
