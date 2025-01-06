@@ -1,10 +1,7 @@
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import ListSearchComponent from '@/app/components/common/list-search.component';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import qs from 'qs';
 import { ChangeEvent, KeyboardEvent, useState } from 'react';
-import { FaSearch } from 'react-icons/fa';
 
 export default function PinSearch() {
   const router = useRouter();
@@ -39,28 +36,13 @@ export default function PinSearch() {
   };
 
   return (
-    <div className="search-container">
-      <div className="search-wrapper">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full">
-          <Label className="min-w-20 text-sm font-medium text-gray-900">
-            상품명
-          </Label>
-          <div className="flex-1 w-full sm:w-auto">
-            <Input
-              value={value}
-              name="name"
-              className="w-full sm:w-[300px]"
-              placeholder="상품명을 입력하세요"
-              onChange={handleInputChange}
-              onKeyDown={handleKeyDown}
-            />
-          </div>
-          <Button onClick={handleSearchClick} variant="search">
-            <FaSearch className="icon-search" />
-            검색
-          </Button>
-        </div>
-      </div>
-    </div>
+    <ListSearchComponent
+      value={value}
+      title="상풍명"
+      placeholder="상품명을 입력해 주세요."
+      onInputChange={handleInputChange}
+      onKeyDown={handleKeyDown}
+      onSearchClick={handleSearchClick}
+    />
   );
 }

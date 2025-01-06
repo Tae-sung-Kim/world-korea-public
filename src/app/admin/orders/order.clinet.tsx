@@ -20,7 +20,7 @@ export default function OrderClient() {
             tableId={tableIdRef.current}
             fileName="주문리스트"
           />
-          <QrCodeScanButton onResiveData={() => {}} />
+          <QrCodeScanButton />
         </div>
       </div>
       <OrderList tableId={tableIdRef.current} />

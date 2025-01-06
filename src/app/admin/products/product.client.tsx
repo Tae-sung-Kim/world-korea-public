@@ -105,7 +105,9 @@ export default function ProductListClient() {
   return (
     <div className="content-search-container">
       <div className="list-search-buttons">
-        <ProductSearch />
+        <div className="flex-1 max-w-xl">
+          <ProductSearch />
+        </div>
       </div>
       <ListWrapper>
         <Table>

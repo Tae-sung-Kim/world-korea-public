@@ -24,7 +24,7 @@ export default function UsersClient() {
 
   return (
     <div className="content-search-container">
-      <ListWrapper className="flex flex-col">
+      <ListWrapper>
         <Table>
           <TableHeader className="table-header">
             <TableRow className="list-table-row">

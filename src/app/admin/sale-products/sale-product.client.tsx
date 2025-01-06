@@ -13,7 +13,6 @@ import ListWrapper from '@/app/components/common/list-wrapper.component';
 import Pagination from '@/app/components/common/pagination';
 import TotalCountBottom from '@/app/components/common/total-count-bottom.component';
 import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
 import {
   Table,
   TableBody,
@@ -121,11 +120,13 @@ export default function SaleProductListClient() {
 
   return (
     <div className="content-search-container">
-      <div className="flex mb-4">
-        <SaleProductSearch />
+      <div className="list-search-buttons">
+        <div className="flex-1 max-w-xl">
+          <SaleProductSearch />
+        </div>
       </div>
 
-      <ListWrapper className="flex flex-col">
+      <ListWrapper>
         <Table>
           <TableHeader className="table-header">
             <TableRow className="list-table-row">
