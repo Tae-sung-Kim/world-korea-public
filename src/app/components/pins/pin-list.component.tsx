@@ -59,6 +59,7 @@ export default function PinList({ tableId, isPartner }: Props) {
   const usedPinMutation = useUsedPinMutation();
 
   const { pageNumber = 1, pageSize = 10, filter } = usePagination();
+  const { sortConfig, handleSort } = useSort();
 
   const searchPinsListQuery = useMemo(() => {
     return isPartner ? usePartnerPinsListQuery : usePinsListQuery;
@@ -68,28 +69,15 @@ export default function PinList({ tableId, isPartner }: Props) {
     pageNumber,
     pageSize,
     filter,
+    sort: sortConfig,
   });
 
   const data = useMemo(() => {
     return pinData.list;
   }, [pinData]);
 
-  const [sortColumn, setSortColumn] = useState<keyof (typeof data)[0] | string>(
-    ''
-  );
-  const [order, setOrder] = useState<SortOrder>('');
-
   const handleSortClick = (column: string) => {
-    const isPrevColumn = sortColumn !== column;
-
-    setSortColumn(column);
-    if (isPrevColumn) {
-      setOrder('asc');
-    } else {
-      setOrder((prevData) =>
-        prevData === '' ? 'asc' : prevData === 'asc' ? 'desc' : ''
-      );
-    }
+    handleSort(column);
   };
 
   // 상품 상세 이동
@@ -177,7 +165,9 @@ export default function PinList({ tableId, isPartner }: Props) {
                   >
                     <SortIcons
                       title="핀 번호"
-                      order={sortColumn === 'number' ? order : ''}
+                      order={
+                        sortConfig.name === 'number' ? sortConfig.order : ''
+                      }
                     />
                   </TableHead>
                   <TableHead
@@ -186,13 +176,21 @@ export default function PinList({ tableId, isPartner }: Props) {
                   >
                     <SortIcons
                       title="연결 상품"
-                      order={sortColumn === 'product.name' ? order : ''}
+                      order={
+                        sortConfig.name === 'product.name'
+                          ? sortConfig.order
+                          : ''
+                      }
                     />
                   </TableHead>
                   <TableHead className="w-[110px] table-th text-center">
                     <SortIcons
                       title="업체명"
-                      order={sortColumn === 'product.name' ? order : ''}
+                      order={
+                        sortConfig.name === 'product.name'
+                          ? sortConfig.order
+                          : ''
+                      }
                     />
                   </TableHead>
                   <TableHead
@@ -201,7 +199,9 @@ export default function PinList({ tableId, isPartner }: Props) {
                   >
                     <SortIcons
                       title="종료일"
-                      order={sortColumn === 'endDate' ? order : ''}
+                      order={
+                        sortConfig.name === 'endDate' ? sortConfig.order : ''
+                      }
                     />
                   </TableHead>
                   <TableHead
@@ -210,7 +210,9 @@ export default function PinList({ tableId, isPartner }: Props) {
                   >
                     <SortIcons
                       title="생성일"
-                      order={sortColumn === 'createdAt' ? order : ''}
+                      order={
+                        sortConfig.name === 'createdAt' ? sortConfig.order : ''
+                      }
                     />
                   </TableHead>
                   <TableHead
@@ -219,7 +221,9 @@ export default function PinList({ tableId, isPartner }: Props) {
                   >
                     <SortIcons
                       title="사용여부"
-                      order={sortColumn === 'usedDate' ? order : ''}
+                      order={
+                        sortConfig.name === 'usedDate' ? sortConfig.order : ''
+                      }
                     />
                   </TableHead>
                   {!isPartner && (

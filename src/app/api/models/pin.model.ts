@@ -14,6 +14,7 @@ import {
   Types,
   SortOrder,
   Document,
+  PipelineStage,
 } from 'mongoose';
 
 export interface PinDB {
@@ -136,15 +137,33 @@ schema.static(
     // 총 개수 가져오기
     const totalItems = await this.countDocuments(filter);
 
-    // 데이터 가져오기
-    const list = await this.find(filter)
-      .sort(sort)
-      .skip(skip)
-      .limit(pageSize)
-      .populate({
-        path: 'product',
-        select: '_id name status images',
-      });
+    const aggregationPipeline: PipelineStage[] = [
+      { $match: filter }, // 필터 조건 적용
+      {
+        $lookup: {
+          from: 'products',
+          localField: 'product',
+          foreignField: '_id',
+          as: 'product',
+        },
+      },
+      { $unwind: '$product' }, // product 배열을 평탄화
+      { $sort: sort as Record<string, 1 | -1> }, // 정렬
+      { $skip: skip },
+      { $limit: pageSize },
+    ];
+
+    const list = await this.aggregate(aggregationPipeline);
+
+    // // 데이터 가져오기
+    // const list = await this.find(filter)
+    //   .sort(sort)
+    //   .skip(skip)
+    //   .limit(pageSize)
+    //   .populate({
+    //     path: 'product',
+    //     select: '_id name status images',
+    //   });
 
     // 전체 페이지 수 계산
     const totalPages = Math.ceil(totalItems / pageSize);
