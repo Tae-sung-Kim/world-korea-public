@@ -52,4 +52,5 @@ export interface ProductDisplayData extends ProductFormData<string> {
   updatedAt: string;
   pins: Pin[];
   pinCount: number;
+  partner?: string;
 }

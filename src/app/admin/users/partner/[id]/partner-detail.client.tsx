@@ -15,13 +15,13 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { ProductDisplayData } from '@/definitions';
 import productService from '@/services/product.service';
 import userService from '@/services/user.service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import React, { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { RiDeleteBin6Line } from 'react-icons/ri';
 import { z } from 'zod';
 
 interface IProps {
@@ -58,6 +58,8 @@ const defaultDetailData = {
 
 export default function PartnerDetailClient({ userId }: IProps) {
   const updatePartner = useUpdatePartnerMutation(userId);
+
+  console.log('userId', userId);
 
   const [partnerProducts, setPartnerProducts] = useState<ProductDisplayData[]>(
     []
@@ -277,9 +279,7 @@ export default function PartnerDetailClient({ userId }: IProps) {
               <div className="space-y-6">
                 <Card className="border-dashed">
                   <CardHeader className="pb-3">
-                    <CardTitle className="text-lg">
-                      파트너 상품 리스트
-                    </CardTitle>
+                    <CardTitle className="text-lg">상품 리스트</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
@@ -287,11 +287,15 @@ export default function PartnerDetailClient({ userId }: IProps) {
                         const isSelected = partnerProducts
                           .map((d) => d._id)
                           .includes(d._id);
+
+                        const isUsed = !!d.partner && d.partner !== userId;
+
                         return (
                           <Button
                             key={d._id}
                             type="button"
                             value={d._id ?? ''}
+                            disabled={isUsed}
                             variant={isSelected ? 'secondary' : 'outline'}
                             onClick={() => handleToggleClick(d)}
                             className={`
@@ -304,6 +308,11 @@ export default function PartnerDetailClient({ userId }: IProps) {
                             `}
                           >
                             {d.name}
+                            {isUsed && (
+                              <span className="icon-badge ml-2 bg-pink-100 text-pink-800">
+                                사용중
+                              </span>
+                            )}
                             {isSelected && (
                               <span className="text-xs text-primary ml-2">
                                 선택됨
@@ -338,16 +347,18 @@ export default function PartnerDetailClient({ userId }: IProps) {
                           <Badge
                             key={d._id}
                             variant="secondary"
-                            className="px-3 py-1.5 text-sm bg-background hover:bg-background"
+                            className="text-sm bg-background hover:bg-background"
                           >
                             {d.name}
-                            <button
+                            <Button
                               type="button"
+                              size="icon"
+                              variant="ghost"
                               onClick={() => handleToggleClick(d)}
-                              className="ml-2 hover:text-destructive"
+                              className="hover:text-destructive"
                             >
-                              ×
-                            </button>
+                              <RiDeleteBin6Line className="icon-delete" />
+                            </Button>
                           </Badge>
                         ))}
                       </div>

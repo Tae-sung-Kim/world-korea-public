@@ -195,7 +195,7 @@ export default function ProductListClient() {
                 </TableCell>
                 <TableCell className="table-cell">
                   <span
-                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium truncate
+                    className={`icon-badge truncate
                         ${
                           product.status === PRODUCT_STATUS.AVAILABLE
                             ? 'bg-green-100 text-green-800'

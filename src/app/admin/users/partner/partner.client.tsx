@@ -49,13 +49,13 @@ export default function PartnerListClient() {
                 onClick={() => handleListClick(user)()}
               >
                 <TableCell className="table-cell">
-                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                  <span className="icon-badge bg-green-100 text-green-800">
                     {user.userCategory?.name}
                   </span>
                 </TableCell>
                 <TableCell className="table-cell">
                   <span
-                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                    className={`icon-badge ${
                       user.isApproved
                         ? 'bg-blue-100 text-blue-800'
                         : 'bg-yellow-100 text-yellow-800'
