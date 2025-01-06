@@ -39,6 +39,7 @@ export interface ProductDB {
   updatedAt: Date;
   deletedAt: Date;
   pins: Types.ObjectId[]; // 빈 번호 목록
+  partner?: Types.ObjectId | null; // 파트너 아이디 목록
 }
 
 type ProductDocument =
@@ -90,6 +91,7 @@ const schema = new Schema<ProductDB, ProductSchemaModel, ProductMethods>({
   updatedAt: { type: Date, default: Date.now },
   deletedAt: { type: Date },
   pins: [{ type: Schema.Types.ObjectId, ref: 'Pin' }],
+  partner: { type: Schema.Types.ObjectId, ref: 'User', default: null },
 });
 
 schema.static('getProductById', function getProductById(productId) {

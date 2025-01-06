@@ -3,6 +3,7 @@
 import { UserHasPassword, User } from '@/definitions';
 import { model, models, Schema, Model, Types } from 'mongoose';
 import '@/app/api/models/user-category.model';
+import ProductModel from './product.model';
 
 interface UserDB {
   loginId: string; // 아이디
@@ -224,13 +225,45 @@ schema.method('updateUser', function updateUser(userData) {
  */
 schema.method(
   'updateUserPartnerProduct',
-  function updateUserPartnerProduct(partnerProductList) {
+  async function updateUserPartnerProduct(partnerProductList) {
+    // if (Array.isArray(partnerProductList)) {
+    //   this.partnerProducts = partnerProductList;
+    // }
+
+    // this.updatedAt = new Date();
+
+    // return this.save();
+
     if (Array.isArray(partnerProductList)) {
+      // 기존 파트너 상품들에서 현재 파트너 ID 제거
+      if (this.partnerProducts?.length) {
+        const oldProducts = await ProductModel.find({
+          _id: { $in: this.partnerProducts },
+        });
+        for (const product of oldProducts) {
+          if (product.partner?.equals(this._id)) {
+            // MongoDB $unset 연산자를 사용하여 필드 제거
+            await ProductModel.updateOne(
+              { _id: product._id },
+              { $unset: { partner: '' } }
+            );
+          }
+        }
+      }
+
+      // 새로운 파트너 상품들에 현재 파트너 ID 추가
+      const products = await ProductModel.find({
+        _id: { $in: partnerProductList },
+      });
+      for (const product of products) {
+        product.partner = this._id;
+        await product.save();
+      }
+
       this.partnerProducts = partnerProductList;
     }
 
     this.updatedAt = new Date();
-
     return this.save();
   }
 );
