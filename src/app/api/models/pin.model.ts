@@ -104,9 +104,10 @@ schema.static(
   ) {
     const skip = (pageNumber - 1) * pageSize;
     const filter: Record<string, any> = {};
-    const sort: { [key: string]: SortOrder } = sortQuery
-      ? { [sortQuery.name]: sortQuery.order === 'asc' ? 1 : -1 }
-      : { createdAt: -1 }; // 최신순 정렬
+    const sort: { [key: string]: SortOrder } =
+      sortQuery && sortQuery.order !== ''
+        ? { [sortQuery.name]: sortQuery.order === 'asc' ? 1 : -1 }
+        : { createdAt: -1 }; // 최신순 정렬
 
     if (Array.isArray(partnerProducts)) {
       filter['product'] = { $in: partnerProducts };
@@ -124,7 +125,11 @@ schema.static(
       // 검색된 상품이 없는 경우 빈 배열로 설정하여 결과가 없도록 함
       filter['product'] =
         productIds.length > 0
-          ? { $in: [...(filter['product']?.$in || []), ...productIds] }
+          ? {
+              $in: Array.from(
+                new Set([...(filter['product']?.$in || []), ...productIds])
+              ),
+            }
           : { $in: [] };
     }
 

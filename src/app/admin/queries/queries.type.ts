@@ -8,6 +8,7 @@ export type PaginationProp<T> = {
   pageNumber?: number;
   pageSize?: number;
   filter?: T;
+  sort?: T;
 };
 
 export type PageFilter = { [key: string]: string };
