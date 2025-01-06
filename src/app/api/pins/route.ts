@@ -18,12 +18,13 @@ export async function GET(req: NextRequest) {
       return createResponse(HTTP_STATUS.FORBIDDEN);
     }
 
-    const { pageNumber, pageSize, filter } = getQueryParams(req);
+    const { pageNumber, pageSize, filter, sort } = getQueryParams(req);
 
     const paginationResponse = await PinModel.getPinList({
       pageNumber,
       pageSize,
       filter,
+      sort,
     });
 
     return NextResponse.json(paginationResponse);
