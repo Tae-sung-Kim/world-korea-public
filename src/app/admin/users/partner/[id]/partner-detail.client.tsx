@@ -59,8 +59,6 @@ const defaultDetailData = {
 export default function PartnerDetailClient({ userId }: IProps) {
   const updatePartner = useUpdatePartnerMutation(userId);
 
-  console.log('userId', userId);
-
   const [partnerProducts, setPartnerProducts] = useState<ProductDisplayData[]>(
     []
   );

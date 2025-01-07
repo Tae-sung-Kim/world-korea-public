@@ -40,8 +40,6 @@ export default function GroupReservationListClient({
   const { pageNumber = 1, pageSize = 10, filter } = usePagination();
   const { sort, onSort } = useSort();
 
-  console.log(filter);
-
   const reservationData = useGroupReservationListQuery({
     pageNumber,
     pageSize,
