@@ -1,4 +1,4 @@
-import { OrderStatus } from '.';
+import { OrderStatus, User } from '.';
 import { ProductDisplayData } from './product.type';
 
 export type PinData = {
@@ -15,6 +15,7 @@ export interface Pin {
   createdAt?: Date | string;
   orderStatus?: OrderStatus;
   product?: ProductDisplayData;
+  partner?: Partial<User>;
   productId?: string;
   number?: string;
   usedDate?: Date | string;

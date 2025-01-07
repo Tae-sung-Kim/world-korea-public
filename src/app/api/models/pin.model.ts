@@ -148,8 +148,45 @@ schema.static(
         },
       },
       { $unwind: '$product' }, // product 배열을 평탄화
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'product.partner',
+          foreignField: '_id',
+          as: 'partner',
+        },
+      },
+      { $unwind: { path: '$partner', preserveNullAndEmptyArrays: true } },
       { $sort: sort as Record<string, 1 | -1> }, // 정렬
       { $skip: skip },
+      {
+        $addFields: {
+          product: {
+            $mergeObjects: [
+              {
+                _id: '$product._id',
+                name: '$product.name',
+                status: '$product.status',
+                images: '$product.images',
+                partner: '$product.partner',
+              },
+            ],
+          },
+          partner: {
+            $mergeObjects: [
+              {
+                _id: '$partner._id',
+                name: '$partner.name',
+                contactNumber: '$partner.contactNumber',
+                companyName: '$partner.companyName',
+                phoneNumber: '$partner.phoneNumber',
+                companyNo: '$partner.companyNo',
+                partnerProducts: '$partner.partnerProducts',
+              },
+            ],
+          },
+        },
+      },
       { $limit: pageSize },
     ];
 

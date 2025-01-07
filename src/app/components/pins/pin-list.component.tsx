@@ -183,18 +183,21 @@ export default function PinList({ tableId, isPartner }: Props) {
                       }
                     />
                   </TableHead>
-                  <TableHead className="w-[110px] table-th text-center">
+                  <TableHead
+                    className="w-[110px] table-th cursor-pointer"
+                    onClick={() => handleSortClick('partner.companyName')}
+                  >
                     <SortIcons
                       title="업체명"
                       order={
-                        sortConfig.name === 'product.name'
+                        sortConfig.name === 'partner.companyName'
                           ? sortConfig.order
                           : ''
                       }
                     />
                   </TableHead>
                   <TableHead
-                    className="w-[110px] table-th text-center cursor-pointer"
+                    className="w-[110px] table-th cursor-pointer"
                     onClick={() => handleSortClick('endDate')}
                   >
                     <SortIcons
@@ -205,7 +208,7 @@ export default function PinList({ tableId, isPartner }: Props) {
                     />
                   </TableHead>
                   <TableHead
-                    className="w-[110px] table-th text-center cursor-pointer"
+                    className="w-[110px] table-th cursor-pointer"
                     onClick={() => handleSortClick('createdAt')}
                   >
                     <SortIcons
@@ -216,7 +219,7 @@ export default function PinList({ tableId, isPartner }: Props) {
                     />
                   </TableHead>
                   <TableHead
-                    className="w-[100px] table-th text-center cursor-pointer"
+                    className="w-[100px] table-th cursor-pointer"
                     onClick={() => handleSortClick('usedDate')}
                   >
                     <SortIcons
@@ -227,7 +230,7 @@ export default function PinList({ tableId, isPartner }: Props) {
                     />
                   </TableHead>
                   {!isPartner && (
-                    <TableHead className="w-[50px] table-th text-center"></TableHead>
+                    <TableHead className="w-[50px] table-th"></TableHead>
                   )}
                 </TableRow>
               </TableHeader>
@@ -266,18 +269,18 @@ export default function PinList({ tableId, isPartner }: Props) {
                       >
                         {pin.product?.name}
                       </TableCell>
-                      <TableCell className="table-cell text-gray-700 text-center">
-                        업체명
+                      <TableCell className="table-cell text-gray-700">
+                        {pin.partner?.companyName}
                       </TableCell>
-                      <TableCell className="table-cell text-gray-700 text-center">
+                      <TableCell className="table-cell text-gray-700">
                         {pin.endDate &&
                           new Date(pin.endDate).toLocaleDateString()}
                       </TableCell>
-                      <TableCell className="table-cell text-gray-700 text-center">
+                      <TableCell className="table-cell text-gray-700">
                         {pin.createdAt &&
                           new Date(pin.createdAt).toLocaleDateString()}
                       </TableCell>
-                      <TableCell className="table-cell text-center">
+                      <TableCell className="table-cell">
                         <>
                           <Checkbox
                             onCheckedChange={() =>
@@ -293,7 +296,7 @@ export default function PinList({ tableId, isPartner }: Props) {
                         </>
                       </TableCell>
                       {!isPartner && (
-                        <TableCell className="table-cell text-center">
+                        <TableCell className="table-cell">
                           <Button
                             variant="ghost"
                             size="icon"
