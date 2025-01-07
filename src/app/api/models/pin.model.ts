@@ -114,30 +114,35 @@ schema.static(
       filter['product'] = { $in: partnerProducts };
     }
 
-    const { name } = filterQuery ?? {};
+    const nestedFilters: Record<string, any> = {};
+    if (filterQuery) {
+      Object.keys(filterQuery).forEach((key) => {
+        const value = filterQuery[key];
 
-    // 상품명 검색 조건 추가
-    if (name) {
-      const products = await ProductModel.find({
-        name: { $regex: name, $options: 'i' },
-      }).select('_id');
-
-      const productIds = products.map((p: { _id: Types.ObjectId }) => p._id);
-      // 검색된 상품이 없는 경우 빈 배열로 설정하여 결과가 없도록 함
-      filter['product'] =
-        productIds.length > 0
-          ? {
-              $in: Array.from(
-                new Set([...(filter['product']?.$in || []), ...productIds])
-              ),
-            }
-          : { $in: [] };
+        // 중첩된 필드와 일반 필드 분리
+        if (key.includes('.')) {
+          // 중첩 필드는 별도로 처리
+          if (typeof value === 'object' && value !== null) {
+            nestedFilters[key] = value;
+          } else {
+            nestedFilters[key] = { $regex: value, $options: 'i' };
+          }
+        } else {
+          // 일반 필드 처리
+          if (typeof value === 'object' && value !== null) {
+            filter[key] = value;
+          } else {
+            filter[key] = { $regex: value, $options: 'i' };
+          }
+        }
+      });
     }
 
-    // 총 개수 가져오기
-    const totalItems = await this.countDocuments(filter);
+    // // 총 개수 가져오기
+    // const totalItems = await this.countDocuments(filter);
 
-    const aggregationPipeline: PipelineStage[] = [
+    // 총 개수 가져오기 (Aggregation Pipeline 사용)
+    const countPipeline: PipelineStage[] = [
       { $match: filter }, // 필터 조건 적용
       {
         $lookup: {
@@ -157,8 +162,22 @@ schema.static(
         },
       },
       { $unwind: { path: '$partner', preserveNullAndEmptyArrays: true } },
-      { $sort: sort as Record<string, 1 | -1> }, // 정렬
-      { $skip: skip },
+    ];
+
+    // 중첩된 필드에 대한 필터 추가
+    if (Object.keys(nestedFilters).length > 0) {
+      countPipeline.push({ $match: nestedFilters });
+    }
+
+    const totalItemsResult = await this.aggregate([
+      ...countPipeline,
+      { $count: 'total' },
+    ]);
+
+    const totalItems = totalItemsResult[0]?.total || 0;
+
+    const aggregationPipeline: PipelineStage[] = [
+      ...countPipeline,
       {
         $addFields: {
           product: {
@@ -187,20 +206,16 @@ schema.static(
           },
         },
       },
-      { $limit: pageSize },
     ];
 
-    const list = await this.aggregate(aggregationPipeline);
+    // 정렬과 페이지네이션 추가
+    aggregationPipeline.push(
+      { $sort: sort as Record<string, 1 | -1> },
+      { $skip: skip },
+      { $limit: pageSize }
+    );
 
-    // // 데이터 가져오기
-    // const list = await this.find(filter)
-    //   .sort(sort)
-    //   .skip(skip)
-    //   .limit(pageSize)
-    //   .populate({
-    //     path: 'product',
-    //     select: '_id name status images',
-    //   });
+    const list = await this.aggregate(aggregationPipeline);
 
     // 전체 페이지 수 계산
     const totalPages = Math.ceil(totalItems / pageSize);

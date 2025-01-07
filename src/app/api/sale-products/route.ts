@@ -18,11 +18,12 @@ export async function GET(req: NextRequest) {
     }
     const { isAdmin } = userData;
     const { level } = userData.userCategory;
-    const { pageNumber, pageSize, filter } = getQueryParams(req);
+    const { pageNumber, pageSize, filter, sort } = getQueryParams(req);
     const paginationResponse = await SaleProductModel.getSaleProductList({
       pageNumber,
       pageSize,
       filter,
+      sort,
       level: String(isAdmin ? USER_CATEGORY_LEVEL_ADMIN : level),
     });
     return NextResponse.json(paginationResponse);

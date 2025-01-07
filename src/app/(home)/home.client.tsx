@@ -14,9 +14,7 @@ export default function HomeClient() {
   useNotifications();
   const { isLoggedIn } = useAuthContext();
 
-  const { pageNumber, pageSize, filter } = usePagination({
-    queryFilters: { name: '' },
-  });
+  const { pageNumber, pageSize, filter } = usePagination();
 
   const saleProductData = useSaleProductListQuery({
     pageNumber: Number(pageNumber),

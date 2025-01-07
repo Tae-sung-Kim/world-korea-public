@@ -14,6 +14,7 @@ import {
   Types,
   Document,
   SortOrder,
+  PipelineStage,
 } from 'mongoose';
 
 export interface OrderDB extends Document {
@@ -109,6 +110,7 @@ schema.static(
       pageNumber = PAGE_NUMBER_DEFAULT,
       pageSize = PAGE_SIZE_DEFAULT,
       filter: filterQuery = null,
+      sort: sortQuery = null,
     } = {},
     userId
   ) {
@@ -116,12 +118,32 @@ schema.static(
     const filter: Record<string, any> = {
       // accessLevel: { $lte: level },
     };
-    const sort = { createdAt: -1 as SortOrder }; // 최신순 정렬
+    const sort: { [key: string]: SortOrder } =
+      sortQuery && sortQuery.order !== ''
+        ? { [sortQuery.name]: sortQuery.order === 'asc' ? 1 : -1 }
+        : { createdAt: -1 }; // 최신순 정렬
 
+    const nestedFilters: Record<string, any> = {};
     if (filterQuery) {
       Object.keys(filterQuery).forEach((key) => {
         const value = filterQuery[key];
-        filter[key] = { $regex: value, $options: 'i' }; // 정규식 검색 적용
+
+        // 중첩된 필드와 일반 필드 분리
+        if (key.includes('.')) {
+          // 중첩 필드는 별도로 처리
+          if (typeof value === 'object' && value !== null) {
+            nestedFilters[key] = value;
+          } else {
+            nestedFilters[key] = { $regex: value, $options: 'i' };
+          }
+        } else {
+          // 일반 필드 처리
+          if (typeof value === 'object' && value !== null) {
+            filter[key] = value;
+          } else {
+            filter[key] = { $regex: value, $options: 'i' };
+          }
+        }
       });
     }
 
@@ -129,25 +151,74 @@ schema.static(
       filter.user = userId;
     }
 
-    // 총 개수 가져오기
-    const totalItems = await this.countDocuments(filter);
+    // 총 개수 가져오기 (Aggregation Pipeline 사용)
+    const countPipeline: PipelineStage[] = [
+      { $match: filter }, // 기본 필터 조건 적용
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'user',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      { $unwind: '$user' },
+      {
+        $lookup: {
+          from: 'saleproducts',
+          localField: 'saleProduct',
+          foreignField: '_id',
+          as: 'saleProduct',
+        },
+      },
+      { $unwind: { path: '$saleProduct', preserveNullAndEmptyArrays: true } },
+    ];
 
-    // 데이터 가져오기
-    let list = (
-      await this.find(filter)
-        .sort(sort)
-        .skip(skip)
-        .limit(pageSize)
-        .populate({
-          path: 'user',
-          select: '_id name companyName',
-        })
-        .populate({
-          path: 'saleProduct',
-          select: '_id name',
-        })
-    ).map((d) => d.toObject());
+    // 중첩된 필드에 대한 필터 추가
+    if (Object.keys(nestedFilters).length > 0) {
+      countPipeline.push({ $match: nestedFilters });
+    }
 
+    const totalItemsResult = await this.aggregate([
+      ...countPipeline,
+      { $count: 'total' },
+    ]);
+
+    const totalItems = totalItemsResult[0]?.total || 0;
+
+    const aggregationPipeline: PipelineStage[] = [
+      ...countPipeline, // 카운트 파이프라인과 동일한 초기 스테이지 사용
+      {
+        $addFields: {
+          user: {
+            $mergeObjects: [
+              {
+                _id: '$user._id',
+                name: '$user.name',
+                companyName: '$user.companyName',
+              },
+            ],
+          },
+          saleProduct: {
+            $mergeObjects: [
+              {
+                _id: '$saleProduct._id',
+                name: '$saleProduct.name',
+              },
+            ],
+          },
+        },
+      },
+    ];
+
+    // 정렬과 페이지네이션 추가
+    aggregationPipeline.push(
+      { $sort: sort as Record<string, 1 | -1> },
+      { $skip: skip },
+      { $limit: pageSize }
+    );
+
+    const list = await this.aggregate(aggregationPipeline);
     // 전체 페이지 수 계산
     const totalPages = Math.ceil(totalItems / pageSize);
 

@@ -27,11 +27,12 @@ export async function GET(req: NextRequest) {
       return createResponse(HTTP_STATUS.UNAUTHORIZED);
     }
 
-    const { pageNumber, pageSize, filter } = getQueryParams(req);
+    const { pageNumber, pageSize, filter, sort } = getQueryParams(req);
     const paginationResponse = await OrderModel.getOrderList({
       pageNumber,
       pageSize,
       filter,
+      sort,
     });
 
     return NextResponse.json(paginationResponse);

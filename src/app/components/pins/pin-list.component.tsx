@@ -5,7 +5,7 @@ import NoDataFound from '../common/no-data-found.component';
 import TotalCountBottom from '../common/total-count-bottom.component';
 import SortIcons from '@/app/admin/components/sort-icons.component';
 import { usePagination } from '@/app/admin/hooks/usePagination';
-import useSort, { SortOrder } from '@/app/admin/hooks/useSort';
+import useSort from '@/app/admin/hooks/useSort';
 import QrCodeModal from '@/app/admin/modals/qr-code.modal';
 import { splitFourChar } from '@/app/admin/pins/pin.utils';
 import {
@@ -38,7 +38,6 @@ import {
 import { MODAL_TYPE, useModalContext } from '@/contexts/modal.context';
 import { Pin } from '@/definitions/pin.type';
 import { usePartnerPinsListQuery } from '@/queries/pins.queries';
-import { addComma } from '@/utils/number';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { RiDeleteBin6Line } from 'react-icons/ri';
@@ -59,7 +58,7 @@ export default function PinList({ tableId, isPartner }: Props) {
   const usedPinMutation = useUsedPinMutation();
 
   const { pageNumber = 1, pageSize = 10, filter } = usePagination();
-  const { sortConfig, handleSort } = useSort();
+  const { sort, handleSort } = useSort();
 
   const searchPinsListQuery = useMemo(() => {
     return isPartner ? usePartnerPinsListQuery : usePinsListQuery;
@@ -69,7 +68,7 @@ export default function PinList({ tableId, isPartner }: Props) {
     pageNumber,
     pageSize,
     filter,
-    sort: sortConfig,
+    sort,
   });
 
   const data = useMemo(() => {
@@ -165,9 +164,7 @@ export default function PinList({ tableId, isPartner }: Props) {
                   >
                     <SortIcons
                       title="핀 번호"
-                      order={
-                        sortConfig.name === 'number' ? sortConfig.order : ''
-                      }
+                      order={sort.name === 'number' ? sort.order : ''}
                     />
                   </TableHead>
                   <TableHead
@@ -176,11 +173,7 @@ export default function PinList({ tableId, isPartner }: Props) {
                   >
                     <SortIcons
                       title="연결 상품"
-                      order={
-                        sortConfig.name === 'product.name'
-                          ? sortConfig.order
-                          : ''
-                      }
+                      order={sort.name === 'product.name' ? sort.order : ''}
                     />
                   </TableHead>
                   <TableHead
@@ -190,9 +183,7 @@ export default function PinList({ tableId, isPartner }: Props) {
                     <SortIcons
                       title="업체명"
                       order={
-                        sortConfig.name === 'partner.companyName'
-                          ? sortConfig.order
-                          : ''
+                        sort.name === 'partner.companyName' ? sort.order : ''
                       }
                     />
                   </TableHead>
@@ -202,9 +193,7 @@ export default function PinList({ tableId, isPartner }: Props) {
                   >
                     <SortIcons
                       title="종료일"
-                      order={
-                        sortConfig.name === 'endDate' ? sortConfig.order : ''
-                      }
+                      order={sort.name === 'endDate' ? sort.order : ''}
                     />
                   </TableHead>
                   <TableHead
@@ -213,9 +202,7 @@ export default function PinList({ tableId, isPartner }: Props) {
                   >
                     <SortIcons
                       title="생성일"
-                      order={
-                        sortConfig.name === 'createdAt' ? sortConfig.order : ''
-                      }
+                      order={sort.name === 'createdAt' ? sort.order : ''}
                     />
                   </TableHead>
                   <TableHead
@@ -224,9 +211,7 @@ export default function PinList({ tableId, isPartner }: Props) {
                   >
                     <SortIcons
                       title="사용여부"
-                      order={
-                        sortConfig.name === 'usedDate' ? sortConfig.order : ''
-                      }
+                      order={sort.name === 'usedDate' ? sort.order : ''}
                     />
                   </TableHead>
                   {!isPartner && (

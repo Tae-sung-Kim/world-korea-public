@@ -4,7 +4,7 @@ import ListWrapper from '../common/list-wrapper.component';
 import TotalCountBottom from '../common/total-count-bottom.component';
 import SortIcons from '@/app/admin/components/sort-icons.component';
 import { usePagination } from '@/app/admin/hooks/usePagination';
-import useSort, { SortOrder } from '@/app/admin/hooks/useSort';
+import useSort from '@/app/admin/hooks/useSort';
 import QrCodeModal from '@/app/admin/modals/qr-code.modal';
 import QrCodePrintModal from '@/app/admin/orders/order-qrcode-print.modal';
 import { useOrderListQuery } from '@/app/admin/queries';
@@ -21,8 +21,6 @@ import {
 } from '@/components/ui/table';
 import { MODAL_TYPE, useModalContext } from '@/contexts/modal.context';
 import {
-  UserInfo,
-  SaleProductBuyDisplayData,
   Tickets,
   OrderStatus,
   ORDER_STATUS_MESSAGE,
@@ -64,13 +62,8 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
 
   const { onRefund } = usePortonePayment();
 
-  const {
-    pageNumber = 1,
-    pageSize = 10,
-    filter,
-  } = usePagination({
-    queryFilters: { 'saleProduct.name': '' },
-  });
+  const { pageNumber = 1, pageSize = 10, filter } = usePagination();
+  const { sort, handleSort } = useSort();
 
   const searchOrderListQuery = useMemo(() => {
     return isMy ? useMyOrderListQuery : useOrderListQuery;
@@ -80,34 +73,15 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
     pageNumber: Number(pageNumber),
     pageSize: Number(pageSize),
     filter,
+    sort,
   });
 
   const data = useMemo(() => {
     return ordersData.list;
   }, [ordersData]);
 
-  const [sortColumn, setSortColumn] = useState<keyof (typeof data)[0] | string>(
-    ''
-  );
-  const [order, setOrder] = useState<SortOrder>('');
-
-  const sortedData = useSort<SaleProductBuyDisplayData<UserInfo>>({
-    data,
-    sortColumn,
-    order,
-  });
-
   const handleSortClick = (column: string) => {
-    const isPrevColumn = sortColumn !== column;
-
-    setSortColumn(column);
-    if (isPrevColumn) {
-      setOrder('asc');
-    } else {
-      setOrder((prevData) =>
-        prevData === '' ? 'asc' : prevData === 'asc' ? 'desc' : ''
-      );
-    }
+    handleSort(column);
   };
 
   // 판매 상품 이동
@@ -189,60 +163,90 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
       <ListWrapper>
         <Table id={tableId ?? 'exportExcelTableId'}>
           <TableHeader className="table-header">
-            <TableRow className="list-table-row">
+            <TableRow className="list-table-row cursor-pointer">
               <TableHead className="w-[70px] table-th" data-exclude-excel>
                 번호
               </TableHead>
               <TableHead
-                className="w-[200px] table-th cursor-pointer"
+                className="w-[200px] table-th"
                 onClick={() => handleSortClick('saleProduct.name')}
               >
                 <SortIcons
                   title="상품명"
-                  order={sortColumn === 'saleProduct.name' ? order : ''}
+                  order={sort.name === 'saleProduct.name' ? sort.order : ''}
                 />
               </TableHead>
-              <TableHead className="w-[110px] table-th text-center">
-                업체명
-              </TableHead>
-              <TableHead className="w-[110px] table-th text-center">
-                담당자명
+              <TableHead
+                className="w-[110px] table-th text-center"
+                onClick={() => handleSortClick('user.companyName')}
+              >
+                <SortIcons
+                  title="업체명"
+                  order={sort.name === 'user.companyName' ? sort.order : ''}
+                />
               </TableHead>
               <TableHead
-                className="w-[180px] table-th text-center cursor-pointer"
+                className="w-[120px] table-th text-center"
+                onClick={() => handleSortClick('user.name')}
+              >
+                <SortIcons
+                  title="담당자명"
+                  order={sort.name === 'user.name' ? sort.order : ''}
+                />
+              </TableHead>
+              <TableHead
+                className="w-[180px] table-th text-center"
                 onClick={() => handleSortClick('quantity')}
               >
                 <SortIcons
                   title="구매수량"
-                  order={sortColumn === 'quantity' ? order : ''}
+                  order={sort.name === 'quantity' ? sort.order : ''}
                 />
               </TableHead>
               <TableHead
-                className="w-[110px] table-th text-right cursor-pointer"
+                className="w-[110px] table-th text-right"
                 onClick={() => handleSortClick('totalPrice')}
               >
                 <SortIcons
                   title="가격"
-                  order={sortColumn === 'totalPrice' ? order : ''}
+                  order={sort.name === 'totalPrice' ? sort.order : ''}
                 />
               </TableHead>
               <TableHead
-                className="w-[110px] table-th text-center cursor-pointer"
+                className="w-[110px] table-th text-center"
                 onClick={() => handleSortClick('orderDate')}
               >
                 <SortIcons
                   title="구매일"
-                  order={sortColumn === 'orderDate' ? order : ''}
+                  order={sort.name === 'orderDate' ? sort.order : ''}
                 />
               </TableHead>
-              <TableHead className="w-[120px] table-th text-center">
-                방문예정일
+              <TableHead
+                className="w-[130px] table-th text-center"
+                onClick={() => handleSortClick('visitDate')}
+              >
+                <SortIcons
+                  title="방문예정일"
+                  order={sort.name === 'visitDate' ? sort.order : ''}
+                />
               </TableHead>
-              <TableHead className="w-[110px] table-th text-center">
-                결제 방법
+              <TableHead
+                className="w-[120px] table-th text-center"
+                onClick={() => handleSortClick('payType')}
+              >
+                <SortIcons
+                  title="결제 방법"
+                  order={sort.name === 'payType' ? sort.order : ''}
+                />
               </TableHead>
-              <TableHead className="w-[110px] table-th text-center">
-                결제 상태
+              <TableHead
+                className="w-[120px] table-th text-center"
+                onClick={() => handleSortClick('status')}
+              >
+                <SortIcons
+                  title="결제 상태"
+                  order={sort.name === 'status' ? sort.order : ''}
+                />
               </TableHead>
               {!isMy && (
                 <TableHead className="min-w-[110px] table-th text-center"></TableHead>
@@ -250,7 +254,7 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {sortedData.map((d, idx) => (
+            {data.map((d, idx) => (
               <TableRow
                 key={d._id}
                 className="hover:bg-gray-50 transition-colors"

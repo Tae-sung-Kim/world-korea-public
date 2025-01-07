@@ -24,7 +24,6 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { MODAL_TYPE, useModalContext } from '@/contexts/modal.context';
-import { PackageDetailName, SaleProductFormData } from '@/definitions';
 import { addComma } from '@/utils/number';
 import { useRouter } from 'next/navigation';
 import React, { useMemo, useState } from 'react';
@@ -34,42 +33,22 @@ export default function SaleProductListClient() {
   const router = useRouter();
   const { openModal } = useModalContext();
 
-  const { pageNumber, pageSize, filter } = usePagination({
-    queryFilters: { name: '' },
-  });
+  const { pageNumber, pageSize, filter } = usePagination();
+  const { sort, handleSort } = useSort();
 
   const saleProductData = useSaleProductListQuery({
     pageNumber: Number(pageNumber),
     pageSize: Number(pageSize),
     filter,
+    sort,
   });
 
   const data = useMemo(() => {
     return saleProductData.list;
   }, [saleProductData]);
 
-  const [sortColumn, setSortColumn] = useState<keyof (typeof data)[0] | string>(
-    ''
-  );
-  const [order, setOrder] = useState<SortOrder>('');
-
-  const sortedData = useSort<SaleProductFormData<PackageDetailName>>({
-    data,
-    sortColumn,
-    order,
-  });
-
   const handleSortClick = (column: string) => {
-    const isPrevColumn = sortColumn !== column;
-
-    setSortColumn(column);
-    if (isPrevColumn) {
-      setOrder('asc');
-    } else {
-      setOrder((prevData) =>
-        prevData === '' ? 'asc' : prevData === 'asc' ? 'desc' : ''
-      );
-    }
+    handleSort(column);
   };
 
   // 유저 레벨
@@ -137,14 +116,20 @@ export default function SaleProductListClient() {
               >
                 <SortIcons
                   title="판매 상품명"
-                  order={sortColumn === 'name' ? order : ''}
+                  order={sort.name === 'name' ? sort.order : ''}
                 />
               </TableHead>
               <TableHead className="table-th min-w-[250px] text-center">
                 상세 상품명
               </TableHead>
-              <TableHead className="table-th w-[120px] text-center">
-                level
+              <TableHead
+                className="table-th w-[120px] text-center cursor-pointer"
+                onClick={() => handleSortClick('accessLevel')}
+              >
+                <SortIcons
+                  title="level"
+                  order={sort.name === 'accessLevel' ? sort.order : ''}
+                />
               </TableHead>
               <TableHead className="table-th w-[170px] text-center">
                 단체예약여부
@@ -155,7 +140,7 @@ export default function SaleProductListClient() {
               >
                 <SortIcons
                   title="판매가"
-                  order={sortColumn === 'price' ? order : ''}
+                  order={sort.name === 'price' ? sort.order : ''}
                 />
               </TableHead>
               <TableHead className="table-th w-[120px] text-center">
@@ -165,11 +150,11 @@ export default function SaleProductListClient() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {sortedData.map((data, idx) => {
-              const id = data._id ?? '';
+            {data.map((saleData, idx) => {
+              const id = saleData._id ?? '';
 
               return (
-                <React.Fragment key={data._id}>
+                <React.Fragment key={saleData._id}>
                   <TableRow className="group hover:bg-gray-50 transition-colors">
                     <TableCell className="table-cell text-gray-700">
                       {(pageNumber - 1) * pageSize + idx + 1}
@@ -178,14 +163,14 @@ export default function SaleProductListClient() {
                       className="table-cell font-medium list-link"
                       onClick={() => handleSaleProductItemClick(id)}
                     >
-                      {data.name}
+                      {saleData.name}
                     </TableCell>
                     <TableCell className="table-cell text-gray-700">
                       <span className="text-sm min-w-0 flex-1">
-                        {data.products[0]?.name}
-                        {data.products.length > 1 && (
+                        {saleData.products[0]?.name}
+                        {saleData.products.length > 1 && (
                           <span className="text-gray-500">
-                            {` 외 ${data.products.length - 1}개`}
+                            {` 외 ${saleData.products.length - 1}개`}
                           </span>
                         )}
                       </span>
@@ -193,28 +178,28 @@ export default function SaleProductListClient() {
                     <TableCell className="table-cell text-gray-700">
                       {
                         userCategoryList?.find(
-                          (f) => f.level === String(data.accessLevel)
+                          (f) => f.level === String(saleData.accessLevel)
                         )?.name
                       }
                     </TableCell>
                     <TableCell className="table-cell text-gray-700">
                       <span
                         className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
-                          data.isReservable
+                          saleData.isReservable
                             ? 'bg-green-100 text-green-800'
                             : 'bg-gray-100 text-gray-800'
                         }`}
                       >
-                        {data.isReservable ? 'Y' : 'N'}
+                        {saleData.isReservable ? 'Y' : 'N'}
                       </span>
                     </TableCell>
                     <TableCell className="table-cell text-gray-700 text-right">
-                      {addComma(data.price)} 원
+                      {addComma(saleData.price)} 원
                     </TableCell>
                     <TableCell className="table-cell text-gray-700 text-right">
                       총{' '}
                       {addComma(
-                        data.products.reduce(
+                        saleData.products.reduce(
                           (acc, curr) => acc + (curr.pinCount ?? 0),
                           0
                         )
@@ -243,7 +228,7 @@ export default function SaleProductListClient() {
                           variant="ghost"
                           className="p-2 hover:bg-red-50"
                           onClick={() =>
-                            handleDeleteProduct({ id, title: data.name })
+                            handleDeleteProduct({ id, title: saleData.name })
                           }
                         >
                           <RiDeleteBin6Line className="icon-delete" />
@@ -256,7 +241,7 @@ export default function SaleProductListClient() {
                       <TableCell colSpan={8} className="bg-gray-50 p-2">
                         <div className="flex flex-col gap-3">
                           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                            {data.products.map((product) => (
+                            {saleData.products.map((product) => (
                               <div
                                 key={product._id}
                                 className="flex items-center justify-between px-2 py-1 bg-white rounded border border-gray-100"

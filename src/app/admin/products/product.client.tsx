@@ -37,42 +37,22 @@ export default function ProductListClient() {
   const router = useRouter();
   const { openModal } = useModalContext();
 
-  const { pageNumber, pageSize, filter } = usePagination({
-    queryFilters: { name: '' },
-  });
+  const { pageNumber, pageSize, filter } = usePagination();
+  const { sort, handleSort } = useSort();
 
   const productData = useProductListQuery({
     pageNumber: Number(pageNumber),
     pageSize: Number(pageSize),
     filter,
+    sort,
   });
 
   const data = useMemo(() => {
     return productData.list;
   }, [productData]);
 
-  const [sortColumn, setSortColumn] = useState<keyof (typeof data)[0] | string>(
-    ''
-  );
-  const [order, setOrder] = useState<SortOrder>('');
-
-  const sortedData = useSort<ProductDisplayData>({
-    data,
-    sortColumn,
-    order,
-  });
-
   const handleSortClick = (column: string) => {
-    const isPrevColumn = sortColumn !== column;
-
-    setSortColumn(column);
-    if (isPrevColumn) {
-      setOrder('asc');
-    } else {
-      setOrder((prevData) =>
-        prevData === '' ? 'asc' : prevData === 'asc' ? 'desc' : ''
-      );
-    }
+    handleSort(column);
   };
 
   //유저 레벨
@@ -120,7 +100,7 @@ export default function ProductListClient() {
               >
                 <SortIcons
                   title="상품명"
-                  order={sortColumn === 'name' ? order : ''}
+                  order={sort.name === 'name' ? sort.order : ''}
                 />
               </TableHead>
               <TableHead
@@ -129,7 +109,7 @@ export default function ProductListClient() {
               >
                 <SortIcons
                   title="level"
-                  order={sortColumn === 'accessLevel' ? order : ''}
+                  order={sort.name === 'accessLevel' ? sort.order : ''}
                 />
               </TableHead>
               <TableHead
@@ -138,7 +118,7 @@ export default function ProductListClient() {
               >
                 <SortIcons
                   title="상태"
-                  order={sortColumn === 'status' ? order : ''}
+                  order={sort.name === 'status' ? sort.order : ''}
                 />
               </TableHead>
               <TableHead
@@ -147,7 +127,7 @@ export default function ProductListClient() {
               >
                 <SortIcons
                   title="정가"
-                  order={sortColumn === 'regularPrice' ? order : ''}
+                  order={sort.name === 'regularPrice' ? sort.order : ''}
                 />
               </TableHead>
               <TableHead
@@ -156,7 +136,7 @@ export default function ProductListClient() {
               >
                 <SortIcons
                   title="할인가"
-                  order={sortColumn === 'salePrice' ? order : ''}
+                  order={sort.name === 'salePrice' ? sort.order : ''}
                 />
               </TableHead>
               <TableHead
@@ -165,14 +145,14 @@ export default function ProductListClient() {
               >
                 <SortIcons
                   title="재고"
-                  order={sortColumn === 'pinCount' ? order : ''}
+                  order={sort.name === 'pinCount' ? sort.order : ''}
                 />
               </TableHead>
               <TableHead className="table-th w-[70px]" />
             </TableRow>
           </TableHeader>
           <TableBody>
-            {sortedData.map((product, idx) => (
+            {data.map((product, idx) => (
               <TableRow
                 key={product._id}
                 className="transition-colors hover:bg-gray-50 focus:outline-none focus:bg-gray-50"

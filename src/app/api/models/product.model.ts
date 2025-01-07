@@ -104,13 +104,17 @@ schema.static(
     pageNumber = PAGE_NUMBER_DEFAULT,
     pageSize = PAGE_SIZE_DEFAULT,
     filter: filterQuery = null,
+    sort: sortQuery = null,
     level = 1,
   } = {}) {
     const skip = (pageNumber - 1) * pageSize;
     const filter: Record<string, any> = {
       accessLevel: { $lte: level },
     };
-    const sort = { createdAt: -1 as SortOrder }; // 최신순 정렬
+    const sort: { [key: string]: SortOrder } =
+      sortQuery && sortQuery.order !== ''
+        ? { [sortQuery.name]: sortQuery.order === 'asc' ? 1 : -1 }
+        : { createdAt: -1 }; // 최신순 정렬
 
     if (filterQuery) {
       Object.keys(filterQuery).forEach((key) => {
