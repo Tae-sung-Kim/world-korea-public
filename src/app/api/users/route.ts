@@ -1,9 +1,10 @@
+import { getQueryParams } from '../utils/api.utils';
 import { requiredIsAdmin } from '../utils/auth.util';
 import connectMongo from '@/app/api/libs/database';
 import UserModel from '@/app/api/models/user.model';
 import { createResponse } from '@/app/api/utils/http.util';
 import { HTTP_STATUS } from '@/definitions/http.constant';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 /**
  * @swagger
@@ -14,7 +15,7 @@ import { NextResponse } from 'next/server';
  *        200:
  *          description: OK
  */
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
     await connectMongo();
 
@@ -22,9 +23,15 @@ export async function GET() {
       return createResponse(HTTP_STATUS.FORBIDDEN);
     }
 
-    const users = await UserModel.getUserList();
+    const { pageNumber, pageSize, filter, sort } = getQueryParams(req);
+    const paginationResponse = await UserModel.getUserList({
+      pageNumber,
+      pageSize,
+      filter,
+      sort,
+    });
 
-    return NextResponse.json(users);
+    return NextResponse.json(paginationResponse);
   } catch (error) {
     return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
   }

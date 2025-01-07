@@ -1,5 +1,7 @@
-import { User } from '@/definitions';
+import { PageFilter, PaginationProp } from '@/app/admin/queries/queries.type';
+import { PaginationResponse, User } from '@/definitions';
 import http from '@/services';
+import qs from 'qs';
 
 class UserService {
   // 유저 반환 (관리자)
@@ -8,8 +10,10 @@ class UserService {
   }
 
   // 유저 목록 반환 (관리자)
-  getUserList() {
-    return http.get<User[]>(`/api/users`);
+  getUserList(pageParams?: PaginationProp<PageFilter>) {
+    const params = qs.stringify(pageParams ?? {});
+
+    return http.get<PaginationResponse<User>>(`/api/users?${params}`);
   }
 
   // 유저 수정 (관리자)
@@ -64,8 +68,10 @@ class UserService {
     return http.post<boolean>(`/api/users/reset-password`);
   }
 
-  getPartnerUserList() {
-    return http.get<User[]>(`/api/users/partner`);
+  getPartnerUserList(pageParams?: PaginationProp<PageFilter>) {
+    const params = qs.stringify(pageParams ?? {});
+
+    return http.get<PaginationResponse<User>>(`/api/users/partner?${params}`);
   }
 
   // 유저 목록 반환 (관리자)

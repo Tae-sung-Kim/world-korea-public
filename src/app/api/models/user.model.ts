@@ -1,7 +1,14 @@
 // 회원
 
-import { UserHasPassword, User } from '@/definitions';
-import { model, models, Schema, Model, Types } from 'mongoose';
+import {
+  UserHasPassword,
+  User,
+  PaginationParams,
+  PaginationResponse,
+  PAGE_NUMBER_DEFAULT,
+  PAGE_SIZE_DEFAULT,
+} from '@/definitions';
+import { model, models, Schema, Model, Types, SortOrder } from 'mongoose';
 import '@/app/api/models/user-category.model';
 import ProductModel from './product.model';
 
@@ -32,13 +39,17 @@ interface UserMethods {
 }
 
 interface UserSchemaModel extends Model<UserDB, {}, UserMethods> {
-  getUserList(): Promise<User[]>;
+  getUserList(
+    paginationParams: PaginationParams
+  ): PaginationResponse<Promise<User[]>>;
   getUserById(userId: string): Promise<User>;
   getUserHasPasswordByLoginId(loginId: string): Promise<UserHasPassword>;
   getUserByLoginId(loginId: string): Promise<User>;
   updateUserPasswordById(userId: string, password: string): Promise<User>;
 
-  getPartnerUserList(): Promise<User[]>;
+  getPartnerUserList(
+    paginationParams: PaginationParams
+  ): PaginationResponse<Promise<User[]>>;
 }
 
 const schema = new Schema<UserDB, UserSchemaModel, UserMethods>({
@@ -142,9 +153,68 @@ const schema = new Schema<UserDB, UserSchemaModel, UserMethods>({
   },
 });
 
-schema.static('getUserList', function getUserList() {
-  return this.find({}, '-password').populate('userCategory');
-});
+schema.static(
+  'getUserList',
+  async function getUserList({
+    pageNumber = PAGE_NUMBER_DEFAULT,
+    pageSize = PAGE_SIZE_DEFAULT,
+    filter: filterQuery = null,
+    sort: sortQuery = null,
+  } = {}) {
+    const skip = (pageNumber - 1) * pageSize;
+    const filter: Record<string, any> = {};
+    const sort: { [key: string]: SortOrder } =
+      sortQuery && sortQuery.order !== ''
+        ? { [sortQuery.name]: sortQuery.order === 'asc' ? 1 : -1 }
+        : { createdAt: -1 }; // 최신순 정렬
+
+    if (filterQuery) {
+      Object.keys(filterQuery).forEach((key) => {
+        const value = filterQuery[key];
+        filter[key] = { $regex: value, $options: 'i' }; // 정규식 검색 적용
+      });
+    }
+
+    // 총 개수 가져오기
+    const totalItems = await this.countDocuments(filter);
+
+    // 데이터 가져오기
+    let list = (
+      await this.find(filter, '-password')
+        .sort(sort)
+        .skip(skip)
+        .limit(pageSize)
+        .populate('userCategory')
+    ).map((d) => d.toObject());
+
+    // 전체 페이지 수 계산
+    const totalPages = Math.ceil(totalItems / pageSize);
+
+    // 페이지네이션 관련 정보 계산
+    const hasPreviousPage = pageNumber > 1;
+    const hasNextPage = pageNumber < totalPages;
+    const previousPage = hasPreviousPage ? pageNumber - 1 : null;
+    const nextPage = hasNextPage ? pageNumber + 1 : null;
+
+    return {
+      list,
+      pageNumber,
+      pageSize,
+      totalItems,
+      totalPages,
+      hasPreviousPage,
+      hasNextPage,
+      previousPage,
+      nextPage,
+      startIndex: skip,
+      endIndex: totalItems - 1,
+    };
+  }
+);
+
+// schema.static('getUserList', async function getUserList() {
+//   return this.find({}, '-password').populate('userCategory');
+// });
 
 schema.static('getUserById', function getUserById(userId) {
   return this.findOne({ _id: userId }, '-password').populate('userCategory');
@@ -174,9 +244,68 @@ schema.static(
 /**
  * 파트너 목록 반환
  */
-schema.static('getPartnerUserList', function getPartnerUserList() {
-  return this.find({ isPartner: true }, '-password').populate('userCategory');
-});
+// schema.static('getPartnerUserList', function getPartnerUserList() {
+//   return this.find({ isPartner: true }, '-password').populate('userCategory');
+// });
+
+schema.static(
+  'getPartnerUserList',
+  async function getPartnerUserList({
+    pageNumber = PAGE_NUMBER_DEFAULT,
+    pageSize = PAGE_SIZE_DEFAULT,
+    filter: filterQuery = null,
+    sort: sortQuery = null,
+  } = {}) {
+    const skip = (pageNumber - 1) * pageSize;
+    const filter: Record<string, any> = { isPartner: true };
+    const sort: { [key: string]: SortOrder } =
+      sortQuery && sortQuery.order !== ''
+        ? { [sortQuery.name]: sortQuery.order === 'asc' ? 1 : -1 }
+        : { createdAt: -1 }; // 최신순 정렬
+
+    if (filterQuery) {
+      Object.keys(filterQuery).forEach((key) => {
+        const value = filterQuery[key];
+        filter[key] = { $regex: value, $options: 'i' }; // 정규식 검색 적용
+      });
+    }
+
+    // 총 개수 가져오기
+    const totalItems = await this.countDocuments(filter);
+
+    // 데이터 가져오기
+    let list = (
+      await this.find(filter, '-password')
+        .sort(sort)
+        .skip(skip)
+        .limit(pageSize)
+        .populate('userCategory')
+    ).map((d) => d.toObject());
+
+    // 전체 페이지 수 계산
+    const totalPages = Math.ceil(totalItems / pageSize);
+
+    // 페이지네이션 관련 정보 계산
+    const hasPreviousPage = pageNumber > 1;
+    const hasNextPage = pageNumber < totalPages;
+    const previousPage = hasPreviousPage ? pageNumber - 1 : null;
+    const nextPage = hasNextPage ? pageNumber + 1 : null;
+
+    return {
+      list,
+      pageNumber,
+      pageSize,
+      totalItems,
+      totalPages,
+      hasPreviousPage,
+      hasNextPage,
+      previousPage,
+      nextPage,
+      startIndex: skip,
+      endIndex: totalItems - 1,
+    };
+  }
+);
 
 /**
  * 유저 정보 업데이트

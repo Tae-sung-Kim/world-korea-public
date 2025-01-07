@@ -1,7 +1,9 @@
 'use client';
 
+import { usePagination } from '../../hooks/usePagination';
 import { usePartnerListQuery } from '../../queries';
 import ListWrapper from '@/app/components/common/list-wrapper.component';
+import Paginations from '@/app/components/common/pagination.component';
 import TotalCountBottom from '@/app/components/common/total-count-bottom.component';
 import {
   Table,
@@ -14,9 +16,20 @@ import {
 } from '@/components/ui/table';
 import { User } from '@/definitions';
 import { useRouter } from 'next/navigation';
+import { useMemo } from 'react';
 
 export default function PartnerListClient() {
-  const partnersData = usePartnerListQuery();
+  const { pageNumber, pageSize, filter } = usePagination();
+
+  const partnersData = usePartnerListQuery({
+    pageNumber: Number(pageNumber),
+    pageSize: Number(pageSize),
+    filter,
+  });
+
+  const data = useMemo(() => {
+    return partnersData.list;
+  }, [partnersData]);
 
   const router = useRouter();
 
@@ -42,7 +55,7 @@ export default function PartnerListClient() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {partnersData.map((user) => (
+            {data.map((user) => (
               <TableRow
                 key={user._id}
                 className="cursor-pointer hover:bg-gray-50 transition-colors"
@@ -100,7 +113,14 @@ export default function PartnerListClient() {
         <TotalCountBottom
           title="총 파트너"
           unit="명"
-          count={partnersData.length}
+          count={partnersData.totalItems}
+        />
+
+        <Paginations
+          pageNumber={pageNumber}
+          pageSize={pageSize}
+          totalPages={partnersData.totalPages}
+          totalItems={partnersData.totalItems}
         />
       </div>
     </div>

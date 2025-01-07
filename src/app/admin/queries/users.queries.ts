@@ -1,19 +1,38 @@
-import { FunctionProps } from './queries.type';
-import { User } from '@/definitions';
+import { FunctionProps, PageFilter, PaginationProp } from './queries.type';
+import { PaginationResponse, User } from '@/definitions';
 import userService from '@/services/user.service';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 const QUERY_KEY = 'users';
 
-export function useUserListQuery() {
-  const fallback: User[] = [];
+export function useUserListQuery(paginationParam?: PaginationProp<PageFilter>) {
+  const fallback: PaginationResponse<User> = {
+    pageNumber: -1,
+    pageSize: -1,
+    list: [],
+    totalItems: -1,
+    totalPages: -1,
+    hasPreviousPage: false,
+    hasNextPage: false,
+    previousPage: -1,
+    nextPage: -1,
+    startIndex: -1,
+    endIndex: -1,
+  };
 
   const { data = fallback } = useQuery({
-    queryKey: [QUERY_KEY],
-    queryFn: userService.getUserList,
+    queryKey: [QUERY_KEY, Object.values(paginationParam ?? {})],
+    queryFn: () => {
+      return userService.getUserList(paginationParam ?? {});
+    },
+    placeholderData: keepPreviousData,
   });
-
   return data;
 }
 
@@ -40,14 +59,30 @@ export function useUpdateUserMutation(userId: string) {
   });
 }
 
-export function usePartnerListQuery() {
-  const fallback: User[] = [];
+export function usePartnerListQuery(
+  paginationParam?: PaginationProp<PageFilter>
+) {
+  const fallback: PaginationResponse<User> = {
+    pageNumber: -1,
+    pageSize: -1,
+    list: [],
+    totalItems: -1,
+    totalPages: -1,
+    hasPreviousPage: false,
+    hasNextPage: false,
+    previousPage: -1,
+    nextPage: -1,
+    startIndex: -1,
+    endIndex: -1,
+  };
 
   const { data = fallback } = useQuery({
-    queryKey: [QUERY_KEY + '-partner'],
-    queryFn: userService.getPartnerUserList,
+    queryKey: [QUERY_KEY, Object.values(paginationParam ?? {})],
+    queryFn: () => {
+      return userService.getPartnerUserList(paginationParam ?? {});
+    },
+    placeholderData: keepPreviousData,
   });
-
   return data;
 }
 

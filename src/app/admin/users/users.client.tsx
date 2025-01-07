@@ -1,7 +1,9 @@
 'use client';
 
+import { usePagination } from '../hooks/usePagination';
 import { useUserListQuery } from '../queries';
 import ListWrapper from '@/app/components/common/list-wrapper.component';
+import Paginations from '@/app/components/common/pagination.component';
 import TotalCountBottom from '@/app/components/common/total-count-bottom.component';
 import {
   Table,
@@ -13,9 +15,21 @@ import {
 } from '@/components/ui/table';
 import { User } from '@/definitions';
 import { useRouter } from 'next/navigation';
+import { useMemo } from 'react';
 
 export default function UsersClient() {
-  const userList = useUserListQuery();
+  const { pageNumber, pageSize, filter } = usePagination();
+
+  const userData = useUserListQuery({
+    pageNumber: Number(pageNumber),
+    pageSize: Number(pageSize),
+    filter,
+  });
+
+  const data = useMemo(() => {
+    return userData.list;
+  }, [userData]);
+
   const router = useRouter();
 
   const handleUserClick = (user: User) => {
@@ -41,7 +55,7 @@ export default function UsersClient() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {userList.map((user) => (
+            {data.map((user) => (
               <TableRow
                 key={user._id}
                 className="cursor-pointer hover:bg-gray-50 transition-colors"
@@ -105,7 +119,18 @@ export default function UsersClient() {
       </ListWrapper>
 
       <div className="mt-4">
-        <TotalCountBottom title="총 회원" unit="명" count={userList.length} />
+        <TotalCountBottom
+          title="총 회원"
+          unit="명"
+          count={userData.totalItems}
+        />
+
+        <Paginations
+          pageNumber={pageNumber}
+          pageSize={pageSize}
+          totalPages={userData.totalPages}
+          totalItems={userData.totalItems}
+        />
       </div>
     </div>
   );
