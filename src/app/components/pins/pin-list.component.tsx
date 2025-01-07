@@ -58,7 +58,7 @@ export default function PinList({ tableId, isPartner }: Props) {
   const usedPinMutation = useUsedPinMutation();
 
   const { pageNumber = 1, pageSize = 10, filter } = usePagination();
-  const { sort, handleSort } = useSort();
+  const { sort, onSort } = useSort();
 
   const searchPinsListQuery = useMemo(() => {
     return isPartner ? usePartnerPinsListQuery : usePinsListQuery;
@@ -74,10 +74,6 @@ export default function PinList({ tableId, isPartner }: Props) {
   const data = useMemo(() => {
     return pinData.list;
   }, [pinData]);
-
-  const handleSortClick = (column: string) => {
-    handleSort(column);
-  };
 
   // 상품 상세 이동
   const handleProductMove = (productId: string = '') => {
@@ -160,7 +156,7 @@ export default function PinList({ tableId, isPartner }: Props) {
                   </TableHead>
                   <TableHead
                     className="w-[200px] table-th cursor-pointer"
-                    onClick={() => handleSortClick('number')}
+                    onClick={() => onSort('number')}
                   >
                     <SortIcons
                       title="핀 번호"
@@ -169,7 +165,7 @@ export default function PinList({ tableId, isPartner }: Props) {
                   </TableHead>
                   <TableHead
                     className="table-th cursor-pointer"
-                    onClick={() => handleSortClick('product.name')}
+                    onClick={() => onSort('product.name')}
                   >
                     <SortIcons
                       title="연결 상품"
@@ -178,7 +174,7 @@ export default function PinList({ tableId, isPartner }: Props) {
                   </TableHead>
                   <TableHead
                     className="w-[110px] table-th cursor-pointer"
-                    onClick={() => handleSortClick('partner.companyName')}
+                    onClick={() => onSort('partner.companyName')}
                   >
                     <SortIcons
                       title="업체명"
@@ -189,7 +185,7 @@ export default function PinList({ tableId, isPartner }: Props) {
                   </TableHead>
                   <TableHead
                     className="w-[110px] table-th cursor-pointer"
-                    onClick={() => handleSortClick('endDate')}
+                    onClick={() => onSort('endDate')}
                   >
                     <SortIcons
                       title="종료일"
@@ -198,7 +194,7 @@ export default function PinList({ tableId, isPartner }: Props) {
                   </TableHead>
                   <TableHead
                     className="w-[110px] table-th cursor-pointer"
-                    onClick={() => handleSortClick('createdAt')}
+                    onClick={() => onSort('createdAt')}
                   >
                     <SortIcons
                       title="생성일"
@@ -207,7 +203,7 @@ export default function PinList({ tableId, isPartner }: Props) {
                   </TableHead>
                   <TableHead
                     className="w-[100px] table-th cursor-pointer"
-                    onClick={() => handleSortClick('usedDate')}
+                    onClick={() => onSort('usedDate')}
                   >
                     <SortIcons
                       title="사용여부"

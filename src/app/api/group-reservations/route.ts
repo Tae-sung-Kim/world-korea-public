@@ -12,7 +12,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
   try {
     await connectMongo();
 
-    const { pageNumber, pageSize } = getQueryParams(req);
+    const { pageNumber, pageSize, filter, sort } = getQueryParams(req);
 
     // const list = await GroupReservationModel.find({});
 
@@ -20,6 +20,8 @@ export async function GET(req: NextRequest, res: NextResponse) {
       await GroupReservationModel.getGroupReservationList({
         pageNumber,
         pageSize,
+        filter,
+        sort,
       });
 
     return NextResponse.json(paginationResponse);

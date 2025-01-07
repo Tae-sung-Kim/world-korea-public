@@ -10,6 +10,7 @@ import {
 } from '../queries';
 import ProductSearch from './product-search.component';
 import ListWrapper from '@/app/components/common/list-wrapper.component';
+import NoDataFound from '@/app/components/common/no-data-found.component';
 import Pagination from '@/app/components/common/pagination.component';
 import TotalCountBottom from '@/app/components/common/total-count-bottom.component';
 import { Button } from '@/components/ui/button';
@@ -38,7 +39,7 @@ export default function ProductListClient() {
   const { openModal } = useModalContext();
 
   const { pageNumber, pageSize, filter } = usePagination();
-  const { sort, handleSort } = useSort();
+  const { sort, onSort } = useSort();
 
   const productData = useProductListQuery({
     pageNumber: Number(pageNumber),
@@ -50,10 +51,6 @@ export default function ProductListClient() {
   const data = useMemo(() => {
     return productData.list;
   }, [productData]);
-
-  const handleSortClick = (column: string) => {
-    handleSort(column);
-  };
 
   //유저 레벨
   const userCategoryList = useUserCategoryListQuery();
@@ -89,142 +86,155 @@ export default function ProductListClient() {
           <ProductSearch />
         </div>
       </div>
-      <ListWrapper>
-        <Table>
-          <TableHeader className="table-header">
-            <TableRow className="list-table-row">
-              <TableHead className="table-th w-[70px]">번호</TableHead>
-              <TableHead
-                className="table-th cursor-pointer w-[200px]"
-                onClick={() => handleSortClick('name')}
-              >
-                <SortIcons
-                  title="상품명"
-                  order={sort.name === 'name' ? sort.order : ''}
-                />
-              </TableHead>
-              <TableHead
-                className="table-th w-[90px] cursor-pointer"
-                onClick={() => handleSortClick('accessLevel')}
-              >
-                <SortIcons
-                  title="level"
-                  order={sort.name === 'accessLevel' ? sort.order : ''}
-                />
-              </TableHead>
-              <TableHead
-                className="table-th w-[90px] cursor-pointer"
-                onClick={() => handleSortClick('status')}
-              >
-                <SortIcons
-                  title="상태"
-                  order={sort.name === 'status' ? sort.order : ''}
-                />
-              </TableHead>
-              <TableHead
-                className="table-th w-[100px] text-right cursor-pointer"
-                onClick={() => handleSortClick('regularPrice')}
-              >
-                <SortIcons
-                  title="정가"
-                  order={sort.name === 'regularPrice' ? sort.order : ''}
-                />
-              </TableHead>
-              <TableHead
-                className="table-th w-[100px] text-right cursor-pointer"
-                onClick={() => handleSortClick('salePrice')}
-              >
-                <SortIcons
-                  title="할인가"
-                  order={sort.name === 'salePrice' ? sort.order : ''}
-                />
-              </TableHead>
-              <TableHead
-                className="table-th w-[70px] text-right cursor-pointer"
-                onClick={() => handleSortClick('pinCount')}
-              >
-                <SortIcons
-                  title="재고"
-                  order={sort.name === 'pinCount' ? sort.order : ''}
-                />
-              </TableHead>
-              <TableHead className="table-th w-[70px]" />
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {data.map((product, idx) => (
-              <TableRow
-                key={product._id}
-                className="transition-colors hover:bg-gray-50 focus:outline-none focus:bg-gray-50"
-              >
-                <TableCell className="table-cell text-gray-700 truncate">
-                  {(pageNumber - 1) * pageSize + idx + 1}
-                </TableCell>
-                <TableCell
-                  className="table-cell font-medium truncate list-link"
-                  onClick={() => handleProductItemClick(product._id)}
-                >
-                  {product.name}
-                </TableCell>
-                <TableCell className="table-cell text-gray-700 truncate">
-                  {
-                    userCategoryList?.find(
-                      (f) => f.level === String(product.accessLevel)
-                    )?.name
-                  }
-                </TableCell>
-                <TableCell className="table-cell">
-                  <span
-                    className={`icon-badge truncate
+      <>
+        {data.length > 0 ? (
+          <>
+            <ListWrapper>
+              <Table>
+                <TableHeader className="table-header">
+                  <TableRow className="list-table-row">
+                    <TableHead className="table-th w-[70px]">번호</TableHead>
+                    <TableHead
+                      className="table-th cursor-pointer w-[200px]"
+                      onClick={() => onSort('name')}
+                    >
+                      <SortIcons
+                        title="상품명"
+                        order={sort.name === 'name' ? sort.order : ''}
+                      />
+                    </TableHead>
+                    <TableHead
+                      className="table-th w-[90px] cursor-pointer"
+                      onClick={() => onSort('accessLevel')}
+                    >
+                      <SortIcons
+                        title="level"
+                        order={sort.name === 'accessLevel' ? sort.order : ''}
+                      />
+                    </TableHead>
+                    <TableHead
+                      className="table-th w-[90px] cursor-pointer"
+                      onClick={() => onSort('status')}
+                    >
+                      <SortIcons
+                        title="상태"
+                        order={sort.name === 'status' ? sort.order : ''}
+                      />
+                    </TableHead>
+                    <TableHead
+                      className="table-th w-[100px] text-right cursor-pointer"
+                      onClick={() => onSort('regularPrice')}
+                    >
+                      <SortIcons
+                        title="정가"
+                        order={sort.name === 'regularPrice' ? sort.order : ''}
+                      />
+                    </TableHead>
+                    <TableHead
+                      className="table-th w-[100px] text-right cursor-pointer"
+                      onClick={() => onSort('salePrice')}
+                    >
+                      <SortIcons
+                        title="할인가"
+                        order={sort.name === 'salePrice' ? sort.order : ''}
+                      />
+                    </TableHead>
+                    <TableHead
+                      className="table-th w-[70px] text-right cursor-pointer"
+                      onClick={() => onSort('pinCount')}
+                    >
+                      <SortIcons
+                        title="재고"
+                        order={sort.name === 'pinCount' ? sort.order : ''}
+                      />
+                    </TableHead>
+                    <TableHead className="table-th w-[70px]" />
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {data.map((product, idx) => (
+                    <TableRow
+                      key={product._id}
+                      className="transition-colors hover:bg-gray-50 focus:outline-none focus:bg-gray-50"
+                    >
+                      <TableCell className="table-cell text-gray-700 truncate">
+                        {productData.totalItems -
+                          (pageNumber - 1) * pageSize -
+                          idx}
+                      </TableCell>
+                      <TableCell
+                        className="table-cell font-medium truncate list-link"
+                        onClick={() => handleProductItemClick(product._id)}
+                      >
+                        {product.name}
+                      </TableCell>
+                      <TableCell className="table-cell text-gray-700 truncate">
+                        {
+                          userCategoryList?.find(
+                            (f) => f.level === String(product.accessLevel)
+                          )?.name
+                        }
+                      </TableCell>
+                      <TableCell className="table-cell">
+                        <span
+                          className={`icon-badge truncate
                         ${
                           product.status === PRODUCT_STATUS.AVAILABLE
                             ? 'bg-green-100 text-green-800'
                             : 'bg-gray-100 text-gray-800'
                         }`}
-                  >
-                    {PRODUCT_STATUS_MESSAGE[product.status]}
-                  </span>
-                </TableCell>
-                <TableCell className="table-cell text-right text-gray-700 truncate">
-                  {addComma(product.regularPrice)}
-                </TableCell>
-                <TableCell className="table-cell text-right text-gray-700 truncate">
-                  {addComma(product.salePrice)}
-                </TableCell>
-                <TableCell className="table-cell text-right text-gray-700 truncate">
-                  {addComma(product.pinCount)}
-                </TableCell>
-                <TableCell className="table-cell text-right">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="hover:bg-destructive/10"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDeleteProduct({
-                        id: product._id,
-                        title: product.name,
-                      });
-                    }}
-                  >
-                    <RiDeleteBin6Line className="icon-delete" />
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </ListWrapper>
+                        >
+                          {PRODUCT_STATUS_MESSAGE[product.status]}
+                        </span>
+                      </TableCell>
+                      <TableCell className="table-cell text-right text-gray-700 truncate">
+                        {addComma(product.regularPrice)}
+                      </TableCell>
+                      <TableCell className="table-cell text-right text-gray-700 truncate">
+                        {addComma(product.salePrice)}
+                      </TableCell>
+                      <TableCell className="table-cell text-right text-gray-700 truncate">
+                        {addComma(product.pinCount)}
+                      </TableCell>
+                      <TableCell className="table-cell text-right">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="hover:bg-destructive/10"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteProduct({
+                              id: product._id,
+                              title: product.name,
+                            });
+                          }}
+                        >
+                          <RiDeleteBin6Line className="icon-delete" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </ListWrapper>
 
-      <div className="mt-4">
-        <TotalCountBottom title="총 상품" count={productData.totalItems} />
-        <Pagination
-          pageNumber={pageNumber}
-          pageSize={pageSize}
-          totalPages={productData.totalPages}
-          totalItems={productData.totalItems}
-        />
-      </div>
+            <div className="mt-4">
+              <TotalCountBottom
+                title="총 상품"
+                count={productData.totalItems}
+              />
+              <Pagination
+                pageNumber={pageNumber}
+                pageSize={pageSize}
+                totalPages={productData.totalPages}
+                totalItems={productData.totalItems}
+              />
+            </div>
+          </>
+        ) : (
+          <NoDataFound />
+        )}
+      </>
     </div>
   );
 }

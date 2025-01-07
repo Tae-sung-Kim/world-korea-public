@@ -27,7 +27,7 @@ export default function useSort(defaultSort?: SortConfig) {
   };
 
   return {
-    handleSort,
+    onSort: handleSort,
     sort: {
       name: sortColumn,
       order: sortOrder,

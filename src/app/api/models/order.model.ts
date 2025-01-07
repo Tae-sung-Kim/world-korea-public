@@ -115,9 +115,7 @@ schema.static(
     userId
   ) {
     const skip = (pageNumber - 1) * pageSize;
-    const filter: Record<string, any> = {
-      // accessLevel: { $lte: level },
-    };
+    const filter: Record<string, any> = {};
     const sort: { [key: string]: SortOrder } =
       sortQuery && sortQuery.order !== ''
         ? { [sortQuery.name]: sortQuery.order === 'asc' ? 1 : -1 }

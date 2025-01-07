@@ -1,0 +1,48 @@
+import ListSearchComponent from '@/app/components/common/list-search.component';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import qs from 'qs';
+import { ChangeEvent, KeyboardEvent, useState } from 'react';
+
+export default function GroupReservationSearch() {
+  const router = useRouter();
+  const pathName = usePathname();
+  const searchParams = useSearchParams();
+
+  const [value, setValue] = useState(
+    searchParams.getAll('filter[customData.companyName]').toString() ?? ''
+  );
+
+  const pageSize = Number(searchParams.get('pageSize') ?? 10);
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+  };
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    setValue(e.currentTarget.value);
+    if (e.key === 'Enter' || e.key.toLocaleLowerCase() === 'enter') {
+      //엔터일경우 현재값으로 조회
+      handleSearchClick();
+    }
+  };
+
+  const handleSearchClick = () => {
+    const filter = {
+      ['customData.companyName']: value,
+    };
+    const params = qs.stringify({ pageNumber: 1, pageSize, filter });
+
+    router.push(pathName + '?' + params);
+  };
+
+  return (
+    <ListSearchComponent
+      value={value}
+      title="업체명"
+      placeholder="업체명을 입력해 주세요."
+      onInputChange={handleInputChange}
+      onKeyDown={handleKeyDown}
+      onSearchClick={handleSearchClick}
+    />
+  );
+}
