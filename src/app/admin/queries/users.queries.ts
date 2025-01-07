@@ -77,7 +77,7 @@ export function usePartnerListQuery(
   };
 
   const { data = fallback } = useQuery({
-    queryKey: [QUERY_KEY, Object.values(paginationParam ?? {})],
+    queryKey: [QUERY_KEY + '-partner', Object.values(paginationParam ?? {})],
     queryFn: () => {
       return userService.getPartnerUserList(paginationParam ?? {});
     },
