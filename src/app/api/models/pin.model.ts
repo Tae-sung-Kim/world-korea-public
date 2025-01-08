@@ -1,4 +1,3 @@
-import ProductModel from './product.model';
 import { OrderStatus, PaginationResponse } from '@/definitions';
 import {
   PAGE_NUMBER_DEFAULT,
@@ -49,6 +48,9 @@ interface PinMethods {}
 
 interface PinSchemaModel extends Model<PinDB, {}, PinMethods> {
   getPinList(
+    paginationParams: PaginationParams
+  ): Promise<PaginationResponse<Pin[]>>; // 핀 목록 반환
+  getPartnerPinList(
     paginationParams: PaginationParams,
     getPinListParams?: GetPinListParams
   ): Promise<PaginationResponse<Pin[]>>; // 핀 목록 반환
@@ -94,25 +96,18 @@ const schema = new Schema<PinDB, PinSchemaModel, PinMethods>({
 
 schema.static(
   'getPinList',
-  async function getPinList(
-    {
-      pageNumber = PAGE_NUMBER_DEFAULT,
-      pageSize = PAGE_SIZE_DEFAULT,
-      filter: filterQuery = null,
-      sort: sortQuery = null,
-    } = {},
-    { partnerProducts = null } = {}
-  ) {
+  async function getPinList({
+    pageNumber = PAGE_NUMBER_DEFAULT,
+    pageSize = PAGE_SIZE_DEFAULT,
+    filter: filterQuery = null,
+    sort: sortQuery = null,
+  } = {}) {
     const skip = (pageNumber - 1) * pageSize;
     const filter: Record<string, any> = {};
     const sort: { [key: string]: SortOrder } =
       sortQuery && sortQuery.order !== ''
         ? { [sortQuery.name]: sortQuery.order === 'asc' ? 1 : -1 }
         : { createdAt: -1 }; // 최신순 정렬
-
-    if (Array.isArray(partnerProducts)) {
-      filter['product'] = { $in: partnerProducts };
-    }
 
     const nestedFilters: Record<string, any> = {};
     if (filterQuery) {
@@ -137,9 +132,6 @@ schema.static(
         }
       });
     }
-
-    // // 총 개수 가져오기
-    // const totalItems = await this.countDocuments(filter);
 
     // 총 개수 가져오기 (Aggregation Pipeline 사용)
     const countPipeline: PipelineStage[] = [
@@ -201,6 +193,133 @@ schema.static(
                 phoneNumber: '$partner.phoneNumber',
                 companyNo: '$partner.companyNo',
                 partnerProducts: '$partner.partnerProducts',
+              },
+            ],
+          },
+        },
+      },
+    ];
+
+    // 정렬과 페이지네이션 추가
+    aggregationPipeline.push(
+      { $sort: sort as Record<string, 1 | -1> },
+      { $skip: skip },
+      { $limit: pageSize }
+    );
+
+    const list = await this.aggregate(aggregationPipeline);
+
+    // 전체 페이지 수 계산
+    const totalPages = Math.ceil(totalItems / pageSize);
+
+    // 페이지네이션 관련 정보 계산
+    const hasPreviousPage = pageNumber > 1;
+    const hasNextPage = pageNumber < totalPages;
+    const previousPage = hasPreviousPage ? pageNumber - 1 : null;
+    const nextPage = hasNextPage ? pageNumber + 1 : null;
+
+    return {
+      list,
+      pageNumber,
+      pageSize,
+      totalItems,
+      totalPages,
+      hasPreviousPage,
+      hasNextPage,
+      previousPage,
+      nextPage,
+      startIndex: skip,
+      endIndex: totalItems - 1,
+    };
+  }
+);
+
+schema.static(
+  'getPartnerPinList',
+  async function getPartnerPinList(
+    {
+      pageNumber = PAGE_NUMBER_DEFAULT,
+      pageSize = PAGE_SIZE_DEFAULT,
+      filter: filterQuery = null,
+      sort: sortQuery = null,
+    } = {},
+    { partnerProducts = null } = {}
+  ) {
+    const skip = (pageNumber - 1) * pageSize;
+    const filter: Record<string, any> = {};
+    const sort: { [key: string]: SortOrder } =
+      sortQuery && sortQuery.order !== ''
+        ? { [sortQuery.name]: sortQuery.order === 'asc' ? 1 : -1 }
+        : { createdAt: -1 }; // 최신순 정렬
+
+    if (Array.isArray(partnerProducts)) {
+      filter['product'] = {
+        $in: partnerProducts.map((id: string) => new Types.ObjectId(id)),
+      };
+    }
+
+    const nestedFilters: Record<string, any> = {};
+    if (filterQuery) {
+      Object.keys(filterQuery).forEach((key) => {
+        const value = filterQuery[key];
+
+        if (key.includes('.')) {
+          // 중첩 필드는 별도로 처리
+          if (typeof value === 'object' && value !== null) {
+            nestedFilters[key] = value;
+          } else {
+            nestedFilters[key] = { $regex: value, $options: 'i' };
+          }
+        } else {
+          // 일반 필드 처리
+          if (typeof value === 'object' && value !== null) {
+            filter[key] = value;
+          } else {
+            filter[key] = { $regex: value, $options: 'i' };
+          }
+        }
+      });
+    }
+
+    // 총 개수 가져오기 (Aggregation Pipeline 사용)
+    const countPipeline: PipelineStage[] = [
+      { $match: filter }, // 필터 조건 적용
+      {
+        $lookup: {
+          from: 'products',
+          localField: 'product',
+          foreignField: '_id',
+          as: 'product',
+        },
+      },
+      { $unwind: '$product' }, // product 배열을 평탄화
+    ];
+
+    // 중첩된 필드에 대한 필터 추가
+    if (Object.keys(nestedFilters).length > 0) {
+      countPipeline.push({ $match: nestedFilters });
+    }
+
+    const totalItemsResult = await this.aggregate([
+      ...countPipeline,
+      { $count: 'total' },
+    ]);
+
+    // 총 개수 가져오기
+    const totalItems = totalItemsResult[0]?.total || 0;
+
+    const aggregationPipeline: PipelineStage[] = [
+      ...countPipeline,
+      {
+        $addFields: {
+          product: {
+            $mergeObjects: [
+              {
+                _id: '$product._id',
+                name: '$product.name',
+                status: '$product.status',
+                images: '$product.images',
+                partner: '$product.partner',
               },
             ],
           },

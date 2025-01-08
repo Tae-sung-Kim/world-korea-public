@@ -30,7 +30,7 @@ export async function GET(req: NextRequest) {
     const partnerProducts = userData.partnerProducts as string[];
 
     const { pageNumber, pageSize, filter, sort } = getQueryParams(req);
-    const paginationResponse = await PinModel.getPinList(
+    const paginationResponse = await PinModel.getPartnerPinList(
       {
         pageNumber,
         pageSize,

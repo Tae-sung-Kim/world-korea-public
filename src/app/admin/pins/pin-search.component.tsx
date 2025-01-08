@@ -9,7 +9,7 @@ export default function PinSearch() {
   const searchParams = useSearchParams();
 
   const [value, setValue] = useState(
-    searchParams.getAll('filter[name]').toString() ?? ''
+    searchParams.getAll('filter[product.name]').toString() ?? ''
   );
 
   const pageSize = Number(searchParams.get('pageSize') ?? 10);
@@ -28,7 +28,7 @@ export default function PinSearch() {
 
   const handleSearchClick = () => {
     const filter = {
-      name: value,
+      ['product.name']: value,
     };
     const params = qs.stringify({ pageNumber: 1, pageSize, filter });
 
