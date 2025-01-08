@@ -29,11 +29,13 @@ export async function GET(req: NextRequest) {
 
     const partnerProducts = userData.partnerProducts as string[];
 
-    const { pageNumber, pageSize } = getQueryParams(req);
+    const { pageNumber, pageSize, filter, sort } = getQueryParams(req);
     const paginationResponse = await PinModel.getPinList(
       {
         pageNumber,
         pageSize,
+        filter,
+        sort,
       },
       {
         partnerProducts: partnerProducts.map((d) => String(d)),

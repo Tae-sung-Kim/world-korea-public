@@ -172,17 +172,19 @@ export default function PinList({ tableId, isPartner }: Props) {
                       order={sort.name === 'product.name' ? sort.order : ''}
                     />
                   </TableHead>
-                  <TableHead
-                    className="w-[110px] table-th cursor-pointer"
-                    onClick={() => onSort('partner.companyName')}
-                  >
-                    <SortIcons
-                      title="업체명"
-                      order={
-                        sort.name === 'partner.companyName' ? sort.order : ''
-                      }
-                    />
-                  </TableHead>
+                  {!isPartner && (
+                    <TableHead
+                      className="w-[110px] table-th cursor-pointer"
+                      onClick={() => onSort('partner.companyName')}
+                    >
+                      <SortIcons
+                        title="업체명"
+                        order={
+                          sort.name === 'partner.companyName' ? sort.order : ''
+                        }
+                      />
+                    </TableHead>
+                  )}
                   <TableHead
                     className="w-[110px] table-th cursor-pointer"
                     onClick={() => onSort('endDate')}
@@ -250,9 +252,11 @@ export default function PinList({ tableId, isPartner }: Props) {
                       >
                         {pin.product?.name}
                       </TableCell>
-                      <TableCell className="table-cell text-gray-700">
-                        {pin.partner?.companyName}
-                      </TableCell>
+                      {!isPartner && (
+                        <TableCell className="table-cell text-gray-700">
+                          {pin.partner?.companyName}
+                        </TableCell>
+                      )}
                       <TableCell className="table-cell text-gray-700">
                         {pin.endDate &&
                           new Date(pin.endDate).toLocaleDateString()}
