@@ -3,9 +3,7 @@ import { getQueryParams } from '../../utils/api.utils';
 import { getCurrentUser } from '../../utils/auth.util';
 import { createResponse } from '../../utils/http.util';
 import connectMongo from '@/app/api/libs/database';
-import {
-  HTTP_STATUS,
-} from '@/definitions';
+import { HTTP_STATUS } from '@/definitions';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
@@ -20,12 +18,16 @@ export async function GET(req: NextRequest) {
       return createResponse(HTTP_STATUS.UNAUTHORIZED);
     }
 
-    const { pageNumber, pageSize, filter } = getQueryParams(req);
-    const paginationResponse = await OrderModel.getOrderList({
-      pageNumber,
-      pageSize,
-      filter
-    }, userData._id);
+    const { pageNumber, pageSize, filter, sort } = getQueryParams(req);
+    const paginationResponse = await OrderModel.getOrderList(
+      {
+        pageNumber,
+        pageSize,
+        filter,
+        sort,
+      },
+      userData._id
+    );
 
     return NextResponse.json(paginationResponse);
   } catch (error) {
