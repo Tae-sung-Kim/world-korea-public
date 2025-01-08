@@ -351,8 +351,8 @@ schema.static(
               },
             ],
           },
-
-          product: {
+          filteredProducts: {
+            // 새로운 필드로 저장
             $let: {
               vars: {
                 filteredProducts: {
@@ -366,17 +366,22 @@ schema.static(
               in: {
                 $map: {
                   input: '$$filteredProducts',
-                  as: 'product',
+                  as: 'filteredProduct',
                   in: {
-                    _id: '$$product._id',
-                    name: '$$product.name',
-                    partner: '$$product.partner',
-                    // 필요한 다른 제품 정보 추가
+                    _id: '$$filteredProduct._id',
+                    name: '$$filteredProduct.name',
+                    partner: '$$filteredProduct.partner',
                   },
                 },
               },
             },
           },
+        },
+      },
+      {
+        // 필터링된 데이터가 비어 있는 경우 제외
+        $match: {
+          $expr: { $gt: [{ $size: '$filteredProducts' }, 0] },
         },
       },
     ];
