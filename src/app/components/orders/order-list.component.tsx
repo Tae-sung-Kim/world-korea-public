@@ -175,24 +175,30 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
                       order={sort.name === 'saleProduct.name' ? sort.order : ''}
                     />
                   </TableHead>
-                  <TableHead
-                    className="w-[110px] table-th text-center"
-                    onClick={() => onSort('user.companyName')}
-                  >
-                    <SortIcons
-                      title="업체명"
-                      order={sort.name === 'user.companyName' ? sort.order : ''}
-                    />
-                  </TableHead>
-                  <TableHead
-                    className="w-[120px] table-th text-center"
-                    onClick={() => onSort('user.name')}
-                  >
-                    <SortIcons
-                      title="담당자명"
-                      order={sort.name === 'user.name' ? sort.order : ''}
-                    />
-                  </TableHead>
+                  {!isMy && !isPartner && (
+                    <>
+                      <TableHead
+                        className="w-[110px] table-th text-center"
+                        onClick={() => onSort('user.companyName')}
+                      >
+                        <SortIcons
+                          title="업체명"
+                          order={
+                            sort.name === 'user.companyName' ? sort.order : ''
+                          }
+                        />
+                      </TableHead>
+                      <TableHead
+                        className="w-[120px] table-th text-center"
+                        onClick={() => onSort('user.name')}
+                      >
+                        <SortIcons
+                          title="담당자명"
+                          order={sort.name === 'user.name' ? sort.order : ''}
+                        />
+                      </TableHead>
+                    </>
+                  )}
                   <TableHead
                     className="w-[180px] table-th text-center"
                     onClick={() => onSort('quantity')}
@@ -275,22 +281,26 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
                     >
                       {d.saleProduct.name}
                     </TableCell>
-                    <TableCell
-                      className={`table-cell text-center ${
-                        isPartner ? '' : 'list-link'
-                      }`}
-                      onClick={() => handleUserInfoMove(d.user._id)}
-                    >
-                      {d.user.companyName}
-                    </TableCell>
-                    <TableCell
-                      className={`table-cell text-center ${
-                        isPartner ? '' : 'list-link'
-                      }`}
-                      onClick={() => handleUserInfoMove(d.user._id)}
-                    >
-                      {d.user.name}
-                    </TableCell>
+                    {!isMy && !isPartner && (
+                      <>
+                        <TableCell
+                          className={`table-cell text-center ${
+                            isPartner ? '' : 'list-link'
+                          }`}
+                          onClick={() => handleUserInfoMove(d.user._id)}
+                        >
+                          {d.user.companyName}
+                        </TableCell>
+                        <TableCell
+                          className={`table-cell text-center ${
+                            isPartner ? '' : 'list-link'
+                          }`}
+                          onClick={() => handleUserInfoMove(d.user._id)}
+                        >
+                          {d.user.name}
+                        </TableCell>
+                      </>
+                    )}
                     <TableCell className="table-cell text-gray-700 text-center">
                       {addComma(d.quantity ?? 0)}
                     </TableCell>
