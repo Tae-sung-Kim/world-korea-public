@@ -283,7 +283,8 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
                           : () => handleSaleProductMove(d.saleProduct._id)
                       }
                     >
-                      {d.saleProduct.name},{d.product.map((d) => d.name)}
+                      {d.saleProduct.name}
+                      {/* {d.product.map((d) => d.name)} */}
                     </TableCell>
                     {!isMy && !isPartner && (
                       <>

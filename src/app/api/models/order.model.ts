@@ -331,7 +331,7 @@ schema.static(
     const totalItems = totalItemsResult[0]?.total || 0;
 
     const aggregationPipeline: PipelineStage[] = [
-      ...countPipeline, // 카운트 파이프라인과 동일한 초기 스테이지 사용
+      ...countPipeline,
       {
         $addFields: {
           user: {
@@ -351,37 +351,23 @@ schema.static(
               },
             ],
           },
-          filteredProducts: {
-            // 새로운 필드로 저장
-            $let: {
-              vars: {
-                filteredProducts: {
-                  $filter: {
-                    input: '$product',
-                    as: 'prod',
-                    cond: { $eq: ['$$prod.partner', userId] },
-                  },
-                },
-              },
-              in: {
-                $map: {
-                  input: '$$filteredProducts',
-                  as: 'filteredProduct',
-                  in: {
-                    _id: '$$filteredProduct._id',
-                    name: '$$filteredProduct.name',
-                    partner: '$$filteredProduct.partner',
-                  },
-                },
-              },
-            },
-          },
+          // product: {
+          //   $concatArrays: [
+          //     {
+          //       $filter: {
+          //         input: '$product',
+          //         as: 'prod',
+          //         cond: { $eq: ['$$prod.partner', userId] },
+          //       },
+          //     },
+          //     [],
+          //   ],
+          // },
         },
       },
       {
-        // 필터링된 데이터가 비어 있는 경우 제외
         $match: {
-          $expr: { $gt: [{ $size: '$filteredProducts' }, 0] },
+          $expr: { $gt: [{ $size: '$product' }, 0] },
         },
       },
     ];
