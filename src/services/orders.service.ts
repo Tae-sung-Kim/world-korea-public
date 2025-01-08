@@ -50,11 +50,18 @@ class OrdersService {
   }
 
   // 회원 구매 목록
-
   getUserOrderList(pageParams?: PaginationProp<PageFilter>) {
     const params = qs.stringify(pageParams ?? {});
     return http.get<PaginationResponse<SaleProductBuyDisplayData<UserInfo>>>(
       `/api/orders/me?${params}`
+    );
+  }
+
+  // 파트너 구매 상품
+  getPartnerOrderList(pageParams?: PaginationProp<PageFilter>) {
+    const params = qs.stringify(pageParams ?? {});
+    return http.get<PaginationResponse<SaleProductBuyDisplayData<UserInfo>>>(
+      `/api/orders/partner?${params}`
     );
   }
 }

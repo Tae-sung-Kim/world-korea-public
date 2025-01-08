@@ -30,7 +30,7 @@ import {
   OrderPayType,
 } from '@/definitions';
 import usePortonePayment from '@/hooks/usePortonePayment';
-import { useMyOrderListQuery } from '@/queries';
+import { useMyOrderListQuery, usePartnerOrderListQuery } from '@/queries';
 import { addComma } from '@/utils/number';
 import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
@@ -67,7 +67,11 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
   const { sort, onSort } = useSort();
 
   const searchOrderListQuery = useMemo(() => {
-    return isMy ? useMyOrderListQuery : useOrderListQuery;
+    return isPartner
+      ? usePartnerOrderListQuery
+      : isMy
+      ? useMyOrderListQuery
+      : useOrderListQuery;
   }, [isMy]);
 
   let ordersData = searchOrderListQuery({
