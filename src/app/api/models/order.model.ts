@@ -348,21 +348,17 @@ schema.static(
               {
                 _id: '$saleProduct._id',
                 name: '$saleProduct.name',
+                products: '$saleProduct.products', // 이 부분 추가
               },
             ],
           },
-          // product: {
-          //   $concatArrays: [
-          //     {
-          //       $filter: {
-          //         input: '$product',
-          //         as: 'prod',
-          //         cond: { $eq: ['$$prod.partner', userId] },
-          //       },
-          //     },
-          //     [],
-          //   ],
-          // },
+          product: {
+            $filter: {
+              input: '$product',
+              as: 'prod',
+              cond: { $eq: ['$$prod.partner', userId] },
+            },
+          },
         },
       },
       {
