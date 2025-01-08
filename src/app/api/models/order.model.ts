@@ -316,6 +316,24 @@ schema.static(
           as: 'product',
         },
       },
+      // 파트너별 제품 필터링 추가
+      {
+        $addFields: {
+          filteredProducts: {
+            $filter: {
+              input: '$product',
+              as: 'prod',
+              cond: { $eq: ['$$prod.partner', userId] },
+            },
+          },
+        },
+      },
+      // 필터링된 제품이 있는 주문만 카운트
+      {
+        $match: {
+          $expr: { $gt: [{ $size: '$filteredProducts' }, 0] },
+        },
+      },
     ];
 
     // 중첩된 필드에 대한 필터 추가
