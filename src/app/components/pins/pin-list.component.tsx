@@ -136,6 +136,7 @@ export default function PinList({ tableId, isPartner }: Props) {
         Component: () => {
           return <QrCodeModal pinNumber={splitFourChar(pinNumber)} />;
         },
+        useCancelButton: false,
       });
     }
   };
