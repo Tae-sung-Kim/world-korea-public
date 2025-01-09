@@ -57,13 +57,13 @@ class OrdersService {
     );
   }
 
-  // 파트너 구매 상품
-  getPartnerOrderList(pageParams?: PaginationProp<PageFilter>) {
-    const params = qs.stringify(pageParams ?? {});
-    return http.get<PaginationResponse<SaleProductBuyDisplayData<UserInfo>>>(
-      `/api/orders/partner?${params}`
-    );
-  }
+  // // 파트너 구매 상품
+  // getPartnerOrderList(pageParams?: PaginationProp<PageFilter>) {
+  //   const params = qs.stringify(pageParams ?? {});
+  //   return http.get<PaginationResponse<SaleProductBuyDisplayData<UserInfo>>>(
+  //     `/api/orders/partner?${params}`
+  //   );
+  // }
 }
 
 const ordersService = new OrdersService();

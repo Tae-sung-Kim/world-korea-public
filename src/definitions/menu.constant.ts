@@ -112,16 +112,16 @@ export const ADMIN_MENU: MenuSection[] = [
 
 // 파트너사
 export const PARTNER_MENU: MenuSection[] = [
-  {
-    key: 'purchase',
-    label: '구매 관리',
-    items: [
-      {
-        label: '구매 목록',
-        href: '/partner/orders',
-      },
-    ],
-  },
+  // {
+  //   key: 'purchase',
+  //   label: '구매 관리',
+  //   items: [
+  //     {
+  //       label: '구매 목록',
+  //       href: '/partner/orders',
+  //     },
+  //   ],
+  // },
   {
     key: 'pin',
     label: '핀번호 관리',

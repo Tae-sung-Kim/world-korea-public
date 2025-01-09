@@ -32,6 +32,7 @@ export interface OrderDB extends Document {
   status: OrderStatus;
   payType: string;
   paymentId: string;
+  // products: Types.ObjectId[];
   merchantId: string;
   orderDate: Date;
   createdAt: Date;
@@ -59,10 +60,10 @@ interface OrderSchemaModel extends Model<OrderDB, {}, OrderMethods> {
     paginationParams: PaginationParams,
     userId?: string
   ): PaginationResponse<Promise<Order[]>>;
-  getPartnerOrderList(
-    paginationParams: PaginationParams,
-    userId?: string
-  ): PaginationResponse<Promise<Order[]>>;
+  // getPartnerOrderList(
+  //   paginationParams: PaginationParams,
+  //   userId?: string
+  // ): PaginationResponse<Promise<Order[]>>;
   checkShortIdExists(shortId: string): Promise<boolean>; // shortUrl 이 이미 있는지 여부 반환
   getOrderByShortId(shortId: string): Promise<OrderDocument | null>;
   getSaleProductIdByShortId(shortId: string): Promise<string | null>;
@@ -245,179 +246,179 @@ schema.static(
     };
   }
 );
-schema.static(
-  'getPartnerOrderList',
-  async function getPartnerOrderList(
-    {
-      pageNumber = PAGE_NUMBER_DEFAULT,
-      pageSize = PAGE_SIZE_DEFAULT,
-      filter: filterQuery = null,
-      sort: sortQuery = null,
-    } = {},
-    userId
-  ) {
-    const skip = (pageNumber - 1) * pageSize;
-    const filter: Record<string, any> = {};
-    const sort: { [key: string]: SortOrder } =
-      sortQuery && sortQuery.order !== ''
-        ? { [sortQuery.name]: sortQuery.order === 'asc' ? 1 : -1 }
-        : { createdAt: -1 }; // 최신순 정렬
+// schema.static(
+//   'getPartnerOrderList',
+//   async function getPartnerOrderList(
+//     {
+//       pageNumber = PAGE_NUMBER_DEFAULT,
+//       pageSize = PAGE_SIZE_DEFAULT,
+//       filter: filterQuery = null,
+//       sort: sortQuery = null,
+//     } = {},
+//     userId
+//   ) {
+//     const skip = (pageNumber - 1) * pageSize;
+//     const filter: Record<string, any> = {};
+//     const sort: { [key: string]: SortOrder } =
+//       sortQuery && sortQuery.order !== ''
+//         ? { [sortQuery.name]: sortQuery.order === 'asc' ? 1 : -1 }
+//         : { createdAt: -1 }; // 최신순 정렬
 
-    const nestedFilters: Record<string, any> = {};
-    if (filterQuery) {
-      Object.keys(filterQuery).forEach((key) => {
-        const value = filterQuery[key];
+//     const nestedFilters: Record<string, any> = {};
+//     if (filterQuery) {
+//       Object.keys(filterQuery).forEach((key) => {
+//         const value = filterQuery[key];
 
-        // 중첩된 필드와 일반 필드 분리
-        if (key.includes('.')) {
-          // 중첩 필드는 별도로 처리
-          if (typeof value === 'object' && value !== null) {
-            nestedFilters[key] = value;
-          } else {
-            nestedFilters[key] = { $regex: value, $options: 'i' };
-          }
-        } else {
-          // 일반 필드 처리
-          if (typeof value === 'object' && value !== null) {
-            filter[key] = value;
-          } else {
-            filter[key] = { $regex: value, $options: 'i' };
-          }
-        }
-      });
-    }
+//         // 중첩된 필드와 일반 필드 분리
+//         if (key.includes('.')) {
+//           // 중첩 필드는 별도로 처리
+//           if (typeof value === 'object' && value !== null) {
+//             nestedFilters[key] = value;
+//           } else {
+//             nestedFilters[key] = { $regex: value, $options: 'i' };
+//           }
+//         } else {
+//           // 일반 필드 처리
+//           if (typeof value === 'object' && value !== null) {
+//             filter[key] = value;
+//           } else {
+//             filter[key] = { $regex: value, $options: 'i' };
+//           }
+//         }
+//       });
+//     }
 
-    // 총 개수 가져오기 (Aggregation Pipeline 사용)
-    const countPipeline: PipelineStage[] = [
-      { $match: filter }, // 기본 필터 조건 적용
-      {
-        $lookup: {
-          from: 'users',
-          localField: 'user',
-          foreignField: '_id',
-          as: 'user',
-        },
-      },
-      { $unwind: '$user' },
-      {
-        $lookup: {
-          from: 'saleproducts',
-          localField: 'saleProduct',
-          foreignField: '_id',
-          as: 'saleProduct',
-        },
-      },
-      { $unwind: { path: '$saleProduct', preserveNullAndEmptyArrays: true } },
-      {
-        $lookup: {
-          from: 'products',
-          localField: 'saleProduct.products', // saleProduct의 products 배열 참조
-          foreignField: '_id',
-          as: 'product',
-        },
-      },
-      // 파트너별 제품 필터링 추가
-      {
-        $addFields: {
-          filteredProducts: {
-            $filter: {
-              input: '$product',
-              as: 'prod',
-              cond: { $eq: ['$$prod.partner', userId] },
-            },
-          },
-        },
-      },
-      // 필터링된 제품이 있는 주문만 카운트
-      {
-        $match: {
-          $expr: { $gt: [{ $size: '$filteredProducts' }, 0] },
-        },
-      },
-    ];
+//     // 총 개수 가져오기 (Aggregation Pipeline 사용)
+//     const countPipeline: PipelineStage[] = [
+//       { $match: filter }, // 기본 필터 조건 적용
+//       {
+//         $lookup: {
+//           from: 'users',
+//           localField: 'user',
+//           foreignField: '_id',
+//           as: 'user',
+//         },
+//       },
+//       { $unwind: '$user' },
+//       {
+//         $lookup: {
+//           from: 'saleproducts',
+//           localField: 'saleProduct',
+//           foreignField: '_id',
+//           as: 'saleProduct',
+//         },
+//       },
+//       { $unwind: { path: '$saleProduct', preserveNullAndEmptyArrays: true } },
+//       {
+//         $lookup: {
+//           from: 'products',
+//           localField: 'saleProduct.products', // saleProduct의 products 배열 참조
+//           foreignField: '_id',
+//           as: 'product',
+//         },
+//       },
+//       // 파트너별 제품 필터링 추가
+//       {
+//         $addFields: {
+//           product: {
+//             $filter: {
+//               input: '$product',
+//               as: 'prod',
+//               cond: { $eq: ['$$prod.partner', userId] },
+//             },
+//           },
+//         },
+//       },
+//       // 필터링된 제품이 있는 주문만 카운트
+//       {
+//         $match: {
+//           $expr: { $gt: [{ $size: '$product' }, 0] },
+//         },
+//       },
+//     ];
 
-    // 중첩된 필드에 대한 필터 추가
-    if (Object.keys(nestedFilters).length > 0) {
-      countPipeline.push({ $match: nestedFilters });
-    }
+//     // 중첩된 필드에 대한 필터 추가
+//     if (Object.keys(nestedFilters).length > 0) {
+//       countPipeline.push({ $match: nestedFilters });
+//     }
 
-    const totalItemsResult = await this.aggregate([
-      ...countPipeline,
-      { $count: 'total' },
-    ]);
+//     const totalItemsResult = await this.aggregate([
+//       ...countPipeline,
+//       { $count: 'total' },
+//     ]);
 
-    const totalItems = totalItemsResult[0]?.total || 0;
+//     const totalItems = totalItemsResult[0]?.total || 0;
 
-    const aggregationPipeline: PipelineStage[] = [
-      ...countPipeline,
-      {
-        $addFields: {
-          user: {
-            $mergeObjects: [
-              {
-                _id: '$user._id',
-                name: '$user.name',
-                companyName: '$user.companyName',
-              },
-            ],
-          },
-          saleProduct: {
-            $mergeObjects: [
-              {
-                _id: '$saleProduct._id',
-                name: '$saleProduct.name',
-                products: '$saleProduct.products', // 이 부분 추가
-              },
-            ],
-          },
-          product: {
-            $filter: {
-              input: '$product',
-              as: 'prod',
-              cond: { $eq: ['$$prod.partner', userId] },
-            },
-          },
-        },
-      },
-      {
-        $match: {
-          $expr: { $gt: [{ $size: '$product' }, 0] },
-        },
-      },
-    ];
+//     const aggregationPipeline: PipelineStage[] = [
+//       ...countPipeline,
+//       {
+//         $addFields: {
+//           user: {
+//             $mergeObjects: [
+//               {
+//                 _id: '$user._id',
+//                 name: '$user.name',
+//                 companyName: '$user.companyName',
+//               },
+//             ],
+//           },
+//           saleProduct: {
+//             $mergeObjects: [
+//               {
+//                 _id: '$saleProduct._id',
+//                 name: '$saleProduct.name',
+//                 products: '$saleProduct.products', // 이 부분 추가
+//               },
+//             ],
+//           },
+//           product: {
+//             $filter: {
+//               input: '$product',
+//               as: 'prod',
+//               cond: { $eq: ['$$prod.partner', userId] },
+//             },
+//           },
+//         },
+//       },
+//       {
+//         $match: {
+//           $expr: { $gt: [{ $size: '$product' }, 0] },
+//         },
+//       },
+//     ];
 
-    // 정렬과 페이지네이션 추가
-    aggregationPipeline.push(
-      { $sort: sort as Record<string, 1 | -1> },
-      { $skip: skip },
-      { $limit: pageSize }
-    );
+//     // 정렬과 페이지네이션 추가
+//     aggregationPipeline.push(
+//       { $sort: sort as Record<string, 1 | -1> },
+//       { $skip: skip },
+//       { $limit: pageSize }
+//     );
 
-    const list = await this.aggregate(aggregationPipeline);
-    // 전체 페이지 수 계산
-    const totalPages = Math.ceil(totalItems / pageSize);
+//     const list = await this.aggregate(aggregationPipeline);
+//     // 전체 페이지 수 계산
+//     const totalPages = Math.ceil(totalItems / pageSize);
 
-    // 페이지네이션 관련 정보 계산
-    const hasPreviousPage = pageNumber > 1;
-    const hasNextPage = pageNumber < totalPages;
-    const previousPage = hasPreviousPage ? pageNumber - 1 : null;
-    const nextPage = hasNextPage ? pageNumber + 1 : null;
+//     // 페이지네이션 관련 정보 계산
+//     const hasPreviousPage = pageNumber > 1;
+//     const hasNextPage = pageNumber < totalPages;
+//     const previousPage = hasPreviousPage ? pageNumber - 1 : null;
+//     const nextPage = hasNextPage ? pageNumber + 1 : null;
 
-    return {
-      list,
-      pageNumber,
-      pageSize,
-      totalItems,
-      totalPages,
-      hasPreviousPage,
-      hasNextPage,
-      previousPage,
-      nextPage,
-      startIndex: skip,
-      endIndex: totalItems - 1,
-    };
-  }
-);
+//     return {
+//       list,
+//       pageNumber,
+//       pageSize,
+//       totalItems,
+//       totalPages,
+//       hasPreviousPage,
+//       hasNextPage,
+//       previousPage,
+//       nextPage,
+//       startIndex: skip,
+//       endIndex: totalItems - 1,
+//     };
+//   }
+// );
 
 schema.static('checkShortIdExists', async function checkShortIdExists(shortId) {
   const exists = await this.exists({ 'tickets.shortId': shortId });

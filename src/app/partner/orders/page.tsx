@@ -1,5 +1,7 @@
 import OrderClient from './order.client';
+import NotFoundPage from '@/app/not-found';
 
 export default function OrderPage() {
-  return <OrderClient />;
+  return <NotFoundPage />;
+  // return <OrderClient />;
 }

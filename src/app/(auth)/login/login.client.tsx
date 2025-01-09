@@ -52,7 +52,7 @@ export default function LoginClient() {
 
       if (response?.ok) {
         if (isPartner) {
-          router.push('/partner/orders');
+          router.push('/partner/pins');
         } else {
           router.push('/');
         }

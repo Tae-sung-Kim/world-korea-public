@@ -30,7 +30,7 @@ import {
   OrderPayType,
 } from '@/definitions';
 import usePortonePayment from '@/hooks/usePortonePayment';
-import { useMyOrderListQuery, usePartnerOrderListQuery } from '@/queries';
+import { useMyOrderListQuery } from '@/queries';
 import { addComma } from '@/utils/number';
 import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
@@ -67,11 +67,7 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
   const { sort, onSort } = useSort();
 
   const searchOrderListQuery = useMemo(() => {
-    return isPartner
-      ? usePartnerOrderListQuery
-      : isMy
-      ? useMyOrderListQuery
-      : useOrderListQuery;
+    return isMy ? useMyOrderListQuery : useOrderListQuery;
   }, [isMy]);
 
   let ordersData = searchOrderListQuery({
@@ -257,7 +253,7 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
                       order={sort.name === 'status' ? sort.order : ''}
                     />
                   </TableHead>
-                  {!isMy && (
+                  {!isMy && !isPartner && (
                     <TableHead className="min-w-[110px] table-th text-center"></TableHead>
                   )}
                 </TableRow>
@@ -325,7 +321,7 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
                     <TableCell className="table-cell text-gray-700 text-center">
                       {ORDER_STATUS_MESSAGE[d.status]}
                     </TableCell>
-                    {!isMy && (
+                    {!isMy && !isPartner && (
                       <TableCell className="table-cell text-center">
                         {OrderStatus.Completed === d.status && (
                           <>

@@ -34,7 +34,7 @@ export default function AdminProtectedRoute({
       //파트너 일때는 파트너만
       const isUrlValid = pathName.includes('/partner/');
       if (!isUrlValid) {
-        redirect('/partner/orders');
+        redirect('/partner/pins');
       }
     }
   }, [isLoggedIn, isPartner, , isUser, pathName]);

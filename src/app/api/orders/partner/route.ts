@@ -13,23 +13,25 @@ export async function GET(req: NextRequest) {
   try {
     await connectMongo();
 
-    const userData = await getCurrentUser();
-    if (!userData) {
-      return createResponse(HTTP_STATUS.UNAUTHORIZED);
-    }
+    // 파트너 구매 목록 제외
+    // const userData = await getCurrentUser();
+    // if (!userData) {
+    //   return createResponse(HTTP_STATUS.UNAUTHORIZED);
+    // }
 
-    const { pageNumber, pageSize, filter, sort } = getQueryParams(req);
-    const paginationResponse = await OrderModel.getPartnerOrderList(
-      {
-        pageNumber,
-        pageSize,
-        filter,
-        sort,
-      },
-      userData._id
-    );
+    // const { pageNumber, pageSize, filter, sort } = getQueryParams(req);
+    // const paginationResponse = await OrderModel.getPartnerOrderList(
+    //   {
+    //     pageNumber,
+    //     pageSize,
+    //     filter,
+    //     sort,
+    //   },
+    //   userData._id
+    // );
 
-    return NextResponse.json(paginationResponse);
+    // return NextResponse.json(paginationResponse);
+    return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
   } catch (error) {
     return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
   }
