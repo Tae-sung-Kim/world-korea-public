@@ -236,7 +236,7 @@ export default function UserCategoriesClient() {
                           >
                             <BsPencilSquare className="h-4 w-4 text-gray-600" />
                           </Button>
-                          <Button
+                          {/* <Button
                             variant="ghost"
                             size="icon"
                             className="h-8 w-8 hover:bg-red-100"
@@ -248,7 +248,7 @@ export default function UserCategoriesClient() {
                             }
                           >
                             <RiDeleteBin6Line className="icon-delete" />
-                          </Button>
+                          </Button> */}
                         </>
                       ) : (
                         <>
