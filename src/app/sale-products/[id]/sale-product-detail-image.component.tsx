@@ -12,8 +12,10 @@ import { useCallback, useState } from 'react';
 
 export default function SaleProductDetailImage({
   images,
+  title,
 }: {
   images: string[];
+  title: string;
 }) {
   const [api, setApi] = useState<CarouselApi>();
 
@@ -25,7 +27,11 @@ export default function SaleProductDetailImage({
   );
 
   return (
-    <article className="w-full lg:w-1/2 bg-white/80 backdrop-blur-md rounded-2xl p-6 lg:p-8 shadow-xl border border-gray-100">
+    <article className="w-full lg:w-1/2 bg-white/60 backdrop-blur-md rounded-2xl p-6 lg:p-8 shadow-xl border border-gray-100">
+      <h1 className="text-2xl lg:text-3xl font-bold text-center mb-6">
+        {title}
+      </h1>
+
       {/* 메인 이미지 캐러셀 */}
       <div className="relative w-full mb-8 px-12">
         <Carousel className="w-full max-w-xl mx-auto" setApi={setApi}>

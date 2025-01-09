@@ -10,6 +10,6 @@ export const ORDER_STATUS_MESSAGE: Record<OrderStatus, string> = {
 };
 
 export const ORDER_PAY_TYPE_MESSAGE: Record<OrderPayType, string> = {
-  [OrderPayType.Card]: '신용카드',
+  [OrderPayType.Card]: '카드',
   [OrderPayType.Trans]: '계좌입금',
 };

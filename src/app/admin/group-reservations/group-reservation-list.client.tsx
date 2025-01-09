@@ -103,8 +103,17 @@ export default function GroupReservationListClient({
                 onClick={() => onSort('createdAt')}
               >
                 <SortIcons
-                  title="예약일"
+                  title="예약 일자"
                   order={sort.name === 'createdAt' ? sort.order : ''}
+                />
+              </TableHead>
+              <TableHead
+                className="w-[120px] table-th"
+                onClick={() => onSort('usedAt')}
+              >
+                <SortIcons
+                  title="방문 일자"
+                  order={sort.name === 'usedAt' ? sort.order : ''}
                 />
               </TableHead>
               <TableHead
@@ -120,7 +129,6 @@ export default function GroupReservationListClient({
                   }
                 />
               </TableHead>
-              <TableHead className="w-[100px] table-th">예약 인원</TableHead>
               <TableHead
                 className="w-[150px] table-th"
                 onClick={() => onSort('customData.guideContactInfo')}
@@ -134,15 +142,7 @@ export default function GroupReservationListClient({
                   }
                 />
               </TableHead>
-              <TableHead
-                className="w-[120px] table-th"
-                onClick={() => onSort('usedAt')}
-              >
-                <SortIcons
-                  title="방문 일자"
-                  order={sort.name === 'usedAt' ? sort.order : ''}
-                />
-              </TableHead>
+              <TableHead className="w-[100px] table-th">예약 인원</TableHead>
               <TableHead className="w-[250px] table-th">비고</TableHead>
             </TableRow>
           </TableHeader>
@@ -152,17 +152,15 @@ export default function GroupReservationListClient({
               return (
                 <TableRow
                   key={groupData._id}
-                  className="hover:bg-gray-50 transition-colors"
+                  className="hover:bg-gray-50 transition-colors cursor-pointer"
+                  onClick={() => handleGroupReservationClick(groupData._id)}
                 >
                   <TableCell className="table-cell" data-exclude-excel>
                     {reservationData.totalItems -
                       (pageNumber - 1) * pageSize -
                       idx}
                   </TableCell>
-                  <TableCell
-                    className="table-cell list-link"
-                    onClick={() => handleGroupReservationClick(groupData._id)}
-                  >
+                  <TableCell className="table-cell">
                     {customData.productName as string}
                   </TableCell>
                   <TableCell className="table-cell">
@@ -173,16 +171,16 @@ export default function GroupReservationListClient({
                       format(groupData.createdAt, 'yyyy.MM.dd')}
                   </TableCell>
                   <TableCell className="table-cell">
-                    {customData.contactPersonInfo as string}
+                    {groupData.usedAt && format(groupData.usedAt, 'yyyy.MM.dd')}
                   </TableCell>
                   <TableCell className="table-cell">
-                    {customData.numberOfPeopel as string}
+                    {customData.contactPersonInfo as string}
                   </TableCell>
                   <TableCell className="table-cell">
                     {customData.guideContactInfo as string}
                   </TableCell>
                   <TableCell className="table-cell">
-                    {groupData.usedAt && format(groupData.usedAt, 'yyyy.MM.dd')}
+                    {customData.numberOfPeopel as string}
                   </TableCell>
                   <TableCell
                     className="table-cell"

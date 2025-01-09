@@ -7,7 +7,12 @@ interface FooterProps {
 
 export default function Footer({ className }: FooterProps) {
   return (
-    <footer className={cn('relative border-t border-gray-200 bg-white/95 py-2', className)}>
+    <footer
+      className={cn(
+        'relative border-t border-gray-200 bg-white/95 py-2',
+        className
+      )}
+    >
       <BackgroundOverlay className="opacity-70" />
       <div className="relative max-w-[1440px] mx-auto px-4">
         <div className="text-xs space-y-1">

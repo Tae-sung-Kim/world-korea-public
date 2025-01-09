@@ -21,6 +21,7 @@ import {
   TransResponse,
   OrderPayType,
   RequestPayParams,
+  ORDER_PAY_TYPE_MESSAGE,
 } from '@/definitions';
 import usePortonePayment from '@/hooks/usePortonePayment';
 import { addComma } from '@/utils/number';
@@ -153,10 +154,6 @@ export default function SaleProductDetailForm({
         className="w-full lg:w-1/2"
       >
         <div className="backdrop-blur-md bg-white/60 rounded-xl p-6 lg:p-8 shadow-lg">
-          <h1 className="text-2xl lg:text-3xl font-bold text-center mb-6">
-            {saleProductDetailData.name}
-          </h1>
-
           <div className="space-y-6">
             <div className="flex justify-between items-center">
               <span className="text-lg text-muted-foreground">가격</span>
@@ -172,9 +169,6 @@ export default function SaleProductDetailForm({
               name="visitDate"
               render={({ field }) => (
                 <FormItem className="space-y-4">
-                  <FormLabel className="text-lg font-medium">
-                    날짜 선택
-                  </FormLabel>
                   <Calendar
                     mode="single"
                     selected={field.value}
@@ -238,6 +232,41 @@ export default function SaleProductDetailForm({
                 )}
               />
 
+              <FormField
+                control={saleProductForm.control}
+                name="payType"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>결제 수단</FormLabel>
+                    <FormControl>
+                      <RadioGroup
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        className="flex flex-col space-y-1"
+                      >
+                        <FormItem className="flex items-center space-x-3 space-y-0">
+                          <FormControl>
+                            <RadioGroupItem value={OrderPayType.Card} />
+                          </FormControl>
+                          <FormLabel className="font-normal">
+                            {ORDER_PAY_TYPE_MESSAGE[OrderPayType.Card]}
+                          </FormLabel>
+                        </FormItem>
+                        <FormItem className="flex items-center space-x-3 space-y-0">
+                          <FormControl>
+                            <RadioGroupItem value={OrderPayType.Trans} />
+                          </FormControl>
+                          <FormLabel className="font-normal">
+                            {ORDER_PAY_TYPE_MESSAGE[OrderPayType.Trans]}
+                          </FormLabel>
+                        </FormItem>
+                      </RadioGroup>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <span className="hidden">
                 <FormField
                   control={saleProductForm.control}
@@ -262,47 +291,14 @@ export default function SaleProductDetailForm({
               </span>
             </div>
 
-            <FormField
-              control={saleProductForm.control}
-              name="payType"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>결제 수단</FormLabel>
-                  <FormControl>
-                    <RadioGroup
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      className="flex flex-col space-y-1"
-                    >
-                      <FormItem className="flex items-center space-x-3 space-y-0">
-                        <FormControl>
-                          <RadioGroupItem value={OrderPayType.Card} />
-                        </FormControl>
-                        <FormLabel className="font-normal">신용카드</FormLabel>
-                      </FormItem>
-                      <FormItem className="flex items-center space-x-3 space-y-0">
-                        <FormControl>
-                          <RadioGroupItem value={OrderPayType.Trans} />
-                        </FormControl>
-                        <FormLabel className="font-normal">계좌입금</FormLabel>
-                      </FormItem>
-                    </RadioGroup>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
             <Button
               type="submit"
               variant="submit"
               className="w-full"
               disabled={saleProductForm.formState.isSubmitting}
             >
-              {saleProductForm.watch('payType') === OrderPayType.Trans
-                ? '계좌입금'
-                : '결제하기'}
-              ({addComma(saleProductForm.watch('amount'))}원)
+              {ORDER_PAY_TYPE_MESSAGE[saleProductForm.watch('payType')]} (
+              {addComma(saleProductForm.watch('amount'))}원)
             </Button>
           </div>
         </div>
