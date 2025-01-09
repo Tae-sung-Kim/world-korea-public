@@ -15,6 +15,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { MODAL_TYPE, useModalContext } from '@/contexts/modal.context';
 import { ProductDisplayData } from '@/definitions';
 import productService from '@/services/product.service';
 import userService from '@/services/user.service';
@@ -57,6 +58,8 @@ const defaultDetailData = {
 };
 
 export default function PartnerDetailClient({ userId }: IProps) {
+  const { openModal } = useModalContext();
+
   const updatePartner = useUpdatePartnerMutation(userId);
 
   const [partnerProducts, setPartnerProducts] = useState<ProductDisplayData[]>(
@@ -121,10 +124,24 @@ export default function PartnerDetailClient({ userId }: IProps) {
         },
   });
 
-  const handleSubmit = () => {
-    updatePartner.mutate({
-      ...partnerForm.getValues(),
-      partnerProducts: partnerProducts.map((d) => d._id ?? ''),
+  const handleSubmit = async () => {
+    return openModal({
+      type: MODAL_TYPE.CONFIRM,
+      title: '파트너 상품 수정',
+      content: (
+        <div className="space-y-4 p-5">
+          <p className="text-gray-700">
+            <b>{partnerForm.getValues().companyName}</b>에 대한 상품 정보를 수정
+            하시겠습니까?
+          </p>
+        </div>
+      ),
+      onOk: () => {
+        updatePartner.mutate({
+          ...partnerForm.getValues(),
+          partnerProducts: partnerProducts.map((d) => d._id ?? ''),
+        });
+      },
     });
   };
 

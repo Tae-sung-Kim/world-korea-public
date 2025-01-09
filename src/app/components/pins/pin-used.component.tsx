@@ -116,7 +116,7 @@ export default function PinUsed() {
                     <FormControl>
                       <Textarea
                         {...field}
-                        className="min-h-[300px] lg:min-h-[400px] font-mono"
+                        className="min-h-[200px] lg:min-h-[400px] font-mono"
                         placeholder="엑셀에서 복사한 핀 번호를 붙여넣기 해주세요."
                       />
                     </FormControl>
