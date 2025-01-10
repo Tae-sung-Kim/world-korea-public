@@ -38,6 +38,11 @@ class SaleProductService {
     );
   }
 
+  // 판매 상품 삭제
+  deleteSaleProduct(id: string) {
+    return http.delete(`/api/sale-products/${id}`);
+  }
+
   // 단체 예약 가능 상품 list
   getReservationSaleProductList() {
     return http.get<SaleProductFormData<ProductDisplayData[]>>(

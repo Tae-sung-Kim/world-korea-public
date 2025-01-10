@@ -4,7 +4,7 @@ import SortIcons from '../components/sort-icons.component';
 import { usePagination } from '../hooks/usePagination';
 import useSort, { SortOrder } from '../hooks/useSort';
 import {
-  useDeleteProductMutation,
+  useDeleteSaleProductMutation,
   useSaleProductListQuery,
   useUserCategoryListQuery,
 } from '../queries';
@@ -61,7 +61,7 @@ export default function SaleProductListClient() {
     router.push(`/admin/products/${id}`);
   };
 
-  const deleteProductMutation = useDeleteProductMutation();
+  const deleteSaleProductMutation = useDeleteSaleProductMutation();
 
   const handleDeleteProduct = ({
     id,
@@ -75,7 +75,7 @@ export default function SaleProductListClient() {
         type: MODAL_TYPE.CONFIRM,
         title: '상품 삭제',
         content: `'${title}'을(를) 삭제 하시겠습니까?`,
-        onOk: () => deleteProductMutation.mutate(id),
+        onOk: () => deleteSaleProductMutation.mutate(id),
       });
     }
   };

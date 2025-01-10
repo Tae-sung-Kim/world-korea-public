@@ -36,6 +36,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { MODAL_TYPE, useModalContext } from '@/contexts/modal.context';
+import { OrderStatus } from '@/definitions';
 import { Pin } from '@/definitions/pin.type';
 import { usePartnerPinsListQuery } from '@/queries/pins.queries';
 import { useRouter } from 'next/navigation';
@@ -220,7 +221,8 @@ export default function PinList({ tableId, isPartner }: Props) {
               </TableHeader>
               <TableBody>
                 {data.map((pin: Pin, idx: number) => {
-                  const isUsed = pin.usedDate;
+                  const isUsed = !!pin.usedDate;
+
                   return (
                     <TableRow
                       key={pin._id}
@@ -273,29 +275,33 @@ export default function PinList({ tableId, isPartner }: Props) {
                               handleUsedPin({
                                 id: pin._id,
                                 number: pin.number,
-                                used: !!isUsed,
+                                used: isUsed,
                               })
                             }
-                            checked={!!isUsed}
+                            checked={isUsed}
                           />
-                          <span className="hidden">{!!isUsed ? 'Y' : 'N'}</span>
+                          <span className="hidden">{isUsed ? 'Y' : 'N'}</span>
                         </>
                       </TableCell>
                       {!isPartner && (
                         <TableCell className="table-cell">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="hover:bg-destructive/10"
-                            onClick={() =>
-                              handleDeletePin({
-                                id: pin._id ?? '',
-                                number: pin.number ?? '',
-                              })
-                            }
-                          >
-                            <RiDeleteBin6Line className="icon-delete" />
-                          </Button>
+                          {!isUsed &&
+                            pin.orderStatus === OrderStatus.Unpaid && (
+                              // 사용중이거나, unpaid상태 일때만 삭제 버튼 노출
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="hover:bg-destructive/10"
+                                onClick={() =>
+                                  handleDeletePin({
+                                    id: pin._id ?? '',
+                                    number: pin.number ?? '',
+                                  })
+                                }
+                              >
+                                <RiDeleteBin6Line className="icon-delete" />
+                              </Button>
+                            )}
                         </TableCell>
                       )}
                     </TableRow>

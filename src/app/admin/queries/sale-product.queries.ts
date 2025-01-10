@@ -6,7 +6,12 @@ import {
   SaleProductFormData,
 } from '@/definitions';
 import saleProductService from '@/services/sale-product.service';
-import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 const QUERY_KEY = 'admin-sale-product';
@@ -89,5 +94,17 @@ export function useUpdateSaleProductMutation({
     },
     onError,
     onSettled,
+  });
+}
+
+export function useDeleteSaleProductMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => saleProductService.deleteSaleProduct(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
+      toast.success('판매 상품이 삭제 되었습니다.');
+    },
   });
 }
