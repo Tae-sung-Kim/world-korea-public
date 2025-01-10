@@ -1,6 +1,8 @@
 import { resolveData } from '../utils/condition.util';
 import { FILE_PATH, FILE_TYPE, uploadFile } from '../utils/upload.util';
+import PinModel from './pin.model';
 import {
+  OrderStatus,
   PAGE_NUMBER_DEFAULT,
   PAGE_SIZE_DEFAULT,
   PRODUCT_STATUS,
@@ -123,15 +125,49 @@ schema.static(
       });
     }
 
+    //삭제 데이터 제외
+    filter.deletedAt = { $exists: false };
+
     // 총 개수 가져오기
     const totalItems = await this.countDocuments(filter);
 
-    // 데이터 가져오기
-    let list = (
-      await this.find(filter).sort(sort).skip(skip).limit(pageSize)
-    ).map((d) => d.toObject()) as (ProductDB & {
-      pinCount?: number;
-    })[];
+    // // 데이터 가져오기
+    // let list = (
+    //   await this.find(filter).sort(sort).skip(skip).limit(pageSize)
+    // ).map((d) => d.toObject()) as (ProductDB & {
+    //   pinCount?: number;
+    // })[];
+
+    const list = await this.aggregate([
+      { $match: filter },
+      { $sort: sort as Record<string, 1 | -1> }, // 기존 정렬 조건 추가
+      { $skip: skip }, // 페이지네이션 skip 추가
+      { $limit: pageSize }, // 페이지네이션 limit 추가
+      {
+        $lookup: {
+          from: 'pins',
+          let: { productId: '$_id' },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ['$product', '$$productId'] },
+                    { $eq: ['$orderStatus', OrderStatus.Unpaid] },
+                  ],
+                },
+              },
+            },
+          ],
+          as: 'pins',
+        },
+      },
+      {
+        $addFields: {
+          pinCount: { $size: '$pins' },
+        },
+      },
+    ]);
 
     // 전체 페이지 수 계산
     const totalPages = Math.ceil(totalItems / pageSize);
@@ -141,11 +177,6 @@ schema.static(
     const hasNextPage = pageNumber < totalPages;
     const previousPage = hasPreviousPage ? pageNumber - 1 : null;
     const nextPage = hasNextPage ? pageNumber + 1 : null;
-
-    list = list.map((d) => ({
-      ...d,
-      pinCount: d.pins.length,
-    }));
 
     return {
       list,
@@ -169,6 +200,24 @@ schema.static('deleteProductById', async function deleteProductById(productId) {
     return false;
   }
 
+  // Unpaid 상태의 핀들 찾기
+  const unpaidPins = await PinModel.find({
+    product: productId,
+    orderStatus: OrderStatus.Unpaid,
+  });
+
+  // 실제 핀 삭제
+  await PinModel.deleteMany({
+    product: productId,
+    orderStatus: OrderStatus.Unpaid,
+  });
+
+  // 상품의 pins 배열에서 Unpaid 핀 제거
+  product.pins = product.pins.filter(
+    (pinId) => !unpaidPins.some((pin) => pin._id.equals(pinId))
+  );
+
+  // 상품 삭제 처리
   product.deletedAt = new Date();
   await product.save();
 
