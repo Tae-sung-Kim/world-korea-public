@@ -370,7 +370,7 @@ export default function ProductDetail({ productId, disabled = false }: Props) {
             </div>
           )}
 
-          <div className="mb-8">
+          <div className="mb-8 mt-8">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
                 <h3 className="text-lg font-semibold text-gray-800">
