@@ -68,10 +68,11 @@ export async function DELETE(
     }
 
     const deletedPin = await PinModel.findByIdAndDelete(id);
+
     if (deletedPin) {
       const product = await ProductModel.getProductById(deletedPin.product);
       if (product) {
-        await product.deleteProductPin(deletedPin.product);
+        await product.deleteProductPin(deletedPin._id);
       }
     }
 
