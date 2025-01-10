@@ -225,7 +225,7 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
                     />
                   </TableHead>
                   <TableHead
-                    className="w-[130px] table-th text-center"
+                    className="w-[160px] table-th text-center"
                     onClick={() => onSort('visitDate')}
                   >
                     <SortIcons
@@ -234,7 +234,7 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
                     />
                   </TableHead>
                   <TableHead
-                    className="w-[120px] table-th text-center"
+                    className="w-[140px] table-th text-center"
                     onClick={() => onSort('payType')}
                   >
                     <SortIcons
@@ -243,7 +243,7 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
                     />
                   </TableHead>
                   <TableHead
-                    className="w-[120px] table-th text-center"
+                    className="w-[130px] table-th text-center"
                     onClick={() => onSort('status')}
                   >
                     <SortIcons
@@ -251,9 +251,7 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
                       order={sort.name === 'status' ? sort.order : ''}
                     />
                   </TableHead>
-                  {!isMy && !isPartner && (
-                    <TableHead className="min-w-[110px] table-th text-center"></TableHead>
-                  )}
+                  <TableHead className="min-w-[80px] table-th text-center"></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -319,31 +317,31 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
                     <TableCell className="table-cell text-gray-700 text-center">
                       {ORDER_STATUS_MESSAGE[d.status]}
                     </TableCell>
-                    {!isMy && !isPartner && (
-                      <TableCell className="table-cell text-center">
-                        {OrderStatus.Completed === d.status && (
-                          <>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-7 w-7 text-gray-600 hover:text-gray-900"
-                              onClick={() =>
-                                handleQrCodeClick({
-                                  tickets: d.tickets ?? [],
-                                  title: d.saleProduct.name,
-                                })
-                              }
-                            >
-                              <LuQrCode className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-7 w-7 text-gray-600 hover:text-gray-900"
-                              onClick={() => handleQrCodePrint(d.tickets ?? [])}
-                            >
-                              <IoMdPrint className="h-4 w-4" />
-                            </Button>
+                    <TableCell className="table-cell text-center">
+                      {OrderStatus.Completed === d.status && (
+                        <>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-7 w-7 text-gray-600 hover:text-gray-900"
+                            onClick={() =>
+                              handleQrCodeClick({
+                                tickets: d.tickets ?? [],
+                                title: d.saleProduct.name,
+                              })
+                            }
+                          >
+                            <LuQrCode className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-7 w-7 text-gray-600 hover:text-gray-900"
+                            onClick={() => handleQrCodePrint(d.tickets ?? [])}
+                          >
+                            <IoMdPrint className="h-4 w-4" />
+                          </Button>
+                          {!isMy && !isPartner && (
                             <Button
                               variant="ghost"
                               size="icon"
@@ -360,10 +358,10 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
                             >
                               <RiRefundLine className="h-4 w-4" />
                             </Button>
-                          </>
-                        )}
-                      </TableCell>
-                    )}
+                          )}
+                        </>
+                      )}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

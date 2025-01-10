@@ -18,11 +18,6 @@ export default function QrCodePrintModal({ tickets, onCancel }: Props) {
     handlePrint();
   };
 
-  const pinList = tickets.reduce<string[]>((acc, ticket) => {
-    acc.push(...ticket.pins);
-    return acc;
-  }, []);
-
   const getGridConfig = (count: number) => {
     if (count <= 1)
       return {
@@ -45,7 +40,7 @@ export default function QrCodePrintModal({ tickets, onCancel }: Props) {
     };
   };
 
-  const config = getGridConfig(pinList.length);
+  const config = getGridConfig(tickets.length);
 
   return (
     <div className="flex flex-col max-h-[90vh]">
@@ -54,17 +49,17 @@ export default function QrCodePrintModal({ tickets, onCancel }: Props) {
           <div
             className={`grid gap-3 sm:gap-4 place-items-center ${config.cols}`}
           >
-            {pinList.map((pin) => (
+            {tickets.map((ticket) => (
               <div
-                key={pin}
+                key={ticket._id}
                 className="flex flex-col items-center p-2 sm:p-3 space-y-2 sm:space-y-3 border rounded-lg bg-white"
               >
                 <span className="text-xs sm:text-sm font-medium text-gray-900">
-                  {splitFourChar(pin)}
+                  {ticket.shortId}
                 </span>
                 <div className="w-full flex items-center justify-center">
                   <QRCodeCanvas
-                    value={pin}
+                    value={ticket.shortId}
                     size={200}
                     level="H"
                     className={config.qrSize}
