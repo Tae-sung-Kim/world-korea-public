@@ -96,12 +96,10 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
     tickets,
   }: QrCodeProps) => {
     if (Array.isArray(tickets) && tickets.length > 0) {
-      //일단은 가장 첫번째것만
-      const firstTickets = [tickets[0]];
       return await openModal({
         title,
         Component: () => {
-          return <QrCodeModal tickets={firstTickets} />;
+          return <QrCodeModal tickets={tickets} />;
         },
         useCancelButton: false,
       });

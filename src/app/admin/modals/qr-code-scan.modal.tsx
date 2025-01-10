@@ -21,6 +21,14 @@ export default function QrCodeScanModal({
     async (result: QrScanner.ScanResult) => {
       if (!result.data || isProcessing) return;
 
+      //shortUrl 여부
+      const isShortUrl =
+        result.data.startsWith('http://') || result.data.startsWith('https://');
+
+      // if (isShortUrl) {
+      //   qrNumber  result.data.split()= '';
+      // }
+
       try {
         setIsProcessing(true);
         qrScannerRef.current?.stop(); // 스캔 일시 중지
