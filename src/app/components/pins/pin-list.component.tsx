@@ -235,13 +235,13 @@ export default function PinList({ tableId, isPartner }: Props) {
                         {pinData.totalItems - (pageNumber - 1) * pageSize - idx}
                       </TableCell>
                       <TableCell
-                        className="table-cell font-medium list-link"
-                        onClick={() =>
-                          handlePinNumberClick({
-                            name: pin.product?.name ?? '',
-                            pinNumber: pin.number ?? '',
-                          })
-                        }
+                        className="table-cell font-medium "
+                        // onClick={() =>
+                        //   handlePinNumberClick({
+                        //     name: pin.product?.name ?? '',
+                        //     pinNumber: pin.number ?? '',
+                        //   })
+                        // }
                       >
                         {splitFourChar(pin.number)}
                       </TableCell>
