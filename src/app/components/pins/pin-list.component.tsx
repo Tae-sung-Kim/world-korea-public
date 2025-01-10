@@ -235,7 +235,7 @@ export default function PinList({ tableId, isPartner }: Props) {
                         {pinData.totalItems - (pageNumber - 1) * pageSize - idx}
                       </TableCell>
                       <TableCell
-                        className="table-cell font-medium "
+                        className="table-cell font-medium"
                         // onClick={() =>
                         //   handlePinNumberClick({
                         //     name: pin.product?.name ?? '',
