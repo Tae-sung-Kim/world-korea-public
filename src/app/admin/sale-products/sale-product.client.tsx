@@ -118,7 +118,7 @@ export default function SaleProductListClient() {
                         order={sort.name === 'name' ? sort.order : ''}
                       />
                     </TableHead>
-                    <TableHead className="table-th min-w-[250px]">
+                    <TableHead className="table-th w-[250px]">
                       상세 상품명
                     </TableHead>
                     <TableHead

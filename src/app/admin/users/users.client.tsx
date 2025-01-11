@@ -1,6 +1,8 @@
 'use client';
 
+import SortIcons from '../components/sort-icons.component';
 import { usePagination } from '../hooks/usePagination';
+import useSort from '../hooks/useSort';
 import { useUserListQuery } from '../queries';
 import ListWrapper from '@/app/components/common/list-wrapper.component';
 import Paginations from '@/app/components/common/pagination.component';
@@ -20,11 +22,13 @@ import { useMemo } from 'react';
 
 export default function UsersClient() {
   const { pageNumber, pageSize, filter } = usePagination();
+  const { sort, onSort } = useSort();
 
   const userData = useUserListQuery({
     pageNumber: Number(pageNumber),
     pageSize: Number(pageSize),
     filter,
+    sort,
   });
 
   const data = useMemo(() => {
@@ -43,13 +47,69 @@ export default function UsersClient() {
         <Table>
           <TableHeader className="table-header">
             <TableRow className="list-table-row">
-              <TableHead className="table-th">구분</TableHead>
-              <TableHead className="table-th">상태</TableHead>
-              <TableHead className="table-th">회원명</TableHead>
-              <TableHead className="table-th">아이디</TableHead>
-              <TableHead className="table-th">회원 분류</TableHead>
-              <TableHead className="table-th">업체명</TableHead>
-              <TableHead className="table-th">업체번호</TableHead>
+              <TableHead
+                className="table-th cursor-pointer"
+                onClick={() => onSort('isPartner')}
+              >
+                <SortIcons
+                  title="구분"
+                  order={sort.name === 'isPartner' ? sort.order : ''}
+                />
+              </TableHead>
+              <TableHead
+                className="table-th cursor-pointer"
+                onClick={() => onSort('isApproved')}
+              >
+                <SortIcons
+                  title="상태"
+                  order={sort.name === 'isApproved' ? sort.order : ''}
+                />
+              </TableHead>
+              <TableHead
+                className="table-th cursor-pointer"
+                onClick={() => onSort('name')}
+              >
+                <SortIcons
+                  title="회원명"
+                  order={sort.name === 'name' ? sort.order : ''}
+                />
+              </TableHead>
+              <TableHead
+                className="table-th cursor-pointer"
+                onClick={() => onSort('loginId')}
+              >
+                <SortIcons
+                  title="아이디"
+                  order={sort.name === 'loginId' ? sort.order : ''}
+                />
+              </TableHead>
+              <TableHead
+                className="table-th cursor-pointer"
+                onClick={() => onSort('userCategory.level')}
+              >
+                <SortIcons
+                  title="회원 분류"
+                  order={sort.name === 'userCategory.level' ? sort.order : ''}
+                />
+              </TableHead>
+              <TableHead
+                className="table-th cursor-pointer"
+                onClick={() => onSort('companyName')}
+              >
+                <SortIcons
+                  title="업체명"
+                  order={sort.name === 'companyName' ? sort.order : ''}
+                />
+              </TableHead>
+              <TableHead
+                className="table-thcursor-pointer"
+                onClick={() => onSort('companyNo')}
+              >
+                <SortIcons
+                  title="업체번호"
+                  order={sort.name === 'companyNo' ? sort.order : ''}
+                />
+              </TableHead>
               <TableHead className="table-th">이메일</TableHead>
               <TableHead className="table-th">연락처</TableHead>
               <TableHead className="table-th">등록일</TableHead>

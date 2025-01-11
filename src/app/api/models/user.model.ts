@@ -178,14 +178,26 @@ schema.static(
     // 총 개수 가져오기
     const totalItems = await this.countDocuments(filter);
 
-    // 데이터 가져오기
-    let list = (
-      await this.find(filter, '-password')
-        .sort(sort)
-        .skip(skip)
-        .limit(pageSize)
-        .populate('userCategory')
-    ).map((d) => d.toObject());
+    let list = await this.aggregate([
+      { $match: filter },
+      {
+        $lookup: {
+          from: 'usercategories', // 참조하는 컬렉션 이름 (보통 모델명의 소문자 복수형)
+          localField: 'userCategory',
+          foreignField: '_id',
+          as: 'userCategory',
+        },
+      },
+      { $unwind: '$userCategory' }, // populate된 배열을 풀어줍니다
+      { $sort: sort as Record<string, 1 | -1> },
+      { $skip: skip },
+      { $limit: pageSize },
+      {
+        $project: {
+          password: 0, // 비밀번호 필드 제외
+        },
+      },
+    ]);
 
     // 전체 페이지 수 계산
     const totalPages = Math.ceil(totalItems / pageSize);
@@ -211,10 +223,6 @@ schema.static(
     };
   }
 );
-
-// schema.static('getUserList', async function getUserList() {
-//   return this.find({}, '-password').populate('userCategory');
-// });
 
 schema.static('getUserById', function getUserById(userId) {
   return this.findOne({ _id: userId }, '-password').populate('userCategory');
@@ -244,9 +252,6 @@ schema.static(
 /**
  * 파트너 목록 반환
  */
-// schema.static('getPartnerUserList', function getPartnerUserList() {
-//   return this.find({ isPartner: true }, '-password').populate('userCategory');
-// });
 
 schema.static(
   'getPartnerUserList',
@@ -274,13 +279,26 @@ schema.static(
     const totalItems = await this.countDocuments(filter);
 
     // 데이터 가져오기
-    let list = (
-      await this.find(filter, '-password')
-        .sort(sort)
-        .skip(skip)
-        .limit(pageSize)
-        .populate('userCategory')
-    ).map((d) => d.toObject());
+    let list = await this.aggregate([
+      { $match: filter },
+      {
+        $lookup: {
+          from: 'usercategories', // 참조하는 컬렉션 이름 (보통 모델명의 소문자 복수형)
+          localField: 'userCategory',
+          foreignField: '_id',
+          as: 'userCategory',
+        },
+      },
+      { $unwind: '$userCategory' }, // populate된 배열을 풀어줍니다
+      { $sort: sort as Record<string, 1 | -1> },
+      { $skip: skip },
+      { $limit: pageSize },
+      {
+        $project: {
+          password: 0, // 비밀번호 필드 제외
+        },
+      },
+    ]);
 
     // 전체 페이지 수 계산
     const totalPages = Math.ceil(totalItems / pageSize);

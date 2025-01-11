@@ -1,6 +1,8 @@
 'use client';
 
+import SortIcons from '../../components/sort-icons.component';
 import { usePagination } from '../../hooks/usePagination';
+import useSort from '../../hooks/useSort';
 import { usePartnerListQuery } from '../../queries';
 import ListWrapper from '@/app/components/common/list-wrapper.component';
 import Paginations from '@/app/components/common/pagination.component';
@@ -21,11 +23,13 @@ import { useMemo } from 'react';
 
 export default function PartnerListClient() {
   const { pageNumber, pageSize, filter } = usePagination();
+  const { sort, onSort } = useSort();
 
   const partnersData = usePartnerListQuery({
     pageNumber: Number(pageNumber),
     pageSize: Number(pageSize),
     filter,
+    sort,
   });
 
   const data = useMemo(() => {
@@ -44,12 +48,60 @@ export default function PartnerListClient() {
         <Table>
           <TableHeader className="table-header">
             <TableRow className="list-table-row">
-              <TableHead className="table-th">분류</TableHead>
-              <TableHead className="table-th">상태</TableHead>
-              <TableHead className="table-th">아이디</TableHead>
-              <TableHead className="table-th">회원명</TableHead>
-              <TableHead className="table-th">업체번호</TableHead>
-              <TableHead className="table-th">업체명</TableHead>
+              <TableHead
+                className="table-th cursor-pointer"
+                onClick={() => onSort('userCategory.level')}
+              >
+                <SortIcons
+                  title="분류"
+                  order={sort.name === 'userCategory.level' ? sort.order : ''}
+                />
+              </TableHead>
+              <TableHead
+                className="table-th cursor-pointer"
+                onClick={() => onSort('isApproved')}
+              >
+                <SortIcons
+                  title="상태"
+                  order={sort.name === 'isApproved' ? sort.order : ''}
+                />
+              </TableHead>
+              <TableHead
+                className="table-th cursor-pointer"
+                onClick={() => onSort('loginId')}
+              >
+                <SortIcons
+                  title="아이디"
+                  order={sort.name === 'loginId' ? sort.order : ''}
+                />
+              </TableHead>
+              <TableHead
+                className="table-th cursor-pointer"
+                onClick={() => onSort('name')}
+              >
+                <SortIcons
+                  title="회원명"
+                  order={sort.name === 'name' ? sort.order : ''}
+                />
+              </TableHead>
+              <TableHead
+                className="table-th cursor-pointer"
+                onClick={() => onSort('companyName')}
+              >
+                <SortIcons
+                  title="업체명"
+                  order={sort.name === 'companyName' ? sort.order : ''}
+                />
+              </TableHead>
+              <TableHead
+                className="table-th cursor-pointer"
+                onClick={() => onSort('companyNo')}
+              >
+                <SortIcons
+                  title="업체번호"
+                  order={sort.name === 'companyNo' ? sort.order : ''}
+                />
+              </TableHead>
               <TableHead className="table-th">이메일</TableHead>
               <TableHead className="table-th">연락처</TableHead>
               <TableHead className="table-th">등록일</TableHead>
@@ -82,8 +134,8 @@ export default function PartnerListClient() {
                 <TableCell className="table-cell font-medium text-gray-900">
                   {user.name}
                 </TableCell>
-                <TableCell className="table-cell">{user.companyNo}</TableCell>
                 <TableCell className="table-cell">{user.companyName}</TableCell>
+                <TableCell className="table-cell">{user.companyNo}</TableCell>
                 <TableCell className="table-cell">{user.email}</TableCell>
                 <TableCell className="table-cell">
                   {user.contactNumber}

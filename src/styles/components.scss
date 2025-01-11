@@ -76,11 +76,7 @@ $breakpoint-2xl: 1536px;
   }
 
   &-th {
-    @apply h-12 text-sm font-semibold text-gray-900 text-center;
-  }
-
-  &-td {
-    @apply font-medium text-gray-900;
+    @apply h-12 text-sm font-semibold text-gray-900;
   }
 
   &-cell {
