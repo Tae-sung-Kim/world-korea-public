@@ -14,6 +14,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { User } from '@/definitions';
+import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
 
@@ -86,31 +87,19 @@ export default function UsersClient() {
                 <TableCell className="table-cell font-medium text-gray-900">
                   {user.name}
                 </TableCell>
-                <TableCell className="table-cell text-gray-700">
-                  {user.loginId}
-                </TableCell>
-                <TableCell className="table-cell text-gray-700">
+                <TableCell className="table-cell">{user.loginId}</TableCell>
+                <TableCell className="table-cell">
                   {user.userCategory?.name}
                 </TableCell>
-                <TableCell className="table-cell text-gray-700">
-                  {user.companyName}
-                </TableCell>
-                <TableCell className="table-cell text-gray-700">
-                  {user.companyNo}
-                </TableCell>
-                <TableCell className="table-cell text-gray-700">
-                  {user.email}
-                </TableCell>
-                <TableCell className="table-cell text-gray-700">
+                <TableCell className="table-cell">{user.companyName}</TableCell>
+                <TableCell className="table-cell">{user.companyNo}</TableCell>
+                <TableCell className="table-cell">{user.email}</TableCell>
+                <TableCell className="table-cell">
                   {user.contactNumber}
                 </TableCell>
-                <TableCell className="table-cell text-gray-700">
+                <TableCell className="table-cell">
                   {user.createdAt &&
-                    new Intl.DateTimeFormat('ko-KR', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                    }).format(new Date(user.createdAt))}
+                    format(new Date(user.createdAt), 'yyyy. M. dd')}
                 </TableCell>
               </TableRow>
             ))}

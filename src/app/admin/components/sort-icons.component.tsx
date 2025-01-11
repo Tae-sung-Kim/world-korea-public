@@ -8,7 +8,7 @@ type SortIcon = {
 
 export default function SortIcons({ title, order }: SortIcon) {
   return (
-    <div className="flex">
+    <div className="flex justify-center">
       <span>{title}</span>
       <div className="m-1">
         {order === '' && <BiSortAlt2 />}

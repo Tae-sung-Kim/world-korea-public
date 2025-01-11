@@ -176,7 +176,7 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
                   {!isMy && !isPartner && (
                     <>
                       <TableHead
-                        className="w-[110px] table-th text-center"
+                        className="w-[110px] table-th"
                         onClick={() => onSort('user.companyName')}
                       >
                         <SortIcons
@@ -187,7 +187,7 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
                         />
                       </TableHead>
                       <TableHead
-                        className="w-[120px] table-th text-center"
+                        className="w-[120px] table-th"
                         onClick={() => onSort('user.name')}
                       >
                         <SortIcons
@@ -198,7 +198,7 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
                     </>
                   )}
                   <TableHead
-                    className="w-[180px] table-th text-center"
+                    className="w-[180px] table-th"
                     onClick={() => onSort('quantity')}
                   >
                     <SortIcons
@@ -216,7 +216,7 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
                     />
                   </TableHead>
                   <TableHead
-                    className="w-[110px] table-th text-center"
+                    className="w-[110px] table-th"
                     onClick={() => onSort('orderDate')}
                   >
                     <SortIcons
@@ -225,7 +225,7 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
                     />
                   </TableHead>
                   <TableHead
-                    className="w-[160px] table-th text-center"
+                    className="w-[160px] table-th"
                     onClick={() => onSort('visitDate')}
                   >
                     <SortIcons
@@ -234,7 +234,7 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
                     />
                   </TableHead>
                   <TableHead
-                    className="w-[140px] table-th text-center"
+                    className="w-[140px] table-th"
                     onClick={() => onSort('payType')}
                   >
                     <SortIcons
@@ -243,7 +243,7 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
                     />
                   </TableHead>
                   <TableHead
-                    className="w-[130px] table-th text-center"
+                    className="w-[130px] table-th"
                     onClick={() => onSort('status')}
                   >
                     <SortIcons
@@ -251,7 +251,7 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
                       order={sort.name === 'status' ? sort.order : ''}
                     />
                   </TableHead>
-                  <TableHead className="min-w-[80px] table-th text-center"></TableHead>
+                  <TableHead className="min-w-[80px] table-th"></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -298,23 +298,24 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
                         </TableCell>
                       </>
                     )}
-                    <TableCell className="table-cell text-gray-700 text-center">
+                    <TableCell className="table-cell text-center">
                       {addComma(d.quantity ?? 0)}
                     </TableCell>
-                    <TableCell className="table-cell text-gray-700 text-right">
+                    <TableCell className="table-cell text-right">
                       {addComma(d.totalPrice ?? 0)}
                     </TableCell>
-                    <TableCell className="table-cell text-gray-700 text-center">
+                    <TableCell className="table-cell text-center">
                       {d.orderDate &&
-                        format(new Date(d.orderDate), 'yy.MM.dd HH:mm')}
+                        format(new Date(d.orderDate), 'yyyy.MM.dd HH:mm')}
                     </TableCell>
-                    <TableCell className="table-cell text-gray-700 text-center">
-                      {d.visitDate && format(new Date(d.visitDate), 'yy.MM.dd')}
+                    <TableCell className="table-cell text-center">
+                      {d.visitDate &&
+                        format(new Date(d.visitDate), 'yyyy. M. dd')}
                     </TableCell>
-                    <TableCell className="table-cell text-gray-700 text-center">
+                    <TableCell className="table-cell text-center">
                       {ORDER_PAY_TYPE_MESSAGE[d.payType]}
                     </TableCell>
-                    <TableCell className="table-cell text-gray-700 text-center">
+                    <TableCell className="table-cell text-center">
                       {ORDER_STATUS_MESSAGE[d.status]}
                     </TableCell>
                     <TableCell className="table-cell text-center">

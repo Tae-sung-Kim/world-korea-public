@@ -168,10 +168,11 @@ export default function GroupReservationListClient({
                   </TableCell>
                   <TableCell className="table-cell">
                     {groupData.createdAt &&
-                      format(groupData.createdAt, 'yyyy.MM.dd')}
+                      format(groupData.createdAt, 'yyyy. M. dd')}
                   </TableCell>
                   <TableCell className="table-cell">
-                    {groupData.usedAt && format(groupData.usedAt, 'yyyy.MM.dd')}
+                    {groupData.usedAt &&
+                      format(groupData.usedAt, 'yyyy. M. dd')}
                   </TableCell>
                   <TableCell className="table-cell">
                     {customData.contactPersonInfo as string}

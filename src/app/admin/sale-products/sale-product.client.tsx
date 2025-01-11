@@ -110,7 +110,7 @@ export default function SaleProductListClient() {
                   <TableRow className="list-table-row">
                     <TableHead className="table-th w-[70px]">번호</TableHead>
                     <TableHead
-                      className="table-th w-[180px] text-center cursor-pointer"
+                      className="table-th w-[180px] cursor-pointer"
                       onClick={() => onSort('name')}
                     >
                       <SortIcons
@@ -118,11 +118,11 @@ export default function SaleProductListClient() {
                         order={sort.name === 'name' ? sort.order : ''}
                       />
                     </TableHead>
-                    <TableHead className="table-th min-w-[250px] text-center">
+                    <TableHead className="table-th min-w-[250px]">
                       상세 상품명
                     </TableHead>
                     <TableHead
-                      className="table-th w-[120px] text-center cursor-pointer"
+                      className="table-th w-[120px] cursor-pointer"
                       onClick={() => onSort('accessLevel')}
                     >
                       <SortIcons
@@ -130,11 +130,11 @@ export default function SaleProductListClient() {
                         order={sort.name === 'accessLevel' ? sort.order : ''}
                       />
                     </TableHead>
-                    <TableHead className="table-th w-[170px] text-center">
+                    <TableHead className="table-th w-[170px]">
                       단체예약여부
                     </TableHead>
                     <TableHead
-                      className="table-th w-[120px] text-center cursor-pointer"
+                      className="table-th w-[120px] cursor-pointer"
                       onClick={() => onSort('price')}
                     >
                       <SortIcons
@@ -142,10 +142,8 @@ export default function SaleProductListClient() {
                         order={sort.name === 'price' ? sort.order : ''}
                       />
                     </TableHead>
-                    <TableHead className="table-th w-[120px] text-center">
-                      재고
-                    </TableHead>
-                    <TableHead className="table-th w-[150px] text-center"></TableHead>
+                    <TableHead className="table-th w-[120px]">재고</TableHead>
+                    <TableHead className="table-th w-[150px]"></TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -155,7 +153,7 @@ export default function SaleProductListClient() {
                     return (
                       <React.Fragment key={saleData._id}>
                         <TableRow className="group hover:bg-gray-50 transition-colors">
-                          <TableCell className="table-cell text-gray-700">
+                          <TableCell className="table-cell">
                             {saleProductData.totalItems -
                               (pageNumber - 1) * pageSize -
                               idx}
@@ -166,7 +164,7 @@ export default function SaleProductListClient() {
                           >
                             {saleData.name}
                           </TableCell>
-                          <TableCell className="table-cell text-gray-700">
+                          <TableCell className="table-cell">
                             <span className="text-sm min-w-0 flex-1">
                               {saleData.products[0]?.name}
                               {saleData.products.length > 1 && (
@@ -176,14 +174,14 @@ export default function SaleProductListClient() {
                               )}
                             </span>
                           </TableCell>
-                          <TableCell className="table-cell text-gray-700">
+                          <TableCell className="table-cell">
                             {
                               userCategoryList?.find(
                                 (f) => f.level === String(saleData.accessLevel)
                               )?.name
                             }
                           </TableCell>
-                          <TableCell className="table-cell text-gray-700">
+                          <TableCell className="table-cell">
                             <span
                               className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
                                 saleData.isReservable
@@ -194,10 +192,10 @@ export default function SaleProductListClient() {
                               {saleData.isReservable ? 'Y' : 'N'}
                             </span>
                           </TableCell>
-                          <TableCell className="table-cell text-gray-700 text-right">
+                          <TableCell className="table-cell text-right">
                             {addComma(saleData.price)} 원
                           </TableCell>
-                          <TableCell className="table-cell text-gray-700 text-right">
+                          <TableCell className="table-cell text-right">
                             총{' '}
                             {addComma(
                               saleData.products.reduce(

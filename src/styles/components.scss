@@ -76,7 +76,7 @@ $breakpoint-2xl: 1536px;
   }
 
   &-th {
-    @apply h-12 text-sm font-semibold text-gray-900;
+    @apply h-12 text-sm font-semibold text-gray-900 text-center;
   }
 
   &-td {
@@ -84,7 +84,7 @@ $breakpoint-2xl: 1536px;
   }
 
   &-cell {
-    @apply px-4 py-4 truncate;
+    @apply h-12 px-4 py-4 truncate;
   }
 }
 
@@ -105,7 +105,7 @@ $breakpoint-2xl: 1536px;
 /* 그룹 예약 스타일 */
 .group-reservation {
   &-td {
-    @apply py-4 text-gray-700;
+    @apply py-4;
   }
 }
 

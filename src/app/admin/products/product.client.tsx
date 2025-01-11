@@ -157,7 +157,7 @@ export default function ProductListClient() {
                       key={product._id}
                       className="transition-colors hover:bg-gray-50 focus:outline-none focus:bg-gray-50"
                     >
-                      <TableCell className="table-cell text-gray-700 truncate">
+                      <TableCell className="table-cell truncate">
                         {productData.totalItems -
                           (pageNumber - 1) * pageSize -
                           idx}
@@ -168,7 +168,7 @@ export default function ProductListClient() {
                       >
                         {product.name}
                       </TableCell>
-                      <TableCell className="table-cell text-gray-700 truncate">
+                      <TableCell className="table-cell truncate">
                         {
                           userCategoryList?.find(
                             (f) => f.level === String(product.accessLevel)
@@ -187,13 +187,13 @@ export default function ProductListClient() {
                           {PRODUCT_STATUS_MESSAGE[product.status]}
                         </span>
                       </TableCell>
-                      <TableCell className="table-cell text-right text-gray-700 truncate">
+                      <TableCell className="table-cell text-right">
                         {addComma(product.regularPrice)}
                       </TableCell>
-                      <TableCell className="table-cell text-right text-gray-700 truncate">
+                      <TableCell className="table-cell text-right">
                         {addComma(product.salePrice)}
                       </TableCell>
-                      <TableCell className="table-cell text-right text-gray-700 truncate">
+                      <TableCell className="table-cell text-right">
                         {addComma(product.pinCount)}
                       </TableCell>
                       <TableCell className="table-cell text-right">

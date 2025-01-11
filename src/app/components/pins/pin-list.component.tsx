@@ -39,6 +39,7 @@ import { MODAL_TYPE, useModalContext } from '@/contexts/modal.context';
 import { OrderStatus } from '@/definitions';
 import { Pin } from '@/definitions/pin.type';
 import { usePartnerPinsListQuery } from '@/queries/pins.queries';
+import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { RiDeleteBin6Line } from 'react-icons/ri';
@@ -170,7 +171,7 @@ export default function PinList({ tableId, isPartner }: Props) {
                     onClick={() => onSort('product.name')}
                   >
                     <SortIcons
-                      title="연결 상품"
+                      title="상품명"
                       order={sort.name === 'product.name' ? sort.order : ''}
                     />
                   </TableHead>
@@ -256,17 +257,17 @@ export default function PinList({ tableId, isPartner }: Props) {
                         {pin.product?.name}
                       </TableCell>
                       {!isPartner && (
-                        <TableCell className="table-cell text-gray-700">
+                        <TableCell className="table-cell">
                           {pin.partner?.companyName}
                         </TableCell>
                       )}
-                      <TableCell className="table-cell text-gray-700">
+                      <TableCell className="table-cell">
                         {pin.endDate &&
-                          new Date(pin.endDate).toLocaleDateString()}
+                          format(new Date(pin.endDate), 'yyyy. M. dd')}
                       </TableCell>
-                      <TableCell className="table-cell text-gray-700">
+                      <TableCell className="table-cell">
                         {pin.createdAt &&
-                          new Date(pin.createdAt).toLocaleDateString()}
+                          format(new Date(pin.createdAt), 'yyyy. M. dd')}
                       </TableCell>
                       <TableCell className="table-cell">
                         <>
