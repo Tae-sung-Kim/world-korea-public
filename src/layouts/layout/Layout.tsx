@@ -9,9 +9,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <BackgroundOverlay />
       <div className="root-layout h-full flex flex-col w-full relative">
         <Header className="shrink-0" />
-        <main className="flex-1 relative w-full min-h-0">
+        <main className="flex-1 relative w-full min-h-0 overflow-y-auto">
           {/* 컨텐츠 */}
-          <div className="relative w-full h-full max-w-[1440px] mx-auto overflow-y-auto">
+          <div className="relative w-full h-full max-w-[1440px] mx-auto">
             {children}
           </div>
         </main>
