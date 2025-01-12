@@ -2,7 +2,7 @@
 
 import { ProfileStep } from './profile.constant';
 import {
-  useGetCurentUserQuery,
+  useGetCurrentUserQuery,
   usePatchUserMutation,
 } from '@/app/admin/queries';
 import { Button } from '@/components/ui/button';
@@ -45,7 +45,7 @@ export default function ProfileEdit({
 }: {
   onStep: (type: ProfileStep) => void;
 }) {
-  const currentUserData = useGetCurentUserQuery();
+  const currentUserData = useGetCurrentUserQuery();
 
   const patchMutation = usePatchUserMutation({
     onSuccess: () => onStep(ProfileStep.Detail),

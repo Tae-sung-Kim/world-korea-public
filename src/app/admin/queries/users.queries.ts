@@ -109,7 +109,7 @@ export function useUpdatePartnerMutation(userId: string) {
   });
 }
 
-export function useGetCurentUserQuery() {
+export function useGetCurrentUserQuery() {
   const fallback: User = {} as User;
 
   const { data = fallback } = useQuery({

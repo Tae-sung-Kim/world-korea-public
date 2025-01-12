@@ -90,7 +90,7 @@ export default function Paginations({
         </span>
       </div>
       <div className="flex items-center gap-4">
-        <Pagination className="rounded-lg bg-white shadow-sm border border-gray-100 pl-1 pr-2 py-1">
+        <Pagination className="rounded-lg bg-white shadow-sm border border-gray-100 pl-1 pr-3">
           <PaginationContent className="gap-1">
             <PaginationItem>
               <PaginationLink

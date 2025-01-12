@@ -1,4 +1,6 @@
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 export default function NoSessionPage() {
   return (
@@ -12,6 +14,11 @@ export default function NoSessionPage() {
           <br />
           판매처라면, 로그인해주세요.
         </AlertDescription>
+        <div className="mt-4 flex justify-center">
+          <Link href="/login">
+            <Button variant="submit">로그인</Button>
+          </Link>
+        </div>
       </Alert>
     </div>
   );

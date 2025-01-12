@@ -2,7 +2,7 @@
 
 import ProfileChangePasswordModal from './profile-change-password.modal';
 import { ProfileStep } from './profile.constant';
-import { useGetCurentUserQuery } from '@/app/admin/queries';
+import { useGetCurrentUserQuery } from '@/app/admin/queries';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -16,7 +16,7 @@ export default function ProfileDetail({
 }) {
   const { openModal } = useModalContext();
 
-  const currentUserData = useGetCurentUserQuery();
+  const currentUserData = useGetCurrentUserQuery();
 
   const handleUpdate = () => {
     onStep(ProfileStep.ConfirmPassword);

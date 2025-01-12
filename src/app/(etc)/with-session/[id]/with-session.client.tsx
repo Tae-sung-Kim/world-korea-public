@@ -1,8 +1,8 @@
 'use client';
 
-import { useGetCurentUserQuery } from '@/app/admin/queries';
 import { useAuthContext } from '@/contexts/auth.context';
 import shortService from '@/services/short.service';
+import userService from '@/services/user.service';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
@@ -13,8 +13,6 @@ export default function WithSessionClient({
 }) {
   const { isLoggedIn } = useAuthContext();
 
-  const currentUser = useGetCurentUserQuery();
-
   const router = useRouter();
 
   useEffect(() => {
@@ -23,7 +21,7 @@ export default function WithSessionClient({
     }
 
     (async () => {
-      const { isPartner } = currentUser;
+      const { isPartner } = await userService.getCurrentUser();
       if (isPartner) {
         // pin 사용 page로 이동
         router.replace('/partner/pins/used');
@@ -35,7 +33,7 @@ export default function WithSessionClient({
         router.replace(`/admin/sale-products/${saleProduct}`);
       }
     })();
-  }, [router, isLoggedIn, currentUser, shortId]);
+  }, [router, isLoggedIn, shortId]);
 
   return <></>;
 }

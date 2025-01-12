@@ -168,7 +168,7 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
                     번호
                   </TableHead>
                   <TableHead
-                    className="w-[200px] table-th"
+                    className="table-th"
                     onClick={() => onSort('saleProduct.name')}
                   >
                     <SortIcons
@@ -179,7 +179,7 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
                   {!isMy && !isPartner && (
                     <>
                       <TableHead
-                        className="w-[110px] table-th"
+                        className="table-th"
                         onClick={() => onSort('user.companyName')}
                       >
                         <SortIcons
@@ -190,7 +190,7 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
                         />
                       </TableHead>
                       <TableHead
-                        className="w-[120px] table-th"
+                        className="table-th"
                         onClick={() => onSort('user.name')}
                       >
                         <SortIcons
@@ -201,7 +201,7 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
                     </>
                   )}
                   <TableHead
-                    className="w-[180px] table-th"
+                    className="table-th"
                     onClick={() => onSort('quantity')}
                   >
                     <SortIcons
@@ -210,7 +210,7 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
                     />
                   </TableHead>
                   <TableHead
-                    className="w-[110px] table-th text-right"
+                    className="table-th text-right"
                     onClick={() => onSort('totalPrice')}
                   >
                     <SortIcons
@@ -219,7 +219,7 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
                     />
                   </TableHead>
                   <TableHead
-                    className="w-[110px] table-th"
+                    className="table-th"
                     onClick={() => onSort('orderDate')}
                   >
                     <SortIcons
@@ -228,7 +228,7 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
                     />
                   </TableHead>
                   <TableHead
-                    className="w-[160px] table-th"
+                    className="table-th"
                     onClick={() => onSort('visitDate')}
                   >
                     <SortIcons
@@ -237,7 +237,7 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
                     />
                   </TableHead>
                   <TableHead
-                    className="w-[140px] table-th"
+                    className="table-th"
                     onClick={() => onSort('payType')}
                   >
                     <SortIcons
@@ -246,7 +246,7 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
                     />
                   </TableHead>
                   <TableHead
-                    className="w-[130px] table-th"
+                    className="table-th"
                     onClick={() => onSort('status')}
                   >
                     <SortIcons
@@ -254,7 +254,7 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
                       order={sort.name === 'status' ? sort.order : ''}
                     />
                   </TableHead>
-                  <TableHead className="min-w-[80px] table-th"></TableHead>
+                  <TableHead className="table-th"></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

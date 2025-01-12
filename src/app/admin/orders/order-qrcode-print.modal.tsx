@@ -54,9 +54,9 @@ export default function QrCodePrintModal({ tickets, onCancel }: Props) {
                 key={ticket._id}
                 className="flex flex-col items-center p-2 sm:p-3 space-y-2 sm:space-y-3 border rounded-lg bg-white"
               >
-                <span className="text-xs sm:text-sm font-medium text-gray-900">
+                {/* <span className="text-xs sm:text-sm font-medium text-gray-900">
                   {ticket.shortId}
-                </span>
+                </span> */}
                 <div className="w-full flex items-center justify-center">
                   <QRCodeCanvas
                     value={
