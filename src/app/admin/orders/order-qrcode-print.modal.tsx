@@ -59,7 +59,9 @@ export default function QrCodePrintModal({ tickets, onCancel }: Props) {
                 </span>
                 <div className="w-full flex items-center justify-center">
                   <QRCodeCanvas
-                    value={ticket.shortId}
+                    value={
+                      window.location.origin + '/short/o/' + ticket.shortId
+                    }
                     size={200}
                     level="H"
                     className={config.qrSize}
@@ -72,10 +74,12 @@ export default function QrCodePrintModal({ tickets, onCancel }: Props) {
       </div>
 
       <div className="shrink-0 form-button-area gap-2 p-4 border-t bg-white">
-        <Button variant="outline" onClick={onCancel}>
+        <Button variant="cancel" onClick={onCancel}>
           닫기
         </Button>
-        <Button onClick={handlePrintClick}>출력</Button>
+        <Button variant="utility" onClick={handlePrintClick}>
+          출력
+        </Button>
       </div>
     </div>
   );

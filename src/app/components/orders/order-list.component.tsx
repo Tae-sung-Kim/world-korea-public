@@ -109,9 +109,12 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
   };
 
   //qrcode 프린트 - 현재는 해당되는 상품에 포함되는 모든 QR코드
-  const handleQrCodePrint = async (tickets: Tickets[]) => {
+  const handleQrCodePrint = async ({
+    title = '구매 상품 정보',
+    tickets,
+  }: QrCodeProps) => {
     return await openModal({
-      title: 'QR 코드 프린트',
+      title,
       showFooter: false,
       Component: ({ onCancel }) => {
         return <QrCodePrintModal tickets={tickets} onCancel={onCancel} />;
@@ -326,22 +329,28 @@ export default function OrderList({ tableId, isMy, isPartner }: Props) {
                             size="icon"
                             className="h-7 w-7 text-gray-600 hover:text-gray-900"
                             onClick={() =>
-                              handleQrCodeClick({
-                                tickets: d.tickets ?? [],
+                              handleQrCodePrint({
                                 title: d.saleProduct.name,
+                                tickets: d.tickets ?? [],
                               })
                             }
+                            // onClick={() =>
+                            //   handleQrCodeClick({
+                            //     tickets: d.tickets ?? [],
+                            //     title: d.saleProduct.name,
+                            //   })
+                            // }
                           >
                             <LuQrCode className="h-4 w-4" />
                           </Button>
-                          <Button
+                          {/* <Button
                             variant="ghost"
                             size="icon"
                             className="h-7 w-7 text-gray-600 hover:text-gray-900"
                             onClick={() => handleQrCodePrint(d.tickets ?? [])}
                           >
                             <IoMdPrint className="h-4 w-4" />
-                          </Button>
+                          </Button> */}
                           {!isMy && !isPartner && (
                             <Button
                               variant="ghost"

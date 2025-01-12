@@ -1,7 +1,7 @@
 import QrCodeScanModal from '../modals/qr-code-scan.modal';
 import { Button } from '@/components/ui/button';
 import { useModalContext } from '@/contexts/modal.context';
-import { BsQrCode } from 'react-icons/bs';
+import { LuQrCode } from 'react-icons/lu';
 
 type Props = {
   modalTitle?: string;
@@ -29,8 +29,8 @@ export default function QrCodeScanButton({
   };
 
   return (
-    <Button variant="outline" onClick={handleQRCodeScan}>
-      <BsQrCode className="sm:h-5 sm:w-5" />
+    <Button variant="outline" size="icon" onClick={handleQRCodeScan}>
+      <LuQrCode className="sm:h-5 sm:w-5" />
     </Button>
   );
 }

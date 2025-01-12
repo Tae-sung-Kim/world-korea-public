@@ -49,7 +49,7 @@ export default function AccessPanel() {
                 className="h-9 px-4 rounded-full hover:bg-slate-100/90 hover:scale-105 transition-all duration-200"
               >
                 <Link
-                  href="/admin/users"
+                  href="/admin/orders"
                   className="text-slate-600 text-sm font-normal tracking-tight"
                 >
                   관리자 페이지

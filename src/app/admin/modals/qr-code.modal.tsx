@@ -30,18 +30,21 @@ const SingleQRCode = ({ value }: { value: string }) => {
 
 const QRCodeGrid = ({ tickets }: { tickets: Tickets[] }) => {
   const getGridConfig = (count: number) => {
-    if (count <= 1) return {
-      cols: 'grid-cols-1',
-      qrSize: 'w-[200px] h-[200px]',
-    };
-    if (count <= 4) return {
-      cols: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3',
-      qrSize: 'w-[180px] h-[180px] sm:w-[160px] sm:h-[160px]',
-    };
-    if (count <= 10) return {
-      cols: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5',
-      qrSize: 'w-[180px] h-[180px] sm:w-[140px] sm:h-[140px]',
-    };
+    if (count <= 1)
+      return {
+        cols: 'grid-cols-1',
+        qrSize: 'w-[200px] h-[200px]',
+      };
+    if (count <= 4)
+      return {
+        cols: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3',
+        qrSize: 'w-[180px] h-[180px] sm:w-[160px] sm:h-[160px]',
+      };
+    if (count <= 10)
+      return {
+        cols: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5',
+        qrSize: 'w-[180px] h-[180px] sm:w-[140px] sm:h-[140px]',
+      };
     return {
       cols: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5',
       qrSize: 'w-[180px] h-[180px] sm:w-[120px] sm:h-[120px]',
