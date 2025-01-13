@@ -104,8 +104,10 @@ export default function PartnerDetailClient({ userId }: IProps) {
             const userData = await userService.getUserById(userId);
             const listData = await _setProductData();
 
-            const partnerProducts = listData.filter((f) =>
-              res.partnerProducts?.includes(f._id ?? '')
+            const partnerProducts = listData.filter(
+              (f) =>
+                userData._id === f.partner &&
+                res.partnerProducts?.includes(f._id)
             );
 
             setPartnerProducts(partnerProducts);
