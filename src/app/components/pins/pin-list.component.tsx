@@ -57,6 +57,8 @@ export default function PinList({ isPartner }: Props) {
   const [selectedProductId, setSelectedProductId] = useState<string>('');
   const { openModal } = useModalContext();
 
+  const [checkedPins, setCheckedPins] = useState<string[]>([]);
+
   const deletePinMutation = useDeletePinMutation();
 
   const usedPinMutation = useUsedPinMutation();
@@ -79,9 +81,35 @@ export default function PinList({ isPartner }: Props) {
     return pinData.list;
   }, [pinData]);
 
+  const checkabledPins = useMemo(() => {
+    return data.filter((f) => {
+      //핀 사용 여부
+      const isUsed = !!f.usedDate;
+      // 핀 상태
+      const pinStatus = f.orderStatus === OrderStatus.Unpaid;
+      return !isUsed && pinStatus;
+    });
+  }, [data]);
+
   // 상품 상세 이동
   const handleProductMove = (productId: string = '') => {
     router.push('products/' + productId);
+  };
+
+  // 개별 선택
+  const handleCheck = (id: string) => {
+    setCheckedPins((prevData) => {
+      if (prevData.includes(id)) {
+        return prevData.filter((pinId) => pinId !== id);
+      } else {
+        return [...prevData, id];
+      }
+    });
+  };
+
+  // 전체 선택 - 삭제 불가능 Pin 제외
+  const handleAllCheck = (data: string[]) => {
+    setCheckedPins(data);
   };
 
   const handleProductChange = (id: string) => {
@@ -162,7 +190,16 @@ export default function PinList({ isPartner }: Props) {
                 <TableRow className="list-table-row">
                   {!isPartner && (
                     <TableHead className="table-th" data-exclude-excel>
-                      <Checkbox />
+                      <Checkbox
+                        onCheckedChange={(checked) => {
+                          const checkData = checkabledPins.map(
+                            (item) => item._id ?? ''
+                          );
+
+                          return handleAllCheck(checked ? checkData : []);
+                        }}
+                        checked={checkedPins.length === checkabledPins.length}
+                      />
                     </TableHead>
                   )}
                   <TableHead className="table-th" data-exclude-excel>
@@ -231,7 +268,11 @@ export default function PinList({ isPartner }: Props) {
               </TableHeader>
               <TableBody>
                 {data.map((pin: Pin, idx: number) => {
+                  //핀 사용 여부
                   const isUsed = !!pin.usedDate;
+                  // 핀 상태
+                  const pinStatus = pin.orderStatus === OrderStatus.Unpaid;
+                  const isDeleteButton = !isUsed && pinStatus;
 
                   return (
                     <TableRow
@@ -240,7 +281,14 @@ export default function PinList({ isPartner }: Props) {
                     >
                       {!isPartner && (
                         <TableCell className="table-cell" data-exclude-excel>
-                          <Checkbox />
+                          {isDeleteButton && (
+                            <Checkbox
+                              onCheckedChange={() => handleCheck(pin._id ?? '')}
+                              checked={
+                                pin._id ? checkedPins.includes(pin._id) : false
+                              }
+                            />
+                          )}
                         </TableCell>
                       )}
                       <TableCell className="table-cell" data-exclude-excel>
@@ -297,18 +345,17 @@ export default function PinList({ isPartner }: Props) {
                       </TableCell>
                       {!isPartner && (
                         <TableCell className="table-cell">
-                          {!isUsed &&
-                            pin.orderStatus === OrderStatus.Unpaid && (
-                              // 사용중이거나, unpaid상태 일때만 삭제 버튼 노출
-                              <IconDeleteButton
-                                onDelete={() =>
-                                  handleDeletePin({
-                                    id: pin._id ?? '',
-                                    number: pin.number ?? '',
-                                  })
-                                }
-                              />
-                            )}
+                          {isDeleteButton && (
+                            // 사용중이거나, unpaid상태 일때만 삭제 버튼 노출
+                            <IconDeleteButton
+                              onDelete={() =>
+                                handleDeletePin({
+                                  id: pin._id ?? '',
+                                  number: pin.number ?? '',
+                                })
+                              }
+                            />
+                          )}
                         </TableCell>
                       )}
                     </TableRow>
