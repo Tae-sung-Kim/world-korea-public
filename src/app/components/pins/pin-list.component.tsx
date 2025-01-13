@@ -152,9 +152,11 @@ export default function PinList({ tableId, isPartner }: Props) {
             <Table id={tableId}>
               <TableHeader className="table-header">
                 <TableRow className="list-table-row">
-                  <TableHead className="w-[50px] table-th" data-exclude-excel>
-                    <Checkbox />
-                  </TableHead>
+                  {!isPartner && (
+                    <TableHead className="w-[50px] table-th" data-exclude-excel>
+                      <Checkbox />
+                    </TableHead>
+                  )}
                   <TableHead className="w-[50px] table-th" data-exclude-excel>
                     번호
                   </TableHead>
@@ -230,9 +232,11 @@ export default function PinList({ tableId, isPartner }: Props) {
                       key={pin._id}
                       className="hover:bg-gray-50 transition-colors"
                     >
-                      <TableCell className="table-cell" data-exclude-excel>
-                        <Checkbox />
-                      </TableCell>
+                      {!isPartner && (
+                        <TableCell className="table-cell" data-exclude-excel>
+                          <Checkbox />
+                        </TableCell>
+                      )}
                       <TableCell className="table-cell" data-exclude-excel>
                         {pinData.totalItems - (pageNumber - 1) * pageSize - idx}
                       </TableCell>
