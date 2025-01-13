@@ -8,6 +8,10 @@ class ShortService {
       `/api/orders/short/${shortId}`
     );
   }
+  // shortId 에 해당하는 판매 상품 id
+  getSaleProductIdByShortId(shortId: string) {
+    return http.get<string>(`/api/sale-products/short/${shortId}`);
+  }
 }
 
 const shortService = new ShortService();

@@ -27,7 +27,7 @@ export default function WithSessionClient({
         router.replace('/partner/pins/used');
       } else {
         //전체 상품이 옴
-        const { saleProduct } = await shortService.getOrderIdByShortId(
+        const saleProduct = await shortService.getSaleProductIdByShortId(
           String(shortId)
         );
         router.replace(`/admin/sale-products/${saleProduct}`);
