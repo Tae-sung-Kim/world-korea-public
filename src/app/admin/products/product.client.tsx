@@ -1,8 +1,9 @@
 'use client';
 
+import IconDeleteButton from '../components/icon-delete-button.component';
 import SortIcons from '../components/sort-icons.component';
 import { usePagination } from '../hooks/usePagination';
-import useSort, { SortOrder } from '../hooks/useSort';
+import useSort from '../hooks/useSort';
 import {
   useDeleteProductMutation,
   useProductListQuery,
@@ -13,7 +14,6 @@ import ListWrapper from '@/app/components/common/list-wrapper.component';
 import NoDataFound from '@/app/components/common/no-data-found.component';
 import Pagination from '@/app/components/common/pagination.component';
 import TotalCountBottom from '@/app/components/common/total-count-bottom.component';
-import { Button } from '@/components/ui/button';
 import {
   Table,
   TableBody,
@@ -24,15 +24,10 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { MODAL_TYPE, useModalContext } from '@/contexts/modal.context';
-import {
-  PRODUCT_STATUS,
-  PRODUCT_STATUS_MESSAGE,
-  ProductDisplayData,
-} from '@/definitions';
+import { PRODUCT_STATUS, PRODUCT_STATUS_MESSAGE } from '@/definitions';
 import { addComma } from '@/utils/number';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
-import { RiDeleteBin6Line } from 'react-icons/ri';
 
 export default function ProductListClient() {
   const router = useRouter();
@@ -197,20 +192,15 @@ export default function ProductListClient() {
                         {addComma(product.pinCount)}
                       </TableCell>
                       <TableCell className="table-cell text-right">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="hover:bg-destructive/10"
-                          onClick={(e) => {
-                            e.stopPropagation();
+                        <IconDeleteButton
+                          onDelete={(e) => {
+                            e?.stopPropagation();
                             handleDeleteProduct({
                               id: product._id,
                               title: product.name,
                             });
                           }}
-                        >
-                          <RiDeleteBin6Line className="icon-delete" />
-                        </Button>
+                        />
                       </TableCell>
                     </TableRow>
                   ))}

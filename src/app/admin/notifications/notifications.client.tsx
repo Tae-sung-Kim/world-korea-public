@@ -1,17 +1,16 @@
 'use client';
 
+import IconDeleteButton from '../components/icon-delete-button.component';
 import {
   useDeleteNotificationMutation,
   useGetNotificationListQuery,
 } from '../queries';
 import NotificationsImage from './notifications-image.component';
 import TotalCountBottom from '@/app/components/common/total-count-bottom.component';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { NotificationDisplayData } from '@/definitions/notifications.type';
 import Image from 'next/image';
 import { useState } from 'react';
-import { RiDeleteBin6Line } from 'react-icons/ri';
 
 export default function NotificationsListClient() {
   const notificationList =
@@ -37,13 +36,9 @@ export default function NotificationsListClient() {
                       <span className="text-muted-foreground">#{idx + 1}</span>
                       <span>{d.title}</span>
                     </CardTitle>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => handleDeleteNotification(d._id)}
-                    >
-                      <RiDeleteBin6Line className="icon-delete" />
-                    </Button>
+                    <IconDeleteButton
+                      onDelete={() => handleDeleteNotification(d._id)}
+                    />
                   </div>
                 </CardHeader>
                 <CardContent>

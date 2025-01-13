@@ -3,6 +3,7 @@
 import ListWrapper from '../common/list-wrapper.component';
 import NoDataFound from '../common/no-data-found.component';
 import TotalCountBottom from '../common/total-count-bottom.component';
+import IconDeleteButton from '@/app/admin/components/icon-delete-button.component';
 import SortIcons from '@/app/admin/components/sort-icons.component';
 import { usePagination } from '@/app/admin/hooks/usePagination';
 import useSort from '@/app/admin/hooks/useSort';
@@ -289,19 +290,14 @@ export default function PinList({ tableId, isPartner }: Props) {
                           {!isUsed &&
                             pin.orderStatus === OrderStatus.Unpaid && (
                               // 사용중이거나, unpaid상태 일때만 삭제 버튼 노출
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="hover:bg-destructive/10"
-                                onClick={() =>
+                              <IconDeleteButton
+                                onDelete={() =>
                                   handleDeletePin({
                                     id: pin._id ?? '',
                                     number: pin.number ?? '',
                                   })
                                 }
-                              >
-                                <RiDeleteBin6Line className="icon-delete" />
-                              </Button>
+                              />
                             )}
                         </TableCell>
                       )}

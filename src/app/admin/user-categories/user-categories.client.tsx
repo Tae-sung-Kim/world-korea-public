@@ -1,5 +1,6 @@
 'use client';
 
+import IconDeleteButton from '../components/icon-delete-button.component';
 import {
   useAddUserCategoryMutation,
   useDeleteUserCategoryMutation,
@@ -269,19 +270,15 @@ export default function UserCategoriesClient() {
                           >
                             <AiOutlineUserAdd className="h-4 w-4 text-green-600" />
                           </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-8 w-8 hover:bg-red-100"
-                            onClick={() =>
+
+                          <IconDeleteButton
+                            onDelete={() =>
                               handleUserCategoryDelete({
                                 id: d._id ?? '',
                                 idx,
                               })
                             }
-                          >
-                            <RiDeleteBin6Line className="icon-delete" />
-                          </Button>
+                          />
                         </>
                       )}
                     </div>

@@ -1,8 +1,9 @@
 'use client';
 
+import IconDeleteButton from '../components/icon-delete-button.component';
 import SortIcons from '../components/sort-icons.component';
 import { usePagination } from '../hooks/usePagination';
-import useSort, { SortOrder } from '../hooks/useSort';
+import useSort from '../hooks/useSort';
 import {
   useDeleteSaleProductMutation,
   useSaleProductListQuery,
@@ -28,7 +29,7 @@ import { MODAL_TYPE, useModalContext } from '@/contexts/modal.context';
 import { addComma } from '@/utils/number';
 import { useRouter } from 'next/navigation';
 import React, { useMemo, useState } from 'react';
-import { RiDeleteBin6Line, RiArrowDownSLine } from 'react-icons/ri';
+import { RiArrowDownSLine } from 'react-icons/ri';
 
 export default function SaleProductListClient() {
   const router = useRouter();
@@ -222,19 +223,15 @@ export default function SaleProductListClient() {
                                   }`}
                                 />
                               </Button>
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                className="p-2 hover:bg-red-50"
-                                onClick={() =>
+
+                              <IconDeleteButton
+                                onDelete={() =>
                                   handleDeleteProduct({
                                     id,
                                     title: saleData.name,
                                   })
                                 }
-                              >
-                                <RiDeleteBin6Line className="icon-delete" />
-                              </Button>
+                              />
                             </div>
                           </TableCell>
                         </TableRow>

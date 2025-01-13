@@ -1,5 +1,6 @@
 'use client';
 
+import IconDeleteButton from '@/app/admin/components/icon-delete-button.component';
 import { useUpdatePartnerMutation } from '@/app/admin/queries';
 import DetailTitle from '@/app/components/common/detail-title.component';
 import { Badge } from '@/components/ui/badge';
@@ -22,7 +23,6 @@ import userService from '@/services/user.service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import React, { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { RiDeleteBin6Line } from 'react-icons/ri';
 import { z } from 'zod';
 
 interface IProps {
@@ -367,15 +367,10 @@ export default function PartnerDetailClient({ userId }: IProps) {
                             className="text-sm bg-background hover:bg-background"
                           >
                             {d.name}
-                            <Button
-                              type="button"
-                              size="icon"
-                              variant="ghost"
-                              onClick={() => handleToggleClick(d)}
-                              className="hover:text-destructive"
-                            >
-                              <RiDeleteBin6Line className="icon-delete" />
-                            </Button>
+
+                            <IconDeleteButton
+                              onDelete={() => handleToggleClick(d)}
+                            />
                           </Badge>
                         ))}
                       </div>
