@@ -1,4 +1,4 @@
-import BackgroundOverlay from '@/components/common/BackgroundOverlay';
+import BackgroundOverlay from '@/components/common/background-overlay.component';
 import cn from 'classnames';
 
 interface FooterProps {
