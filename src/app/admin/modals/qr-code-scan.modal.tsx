@@ -1,3 +1,4 @@
+import { splitFourChar } from '../pins/pin.utils';
 import { Button } from '@/components/ui/button';
 import { MODAL_TYPE, useModalContext } from '@/contexts/modal.context';
 import pinsService from '@/services/pins.service';
@@ -22,10 +23,9 @@ export default function QrCodeScanModal({
     async (result: QrScanner.ScanResult) => {
       if (!result.data || isProcessing) return;
 
-      let qrCodeNumber: string;
-      let shortId: string = '';
-
       try {
+        let qrCodeNumber: string = '';
+        let shortId: string = '';
         setIsProcessing(true);
         qrScannerRef.current?.stop(); // 스캔 일시 중지
 
@@ -38,31 +38,27 @@ export default function QrCodeScanModal({
           const splitData = result.data.split('/');
           shortId = splitData[splitData.length - 1];
 
-          const { tickets } = await shortService.getOrderIdByShortId(
+          const { number } = await shortService.getTicketByShortId(
             String(shortId)
           );
 
-          const data = await shortService.getOrderIdByShortId(String(shortId));
-
-          console.log(data);
-
-          const findTicket = tickets.find((f) => f.shortId === shortId);
+          qrCodeNumber = number ?? '';
         }
 
-        const usedPinQrCode = await pinsService.usedPinQrCode(
-          result.data.replaceAll('-', '')
-        );
+        const usedPinQrCode = await pinsService.usedPinQrCode(qrCodeNumber);
 
         if (usedPinQrCode) {
           await openModal({
             type: MODAL_TYPE.ALERT,
-            title: result.data,
-            content: `${result.data}는 이미 사용된 코드입니다.\n다시 확인해 주세요.`,
+            // title: qrCodeNumber,
+            content: `${splitFourChar(
+              qrCodeNumber
+            )}는 이미 사용된 코드입니다.\n다시 확인해 주세요.`,
             onOk: () => qrScannerRef.current?.start(),
           });
           qrScannerRef.current?.start(); // 스캔 재개
         } else {
-          onResiveData?.(result.data);
+          onResiveData?.(qrCodeNumber);
           onCancel?.();
         }
       } finally {

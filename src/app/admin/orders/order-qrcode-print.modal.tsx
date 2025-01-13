@@ -1,4 +1,3 @@
-import { splitFourChar } from '../pins/pin.utils';
 import { Button } from '@/components/ui/button';
 import { Tickets } from '@/definitions';
 import { QRCodeCanvas } from 'qrcode.react';

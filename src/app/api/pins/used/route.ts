@@ -15,9 +15,9 @@ export async function POST(req: NextRequest) {
 
     await connectMongo();
 
-    if (!(await requiredIsAdmin())) {
-      return createResponse(HTTP_STATUS.FORBIDDEN);
-    }
+    // if (!(await requiredIsAdmin())) {
+    //   return createResponse(HTTP_STATUS.FORBIDDEN);
+    // }
 
     const pinList = await PinModel.find({ number: { $in: pinNumberList } });
 

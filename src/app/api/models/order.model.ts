@@ -1,3 +1,4 @@
+import PinModel from './pin.model';
 import {
   Order,
   OrderStatus,
@@ -67,6 +68,7 @@ interface OrderSchemaModel extends Model<OrderDB, {}, OrderMethods> {
   checkShortIdExists(shortId: string): Promise<boolean>; // shortUrl 이 이미 있는지 여부 반환
   getOrderByShortId(shortId: string): Promise<OrderDocument | null>;
   getSaleProductIdByShortId(shortId: string): Promise<string | null>;
+  getTicketByShortId(shortId: string, userId?: string): Promise<any | null>;
 }
 
 const schema = new Schema<OrderDB, OrderSchemaModel, OrderMethods>({
@@ -428,6 +430,34 @@ schema.static('checkShortIdExists', async function checkShortIdExists(shortId) {
 schema.static('getOrderByShortId', function getOrderByShortId(shortId) {
   return this.findOne({ 'tickets.shortId': shortId });
 });
+
+// shortId로 주문 pin번호 찾기
+schema.static(
+  'getTicketByShortId',
+  async function getTicketByShortId(shortId, userId) {
+    const order = await this.findOne({ 'tickets.shortId': shortId });
+
+    if (order) {
+      const pinIds =
+        order.tickets.find((ticket) => ticket.shortId === shortId)?.pins || [];
+
+      const pins = await PinModel.find({
+        _id: { $in: pinIds },
+        // product가 존재하는 핀만 필터링
+        product: { $exists: true, $ne: null },
+      }).populate({
+        path: 'product',
+        match: { partner: userId }, // partner와 userId가 같은 product만 필터링
+      });
+
+      // product가 null이 아닌 핀만 필터링하고 첫 번째 핀 반환
+      const filteredPins = pins.filter((pin) => pin.product !== null);
+      return filteredPins[0] || null;
+    }
+
+    return null;
+  }
+);
 
 schema.static(
   'getSaleProductIdByShortId',

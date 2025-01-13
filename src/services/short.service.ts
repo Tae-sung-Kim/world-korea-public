@@ -1,4 +1,4 @@
-import { UserInfo, SaleProductBuyDisplayData } from '@/definitions';
+import { UserInfo, SaleProductBuyDisplayData, Pin } from '@/definitions';
 import http from '@/services';
 
 class ShortService {
@@ -11,6 +11,11 @@ class ShortService {
   // shortId 에 해당하는 판매 상품 id
   getSaleProductIdByShortId(shortId: string) {
     return http.get<string>(`/api/sale-products/short/${shortId}`);
+  }
+
+  // shortId로 주문 ticket 찾기
+  getTicketByShortId(shortId: string) {
+    return http.get<Pin>(`/api/pins/short/${shortId}`);
   }
 }
 

@@ -15,9 +15,11 @@ export async function GET(
   try {
     const pinNumber = ctx.params.number;
 
-    if (!(await requiredIsAdmin())) {
-      return createResponse(HTTP_STATUS.FORBIDDEN);
-    }
+    await connectMongo();
+
+    // if (!(await requiredIsAdmin())) {
+    //   return createResponse(HTTP_STATUS.FORBIDDEN);
+    // }
 
     // 핀 검색
     const existingPin = await PinModel.getPinByNumber(pinNumber);

@@ -5,6 +5,7 @@ export const splitFourChar = (pinNumber: string = '') => {
   if (pinNumber) {
     return pinNumber.replace(/(.{4})/g, '$1-').slice(0, -1);
   }
+  return pinNumber;
 };
 
 //엑셀에서 복사한 데이터

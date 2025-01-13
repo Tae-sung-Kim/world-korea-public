@@ -1,6 +1,7 @@
 'use client';
 
 import QrCodeScanButton from '@/app/admin/components/qr-code-scan-button.component';
+import { splitFourChar } from '@/app/admin/pins/pin.utils';
 import { useUsedPinListMutation } from '@/app/admin/queries';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
