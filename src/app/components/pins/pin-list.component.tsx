@@ -3,11 +3,13 @@
 import ListWrapper from '../common/list-wrapper.component';
 import NoDataFound from '../common/no-data-found.component';
 import TotalCountBottom from '../common/total-count-bottom.component';
+import ExportExcelButton from '@/app/admin/components/export-excel-button.component';
 import IconDeleteButton from '@/app/admin/components/icon-delete-button.component';
 import SortIcons from '@/app/admin/components/sort-icons.component';
 import { usePagination } from '@/app/admin/hooks/usePagination';
 import useSort from '@/app/admin/hooks/useSort';
 import QrCodeModal from '@/app/admin/modals/qr-code.modal';
+import PinSearch from '@/app/admin/pins/pin-search.component';
 import { splitFourChar } from '@/app/admin/pins/pin.utils';
 import {
   useDeletePinMutation,
@@ -16,7 +18,6 @@ import {
   useUsedPinMutation,
 } from '@/app/admin/queries';
 import Pagination from '@/app/components/common/pagination.component';
-import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   Select,
@@ -42,15 +43,15 @@ import { Pin } from '@/definitions/pin.type';
 import { usePartnerPinsListQuery } from '@/queries/pins.queries';
 import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
-import { useMemo, useState } from 'react';
-import { RiDeleteBin6Line } from 'react-icons/ri';
+import { useMemo, useRef, useState } from 'react';
 
 type Props = {
-  tableId?: string;
   isPartner?: boolean;
 };
 
-export default function PinList({ tableId, isPartner }: Props) {
+export default function PinList({ isPartner }: Props) {
+  const tableIdRef = useRef('pinExportExcelTable');
+
   const router = useRouter();
   const productData = useProductListQuery();
   const [selectedProductId, setSelectedProductId] = useState<string>('');
@@ -145,23 +146,30 @@ export default function PinList({ tableId, isPartner }: Props) {
   };
 
   return (
-    <>
+    <div className="content-search-container">
+      <div className="list-search-buttons">
+        <div className="flex-1 max-w-xl">
+          <PinSearch />
+        </div>
+        <ExportExcelButton tableId={tableIdRef.current} fileName="핀리스트" />
+      </div>
+
       {data.length > 0 ? (
         <>
           <ListWrapper>
-            <Table id={tableId}>
+            <Table id={tableIdRef.current}>
               <TableHeader className="table-header">
                 <TableRow className="list-table-row">
                   {!isPartner && (
-                    <TableHead className="w-[50px] table-th" data-exclude-excel>
+                    <TableHead className="table-th" data-exclude-excel>
                       <Checkbox />
                     </TableHead>
                   )}
-                  <TableHead className="w-[50px] table-th" data-exclude-excel>
+                  <TableHead className="table-th" data-exclude-excel>
                     번호
                   </TableHead>
                   <TableHead
-                    className="w-[200px] table-th cursor-pointer"
+                    className="table-th cursor-pointer"
                     onClick={() => onSort('number')}
                   >
                     <SortIcons
@@ -180,7 +188,7 @@ export default function PinList({ tableId, isPartner }: Props) {
                   </TableHead>
                   {!isPartner && (
                     <TableHead
-                      className="w-[110px] table-th cursor-pointer"
+                      className="table-th cursor-pointer"
                       onClick={() => onSort('partner.companyName')}
                     >
                       <SortIcons
@@ -192,7 +200,7 @@ export default function PinList({ tableId, isPartner }: Props) {
                     </TableHead>
                   )}
                   <TableHead
-                    className="w-[110px] table-th cursor-pointer"
+                    className="table-th cursor-pointer"
                     onClick={() => onSort('endDate')}
                   >
                     <SortIcons
@@ -201,7 +209,7 @@ export default function PinList({ tableId, isPartner }: Props) {
                     />
                   </TableHead>
                   <TableHead
-                    className="w-[110px] table-th cursor-pointer"
+                    className="table-th cursor-pointer"
                     onClick={() => onSort('createdAt')}
                   >
                     <SortIcons
@@ -210,7 +218,7 @@ export default function PinList({ tableId, isPartner }: Props) {
                     />
                   </TableHead>
                   <TableHead
-                    className="w-[100px] table-th cursor-pointer"
+                    className="table-th cursor-pointer"
                     onClick={() => onSort('usedDate')}
                   >
                     <SortIcons
@@ -218,9 +226,7 @@ export default function PinList({ tableId, isPartner }: Props) {
                       order={sort.name === 'usedDate' ? sort.order : ''}
                     />
                   </TableHead>
-                  {!isPartner && (
-                    <TableHead className="w-[50px] table-th"></TableHead>
-                  )}
+                  {!isPartner && <TableHead className="table-th"></TableHead>}
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -327,6 +333,6 @@ export default function PinList({ tableId, isPartner }: Props) {
       ) : (
         <NoDataFound />
       )}
-    </>
+    </div>
   );
 }
