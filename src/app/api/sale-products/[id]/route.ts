@@ -73,7 +73,7 @@ export async function DELETE(
       return createResponse(HTTP_STATUS.FORBIDDEN);
     }
 
-    await SaleProductModel.findByIdAndDelete(productId);
+    await SaleProductModel.deleteSaleProductById(productId);
 
     return NextResponse.json(true);
   } catch (error) {

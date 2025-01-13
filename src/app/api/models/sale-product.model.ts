@@ -102,6 +102,9 @@ schema.static(
       });
     }
 
+    //삭제 데이터 제외
+    filter.deletedAt = { $exists: false };
+
     // 총 개수 가져오기
     const totalItems = await this.countDocuments(filter);
 
