@@ -13,6 +13,7 @@ import PinSearch from '@/app/admin/pins/pin-search.component';
 import { splitFourChar } from '@/app/admin/pins/pin.utils';
 import {
   useDeletePinMutation,
+  useDeletePinsMutation,
   usePinsListQuery,
   useProductListQuery,
   useUsedPinMutation,
@@ -59,7 +60,10 @@ export default function PinList({ isPartner }: Props) {
 
   const [checkedPins, setCheckedPins] = useState<string[]>([]);
 
+  // 단건 pin 삭제
   const deletePinMutation = useDeletePinMutation();
+  // 다건 pin 삭제
+  const deletePinsMutation = useDeletePinsMutation();
 
   const usedPinMutation = useUsedPinMutation();
 
@@ -118,15 +122,33 @@ export default function PinList({ isPartner }: Props) {
     console.log('선택된 상품', findProduct);
   };
 
-  //핀번호 삭제
+  // 핀번호 삭제
   const handleDeletePin = ({ id, number }: { id: string; number: string }) => {
     if (!!id) {
       return openModal({
         type: MODAL_TYPE.CONFIRM,
-        title: '핀번호 삭제',
-        content: `${splitFourChar(number)}를 삭제 하시겠습니까?`,
+        title: 'Pin 삭제',
+        content: <DeletePinModal number={[number]} />,
         onOk: () => {
           deletePinMutation.mutate(id);
+        },
+      });
+    }
+  };
+
+  // 다건 핀번호 삭제
+  const handleDeletePins = () => {
+    const pinNumbers = checkabledPins
+      .filter((f) => f._id && checkedPins.includes(f._id))
+      .map((d) => d.number ?? '');
+
+    if (checkedPins.length > 0) {
+      return openModal({
+        type: MODAL_TYPE.CONFIRM,
+        title: 'Pin 삭제',
+        content: <DeletePinModal number={pinNumbers} />,
+        onOk: () => {
+          deletePinsMutation.mutate(checkedPins);
         },
       });
     }
@@ -181,7 +203,7 @@ export default function PinList({ isPartner }: Props) {
         </div>
         <ExportExcelButton tableId={tableIdRef.current} fileName="핀리스트" />
         {/* 여러건 삭제 */}
-        <IconDeleteButton onDelete={() => {}} />
+        <IconDeleteButton onDelete={handleDeletePins} />
         {/* 여러건 핀 사용사용 */}
       </div>
 
@@ -386,3 +408,31 @@ export default function PinList({ isPartner }: Props) {
     </div>
   );
 }
+
+export const DeletePinModal = ({ number }: { number: string[] }) => {
+  return (
+    <div className="space-y-4">
+      <div className="text-sm text-gray-600 mb-2">
+        다음 {number.length}개의 Pin을 삭제하시겠습니까?
+      </div>
+      <div className="max-h-40 overflow-y-auto border border-gray-200 rounded-md p-3">
+        {number.map((d, index) => (
+          <div
+            key={d}
+            className={`
+                    py-1 px-2 
+                    ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}
+                    text-sm text-gray-800
+                    rounded-sm
+                  `}
+          >
+            {index + 1}. {splitFourChar(d)}
+          </div>
+        ))}
+      </div>
+      <div className="text-red-600 font-semibold text-sm">
+        ⚠️ 삭제된 Pin은 복구할 수 없습니다.
+      </div>
+    </div>
+  );
+};

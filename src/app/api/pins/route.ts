@@ -14,6 +14,8 @@ import { NextRequest, NextResponse } from 'next/server';
  */
 export async function GET(req: NextRequest) {
   try {
+    await connectMongo();
+
     if (!(await requiredIsAdmin())) {
       return createResponse(HTTP_STATUS.FORBIDDEN);
     }
@@ -125,21 +127,34 @@ export async function POST(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   try {
+    await connectMongo();
+
     if (!(await requiredIsAdmin())) {
       return createResponse(HTTP_STATUS.FORBIDDEN);
     }
 
     const { ids } = await req.json(); // 요청 본문에서 직접 ids 추출
 
-    console.log('idsidsidsidsidsidsidsidsidsidsids', ids);
+    // ids 유효성 검사 추가
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+      return createResponse(
+        HTTP_STATUS.BAD_REQUEST,
+        '유효하지 않은 핀 ID 목록'
+      );
+    }
 
-    //개발 해야함
-
-    // 여기서 ids로 삭제 로직 구현
     const deletedPins = await PinModel.find({ _id: { $in: ids } });
+
+    // 존재하지 않는 핀 ID 처리
+    if (deletedPins.length !== ids.length) {
+      const existingPinIds = deletedPins.map((pin) => pin._id.toString());
+      const missingPinIds = ids.filter((id) => !existingPinIds.includes(id));
+
+      console.log(`다음 핀 ID는 존재하지 않음: ${missingPinIds.join(', ')}`);
+    }
+
     await PinModel.deleteMany({ _id: { $in: ids } });
 
-    // 관련된 제품의 핀 참조 제거
     const productIds = deletedPins.map((pin) => pin.product).filter(Boolean);
     await ProductModel.updateMany(
       { _id: { $in: productIds } },
@@ -148,8 +163,10 @@ export async function DELETE(req: NextRequest) {
 
     return NextResponse.json({
       deletedCount: deletedPins.length,
+      totalRequestedCount: ids.length,
     });
   } catch (error) {
+    console.error('핀 다건 삭제 중 오류:', error);
     return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
   }
 }
