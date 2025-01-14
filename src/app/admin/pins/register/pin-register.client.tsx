@@ -1,7 +1,7 @@
 'use client';
 
 import { useCreatePinMutation, useProductListQuery } from '../../queries';
-import { excelDataToPinRegisterData } from '../pin.utils';
+import { excelDataToPinRegisterData } from '@/app/api/utils/pin.utils';
 import { Button } from '@/components/ui/button';
 import {
   Form,
