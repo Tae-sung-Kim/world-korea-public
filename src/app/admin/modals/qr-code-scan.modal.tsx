@@ -1,4 +1,4 @@
-import { splitFourChar } from '../pins/pin.utils';
+import { splitFourChar } from '@/app/api/utils/pin.utils';
 import { Button } from '@/components/ui/button';
 import { MODAL_TYPE, useModalContext } from '@/contexts/modal.context';
 import pinsService from '@/services/pins.service';

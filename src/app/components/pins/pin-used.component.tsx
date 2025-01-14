@@ -1,8 +1,8 @@
 'use client';
 
 import QrCodeScanButton from '@/app/admin/components/qr-code-scan-button.component';
-import { splitFourChar } from '@/app/admin/pins/pin.utils';
 import { useUsedPinListMutation } from '@/app/admin/queries';
+import { excelDataToPinUsedData } from '@/app/api/utils/pin.utils';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import {
@@ -43,18 +43,6 @@ export default function PinUsed() {
     },
   });
 
-  const excelDataToPinUsedData = (value: string): string[] => {
-    const splitLineValue = value.split('\n');
-
-    return splitLineValue.reduce((acc: string[], cur: string) => {
-      const splitTabValue = cur.split('\t');
-
-      acc.push(splitTabValue[0].replaceAll('-', ''));
-
-      return acc;
-    }, []);
-  };
-
   const handleSubmit = () => {
     const formValues = pinForm.getValues();
     const data: PinUsed = {
@@ -68,6 +56,10 @@ export default function PinUsed() {
         console.error('키가 존재 하지 않습니다.');
       }
     }
+
+    console.log(data);
+
+    return false;
 
     usedPinListMutation.mutate(data);
   };

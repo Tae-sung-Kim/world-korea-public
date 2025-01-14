@@ -10,7 +10,6 @@ import { usePagination } from '@/app/admin/hooks/usePagination';
 import useSort from '@/app/admin/hooks/useSort';
 import QrCodeModal from '@/app/admin/modals/qr-code.modal';
 import PinSearch from '@/app/admin/pins/pin-search.component';
-import { splitFourChar } from '@/app/admin/pins/pin.utils';
 import {
   useDeletePinMutation,
   useDeletePinsMutation,
@@ -18,6 +17,7 @@ import {
   useProductListQuery,
   useUsedPinMutation,
 } from '@/app/admin/queries';
+import { splitFourChar } from '@/app/api/utils/pin.utils';
 import Pagination from '@/app/components/common/pagination.component';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -154,6 +154,7 @@ export default function PinList({ isPartner }: Props) {
     }
   };
 
+  // 핀 번호 단건 사용
   const handleUsedPin = ({
     id = '',
     number = '',
@@ -203,8 +204,14 @@ export default function PinList({ isPartner }: Props) {
         </div>
         <ExportExcelButton tableId={tableIdRef.current} fileName="핀리스트" />
         {/* 여러건 삭제 */}
-        <IconDeleteButton onDelete={handleDeletePins} />
-        {/* 여러건 핀 사용사용 */}
+        {!isPartner && (
+          <IconDeleteButton
+            variant="outline"
+            className="ml-2"
+            onDelete={handleDeletePins}
+          />
+        )}
+        {/* 핀 사용 처리 */}
       </div>
 
       {data.length > 0 ? (
