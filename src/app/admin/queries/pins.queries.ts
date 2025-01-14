@@ -72,11 +72,32 @@ export function useCreatePinMutation({
   });
 }
 
+/**
+ * 단건 핀 삭제
+ * @returns
+ */
+
 export function useDeletePinMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (id: string) => pinsService.deletePin(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
+    },
+  });
+}
+
+/**
+ * 다건 핀 삭제
+ * @returns
+ */
+
+export function useDeletePinsMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (ids: string[]) => pinsService.deletePins(ids),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
     },

@@ -118,3 +118,38 @@ export async function POST(req: NextRequest) {
     return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
   }
 }
+
+/**
+ * 다건 핀 삭제
+ */
+
+export async function DELETE(req: NextRequest) {
+  try {
+    if (!(await requiredIsAdmin())) {
+      return createResponse(HTTP_STATUS.FORBIDDEN);
+    }
+
+    const { ids } = await req.json(); // 요청 본문에서 직접 ids 추출
+
+    console.log('idsidsidsidsidsidsidsidsidsidsids', ids);
+
+    //개발 해야함
+
+    // 여기서 ids로 삭제 로직 구현
+    const deletedPins = await PinModel.find({ _id: { $in: ids } });
+    await PinModel.deleteMany({ _id: { $in: ids } });
+
+    // 관련된 제품의 핀 참조 제거
+    const productIds = deletedPins.map((pin) => pin.product).filter(Boolean);
+    await ProductModel.updateMany(
+      { _id: { $in: productIds } },
+      { $pullAll: { pins: deletedPins.map((pin) => pin._id) } }
+    );
+
+    return NextResponse.json({
+      deletedCount: deletedPins.length,
+    });
+  } catch (error) {
+    return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
+  }
+}

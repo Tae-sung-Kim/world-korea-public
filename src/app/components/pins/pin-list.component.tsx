@@ -180,6 +180,9 @@ export default function PinList({ isPartner }: Props) {
           <PinSearch />
         </div>
         <ExportExcelButton tableId={tableIdRef.current} fileName="핀리스트" />
+        {/* 여러건 삭제 */}
+        <IconDeleteButton onDelete={() => {}} />
+        {/* 여러건 핀 사용사용 */}
       </div>
 
       {data.length > 0 ? (
