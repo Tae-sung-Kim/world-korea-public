@@ -4,6 +4,7 @@ import SaleProductDetailBottom from './sale-product-detail-bottom.component';
 import SaleProductDetailForm from './sale-product-detail-form.component';
 import SaleProductDetailImage from './sale-product-detail-image.component';
 import SaleProductDetailInfo from './sale-product-detail-info.component';
+import { useCoolSMS } from '@/hooks/useCoolSMS';
 import { useDetailSaleProductQuery } from '@/queries/products.queries';
 import { useMemo } from 'react';
 
@@ -12,6 +13,8 @@ type Props = {
 };
 
 export default function SaleProductDetailClient({ saleProductId }: Props) {
+  const { onSendSMS } = useCoolSMS();
+
   const saleProductDetailData = useDetailSaleProductQuery(saleProductId);
 
   const productList = useMemo(
@@ -25,12 +28,21 @@ export default function SaleProductDetailClient({ saleProductId }: Props) {
     [productList]
   );
 
+  //////////////
+  const handleSendSMS = () => {
+    onSendSMS('01046906584', '테스트 진행중입니다. 테스트, test');
+  };
+
   if (Object.keys(saleProductDetailData).length < 1) {
     return false;
   }
 
   return (
     <div className="w-full max-w-7xl mx-auto space-y-6">
+      <button type="button" onClick={handleSendSMS}>
+        문자보내기
+      </button>
+
       <div className="flex flex-col lg:flex-row gap-6">
         {/* 이미지 섹션 */}
         <SaleProductDetailImage
