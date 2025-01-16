@@ -1,21 +1,8 @@
+import { createSignature } from '../utils/coolsms.util';
 import { createResponse } from '../utils/http.util';
 import { HTTP_STATUS } from '@/definitions';
 import axios from 'axios';
-import crypto from 'crypto';
 import { NextRequest, NextResponse } from 'next/server';
-
-// CoolSMS 날짜 형식 생성 함수
-const formatCoolSMSDate = () => {
-  const now = new Date();
-  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(
-    2,
-    '0'
-  )}-${String(now.getDate()).padStart(2, '0')} ${String(
-    now.getHours()
-  ).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(
-    now.getSeconds()
-  ).padStart(2, '0')}`;
-};
 
 export async function POST(req: NextRequest) {
   try {
@@ -26,35 +13,8 @@ export async function POST(req: NextRequest) {
     const endpoint = process.env.COOLSMS_API_URL!;
     const sender = process.env.COOLSMS_SENDER_PHONE_NUMBER!;
 
-    // CoolSMS 특정 날짜 형식 사용
-    const now = formatCoolSMSDate();
-
-    // crypto를 사용한 salt 생성 (12-64바이트)
-    const salt = crypto.randomBytes(32).toString('hex').slice(0, 64);
-
-    // 서명 생성 함수
-    const createSignature = (secret: string, date: string, salt: string) => {
-      try {
-        // 메시지 생성 (날짜 + 솔트, 공백 없이)
-        const message = `${date}${salt}`;
-
-        // HMAC-SHA256 알고리즘으로 서명 생성
-        const signature = crypto
-          .createHmac('sha256', secret)
-          .update(message)
-          .digest('hex'); // base64 대신 hex로 변경
-
-        return signature;
-      } catch (error) {
-        throw new Error('서명 생성 실패');
-      }
-    };
-
     // 서명 생성
-    const signature = createSignature(apiSecret, now, salt);
-
-    // Authorization 헤더 생성
-    const authHeader = `HMAC-SHA256 apiKey=${apiKey}, date=${now}, salt=${salt}, signature=${signature}`;
+    const Authorization = createSignature({ apiKey, apiSecret });
 
     // CoolSMS API 페이로드 구조 수정
     const payload = {
@@ -73,7 +33,7 @@ export async function POST(req: NextRequest) {
         {
           headers: {
             'Content-Type': 'application/json',
-            Authorization: authHeader,
+            Authorization,
           },
           timeout: 10000,
         }
