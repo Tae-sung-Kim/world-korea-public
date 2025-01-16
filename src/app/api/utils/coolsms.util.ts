@@ -1,19 +1,6 @@
 import crypto from 'crypto';
 import { format } from 'date-fns';
 
-// CoolSMS 날짜 형식 생성 함수
-const formatCoolSMSDate = () => {
-  const now = new Date();
-  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(
-    2,
-    '0'
-  )}-${String(now.getDate()).padStart(2, '0')} ${String(
-    now.getHours()
-  ).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(
-    now.getSeconds()
-  ).padStart(2, '0')}`;
-};
-
 // 서명 생성 함수
 export const createSignature = ({
   apiKey,
@@ -22,7 +9,6 @@ export const createSignature = ({
   apiKey: string;
   apiSecret: string;
 }) => {
-  // const now = formatCoolSMSDate();
   const now = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
 
   // crypto를 사용한 salt 생성 (12-64바이트)

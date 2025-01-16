@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
   try {
-    const { to, text } = await req.json();
+    const { subject = '제목없음', to, text } = await req.json();
 
     const apiKey = process.env.COOLSMS_API_KEY!;
     const apiSecret = process.env.COOLSMS_API_SECRET!;
@@ -19,10 +19,10 @@ export async function POST(req: NextRequest) {
     // CoolSMS API 페이로드 구조 수정
     const payload = {
       message: {
+        subject,
         to: to,
         from: sender,
         text: text,
-        type: 'SMS',
       },
     };
 

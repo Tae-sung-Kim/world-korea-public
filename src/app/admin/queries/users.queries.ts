@@ -131,7 +131,7 @@ export function usePatchUserMutation({
     mutationFn: userService.patchUser,
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ['userService.patchUser'],
+        queryKey: [QUERY_KEY, 'user-info'],
       });
       toast.success('정보 수정이 완료 되었습니다.');
       onSuccess && onSuccess();

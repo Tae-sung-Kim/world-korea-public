@@ -23,6 +23,7 @@ import {
   RequestPayParams,
   ORDER_PAY_TYPE_MESSAGE,
 } from '@/definitions';
+import { useCoolSMS } from '@/hooks/useCoolSMS';
 import usePortonePayment from '@/hooks/usePortonePayment';
 import { addComma } from '@/utils/number';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -60,9 +61,22 @@ export default function SaleProductDetailForm({
 }: SaleProductDetailFormProps) {
   const { openModal } = useModalContext();
 
+  const { onSendSMS } = useCoolSMS();
+
+  const handleSms = async () => {
+    await onSendSMS({
+      name: saleProductDetailData.name ?? '',
+      payType: ORDER_PAY_TYPE_MESSAGE[saleProductForm.getValues().payType],
+      amount: String(saleProductForm.getValues().amount),
+      quantity: saleProductForm.getValues().quantity,
+    });
+  };
+
   const { onPayment } = usePortonePayment({
     // 계좌 입금
     onTransPayment: async (res: TransResponse) => {
+      await handleSms();
+
       return await openModal({
         title: '계좌입금 안내',
         Component: () => {
@@ -75,7 +89,8 @@ export default function SaleProductDetailForm({
       });
     },
     // 카드 결제
-    onPaymentSuccess: () => {
+    onPaymentSuccess: async () => {
+      await handleSms();
       window.location.reload();
     },
   });
