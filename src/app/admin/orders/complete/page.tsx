@@ -1,5 +1,6 @@
 'use client';
 
+import { useCoolSMS } from '@/hooks/useCoolSMS';
 import ordersService from '@/services/orders.service';
 import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
@@ -7,6 +8,7 @@ import { toast } from 'sonner';
 
 export default function OrderCompletePage() {
   const searchParams = useSearchParams();
+  const { onSendSMS } = useCoolSMS();
 
   useEffect(() => {
     const handlePaymentComplete = async () => {
@@ -14,6 +16,10 @@ export default function OrderCompletePage() {
       const impSuccess = searchParams.get('imp_success');
       const impUid = searchParams.get('imp_uid');
       const saleProductId = searchParams.get('saleProductId');
+      const name = searchParams.get('name') ?? '';
+      const payType = searchParams.get('payType') ?? '';
+      const amount = searchParams.get('amount') ?? '';
+      const quantity = Number(searchParams.get('quantity')) ?? 0;
 
       if (!orderId || !impSuccess || !impUid) {
         toast.error('결제 정보가 올바르지 않습니다.');
@@ -35,6 +41,15 @@ export default function OrderCompletePage() {
               orderId,
               paymentId: impUid,
             });
+
+            //모바일 결제시 문자
+            await onSendSMS({
+              name,
+              payType,
+              amount,
+              quantity,
+            });
+
             toast.success('결제가 완료되었습니다.');
             // 결제 완료 후 메인 페이지로 이동하며, 히스토리에 현재 페이지를 저장하지 않음
             window.location.replace(`/sale-products/${saleProductId}`);
@@ -52,7 +67,7 @@ export default function OrderCompletePage() {
     };
 
     handlePaymentComplete();
-  }, [searchParams]);
+  }, [searchParams, onSendSMS]);
 
   return (
     <div className="flex min-h-screen items-center justify-center">

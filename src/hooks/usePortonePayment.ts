@@ -1,4 +1,8 @@
-import { PaymentStatus } from '@/definitions';
+import {
+  ORDER_PAY_TYPE_MESSAGE,
+  OrderPayType,
+  PaymentStatus,
+} from '@/definitions';
 import {
   RefundRequest,
   RequestPayParams,
@@ -21,6 +25,11 @@ type PortoneProps = {
   }) => void;
 };
 
+export type RequestPayParamsAddQuantity = RequestPayParams & {
+  quantity?: number;
+  payType: OrderPayType;
+};
+
 export default function usePortonePayment(props: PortoneProps = {}) {
   const { onPaymentSuccess, onTransPayment } = props;
   const router = useRouter();
@@ -38,7 +47,7 @@ export default function usePortonePayment(props: PortoneProps = {}) {
     orderId,
     saleProductId,
   }: {
-    reqData: RequestPayParams;
+    reqData: RequestPayParamsAddQuantity;
     orderId: string;
     saleProductId?: string;
   }) => {
@@ -82,7 +91,7 @@ export default function usePortonePayment(props: PortoneProps = {}) {
 
       const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-      const data: RequestPayParams = {
+      const data: RequestPayParamsAddQuantity = {
         pg: 'html5_inicis',
         buyer_name: name,
         buyer_tel: phoneNumber,
@@ -93,7 +102,13 @@ export default function usePortonePayment(props: PortoneProps = {}) {
 
       // 모바일인 경우 결제 완료 페이지로 리디렉션
       if (isMobile) {
-        data.m_redirect_url = `${window.location.origin}/admin/orders/complete?orderId=${orderId}&saleProductId=${saleProductId}`;
+        data.m_redirect_url = `${
+          window.location.origin
+        }/admin/orders/complete?orderId=${orderId}&saleProductId=${saleProductId}&name=${
+          reqData.name
+        }&payType=${ORDER_PAY_TYPE_MESSAGE[reqData.payType]}&amount=${
+          reqData.amount
+        }&quantity=${reqData.quantity}`;
         IMP.request_pay(data);
       } else {
         IMP.request_pay(data, callback);

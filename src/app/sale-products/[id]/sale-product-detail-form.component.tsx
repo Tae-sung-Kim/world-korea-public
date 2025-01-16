@@ -24,7 +24,9 @@ import {
   ORDER_PAY_TYPE_MESSAGE,
 } from '@/definitions';
 import { useCoolSMS } from '@/hooks/useCoolSMS';
-import usePortonePayment from '@/hooks/usePortonePayment';
+import usePortonePayment, {
+  RequestPayParamsAddQuantity,
+} from '@/hooks/usePortonePayment';
 import { addComma } from '@/utils/number';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Separator } from '@radix-ui/react-separator';
@@ -101,12 +103,14 @@ export default function SaleProductDetailForm({
       if (data) {
         const orderId = data._id;
         const saleProductId = data.saleProduct;
-        const reqData: RequestPayParams = {
+        const reqData: RequestPayParamsAddQuantity = {
           pay_method: saleProductForm.getValues().payType, // 결제수단
+          payType: saleProductForm.getValues().payType,
           merchant_uid: `mid_${purchaseDate.getTime()}`, // 주문번호
           amount: saleProductForm.getValues().amount,
           name: saleProductDetailData.name, // 주문명
           tax_free: saleProductForm.getValues().taxFree,
+          quantity: saleProductForm.getValues().quantity,
         };
         await onPayment({ reqData, orderId, saleProductId });
       } else {
