@@ -63,6 +63,7 @@ export const useCoolSMS = () => {
 
   return {
     onSendSMS: sendSMS,
+    onSendCoolSMS: sendCoolSMS,
     loading,
     response,
   };

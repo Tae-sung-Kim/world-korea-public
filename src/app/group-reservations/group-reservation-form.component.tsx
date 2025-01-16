@@ -27,6 +27,7 @@ import {
   MEAL_COUPON,
   PAYMENT_TYPE,
 } from '@/definitions/group-reservation.constant';
+import { useCoolSMS } from '@/hooks/useCoolSMS';
 import { cn } from '@/lib/utils';
 import { useCreateGroupReservationMutation } from '@/queries';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -63,10 +64,31 @@ const GroupReservationFormSchema = z.object({
 export default function GroupReservationFormClient() {
   // 예약 가능 상품
   const reservableSaleProduct = useReservableSaleProductQuery();
+  const { onSendCoolSMS } = useCoolSMS();
 
   // 단체 예약 req
   const createGroupReservationMutation = useCreateGroupReservationMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
+      const {
+        companyName,
+        contactPersonInfo,
+        guideContactInfo,
+        appointmentDate,
+        paymentType,
+        numberOfPeopel,
+        productName,
+      } = groupReservationForm.getValues();
+
+      await onSendCoolSMS({
+        subject: '단체 예약 완료',
+        to: guideContactInfo ?? contactPersonInfo,
+        text: `${companyName}단체 예약 완료
+상품명: ${productName}
+결제방법: ${PAYMENT_TYPE.find((f) => f.value === paymentType.type)?.label}
+방문예정일: ${format(appointmentDate, 'yyyy. MM. dd')}
+수량: ${numberOfPeopel} 개 `,
+      });
+
       groupReservationForm.reset();
     },
   });
@@ -550,6 +572,7 @@ export default function GroupReservationFormClient() {
         <div className="flex justify-center p-4">
           <Button
             size="lg"
+            type="submit"
             className="px-12 py-6 text-lg font-semibold bg-gradient-to-r from-purple-500 to-purple-700 text-white hover:from-purple-600 hover:to-purple-800 transition-all duration-300 shadow-lg hover:shadow-xl rounded-xl"
           >
             예약 신청하기
