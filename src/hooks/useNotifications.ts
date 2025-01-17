@@ -30,7 +30,7 @@ export default function useNotifications() {
     const showPopup = (index: number) => {
       if (index < showNotificationList.length) {
         openModal({
-          useOverlayOpacity: false,
+          useOverlayOpacity: true,
           showHeader: false,
           showFooter: false,
           Component: ({ onCancel }) => {

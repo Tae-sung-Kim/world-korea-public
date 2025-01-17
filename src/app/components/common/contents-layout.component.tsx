@@ -1,8 +1,8 @@
 'use client';
 
 import AdminProtectedRoute from '@/app/admin/admin-protected-route.component';
-import Loading from '@/app/components/common/loading.component';
 import MenuNavigation from '@/app/components/common/menu-navigation.component';
+import Loading from '@/components/common/loading.component';
 import Breadcrumb from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
