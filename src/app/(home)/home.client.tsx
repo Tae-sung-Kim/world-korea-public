@@ -1,6 +1,7 @@
 'use client';
 
 import { usePagination } from '../admin/hooks/usePagination';
+import NoDataFound from '../components/common/no-data-found.component';
 import SaleProductList from './components/sale-product-list.component';
 import { Button } from '@/components/ui/button';
 import { useAuthContext } from '@/contexts/auth.context';
@@ -21,17 +22,6 @@ export default function HomeClient() {
     pageSize: Number(pageSize),
     filter,
   });
-
-  if (!Array.isArray(saleProductData?.list)) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-pulse space-y-4">
-          <div className="h-4 w-32 bg-gray-200 dark:bg-gray-700 rounded"></div>
-          <div className="h-4 w-24 bg-gray-200 dark:bg-gray-700 rounded"></div>
-        </div>
-      </div>
-    );
-  }
 
   // 로그인하지 않은 경우
   if (!isLoggedIn) {
@@ -109,8 +99,22 @@ export default function HomeClient() {
 
   // 로그인한 경우
   return (
-    <div className="w-full">
-      <SaleProductList products={saleProductData.list} />
-    </div>
+    <>
+      {saleProductData.list.length > 0 ? (
+        <div className="w-full">
+          <SaleProductList products={saleProductData.list} />
+        </div>
+      ) : (
+        <div className="w-full h-[calc(100vh-200px)]">
+          <NoDataFound>
+            <div className="text-gray-500 text-lg font-semibold text-center">
+              검색 결과가 없습니다.
+              <br />
+              담당자에게 문의 해주세요.
+            </div>
+          </NoDataFound>
+        </div>
+      )}
+    </>
   );
 }
