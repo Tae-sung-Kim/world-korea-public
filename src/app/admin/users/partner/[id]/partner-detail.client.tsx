@@ -1,7 +1,10 @@
 'use client';
 
 import IconDeleteButton from '@/app/admin/components/icon-delete-button.component';
-import { useUpdatePartnerMutation } from '@/app/admin/queries';
+import {
+  usePartnerDetailQuery,
+  useUpdatePartnerMutation,
+} from '@/app/admin/queries';
 import DetailTitle from '@/app/components/common/detail-title.component';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -21,7 +24,7 @@ import { ProductDisplayData } from '@/definitions';
 import productService from '@/services/product.service';
 import userService from '@/services/user.service';
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -47,7 +50,7 @@ const PartnerFormSchema = z.object({
 });
 
 type PartnerFormValues = z.infer<typeof PartnerFormSchema>;
-const defaultDetailData = {
+const defaultValues = {
   companyName: '',
   address: '',
   contactNumber: '',
@@ -66,6 +69,9 @@ export default function PartnerDetailClient({ userId }: IProps) {
     []
   );
 
+  // 파트너 상세 조회
+  const detailPartnerData = usePartnerDetailQuery(userId ?? '');
+
   // 상품조회(판매 상품이 아님)
   const [productData, setProductData] = useState<ProductDisplayData[]>([]);
 
@@ -80,15 +86,6 @@ export default function PartnerDetailClient({ userId }: IProps) {
     });
   };
 
-  const _setProductData = async () => {
-    const productData = await productService.getProudctList();
-
-    const listData = productData.list;
-    setProductData(listData);
-
-    return listData;
-  };
-
   const isReadOnly = useMemo(() => {
     return {
       disabled: !!userId,
@@ -98,32 +95,7 @@ export default function PartnerDetailClient({ userId }: IProps) {
 
   const partnerForm = useForm<PartnerFormValues>({
     resolver: zodResolver(PartnerFormSchema),
-    defaultValues: !!userId
-      ? async () =>
-          userService.getPartnerUser(userId).then(async (res) => {
-            const userData = await userService.getUserById(userId);
-            const listData = await _setProductData();
-
-            const partnerProducts = listData.filter(
-              (f) =>
-                userData._id === f.partner &&
-                res.partnerProducts?.includes(f._id)
-            );
-
-            setPartnerProducts(partnerProducts);
-
-            return {
-              ...defaultDetailData,
-              ...res,
-              userCategoryId: userData.userCategory?._id,
-              id: userData.loginId,
-            };
-          })
-      : async () => {
-          await _setProductData();
-
-          return defaultDetailData;
-        },
+    defaultValues,
   });
 
   const handleSubmit = async () => {
@@ -146,6 +118,80 @@ export default function PartnerDetailClient({ userId }: IProps) {
       },
     });
   };
+
+  // useEffect(() => {
+  //   (async () => {
+  //     const productData = await productService.getProudctList();
+  //     const listData = productData.list;
+  //     setProductData(listData);
+
+  //     if (!detailPartnerData || Object.keys(detailPartnerData).length < 1) {
+  //       return;
+  //     } else {
+  //       const res = detailPartnerData;
+  //       const userData = await userService.getUserById(userId);
+
+  //       const partnerProducts = listData.filter(
+  //         (f) =>
+  //           userData._id === f.partner && res.partnerProducts?.includes(f._id)
+  //       );
+
+  //       setPartnerProducts(partnerProducts);
+
+  //       partnerForm.reset({
+  //         ...defaultValues,
+  //         ...res,
+  //         // userCategoryId: userData.userCategory?._id,
+  //         // id: userData.loginId,
+  //       });
+  //     }
+  //   })();
+  // }, [detailPartnerData]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // 병렬로 데이터 fetching
+        const [productData, userData] = await Promise.all([
+          productService.getProudctList(),
+          detailPartnerData && userId
+            ? userService.getUserById(userId)
+            : Promise.resolve(null),
+        ]);
+
+        // 상품 데이터 설정
+        const listData = productData.list;
+        setProductData(listData);
+
+        // 파트너 데이터가 없으면 early return
+        if (!detailPartnerData || Object.keys(detailPartnerData).length < 1) {
+          return;
+        }
+
+        // 파트너 상품 필터링
+        const partnerProducts = userData
+          ? listData.filter(
+              (f) =>
+                userData._id === f.partner &&
+                detailPartnerData.partnerProducts?.includes(f._id)
+            )
+          : [];
+
+        setPartnerProducts(partnerProducts);
+
+        // 폼 리셋
+        partnerForm.reset({
+          ...defaultValues,
+          ...detailPartnerData,
+        });
+      } catch (error) {
+        console.error('데이터 로딩 중 오류 발생:', error);
+        // 에러 핸들링 로직 추가
+      }
+    };
+
+    fetchData();
+  }, [detailPartnerData, userId, partnerForm]);
 
   return (
     <>

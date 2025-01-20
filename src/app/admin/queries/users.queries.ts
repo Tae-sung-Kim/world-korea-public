@@ -92,6 +92,7 @@ export function usePartnerDetailQuery(userId: string) {
   const { data = fallback } = useQuery({
     queryKey: [QUERY_KEY, userId],
     queryFn: () => userService.getPartnerUser(userId),
+    enabled: !!userId,
   });
 
   return data;
