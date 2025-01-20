@@ -36,7 +36,7 @@ export default function ContentsLayout({
 
   return (
     <ProtectedRouteComponent>
-      <Loading />
+      {/* <Loading /> */}
       <div className="h-full bg-gradient-to-br to-gray-100">
         <div className="flex h-full">
           {/* Mobile Menu Button */}

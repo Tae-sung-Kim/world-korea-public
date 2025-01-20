@@ -7,6 +7,7 @@ import {
 } from '@/app/admin/products/product.schema';
 import {
   useCreateProductMutation,
+  useDetailProductQuery,
   useUpdateProductMutation,
   useUserCategoryListQuery,
 } from '@/app/admin/queries';
@@ -20,7 +21,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
@@ -32,12 +32,11 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import { MODAL_TYPE, useModalContext } from '@/contexts/modal.context';
 import { PRODUCT_STATUS, PRODUCT_STATUS_MESSAGE } from '@/definitions';
-import productService from '@/services/product.service';
 import { bytesToMB, fileToBlob } from '@/utils/file';
 import { addComma, removeComma } from '@/utils/number';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import {
   useForm,
   useFieldArray,
@@ -99,12 +98,31 @@ type Props = {
   disabled?: boolean;
 };
 
-export default function ProductDetail({ productId, disabled = false }: Props) {
+export default function ProductDetail({
+  productId = '',
+  disabled = false,
+}: Props) {
   const { openModal } = useModalContext();
 
   const userCategoryList = useUserCategoryListQuery();
 
   const [productImageList, setProductImageList] = useState<ProductImage[]>([]);
+
+  const defaultValues = useMemo(
+    () => ({
+      name: '', // 상품명
+      accessLevel: '1', // 접근 레벨
+      status: PRODUCT_STATUS.AVAILABLE, // 상품 상태
+      images: [{ file: undefined }], // 상품 이미지
+      regularPrice: '0', // 정가
+      // taxFreeRegularPrice: '0', // 면세 정가
+      salePrice: '0', // 할인가
+      price: '0', // 판매가
+      description1: '',
+      description2: '',
+    }),
+    []
+  );
 
   //상품 등록 후 reset
   const handleResetForm = () => {
@@ -120,42 +138,12 @@ export default function ProductDetail({ productId, disabled = false }: Props) {
   //상품 수정
   const updateProductMutation = useUpdateProductMutation({});
 
+  // 상품 상세
+  const detailProudct = useDetailProductQuery(productId);
+
   const productForm = useForm<ProductFormValues>({
     resolver: zodResolver(ProductFormSchema),
-    defaultValues: !!productId
-      ? async () =>
-          productService.detailProudct(productId).then((res) => {
-            let images = res.images.map((d) => ({
-              name: '',
-              size: '',
-              blob: d as string,
-            }));
-
-            setProductImageList(images);
-
-            return {
-              ...res,
-              price: addComma(res.price),
-              regularPrice: addComma(res.regularPrice),
-              salePrice: addComma(res.salePrice),
-              // taxFreeRegularPrice: addComma(res.taxFreeRegularPrice), // 작업해야 함
-            };
-          })
-      : {
-          name: '', // 상품명
-          accessLevel: '1', // 접근 레벨
-          status: PRODUCT_STATUS.AVAILABLE, // 상품 상태
-          images: [{ file: undefined }], // 상품 이미지
-          regularPrice: '0', // 정가
-          // taxFreeRegularPrice: '0', // 면세 정가
-          salePrice: '0', // 할인가
-          price: '0', // 판매가
-          description1: '',
-          description2: '',
-          description3: '',
-          description4: '',
-          // unavailableDates: [], // 이용 불가능 날짜
-        },
+    defaultValues,
   });
 
   //fields, append, remove, update??
@@ -260,6 +248,28 @@ export default function ProductDetail({ productId, disabled = false }: Props) {
       field.onChange(String(removeComma(e.target.value)));
     }
   };
+
+  // 상품 상세 추가
+  useEffect(() => {
+    if (!detailProudct || Object.keys(detailProudct).length < 1) {
+      return;
+    }
+
+    let images = (detailProudct.images ?? []).map((d) => ({
+      name: '',
+      size: '',
+      blob: d as string,
+    }));
+
+    setProductImageList(images);
+
+    productForm.reset({
+      ...detailProudct,
+      price: addComma(detailProudct.price ?? '0'),
+      regularPrice: addComma(detailProudct.regularPrice ?? '0'),
+      salePrice: addComma(detailProudct.salePrice ?? '0'),
+    });
+  }, [detailProudct, productForm]);
 
   return (
     <div className="p-2 mx-auto space-y-8 bg-white rounded-xl shadow-sm">
