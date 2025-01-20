@@ -2,6 +2,7 @@ import ProductDetail from '@/app/components/products/product-detail.component';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ProductDisplayData } from '@/definitions';
+import { useState } from 'react';
 
 export default function SaleProductDetail({
   products,

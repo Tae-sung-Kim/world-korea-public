@@ -42,7 +42,7 @@ export function useDetailProductQuery(id: string) {
   const fallback: Partial<ProductDisplayData> = {};
 
   const { data = fallback } = useQuery({
-    queryKey: [QUERY_KEY],
+    queryKey: [QUERY_KEY, id],
     queryFn: () => productService.detailProudct(id),
     enabled: !!id,
   });

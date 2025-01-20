@@ -20,7 +20,6 @@ import {
   SaleProductFormData,
   TransResponse,
   OrderPayType,
-  RequestPayParams,
   ORDER_PAY_TYPE_MESSAGE,
 } from '@/definitions';
 import { useCoolSMS } from '@/hooks/useCoolSMS';

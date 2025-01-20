@@ -249,7 +249,7 @@ export default function ProductDetail({
     }
   };
 
-  // 상품 상세 추가
+  // 상품 상세 세팅
   useEffect(() => {
     if (!detailProudct || Object.keys(detailProudct).length < 1) {
       return;

@@ -28,10 +28,10 @@ import {
 } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { ProductDisplayData } from '@/definitions';
-import saleProductService from '@/services/sale-product.service';
+import { useDetailSaleProductQuery } from '@/queries';
 import { addComma, removeComma } from '@/utils/number';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ChangeEvent, useMemo, useState } from 'react';
+import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { useForm, ControllerRenderProps } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -67,6 +67,19 @@ export default function SaleProductForm({
   const [detailProducts, setDetailProducts] = useState<ProductDisplayData[]>(
     []
   );
+
+  const defaultValues = useMemo(
+    () => ({
+      name: '', // 상품명
+      accessLevel: '1', // 접근 레벨
+      price: '0', // 판매가
+      taxFree: '0', // 면세가
+      products: [],
+      isReservable: false,
+    }),
+    []
+  );
+
   // 상품 등록 후 reset
   const handleResetForm = () => {
     onResetData && onResetData();
@@ -81,39 +94,20 @@ export default function SaleProductForm({
   // 상품 수정
   const updateSaleProductMutation = useUpdateSaleProductMutation({});
 
+  // 상품 상세
+  const detailSaleProduct = useDetailSaleProductQuery(productId);
+
   const regularPrice = useMemo(() => {
     const data = !!productId ? detailProducts : selectProductData ?? [];
 
     return data.reduce((acc: number, cur: ProductDisplayData): number => {
       return Number(acc + cur.regularPrice);
     }, 0);
-  }, [selectProductData, detailProducts]);
+  }, [selectProductData, productId, detailProducts]);
 
   const saleProductForm = useForm<SaleProductFormValues>({
     resolver: zodResolver(SaleProductFormSchema),
-    defaultValues: !!productId
-      ? async () =>
-          saleProductService.getDetailSaleProudct(productId).then((res) => {
-            const { products, ...other } = res;
-
-            // 상품상세 세팅
-            setDetailProducts(products);
-
-            return {
-              ...other,
-              price: String(other.price),
-              taxFree: String(other.taxFree),
-              products: [],
-            };
-          })
-      : {
-          name: '', // 상품명
-          accessLevel: '1', // 접근 레벨
-          price: '0', // 판매가
-          taxFree: '0', // 면세가
-          products: [],
-          isReservable: false,
-        },
+    defaultValues,
   });
 
   const handleSubmit = () => {
@@ -137,6 +131,24 @@ export default function SaleProductForm({
       field.onChange(String(removeComma(e.target.value)));
     }
   };
+
+  // 상품 상세 세팅
+  useEffect(() => {
+    if (!detailSaleProduct || Object.keys(detailSaleProduct).length < 1) {
+      return;
+    }
+
+    const { products, ...other } = detailSaleProduct;
+
+    // 상품상세 세팅
+    setDetailProducts(products ?? []);
+
+    saleProductForm.reset({
+      ...other,
+      price: String(other.price),
+      taxFree: String(other.taxFree),
+    });
+  }, [detailSaleProduct, saleProductForm]);
 
   return (
     <div className="flex flex-col max-w-[1920px] mx-auto">
@@ -302,7 +314,7 @@ export default function SaleProductForm({
           </form>
         </Form>
 
-        {!!productId && (
+        {detailProducts.length > 0 && (
           <div className="mt-6">
             <SaleProductDetail products={detailProducts} />
           </div>
