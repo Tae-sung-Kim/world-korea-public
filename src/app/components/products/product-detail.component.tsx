@@ -124,18 +124,18 @@ export default function ProductDetail({
     []
   );
 
-  //상품 등록 후 reset
+  // 상품 등록 후 reset
   const handleResetForm = () => {
     setProductImageList([]);
     productForm.reset();
   };
 
-  //상품 추가
+  // 상품 추가
   const createProductMutation = useCreateProductMutation({
     onSuccess: handleResetForm,
   });
 
-  //상품 수정
+  // 상품 수정
   const updateProductMutation = useUpdateProductMutation({});
 
   // 상품 상세
@@ -146,7 +146,7 @@ export default function ProductDetail({
     defaultValues,
   });
 
-  //fields, append, remove, update??
+  // fields, append, remove, update??
   const productImages = useFieldArray({
     control: productForm.control,
     name: 'images',
@@ -221,7 +221,7 @@ export default function ProductDetail({
     }
   };
 
-  //이미지 삭제 버튼
+  // 이미지 삭제 버튼
   const handleDeleteImage = (idx: number) => {
     if (productImages.fields.length <= 1) {
       openModal({
@@ -239,7 +239,7 @@ export default function ProductDetail({
     );
   };
 
-  //가격 입력
+  // 가격 입력
   const handlePriceChange = (
     e: ChangeEvent<HTMLInputElement>,
     field: ControllerRenderProps
