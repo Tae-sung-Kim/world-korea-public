@@ -75,7 +75,7 @@ export function useReservableSaleProductQuery() {
   const fallback: SaleProductFormData<ProductDisplayData>[] = [];
 
   const { data = fallback } = useQuery({
-    queryKey: [QUERY_KEY],
+    queryKey: [QUERY_KEY, 'reservable'],
     queryFn: () => saleProductService.getReservationSaleProductList(),
   });
 
