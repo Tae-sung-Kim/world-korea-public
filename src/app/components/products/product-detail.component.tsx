@@ -265,6 +265,7 @@ export default function ProductDetail({
 
     productForm.reset({
       ...detailProudct,
+      accessLevel: String(detailProudct.accessLevel),
       price: addComma(detailProudct.price ?? '0'),
       regularPrice: addComma(detailProudct.regularPrice ?? '0'),
       salePrice: addComma(detailProudct.salePrice ?? '0'),

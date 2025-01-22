@@ -19,9 +19,9 @@ export default function NoDataFound({
       <div className="rounded-full bg-gray-100 p-4 mb-4">
         <FiInbox className="w-8 h-8 text-gray-400" />
       </div>
-      <p className="text-gray-500 text-lg font-medium">
+      <div className="text-gray-500 text-lg font-medium">
         {children ? children : message}
-      </p>
+      </div>
     </div>
   );
 }
