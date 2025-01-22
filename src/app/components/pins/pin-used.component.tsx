@@ -57,10 +57,6 @@ export default function PinUsed() {
       }
     }
 
-    console.log(data);
-
-    return false;
-
     usedPinListMutation.mutate(data);
   };
 
