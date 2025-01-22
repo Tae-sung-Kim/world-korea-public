@@ -77,6 +77,8 @@ export function useReservableSaleProductQuery() {
   const { data = fallback } = useQuery({
     queryKey: [QUERY_KEY, 'reservable'],
     queryFn: () => saleProductService.getReservationSaleProductList(),
+    gcTime: 0,
+    refetchOnMount: true,
   });
 
   return data;
