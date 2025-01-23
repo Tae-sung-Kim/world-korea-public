@@ -10,6 +10,16 @@ export async function POST(req: NextRequest) {
 
     const body = await req.json();
     const { id, password } = body;
+
+    // ID 중복 확인
+    const existingUser = await UserModel.findOne({ loginId: id });
+    if (existingUser) {
+      return NextResponse.json(
+        { error: '이미 사용 중인 아이디입니다.' },
+        { status: 400 }
+      );
+    }
+
     const hashedPassword = await hashPassword(password);
     const userCategoryList = await UserCategoryModel.getUserCategoryList();
     const newUser = new UserModel({

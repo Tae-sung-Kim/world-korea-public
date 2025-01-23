@@ -84,11 +84,11 @@ export default function Register() {
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      toast.success('회원가입이 성공적으로 완료되었습니다.');
       await authService.register(values);
+      toast.success('회원가입이 성공적으로 완료되었습니다.');
       router.push('/login');
     } catch (error: any) {
-      toast.error('에러가 발생하였습니다.');
+      toast.error(error?.response?.data?.error ?? '에러가 발생하였습니다.');
     }
   };
 
