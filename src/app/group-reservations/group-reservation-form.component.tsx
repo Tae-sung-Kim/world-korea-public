@@ -80,15 +80,16 @@ type addedGroupReservation = GroupReservationForm & Partial<GroupReservation>;
 export default function GroupReservationFormClient({
   groupReservationId,
 }: {
-  groupReservationId: string;
+  groupReservationId?: string;
 }) {
   // 예약 가능 상품
   const reservableSaleProduct = useReservableSaleProductQuery();
   const { onSendCoolSMS } = useCoolSMS();
 
   // 단체 예약 상세
-  const detailGroupReservation =
-    useGroupReservationDetailsQuery(groupReservationId);
+  const detailGroupReservation = useGroupReservationDetailsQuery(
+    groupReservationId ?? ''
+  );
 
   // 단체 예약 수정
   const updateGroupReservationMutation = useUpdateGroupReservationMutation({});
