@@ -206,7 +206,13 @@ export default function UsersDetailClient({ userId }: IProps) {
                     <FormControl>
                       <Switch
                         checked={field.value}
-                        onCheckedChange={field.onChange}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            form.setValue('isAdmin', false);
+                          }
+
+                          field.onChange(checked);
+                        }}
                       />
                     </FormControl>
                   </FormItem>
@@ -225,7 +231,12 @@ export default function UsersDetailClient({ userId }: IProps) {
                     <FormControl>
                       <Switch
                         checked={field.value}
-                        onCheckedChange={field.onChange}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            form.setValue('isPartner', false);
+                          }
+                          field.onChange(checked);
+                        }}
                       />
                     </FormControl>
                   </FormItem>
