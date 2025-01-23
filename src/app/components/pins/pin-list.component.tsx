@@ -74,7 +74,7 @@ export default function PinList({ isPartner }: Props) {
     return isPartner ? usePartnerPinsListQuery : usePinsListQuery;
   }, [isPartner]);
 
-  const pinData = searchPinsListQuery({
+  const { data: pinData, refetch } = searchPinsListQuery({
     pageNumber,
     pageSize,
     filter,
@@ -172,7 +172,10 @@ export default function PinList({ isPartner }: Props) {
           !used ? '완료' : '취소'
         } 하시겠습니까?`,
         onOk: () => {
-          usedPinMutation.mutate({ id, used: !used });
+          usedPinMutation.mutate(
+            { id, used: !used },
+            { onSuccess: () => refetch() }
+          );
         },
       });
     }

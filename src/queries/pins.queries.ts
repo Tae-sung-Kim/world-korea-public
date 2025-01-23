@@ -22,11 +22,11 @@ export function usePartnerPinsListQuery(
     endIndex: -1,
   };
 
-  const { data = fallback } = useQuery({
+  const { data = fallback, refetch } = useQuery({
     queryKey: [QUERY_KEY, Object.values(paginationParam ?? {})],
     queryFn: () => pinsService.getPartnerListPin(paginationParam ?? {}),
     placeholderData: keepPreviousData,
   });
 
-  return data;
+  return { data, refetch };
 }

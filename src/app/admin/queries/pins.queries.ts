@@ -33,20 +33,20 @@ export function usePinsListQuery(paginationParam?: PaginationProp<PageFilter>) {
     endIndex: -1,
   };
 
-  const { data = fallback } = useQuery({
+  const { data = fallback, refetch } = useQuery({
     queryKey: [QUERY_KEY, Object.values(paginationParam ?? {})],
     queryFn: () => pinsService.getListPin(paginationParam ?? {}),
     placeholderData: keepPreviousData,
   });
 
-  return data;
+  return { data, refetch };
 }
 
 export function useDetailPinsQuery(id: string) {
   const fallback: Pin[] = [];
 
   const { data = fallback } = useQuery({
-    queryKey: [QUERY_KEY],
+    queryKey: [QUERY_KEY, id],
     queryFn: () => pinsService.detailPin(id),
   });
 
@@ -64,7 +64,7 @@ export function useCreatePinMutation({
     mutationFn: pinsService.createPin,
     onSuccess: () => {
       onSuccess && onSuccess();
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY, 'create'] });
       toast.success('핀 생성이 완료 되었습니다.');
     },
     onError: (error: AxiosError<ErrorResponse>) => {
@@ -90,7 +90,7 @@ export function useDeletePinMutation() {
   return useMutation({
     mutationFn: (id: string) => pinsService.deletePin(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY, 'delete'] });
     },
   });
 }
@@ -106,7 +106,7 @@ export function useDeletePinsMutation() {
   return useMutation({
     mutationFn: (ids: string[]) => pinsService.deletePins(ids),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY, 'deleteList'] });
     },
   });
 }

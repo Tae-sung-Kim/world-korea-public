@@ -15,9 +15,9 @@ export async function PATCH(req: NextRequest, ctx: { params: { id: string } }) {
 
     await connectMongo();
 
-    if (!(await requiredIsAdmin())) {
-      return createResponse(HTTP_STATUS.FORBIDDEN);
-    }
+    // if (!(await requiredIsAdmin())) {
+    //   return createResponse(HTTP_STATUS.FORBIDDEN);
+    // }
 
     const existingProduct = await PinModel.updateUsedDatePin(pinId, used);
     if (!existingProduct) {
