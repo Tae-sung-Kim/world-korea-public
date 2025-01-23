@@ -134,7 +134,7 @@ export default function GroupReservationListClient({
                 onClick={() => onSort('customData.guideContactInfo')}
               >
                 <SortIcons
-                  title="인솔자"
+                  title="연락처"
                   order={
                     sort.name === 'customData.guideContactInfo'
                       ? sort.order

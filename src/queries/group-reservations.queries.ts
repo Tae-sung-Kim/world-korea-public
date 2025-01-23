@@ -71,6 +71,7 @@ export function useGroupReservationDetailsQuery(id: string) {
   const { data = fallback } = useQuery({
     queryKey: [QUERY_KEY, id],
     queryFn: () => groupReservationService.getGroupReservationDetails(id),
+    enabled: !!id
   });
 
   return data;

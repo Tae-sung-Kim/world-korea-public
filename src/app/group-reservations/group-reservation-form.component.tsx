@@ -20,7 +20,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { GroupReservationForm } from '@/definitions';
+import { GroupReservation, GroupReservationForm } from '@/definitions';
 import {
   ADDITIONAL_OPTIONS,
   ESTIMATED_ARRIVAL_TIME,
@@ -29,10 +29,15 @@ import {
 } from '@/definitions/group-reservation.constant';
 import { useCoolSMS } from '@/hooks/useCoolSMS';
 import { cn } from '@/lib/utils';
-import { useCreateGroupReservationMutation } from '@/queries';
+import {
+  useCreateGroupReservationMutation,
+  useGroupReservationDetailsQuery,
+  useUpdateGroupReservationMutation,
+} from '@/queries';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
+import { useEffect } from 'react';
 import { ControllerRenderProps, useForm } from 'react-hook-form';
 import { BsCalendarDate } from 'react-icons/bs';
 import { z } from 'zod';
@@ -70,10 +75,23 @@ const GroupReservationFormSchema = z.object({
   vehicleAndTransportType: z.string(),
 });
 
-export default function GroupReservationFormClient() {
+type addedGroupReservation = GroupReservationForm & Partial<GroupReservation>;
+
+export default function GroupReservationFormClient({
+  groupReservationId,
+}: {
+  groupReservationId: string;
+}) {
   // 예약 가능 상품
   const reservableSaleProduct = useReservableSaleProductQuery();
   const { onSendCoolSMS } = useCoolSMS();
+
+  // 단체 예약 상세
+  const detailGroupReservation =
+    useGroupReservationDetailsQuery(groupReservationId);
+
+  // 단체 예약 수정
+  const updateGroupReservationMutation = useUpdateGroupReservationMutation({});
 
   // 단체 예약 req
   const createGroupReservationMutation = useCreateGroupReservationMutation({
@@ -103,7 +121,7 @@ export default function GroupReservationFormClient() {
     },
   });
 
-  const defaultValues: GroupReservationForm = {
+  const defaultValues: addedGroupReservation = {
     companyName: '',
     contactPersonInfo: '',
     appointmentDate: '',
@@ -126,7 +144,7 @@ export default function GroupReservationFormClient() {
     vehicleAndTransportType: '',
   };
 
-  const groupReservationForm = useForm<GroupReservationForm>({
+  const groupReservationForm = useForm<addedGroupReservation>({
     resolver: zodResolver(GroupReservationFormSchema),
     defaultValues,
   });
@@ -156,8 +174,33 @@ export default function GroupReservationFormClient() {
   };
 
   const handleSubmit = () => {
-    createGroupReservationMutation.mutate(groupReservationForm.getValues());
+    if (groupReservationId) {
+      updateGroupReservationMutation.mutate({
+        id: groupReservationId,
+        data: groupReservationForm.getValues(),
+      });
+    } else {
+      createGroupReservationMutation.mutate(groupReservationForm.getValues());
+    }
   };
+
+  useEffect(() => {
+    if (
+      !detailGroupReservation ||
+      Object.keys(detailGroupReservation).length < 1
+    ) {
+      return;
+    }
+
+    const { customData, ...other } = detailGroupReservation;
+
+    const data = {
+      ...other,
+      ...(customData ?? {}),
+    };
+
+    groupReservationForm.reset(data);
+  }, [detailGroupReservation, groupReservationForm]);
 
   return (
     <Form {...groupReservationForm}>
@@ -165,16 +208,18 @@ export default function GroupReservationFormClient() {
         onSubmit={groupReservationForm.handleSubmit(handleSubmit)}
         className="max-w-6xl mx-auto space-y-8"
       >
-        <div className="relative py-4">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t-2 border-purple-200"></div>
+        {!groupReservationId && (
+          <div className="relative py-4">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t-2 border-purple-200"></div>
+            </div>
+            <div className="relative flex justify-center">
+              <h1 className="px-8 py-4 text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 text-white rounded-2xl shadow-lg">
+                단체 예약 요청서
+              </h1>
+            </div>
           </div>
-          <div className="relative flex justify-center">
-            <h1 className="px-8 py-4 text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 text-white rounded-2xl shadow-lg">
-              단체 예약 요청서
-            </h1>
-          </div>
-        </div>
+        )}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           <FormField
             control={groupReservationForm.control}
@@ -636,13 +681,19 @@ export default function GroupReservationFormClient() {
           />
         </div>
         <div className="flex justify-center p-4">
-          <Button
-            size="lg"
-            type="submit"
-            className="px-12 py-6 text-lg font-semibold bg-gradient-to-r from-purple-500 to-purple-700 text-white hover:from-purple-600 hover:to-purple-800 transition-all duration-300 shadow-lg hover:shadow-xl rounded-xl"
-          >
-            예약 신청하기
-          </Button>
+          {groupReservationId ? (
+            <Button type="submit" variant="submit">
+              예약 수정하기
+            </Button>
+          ) : (
+            <Button
+              size="lg"
+              type="submit"
+              className="px-12 py-6 text-lg font-semibold bg-gradient-to-r from-purple-500 to-purple-700 text-white hover:from-purple-600 hover:to-purple-800 transition-all duration-300 shadow-lg hover:shadow-xl rounded-xl"
+            >
+              예약 신청하기
+            </Button>
+          )}
         </div>
       </form>
     </Form>
