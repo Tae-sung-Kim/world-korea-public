@@ -30,6 +30,7 @@ class UserService {
       | 'email'
       | 'isApproved'
       | 'isPartner'
+      | 'isAdmin'
     > & { userCategoryId: string }
   ) {
     return http.patch<User>(`/api/users/${userData._id}`, userData);

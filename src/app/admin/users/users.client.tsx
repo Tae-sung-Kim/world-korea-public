@@ -116,53 +116,62 @@ export default function UsersClient() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.map((user) => (
-              <TableRow
-                key={user._id}
-                className="cursor-pointer hover:bg-gray-50 transition-colors"
-                onClick={() => handleUserClick(user)}
-              >
-                <TableCell className="table-cell">
-                  <span
-                    className={`icon-badge ${
-                      user.isPartner
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-gray-100 text-gray-800'
-                    }`}
-                  >
-                    {user.isPartner ? '파트너' : '일반'}
-                  </span>
-                </TableCell>
-                <TableCell className="table-cell">
-                  <span
-                    className={`icon-badge ${
-                      user.isApproved
-                        ? 'bg-blue-100 text-blue-800'
-                        : 'bg-yellow-100 text-yellow-800'
-                    }`}
-                  >
-                    {user.isApproved ? '승인' : '미승인'}
-                  </span>
-                </TableCell>
-                <TableCell className="table-cell font-medium text-gray-900">
-                  {user.name}
-                </TableCell>
-                <TableCell className="table-cell">{user.loginId}</TableCell>
-                <TableCell className="table-cell">
-                  {user.userCategory?.name}
-                </TableCell>
-                <TableCell className="table-cell">{user.companyName}</TableCell>
-                <TableCell className="table-cell">{user.companyNo}</TableCell>
-                <TableCell className="table-cell">{user.email}</TableCell>
-                <TableCell className="table-cell">
-                  {user.contactNumber}
-                </TableCell>
-                <TableCell className="table-cell">
-                  {user.createdAt &&
-                    format(new Date(user.createdAt), 'yyyy. M. dd')}
-                </TableCell>
-              </TableRow>
-            ))}
+            {data.map((user) => {
+              const isAdmin = user.isAdmin;
+              const isPartner = user.isPartner;
+
+              return (
+                <TableRow
+                  key={user._id}
+                  className="cursor-pointer hover:bg-gray-50 transition-colors"
+                  onClick={() => handleUserClick(user)}
+                >
+                  <TableCell className="table-cell">
+                    <span
+                      className={`icon-badge ${
+                        isAdmin
+                          ? 'bg-pink-100 text-pink-800'
+                          : isPartner
+                          ? 'bg-green-100 text-green-800'
+                          : 'bg-gray-100 text-gray-800'
+                      }`}
+                    >
+                      {isAdmin ? '관리자' : isPartner ? '파트너' : '일반'}
+                    </span>
+                  </TableCell>
+                  <TableCell className="table-cell">
+                    <span
+                      className={`icon-badge ${
+                        user.isApproved
+                          ? 'bg-blue-100 text-blue-800'
+                          : 'bg-yellow-100 text-yellow-800'
+                      }`}
+                    >
+                      {user.isApproved ? '승인' : '미승인'}
+                    </span>
+                  </TableCell>
+                  <TableCell className="table-cell font-medium text-gray-900">
+                    {user.name}
+                  </TableCell>
+                  <TableCell className="table-cell">{user.loginId}</TableCell>
+                  <TableCell className="table-cell">
+                    {user.userCategory?.name}
+                  </TableCell>
+                  <TableCell className="table-cell">
+                    {user.companyName}
+                  </TableCell>
+                  <TableCell className="table-cell">{user.companyNo}</TableCell>
+                  <TableCell className="table-cell">{user.email}</TableCell>
+                  <TableCell className="table-cell">
+                    {user.contactNumber}
+                  </TableCell>
+                  <TableCell className="table-cell">
+                    {user.createdAt &&
+                      format(new Date(user.createdAt), 'yyyy. M. dd')}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </ListWrapper>

@@ -52,8 +52,9 @@ const formSchema = z.object({
     }),
   phoneNumber: z.string(),
   email: z.string().email('유효하지 않은 이메일 입니다.'),
-  isApproved: z.boolean(),
-  isPartner: z.boolean(),
+  isAdmin: z.boolean(), // 관리자 여부
+  isApproved: z.boolean(), // 회원 승인
+  isPartner: z.boolean(), // 파트너 여부
 });
 
 export default function UsersDetailClient({ userId }: IProps) {
@@ -78,6 +79,7 @@ export default function UsersDetailClient({ userId }: IProps) {
       email: '',
       isApproved: false,
       isPartner: false,
+      isAdmin: false,
     },
   });
 
@@ -104,6 +106,7 @@ export default function UsersDetailClient({ userId }: IProps) {
       email: values.email,
       isApproved: values.isApproved,
       isPartner: values.isPartner,
+      isAdmin: values.isAdmin,
     });
   };
 
@@ -123,6 +126,7 @@ export default function UsersDetailClient({ userId }: IProps) {
       form.setValue('phoneNumber', userData.phoneNumber);
       form.setValue('email', userData.email);
       form.setValue('isPartner', userData.isPartner);
+      form.setValue('isAdmin', userData.isAdmin);
 
       setIsInitialLoading(false);
     }
@@ -170,7 +174,7 @@ export default function UsersDetailClient({ userId }: IProps) {
             }}
           />
 
-          <div className="grid grid-cols-2">
+          <div className="grid grid-cols-3">
             <FormField
               control={form.control}
               name="isApproved"
@@ -178,7 +182,7 @@ export default function UsersDetailClient({ userId }: IProps) {
                 return (
                   <FormItem>
                     <div>
-                      <FormLabel>관리자 승인</FormLabel>
+                      <FormLabel>회원 승인</FormLabel>
                     </div>
                     <FormControl>
                       <Switch
@@ -197,7 +201,26 @@ export default function UsersDetailClient({ userId }: IProps) {
                 return (
                   <FormItem>
                     <div>
-                      <FormLabel>파트너 승인</FormLabel>
+                      <FormLabel>파트너 여부</FormLabel>
+                    </div>
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                  </FormItem>
+                );
+              }}
+            />
+            <FormField
+              control={form.control}
+              name="isAdmin"
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <div>
+                      <FormLabel>관리자 여부</FormLabel>
                     </div>
                     <FormControl>
                       <Switch
