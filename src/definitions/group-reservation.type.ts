@@ -15,9 +15,9 @@ export type GroupReservationItemProduct = {
 
 export type GroupReservationForm = {
   companyName: string; // 회사명
-  contactPersonInfo: string; // 예약 담당자명 및 연락처
+  contactPersonInfo: string; // 예약 담당자명
   appointmentDate: Date | string; // 방문 일자
-  guideContactInfo: string; // 인솔자명 연락처
+  guideContactInfo: string; // 예약 담당자 연락처
   numberOfPeopel: string; // 인원수
   nationality: string; // 국적
   productId: string; // 이용상품
@@ -32,6 +32,7 @@ export type GroupReservationForm = {
     type: string;
     memo?: string;
   }; // 예상 도착시간 및 미팅장소
+  addedVisitDate: Date | string; // 추가옵션 방문 일자
   vehicleAndTransportType: string; // 차량번호 혹은 교통수단
   memo?: string; // 비고
 };

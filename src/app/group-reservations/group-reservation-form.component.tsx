@@ -39,20 +39,29 @@ import { z } from 'zod';
 
 const GroupReservationFormSchema = z.object({
   companyName: z.string().min(1, '업체명은 필수 입니다.'),
-  contactPersonInfo: z.string(), // 예약 담당자명 및 연락처
-  appointmentDate: z.date().or(z.string()).optional(), // 방문 일자
-  guideContactInfo: z.string().min(1, '인솔자(가이드)정보는 필수 입니다.'), // 인솔자명 연락처
+  contactPersonInfo: z.string().min(1, '담당자명은 필수 입니다.'), // 예약 담당자명
+  appointmentDate: z
+    .union([z.date(), z.string()])
+    .refine((val) => val !== null && val !== undefined && val !== '', {
+      message: '방문 일자는 필수입니다.',
+    }), // 방문 일자
+  addedVisitDate: z.union([z.date(), z.string()]),
+  guideContactInfo: z.string().min(1, '연락처는 필수 입니다.'), // 예약 담당자 연락처
   numberOfPeopel: z.string().min(1, '인원수는 필수 입니다.'),
   nationality: z.string().min(1, '국적은 필수 입니다.'),
   productId: z.string().min(1, '상품은 필수 입니다.'),
   productName: z.string(),
   additionalOptions: z.array(z.string()), // 추가옵션
   mealCoupon: z.string(),
-  paymentType: z.object({
-    // 결제 방법
-    type: z.string().min(1, '결제 방법은 필수 입니다.'),
-    memo: z.string().optional(),
-  }),
+  paymentType: z
+    .object({
+      // 결제 방법
+      type: z.string(),
+      memo: z.string().optional(),
+    })
+    .refine((d) => !!d.type, {
+      message: '결제 방법을 선택해 주세요.',
+    }),
   estimatedArrivalTime: z.object({
     // 예상 도착 시간
     type: z.string().optional(),
@@ -81,11 +90,12 @@ export default function GroupReservationFormClient() {
 
       await onSendCoolSMS({
         subject: '단체 예약 완료',
-        to: guideContactInfo ?? contactPersonInfo,
+        to: guideContactInfo.replace(/-/g, ''),
         text: `${companyName}단체 예약 완료
+인솔자: ${contactPersonInfo}
 상품명: ${productName}
 결제방법: ${PAYMENT_TYPE.find((f) => f.value === paymentType.type)?.label}
-방문예정일: ${format(appointmentDate, 'yyyy. MM. dd')}
+방문예정일: ${format(appointmentDate, 'yyyy. M. dd')}
 수량: ${numberOfPeopel} 개 `,
       });
 
@@ -97,6 +107,7 @@ export default function GroupReservationFormClient() {
     companyName: '',
     contactPersonInfo: '',
     appointmentDate: '',
+    addedVisitDate: '',
     guideContactInfo: '',
     numberOfPeopel: '',
     nationality: '',
@@ -184,11 +195,11 @@ export default function GroupReservationFormClient() {
           />
           <FormField
             control={groupReservationForm.control}
-            name="guideContactInfo"
+            name="contactPersonInfo"
             render={({ field }) => (
               <FormItem className="bg-gray-50 p-4 rounded-lg">
                 <FormLabel className="text-base font-medium">
-                  인솔자(가이드)님 성함 및 연락처
+                  인솔자(가이드)님 성함
                 </FormLabel>
                 <FormControl>
                   <Input
@@ -219,7 +230,7 @@ export default function GroupReservationFormClient() {
                         )}
                       >
                         {field.value ? (
-                          format(new Date(field.value), 'PPP', { locale: ko })
+                          format(new Date(field.value), 'yyyy. M. dd')
                         ) : (
                           <span>날짜를 선택해주세요</span>
                         )}
@@ -248,8 +259,7 @@ export default function GroupReservationFormClient() {
                   </PopoverContent>
                 </Popover>
                 <FormDescription>
-                  롯데월드 패키지는 모두 당일 이용이 기본이며, 추가 옵션은 별도
-                  일자에 이용하실 경우 기재해주시면 됩니다.
+                  롯데월드 패키지는 모두 당일 이용이 기본입니다.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -257,15 +267,14 @@ export default function GroupReservationFormClient() {
           />
           <FormField
             control={groupReservationForm.control}
-            name="contactPersonInfo"
+            name="guideContactInfo"
             render={({ field }) => (
               <FormItem className="bg-gray-50 p-4 rounded-lg">
                 <FormLabel className="text-base font-medium">
-                  예약 담당자 성함 및 연락처
+                  인솔자(가이드)님 연락처
                 </FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="(가이드님 직접 예약일 경우 기재 안 하셔도 됩니다.)"
                     className="bg-white border-gray-200 focus:border-purple-500"
                     {...field}
                   />
@@ -344,61 +353,118 @@ export default function GroupReservationFormClient() {
               </FormItem>
             )}
           />
-
-          <FormField
-            control={groupReservationForm.control}
-            name="additionalOptions"
-            render={() => (
-              <FormItem className="col-span-1 md:col-span-2 bg-gray-50 p-4 rounded-lg space-y-3">
-                <div>
-                  <FormLabel className="text-base font-medium">
-                    추가 옵션
-                  </FormLabel>
-                  <FormDescription>
-                    (해당 없을 시 비워두시면 됩니다.)
-                  </FormDescription>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {ADDITIONAL_OPTIONS.map((option) => (
-                    <div
-                      key={option.id}
-                      className="bg-white p-3 rounded border"
-                    >
-                      <FormField
+          <div>
+            <FormField
+              control={groupReservationForm.control}
+              name="additionalOptions"
+              render={() => (
+                <FormItem className="col-span-1 md:col-span-2 bg-gray-50 p-4 rounded-lg space-y-3">
+                  <div>
+                    <FormLabel className="text-base font-medium">
+                      추가 옵션
+                    </FormLabel>
+                    <FormDescription>
+                      (해당 없을 시 비워두시면 됩니다.)
+                    </FormDescription>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {ADDITIONAL_OPTIONS.map((option) => (
+                      <div
                         key={option.id}
-                        control={groupReservationForm.control}
-                        name="additionalOptions"
-                        render={({ field }) => (
-                          <div className="flex items-center space-x-2">
-                            <Checkbox
-                              id={`checkbox-${option.id}`}
-                              checked={field.value?.includes(option.id)}
-                              onCheckedChange={(checked: boolean) =>
-                                handleAdditionalOptionsChange(
-                                  checked,
-                                  option.id,
-                                  {
-                                    ...field,
-                                  }
-                                )
-                              }
-                            />
-                            <label
-                              htmlFor={`checkbox-${option.id}`}
-                              className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
-                            >
-                              {option.label}
-                            </label>
-                          </div>
-                        )}
+                        className="bg-white p-3 rounded border"
+                      >
+                        <FormField
+                          key={option.id}
+                          control={groupReservationForm.control}
+                          name="additionalOptions"
+                          render={({ field }) => (
+                            <div className="flex items-center space-x-2">
+                              <Checkbox
+                                id={`checkbox-${option.id}`}
+                                checked={field.value?.includes(option.id)}
+                                onCheckedChange={(checked: boolean) =>
+                                  handleAdditionalOptionsChange(
+                                    checked,
+                                    option.id,
+                                    {
+                                      ...field,
+                                    }
+                                  )
+                                }
+                              />
+                              <label
+                                htmlFor={`checkbox-${option.id}`}
+                                className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                              >
+                                {option.label}
+                              </label>
+                            </div>
+                          )}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={groupReservationForm.control}
+              name="addedVisitDate"
+              render={({ field }) => (
+                <FormItem className="bg-gray-50 p-4 rounded-lg">
+                  <FormLabel className="text-base font-medium">
+                    추가 옵션 방문 일자
+                  </FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant={'outline'}
+                          className={cn(
+                            'w-full pl-3 text-left font-normal',
+                            !field.value && 'text-muted-foreground'
+                          )}
+                        >
+                          {field.value ? (
+                            format(new Date(field.value), 'yyyy. M. dd')
+                          ) : (
+                            <span>날짜를 선택해주세요</span>
+                          )}
+                          <BsCalendarDate className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        locale={ko}
+                        selected={
+                          field.value ? new Date(field.value) : undefined
+                        }
+                        onSelect={(date) => {
+                          if (date) {
+                            // 선택된 날짜의 자정(00:00:00)으로 설정
+                            const selectedDate = new Date(date);
+                            selectedDate.setHours(0, 0, 0, 0);
+                            field.onChange(selectedDate.toISOString());
+                          } else {
+                            field.onChange(date);
+                          }
+                        }}
+                        disabled={(date) => date < new Date()}
+                        initialFocus
                       />
-                    </div>
-                  ))}
-                </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                    </PopoverContent>
+                  </Popover>
+                  <FormDescription>
+                    추가 옵션은 별도 일자에 이용하실 경우 기재해주시면 됩니다.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
           <FormField
             control={groupReservationForm.control}
