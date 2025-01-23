@@ -15,6 +15,7 @@ export default function SaleProductList({ products }: ProductGridProps) {
       {products.map((d, index) => {
         const { _id, name, price, products } = d;
         const images = products.map((d2) => d2.images).flat();
+        const stockCount = Math.min(...products.map((d2) => d2.pinCount));
 
         return (
           <div
@@ -28,7 +29,7 @@ export default function SaleProductList({ products }: ProductGridProps) {
             >
               <div className="relative">
                 <div className="aspect-square w-[90%] mx-auto mt-2 overflow-hidden rounded-lg">
-                  <ProductImage url={images[0]} />
+                  <ProductImage url={images[0]} stockCount={stockCount} />
                 </div>
                 <ProductInfo name={name} price={price} />
               </div>

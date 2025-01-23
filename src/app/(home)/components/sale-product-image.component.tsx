@@ -5,9 +5,10 @@ import { useState } from 'react';
 
 type Props = {
   url: string;
+  stockCount: number;
 };
 
-export default function ProductImage({ url }: Props) {
+export default function ProductImage({ url, stockCount }: Props) {
   const [isLoading, setIsLoading] = useState(true);
 
   if (!url) {
@@ -18,6 +19,9 @@ export default function ProductImage({ url }: Props) {
 
   return (
     <div className="relative w-full h-full overflow-hidden group">
+      <div className="absolute top-2 left-2 z-10 bg-black/50 text-white px-2 py-1 rounded-md text-xs">
+        재고: {stockCount}개
+      </div>
       {/* Background overlay */}
       <div className="absolute inset-0 bg-white/30 backdrop-blur-sm transition-opacity duration-300 rounded-xl" />
 
