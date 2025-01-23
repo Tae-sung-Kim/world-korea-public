@@ -82,10 +82,8 @@ export default function ProfileConfirmPassword({
 
                 <div className="flex justify-center pt-4 sm:pt-6">
                   <Button type="submit" variant="submit">
-                    <span className="relative flex items-center justify-center gap-2">
-                      <MdOutlineCheck className="text-xl" />
-                      확인
-                    </span>
+                    <MdOutlineCheck className="text-xl mr-2" />
+                    확인
                   </Button>
                 </div>
               </div>

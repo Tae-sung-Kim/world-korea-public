@@ -116,24 +116,18 @@ export function useGetCurrentUserQuery() {
   const { data = fallback } = useQuery({
     queryKey: [QUERY_KEY, 'current-user'],
     queryFn: userService.getCurrentUser,
+    gcTime: 0,
+    staleTime: 0,
+    refetchOnMount: true,
   });
 
   return data;
 }
 
-export function usePatchUserMutation({
-  onSuccess,
-  onError,
-  onSettled,
-}: FunctionProps) {
-  const queryClient = useQueryClient();
-
+export function usePatchUserMutation({ onSuccess }: FunctionProps) {
   return useMutation({
     mutationFn: userService.patchUser,
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: [QUERY_KEY, 'user-info'],
-      });
       toast.success('정보 수정이 완료 되었습니다.');
       onSuccess && onSuccess();
     },

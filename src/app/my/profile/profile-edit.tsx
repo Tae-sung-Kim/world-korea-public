@@ -262,23 +262,24 @@ export default function ProfileEdit({
                 </div>
               </div>
 
-              <div className="flex flex-col sm:flex-row justify-center gap-3 pt-4 sm:pt-6">
+              {/* <div className="flex flex-col sm:flex-row justify-center gap-3 pt-4 sm:pt-6"> */}
+              <div className="form-button-area gap-4">
                 <Button
                   type="button"
-                  variant="outline"
+                  variant="cancel"
+                  className="w-full sm:w-32 font-medium"
                   onClick={() => onStep(ProfileStep.Detail)}
-                  className="w-full sm:w-32 font-medium hover:bg-gray-100"
                 >
-                  <span className="relative flex items-center justify-center gap-2">
-                    <MdOutlineClose className="text-xl" />
-                    취소
-                  </span>
+                  <MdOutlineClose className="text-xl" />
+                  취소
                 </Button>
-                <Button type="submit" variant="submit">
-                  <span className="relative flex items-center justify-center gap-2">
-                    <MdOutlineCheck className="text-xl" />
-                    저장
-                  </span>
+                <Button
+                  type="submit"
+                  variant="submit"
+                  className="w-full sm:w-32 font-medium"
+                >
+                  <MdOutlineCheck className="text-xl" />
+                  저장
                 </Button>
               </div>
             </form>

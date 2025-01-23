@@ -111,7 +111,7 @@ export default function ProfileDetail({
                 <Input
                   readOnly
                   disabled
-                  value={currentUserData?.contactNumber ?? ''}
+                  value={currentUserData?.phoneNumber ?? ''}
                   className="bg-gray-50 font-medium"
                 />
               </div>
@@ -142,12 +142,10 @@ export default function ProfileDetail({
             <Button
               onClick={handleUpdate}
               disabled={!currentUserData}
-              variant="submit"
+              variant="utility"
             >
-              <span className="relative flex items-center gap-2">
-                <MdOutlineEdit className="text-xl" />
-                정보 수정
-              </span>
+              <MdOutlineEdit className="text-xl mr-2" />
+              정보 수정
             </Button>
           </div>
         </div>

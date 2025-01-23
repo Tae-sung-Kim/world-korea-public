@@ -187,10 +187,10 @@ export default function ProfileChangePasswordModal({
               />
             </div>
 
-            <div className="flex flex-col sm:flex-row justify-center gap-3 pt-6 border-t">
+            <div className="form-button-area gap-4">
               <Button
                 type="button"
-                variant="outline"
+                variant="cancel"
                 onClick={onCancel}
                 className="w-full sm:w-32 font-medium"
               >
