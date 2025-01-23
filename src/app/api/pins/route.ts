@@ -89,6 +89,24 @@ export async function POST(req: NextRequest) {
     } else if (isPinManualValid) {
       const listToInsert: PinDB[] = [];
 
+      // 먼저 중복된 핀 번호 체크
+      const existingPins = await PinModel.find({
+        number: { $in: pinList.map((p) => p.pinNumber) },
+      });
+
+      // 중복된 핀 번호가 있으면 에러 응답
+      if (existingPins.length > 0) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: `다음 핀 번호들이 이미 존재합니다: ${existingPins
+              .map((pin) => pin.number)
+              .join(', ')}`,
+          },
+          { status: 400 }
+        );
+      }
+
       pinList.forEach(
         ({ pinNumber, endDate }: { pinNumber: string; endDate?: Date }) => {
           if (typeof pinNumber === 'string' && pinNumber.length === 16) {

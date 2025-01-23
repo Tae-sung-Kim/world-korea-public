@@ -1,4 +1,9 @@
-import { FunctionProps, PageFilter, PaginationProp } from './queries.type';
+import {
+  ErrorResponse,
+  FunctionProps,
+  PageFilter,
+  PaginationProp,
+} from './queries.type';
 import { PaginationResponse } from '@/definitions';
 import { Pin, PinUsed } from '@/definitions/pin.type';
 import pinsService from '@/services/pins.service';
@@ -62,10 +67,12 @@ export function useCreatePinMutation({
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
       toast.success('핀 생성이 완료 되었습니다.');
     },
-    onError: () => {
+    onError: (error: AxiosError<ErrorResponse>) => {
       onError && onError();
+
       toast.error(
-        '핀 생성중 에러가 발생했습니다.<br/>잠시 후 다시 시도해주세요.'
+        error?.response?.data?.message ??
+          '핀 생성중 에러가 발생했습니다.<br/>잠시 후 다시 시도해주세요.'
       );
     },
     onSettled,
