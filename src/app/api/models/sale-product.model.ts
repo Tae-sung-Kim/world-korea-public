@@ -191,10 +191,44 @@ schema.static(
   }
 );
 
+// schema.static(
+//   'getReservableSaleProductList',
+//   function getReservableSaleProductList() {
+//     return this.find({ isReservable: true, deletedAt: { $exists: false } });
+//   }
+// );
+
 schema.static(
   'getReservableSaleProductList',
   function getReservableSaleProductList() {
-    return this.find({ isReservable: true, deletedAt: { $exists: false } });
+    // 로깅 및 디버깅 추가
+    console.log(
+      'getReservableSaleProductList 호출 시간:',
+      new Date().toISOString()
+    );
+    console.log('현재 mongoose 컨텍스트:', this);
+
+    const query = {
+      isReservable: true,
+      deletedAt: { $exists: false },
+    };
+
+    console.log('쿼리 조건:', query);
+
+    return this.find(query)
+      .lean() // 순수 JavaScript 객체로 변환
+      .exec()
+      .then((results) => {
+        console.log('쿼리 결과:', {
+          count: results.length,
+          firstItem: results[0],
+        });
+        return results;
+      })
+      .catch((error) => {
+        console.error('쿼리 실행 중 에러:', error);
+        throw error;
+      });
   }
 );
 
