@@ -15,7 +15,7 @@ import Image from 'next/image';
 export default function GroupReservationBottom() {
   return (
     <>
-      <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+      <div className="bg-white mt-8 p-6 rounded-lg shadow-sm border border-gray-100">
         <div className="relative">
           <div className="text-base md:text-lg mb-8 text-center font-medium">
             <span className="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-6 py-2 rounded-full inline-block">

@@ -5,7 +5,12 @@ import {
 } from '@/app/admin/queries/queries.type';
 import { GroupReservation, PaginationResponse } from '@/definitions';
 import groupReservationService from '@/services/group-reservation.service';
-import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 const QUERY_KEY = 'group-reservation';
@@ -71,7 +76,7 @@ export function useGroupReservationDetailsQuery(id: string) {
   const { data = fallback } = useQuery({
     queryKey: [QUERY_KEY, id],
     queryFn: () => groupReservationService.getGroupReservationDetails(id),
-    enabled: !!id
+    enabled: !!id,
   });
 
   return data;
@@ -83,10 +88,13 @@ export function useUpdateGroupReservationMutation({
   onError,
   onSettled,
 }: FunctionProps) {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: groupReservationService.updateGroupReservation,
     onSuccess: () => {
       onSuccess && onSuccess();
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
       toast.success('단체 예약 정보가 수정되었습니다.');
     },
     onError: () => {

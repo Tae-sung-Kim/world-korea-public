@@ -141,221 +141,222 @@ export default function UsersDetailClient({ userId }: IProps) {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
           <DetailTitle title={`회원 ${isEdit ? '수정' : '상세'}`} />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+            <FormField
+              control={form.control}
+              name="userCategoryId"
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormLabel>회원 구분</FormLabel>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {userCategoryList?.map((item) => {
+                          return (
+                            <SelectItem key={item._id} value={item._id}>
+                              {item.name}
+                            </SelectItem>
+                          );
+                        })}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
 
-          <FormField
-            control={form.control}
-            name="userCategoryId"
-            render={({ field }) => {
-              return (
+            <div className="grid grid-cols-3">
+              <FormField
+                control={form.control}
+                name="isApproved"
+                render={({ field }) => {
+                  return (
+                    <FormItem>
+                      <div>
+                        <FormLabel>회원 승인</FormLabel>
+                      </div>
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  );
+                }}
+              />
+              <FormField
+                control={form.control}
+                name="isPartner"
+                render={({ field }) => {
+                  return (
+                    <FormItem>
+                      <div>
+                        <FormLabel>파트너 여부</FormLabel>
+                      </div>
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={(checked) => {
+                            if (checked) {
+                              form.setValue('isAdmin', false);
+                            }
+
+                            field.onChange(checked);
+                          }}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  );
+                }}
+              />
+              <FormField
+                control={form.control}
+                name="isAdmin"
+                render={({ field }) => {
+                  return (
+                    <FormItem>
+                      <div>
+                        <FormLabel>관리자 여부</FormLabel>
+                      </div>
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={(checked) => {
+                            if (checked) {
+                              form.setValue('isPartner', false);
+                            }
+                            field.onChange(checked);
+                          }}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  );
+                }}
+              />
+            </div>
+
+            <FormField
+              control={form.control}
+              name="id"
+              render={({ field }) => (
                 <FormItem>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormLabel>회원 구분</FormLabel>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {userCategoryList?.map((item) => {
-                        return (
-                          <SelectItem key={item._id} value={item._id}>
-                            {item.name}
-                          </SelectItem>
-                        );
-                      })}
-                    </SelectContent>
-                  </Select>
+                  <FormLabel>아이디</FormLabel>
+                  <FormControl>
+                    <Input placeholder="" readOnly {...field} />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
-              );
-            }}
-          />
-
-          <div className="grid grid-cols-3">
-            <FormField
-              control={form.control}
-              name="isApproved"
-              render={({ field }) => {
-                return (
-                  <FormItem>
-                    <div>
-                      <FormLabel>회원 승인</FormLabel>
-                    </div>
-                    <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                  </FormItem>
-                );
-              }}
+              )}
             />
-            <FormField
-              control={form.control}
-              name="isPartner"
-              render={({ field }) => {
-                return (
-                  <FormItem>
-                    <div>
-                      <FormLabel>파트너 여부</FormLabel>
-                    </div>
-                    <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={(checked) => {
-                          if (checked) {
-                            form.setValue('isAdmin', false);
-                          }
 
-                          field.onChange(checked);
-                        }}
-                      />
-                    </FormControl>
-                  </FormItem>
-                );
-              }}
-            />
             <FormField
               control={form.control}
-              name="isAdmin"
-              render={({ field }) => {
-                return (
-                  <FormItem>
-                    <div>
-                      <FormLabel>관리자 여부</FormLabel>
-                    </div>
-                    <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={(checked) => {
-                          if (checked) {
-                            form.setValue('isPartner', false);
-                          }
-                          field.onChange(checked);
-                        }}
-                      />
-                    </FormControl>
-                  </FormItem>
-                );
-              }}
+              name="companyName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>업체명</FormLabel>
+                  <FormControl>
+                    <Input placeholder="" readOnly={!isEdit} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="companyNo"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>업체 번호</FormLabel>
+                  <FormControl>
+                    <Input placeholder="" readOnly={!isEdit} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="address"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>주소</FormLabel>
+                  <FormControl>
+                    <Input placeholder="" readOnly={!isEdit} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="contactNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>연락처</FormLabel>
+                  <FormControl>
+                    <Input placeholder="" readOnly={!isEdit} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>이름</FormLabel>
+                  <FormControl>
+                    <Input placeholder="" readOnly={!isEdit} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="phoneNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>휴대폰</FormLabel>
+                  <FormControl>
+                    <Input placeholder="" readOnly={!isEdit} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>이메일</FormLabel>
+                  <FormControl>
+                    <Input placeholder="" readOnly={!isEdit} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
-
-          <FormField
-            control={form.control}
-            name="id"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>아이디</FormLabel>
-                <FormControl>
-                  <Input placeholder="" readOnly {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="companyName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>업체명</FormLabel>
-                <FormControl>
-                  <Input placeholder="" readOnly={!isEdit} {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="companyNo"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>업체 번호</FormLabel>
-                <FormControl>
-                  <Input placeholder="" readOnly={!isEdit} {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="address"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>주소</FormLabel>
-                <FormControl>
-                  <Input placeholder="" readOnly={!isEdit} {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="contactNumber"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>연락처</FormLabel>
-                <FormControl>
-                  <Input placeholder="" readOnly={!isEdit} {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>이름</FormLabel>
-                <FormControl>
-                  <Input placeholder="" readOnly={!isEdit} {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="phoneNumber"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>휴대폰</FormLabel>
-                <FormControl>
-                  <Input placeholder="" readOnly={!isEdit} {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>이메일</FormLabel>
-                <FormControl>
-                  <Input placeholder="" readOnly={!isEdit} {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
 
           <div className="form-button-area space-x-2">
             <Button

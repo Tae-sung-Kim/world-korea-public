@@ -1,4 +1,4 @@
-import GroupReservationDetailClient from './group-reservation-detail.client';
+import GroupReservationFormClient from '@/app/group-reservations/group-reservation-form.component';
 
 interface GroupReservationDetailPageProps {
   params: {
@@ -9,5 +9,5 @@ interface GroupReservationDetailPageProps {
 export default function GroupReservationDetailPage({
   params,
 }: GroupReservationDetailPageProps) {
-  return <GroupReservationDetailClient id={params.id} />;
+  return <GroupReservationFormClient groupReservationId={params.id} />;
 }
