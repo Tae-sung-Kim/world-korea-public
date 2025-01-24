@@ -78,7 +78,9 @@ export function useReservableSaleProductQuery() {
     queryKey: [QUERY_KEY, 'reservable'],
     queryFn: () => saleProductService.getReservationSaleProductList(),
     gcTime: 0,
+    staleTime: 0, // 데이터를 즉시 오래된 것으로 표시
     refetchOnMount: true,
+    refetchOnWindowFocus: true, // 추가로 윈도우 포커스 시 리패치
   });
 
   return data;
