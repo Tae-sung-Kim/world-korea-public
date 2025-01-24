@@ -21,7 +21,14 @@ export async function GET(req: NextRequest) {
 
     const list = await SaleProductModel.getReservableSaleProductList();
 
-    return NextResponse.json(list);
+    return NextResponse.json(list, {
+      headers: {
+        'Cache-Control': 'no-store, max-age=0, no-cache, must-revalidate',
+        Pragma: 'no-cache',
+        Expires: '0',
+        'X-Request-Timestamp': Date.now().toString(),
+      },
+    });
   } catch (error) {
     return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
   }
