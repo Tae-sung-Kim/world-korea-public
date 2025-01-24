@@ -194,7 +194,7 @@ schema.static(
 schema.static(
   'getReservableSaleProductList',
   function getReservableSaleProductList() {
-    return this.find({ isReservable: true });
+    return this.find({ isReservable: true, deletedAt: { $exists: false } });
   }
 );
 
