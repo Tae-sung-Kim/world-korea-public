@@ -222,7 +222,10 @@ export default function GroupReservationFormClient({
       )}
       <div className="p-2 mx-auto space-y-8 bg-white rounded-xl shadow-sm">
         <Form {...groupReservationForm}>
-          <form onSubmit={groupReservationForm.handleSubmit(handleSubmit)}>
+          <form
+            onSubmit={groupReservationForm.handleSubmit(handleSubmit)}
+            className="space-y-4"
+          >
             {/* 기본 정보 섹션 */}
             <div className="space-y-4">
               <h3 className="text-lg font-semibold">기본 정보</h3>
