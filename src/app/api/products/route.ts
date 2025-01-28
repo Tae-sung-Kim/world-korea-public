@@ -65,6 +65,7 @@ export async function POST(req: NextRequest) {
     const description2 = formData.get('description2');
     const description3 = formData.get('description3');
     const description4 = formData.get('description4');
+    const isLotteWorld = formData.get('isLotteWorld') === 'true';
     // const unavailableDates = formData.get('unavailableDates');
 
     const imageFiles = Array.from(formData.getAll('images')) as File[];
@@ -87,6 +88,7 @@ export async function POST(req: NextRequest) {
       description4,
       images: imageUrlListToUpload,
       pins: [],
+      isLotteWorld,
       // unavailableDates
     });
 

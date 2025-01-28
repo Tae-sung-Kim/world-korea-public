@@ -42,6 +42,7 @@ export interface ProductDB {
   deletedAt: Date;
   pins: Types.ObjectId[]; // 빈 번호 목록
   partner?: Types.ObjectId | null; // 파트너 아이디 목록
+  isLotteWorld?: boolean;
 }
 
 type ProductDocument =
@@ -94,6 +95,7 @@ const schema = new Schema<ProductDB, ProductSchemaModel, ProductMethods>({
   deletedAt: { type: Date },
   pins: [{ type: Schema.Types.ObjectId, ref: 'Pin' }],
   partner: { type: Schema.Types.ObjectId, ref: 'User', default: null },
+  isLotteWorld: { type: Boolean, default: false },
 });
 
 schema.static('getProductById', function getProductById(productId) {
@@ -258,6 +260,10 @@ schema.method('updateProduct', async function updateProduct(productData) {
   this.description4 = resolveData<ProductDB['description4']>(
     productData.description4,
     this.description4
+  );
+  this.isLotteWorld = resolveData<ProductDB['isLotteWorld']>(
+    productData.isLotteWorld,
+    this.isLotteWorld
   );
   this.updatedAt = new Date();
 

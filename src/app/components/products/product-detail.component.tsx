@@ -29,6 +29,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import { MODAL_TYPE, useModalContext } from '@/contexts/modal.context';
 import { PRODUCT_STATUS, PRODUCT_STATUS_MESSAGE } from '@/definitions';
@@ -83,6 +84,7 @@ const ProductFormSchema = z.object({
   description2: descriptionShcema(),
   description3: descriptionShcema(),
   description4: descriptionShcema(),
+  isLotteWorld: z.boolean(), // 롯데월드 상품 여부
   // unavailableDates: z.string().array().optional(), // 이용 불가능 날짜
 });
 
@@ -120,6 +122,7 @@ export default function ProductDetail({
       price: '0', // 판매가
       description1: '',
       description2: '',
+      isLotteWorld: false,
     }),
     []
   );
@@ -178,9 +181,9 @@ export default function ProductDetail({
             'taxFreeRegularPrice',
           ].includes(key)
         ) {
-          data.append(key, String(removeComma(values)));
+          data.append(key, String(removeComma(String(values))));
         } else {
-          data.append(key, values);
+          data.append(key, String(values));
         }
       }
     }
@@ -275,9 +278,12 @@ export default function ProductDetail({
   return (
     <div className="p-2 mx-auto space-y-8 bg-white rounded-xl shadow-sm">
       <Form {...productForm}>
-        <form onSubmit={productForm.handleSubmit(handleSubmit)}>
+        <form
+          onSubmit={productForm.handleSubmit(handleSubmit)}
+          className="space-y-6"
+        >
           {!disabled && (
-            <div className="space-y-6">
+            <>
               <FormField
                 control={productForm.control}
                 name="name"
@@ -301,7 +307,7 @@ export default function ProductDetail({
                 )}
               />
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <FormField
                   control={productForm.control}
                   name="accessLevel"
@@ -377,8 +383,29 @@ export default function ProductDetail({
                     </FormItem>
                   )}
                 />
+                <FormField
+                  control={productForm.control}
+                  name="isLotteWorld"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <div className="flex items-center space-x-2">
+                          <FormLabel className="text-sm font-medium text-gray-900">
+                            롯데월드 상품
+                          </FormLabel>
+                          <FormControl>
+                            <Switch
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                        </div>
+                      </FormItem>
+                    );
+                  }}
+                />
               </div>
-            </div>
+            </>
           )}
 
           <div className="mb-8 mt-8">

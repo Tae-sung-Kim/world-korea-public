@@ -44,6 +44,7 @@ export interface ProductFormData<T> {
   description3: string;
   description4: string;
   unavailableDates?: string[];
+  isLotteWorld?: boolean;
 }
 
 export interface ProductDisplayData extends ProductFormData<string> {

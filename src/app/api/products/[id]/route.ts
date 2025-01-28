@@ -53,6 +53,7 @@ export async function PATCH(req: NextRequest, ctx: { params: { id: string } }) {
     const description3 = formData.get('description3') as string;
     const description4 = formData.get('description4') as string;
     const images = formData.getAll('images') as ProductImage[];
+    const isLotteWorld = formData.get('isLotteWorld') === 'true';
 
     const existingProduct = await ProductModel.findById(productId);
     if (!existingProduct) {
@@ -72,6 +73,7 @@ export async function PATCH(req: NextRequest, ctx: { params: { id: string } }) {
       description3,
       description4,
       images,
+      isLotteWorld,
     });
 
     return NextResponse.json(true);
