@@ -35,3 +35,14 @@ yarn-error.log*
 next-env.d.ts
 
 certificates
+
+# Environment files
+.env
+*.env
+.env.local
+!.env.example
+
+page.txt
+db.txt
+
+README.md
